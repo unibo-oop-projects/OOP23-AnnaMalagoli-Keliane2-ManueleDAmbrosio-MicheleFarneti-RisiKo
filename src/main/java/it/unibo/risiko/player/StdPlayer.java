@@ -8,20 +8,26 @@ import java.util.Set;
 import it.unibo.risiko.Card;
 import it.unibo.risiko.Territory;
 
+/**
+ * @author Manuele D'Ambrosio
+ */
+
 /*TO DO:
 Aggiungere campi che contano il numero di territori e carte possedute.
 Aggiungere ai metodi l'aggiornamento dei campi sopracitati.
 Aggiungere un Set di continenti controllati con relativi metodi.
+Aggiungere (o modificare esistenti) metodi che restituiscono le carte e i territori persi.
+Aggiungere il sistema degli obbiettivi
  */
 
-public class RealPlayer implements Player{
+public class StdPlayer implements Player {
 
     private final String color_id;
     private Set<Territory> ownedTerritories = new HashSet<>();
     private Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
 
-    public RealPlayer (final String color, final int armiesToPlace) {
+    public StdPlayer (final String color, final int armiesToPlace) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
         this.ownedCards = Collections.emptySet();
@@ -69,7 +75,7 @@ public class RealPlayer implements Player{
             this.ownedCards.remove(card);
         }
         else {
-            System.err.println("Carta " + card.getTerritoryName() + " non posseduta");
+            System.err.println("Card " + card.getTerritoryName() + " not in possession");
         }
     }
 
@@ -78,7 +84,7 @@ public class RealPlayer implements Player{
             this.ownedTerritories.remove(territory);
         }
         else {
-            System.err.println("Territorio " + territory.getTerritoryName() + " non posseduta");
+            System.err.println("Territory " + territory.getTerritoryName() + " not in possession");
         }
     }
 
