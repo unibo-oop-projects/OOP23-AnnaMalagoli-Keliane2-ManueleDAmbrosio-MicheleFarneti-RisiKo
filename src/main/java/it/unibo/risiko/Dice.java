@@ -3,6 +3,7 @@ package it.unibo.risiko;
 import java.util.Random;
 
 /**
+ * A simple dice.
  * @author Manuele D'Ambrosio
  */
 

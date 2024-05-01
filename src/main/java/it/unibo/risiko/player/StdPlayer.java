@@ -9,22 +9,21 @@ import it.unibo.risiko.Card;
 import it.unibo.risiko.Territory;
 
 /**
+ * Implementation of Player interface.
  * @author Manuele D'Ambrosio
  */
 
 /*TO DO:
-Aggiungere campi che contano il numero di territori e carte possedute.
-Aggiungere ai metodi l'aggiornamento dei campi sopracitati.
-Aggiungere un Set di continenti controllati con relativi metodi.
-Aggiungere (o modificare esistenti) metodi che restituiscono le carte e i territori persi.
-Aggiungere il sistema degli obbiettivi
+Aggiungere la gestione degli obbietti.
  */
 
 public class StdPlayer implements Player {
 
     private final String color_id;
     private Set<Territory> ownedTerritories = new HashSet<>();
+    private int numberOfTerritores;
     private Set<Card> ownedCards = new HashSet<>();
+    private int numberOfCards;
     private int armiesToPlace;
 
     public StdPlayer (final String color, final int armiesToPlace) {
@@ -32,22 +31,27 @@ public class StdPlayer implements Player {
         this.armiesToPlace = armiesToPlace;
         this.ownedCards = Collections.emptySet();
         this.ownedTerritories = Collections.emptySet();
+        this.numberOfCards = 0;
+        this.numberOfTerritores = 0;
     }
 
     public void setArmiesToPlace(final int armiesToPlace) {
         this.armiesToPlace = armiesToPlace;
     }
 
-    public void setOwnedTerritories(final Set<Territory> ownedTerritories) {
-        this.ownedTerritories.addAll(ownedTerritories);
+    public void setOwnedTerritories(final Set<Territory> newTerritories) {
+        this.ownedTerritories.addAll(newTerritories);
+        this.numberOfTerritores = newTerritories.size();
     }
 
     public void addTerritory(final Territory newTerritory) {
         this.ownedTerritories.add(newTerritory);
+        incrementTerritories();
     }
 
     public void addCard (final Card newCard) {
         this.ownedCards.add(newCard);
+        incrementCards();
     }
 
     public String getColor_id() {
@@ -66,6 +70,14 @@ public class StdPlayer implements Player {
         return this.ownedCards;
     }
 
+    public int getNumberOfCards() {
+        return this.numberOfCards;
+    }
+
+    public int getNumberOfTerritores() {
+        return this.numberOfTerritores;
+    }
+
     public void decrementArmiesToPlace() {
         this.armiesToPlace--;
     }
@@ -73,6 +85,7 @@ public class StdPlayer implements Player {
     public void removeCard(final Card card) {
         if (isOwnedCard(card)) {
             this.ownedCards.remove(card);
+            decrementCards();
         }
         else {
             System.err.println("Card " + card.getTerritoryName() + " not in possession");
@@ -82,6 +95,7 @@ public class StdPlayer implements Player {
     public void removeTerritory(final Territory territory) {
         if (isOwnedTerritory(territory)) {
             this.ownedTerritories.remove(territory);
+            decrementTerritories();
         }
         else {
             System.err.println("Territory " + territory.getTerritoryName() + " not in possession");
@@ -99,4 +113,21 @@ public class StdPlayer implements Player {
     private boolean isOwnedTerritory(final Territory territory) {
         return this.ownedTerritories.contains(territory);
     }
+
+    private void incrementTerritories() {
+        this.numberOfTerritores++;
+    }
+
+    private void decrementTerritories() {
+        this.numberOfTerritores--;
+    }
+
+    private void incrementCards() {
+        this.numberOfCards++;
+    }
+
+    private void decrementCards() {
+        this.numberOfCards--;
+    }
+
 }

@@ -1,16 +1,10 @@
 package it.unibo.risiko;
 
-import java.util.Optional;
-
-import it.unibo.risiko.Dice;
-
 /**
+ * compare the results of the multiple dice throws.
  * @author Manuele D'Ambrosio
  */
 
-/*
- * TO do:
- */
 
 public class TripleDice extends Dice{
     private static final int MAX_THROWS = 3;
@@ -77,8 +71,9 @@ public class TripleDice extends Dice{
     }
 
     public static int attackerLostArmies(final TripleDice attackerThrows, final TripleDice defenderThrows) {
+        int maxLostArmies = Math.min(attackerThrows.getNumberOfThrows(), defenderThrows.getNumberOfThrows());
         int lostArmies = 0;
-        if (attackerThrows.getNumberOfThrows() == MAX_THROWS) {
+        if (maxLostArmies == MAX_THROWS) {
             if (attackerThrows.getResults()[MAX_VAL] >= defenderThrows.getResults()[MAX_VAL]) {
                 lostArmies++;
             }
@@ -89,7 +84,7 @@ public class TripleDice extends Dice{
                 lostArmies++;
             }
         }
-        else if (attackerThrows.getNumberOfThrows() == MIN_THROWS) {
+        else if (maxLostArmies == MIN_THROWS) {
             if (attackerThrows.getResults()[MAX_VAL] >= defenderThrows.getResults()[MAX_VAL]) {
                 lostArmies++;
             }
