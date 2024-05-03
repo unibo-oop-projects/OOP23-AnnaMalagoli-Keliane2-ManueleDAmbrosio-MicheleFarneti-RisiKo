@@ -10,7 +10,8 @@ import it.unibo.risiko.event.Event;
  */
 public interface Log {
     /**
-     * This method adds a an event in the log
+     * This method adds an event in the log
+     * @param e the event to be added
      */
     void addEvent(Event e);
 
