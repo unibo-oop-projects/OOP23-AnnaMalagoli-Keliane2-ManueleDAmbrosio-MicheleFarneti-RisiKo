@@ -12,6 +12,7 @@ public class ConquerTerritoriesTarget extends BaseTarget{
 
     @Override
     public Boolean isAchieved() {
+        //return this.territoryWantedNumber==this.getPlayer().getNumberOfTerritores();
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'isAchieved'");
     }

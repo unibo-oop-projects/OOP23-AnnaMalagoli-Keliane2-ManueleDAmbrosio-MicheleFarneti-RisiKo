@@ -2,10 +2,10 @@ package it.unibo.risiko.objective;
 
 import it.unibo.risiko.player.Player;
 
-public class DestroyPlayer extends BaseTarget {
+public class DestroyPlayerTarget extends BaseTarget {
     private Player playerToDestroy;
     
-    public DestroyPlayer(Player player, Player playerToDestroy) {
+    public DestroyPlayerTarget(Player player, Player playerToDestroy) {
         super(player);
         this.playerToDestroy=playerToDestroy;
     }
@@ -13,8 +13,7 @@ public class DestroyPlayer extends BaseTarget {
 
     @Override
     public Boolean isAchieved() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isAchieved'");
+        return this.playerToDestroy.isDefeated();
     }
     
 }
