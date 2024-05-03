@@ -2,12 +2,11 @@ package it.unibo.risiko.objective;
 
 import it.unibo.risiko.player.Player;
 
-public class ConquerContinentTarget implements Target {
-    private Player player;
+public class ConquerContinentTarget extends BaseTarget {
     //private Continent continent;
     
     public ConquerContinentTarget(Player player /*,Continent continent*/) {
-        this.player = player;
+        super(player);
         /*this.continent=continent; */
     } 
     

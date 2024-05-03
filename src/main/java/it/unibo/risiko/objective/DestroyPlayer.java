@@ -2,12 +2,11 @@ package it.unibo.risiko.objective;
 
 import it.unibo.risiko.player.Player;
 
-public class DestroyPlayer implements Target {
-    private Player player;
+public class DestroyPlayer extends BaseTarget {
     private Player playerToDestroy;
     
     public DestroyPlayer(Player player, Player playerToDestroy) {
-        this.player = player;
+        super(player);
         this.playerToDestroy=playerToDestroy;
     }
 

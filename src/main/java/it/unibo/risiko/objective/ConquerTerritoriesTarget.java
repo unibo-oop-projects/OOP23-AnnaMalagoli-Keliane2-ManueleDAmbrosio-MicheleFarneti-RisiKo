@@ -2,12 +2,11 @@ package it.unibo.risiko.objective;
 
 import it.unibo.risiko.player.Player;
 
-public class ConquerTerritoriesTarget implements Target{
-    private Player player;
+public class ConquerTerritoriesTarget extends BaseTarget{
     private int territoryWantedNumber;
 
     public ConquerTerritoriesTarget(Player player, int territoryWantedNumber) {
-        this.player=player;
+        super(player);
         this.territoryWantedNumber=territoryWantedNumber;
     }
 
