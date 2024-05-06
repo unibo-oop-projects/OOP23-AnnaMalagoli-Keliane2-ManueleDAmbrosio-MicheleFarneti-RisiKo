@@ -10,19 +10,20 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 /**
- * That class is used by the controller at the start of the game to generate the list 
- * of territories that are in the map. The information of the territories are 
- * memorized in a file text that contains after the name every contry followed by a :
- * the name of a territory and the list of the neighboring territories. 
+ * The Territories class is used by the controller at the start of the game to generate 
+ * the list of territories that are in the map. The informations about the territories are 
+ * memorized in a file text that contains the name of a territory and the list of the 
+ * neighboring territories after the name of the continent. 
+ * 
+ * @author Anna Malagoli 
  */
 public class Territories {
 
     private final List<Territory> listTerritories = new ArrayList<>();
     /**
      * Contructor to set the list of territories by extracting informations 
-     * from a file text. 
+     * from a file text. If an exeption is thrown the list of territories is empty.
      * 
      * @param filePath is the relative path of the text file
      */
@@ -30,10 +31,10 @@ public class Territories {
         final File file = new File(filePath);
         final String absoluteFilePath = file.getAbsolutePath();
         try {
-            InputStream inputStream = new FileInputStream(absoluteFilePath);
+            final InputStream inputStream = new FileInputStream(absoluteFilePath);
             try {
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String stringRow;
             String continentName = " ";
             String nameTerritory;
@@ -59,7 +60,7 @@ public class Territories {
             listTerritories.clear();
         }
     } catch (FileNotFoundException e) {
-            listTerritories.clear();;
+            listTerritories.clear();
         }
     }
 
