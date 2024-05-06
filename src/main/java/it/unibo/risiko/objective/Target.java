@@ -14,6 +14,13 @@ public interface Target {
     Player getPlayer();
 
     /**
+     * This method shows the number of remaining actions a players has to
+     * do in other to complete his target
+     * @return the number of specifics territories the player should conquer to win
+     */
+    int remainingActions();
+
+    /**
      * This method tells us if the goal of a specific player has been achieved
      * @return true if the objective is achieved, false if not
      */

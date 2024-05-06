@@ -13,4 +13,9 @@ public abstract class BaseTarget implements Target{
     public Player getPlayer(){
         return this.player;
     }
+
+    @Override
+    public Boolean isAchieved() {
+        return this.remainingActions()==0;
+    }
 }

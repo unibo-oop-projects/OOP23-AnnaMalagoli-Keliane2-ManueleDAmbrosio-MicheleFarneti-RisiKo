@@ -10,10 +10,8 @@ public class DestroyPlayerTarget extends BaseTarget {
         this.playerToDestroy=playerToDestroy;
     }
 
-
     @Override
-    public Boolean isAchieved() {
-        return this.playerToDestroy.isDefeated();
+    public int remainingActions() {
+        return Math.max(0,playerToDestroy.getNumberOfTerritories());
     }
-    
 }
