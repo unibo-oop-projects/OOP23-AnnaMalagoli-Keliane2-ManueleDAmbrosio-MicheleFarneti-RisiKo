@@ -1,52 +1,81 @@
 package it.unibo.risiko;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.print.DocFlavor.STRING;
-
+/**
+ * Implementation of the interface Territory.
+ * @author Anna Malagoli 
+ */
 public class TerritoryImpl implements Territory {
-    private String name;
+    private final String name;
     private int numberOfArmies;
-    private List<String> listNearTerritories = new ArrayList<>();
-    private String continent;
+    private final List<String> listNearTerritories;
+    private final String continent;
 
-    public TerritoryImpl(String name, String continent, List<String> listNearTerritories){
+    /**
+     * Constructor to set the parameters of the territory with the input parameters
+     * and to set the initial number of armies to zero.
+     * @param name is the name of the territory
+     * @param continent is the name of the continent
+     * @param listNearTerritories is the list of the neighboring territories
+     */
+    public TerritoryImpl(final String name, final String continent, final List<String> listNearTerritories) {
         this.name = name;
         this.continent = continent;
-        this.listNearTerritories = listNearTerritories;
+        this.listNearTerritories = List.copyOf(listNearTerritories);
         this.numberOfArmies = 0;
     }
 
+    /**
+     * Method to extract the name of the territory.
+     * @return the name of the territory
+     */
     @Override
     public String getTerritoryName() {
         return this.name;
     }
 
+    /**
+     * Method to get the number positioned in the territory.
+     * @return the number of armies
+     */
     @Override
     public int getNumberOfArmies() {
         return this.numberOfArmies;
     }
+
+    /**
+     * Method used to add a specified number of armies in the territory.
+     * @param number is the number of armies that has to be added
+     */
     @Override
-    public void addArmies(int number) {
+    public void addArmies(final int number) {
         this.numberOfArmies += number;
     }
 
+    /**
+     * Method used to remove a specified number of armies in the territory.
+     * @param number is the number of armies that has to be removed
+     */
     @Override
-    public void removeArmies(int number) {
+    public void removeArmies(final int number) {
         this.numberOfArmies -= number;
     }
 
+    /**
+     * Method to get the list of the territories that are near the territory.
+     * @return the list of the neighboring territories of a territory
+     */
     @Override
     public List<String> getListOfNearTerritories() {
-        List<String> copyListNearTerritories;
-        copyListNearTerritories = new ArrayList<>(this.getNumberOfArmies());
-        return copyListNearTerritories;
+        return List.copyOf(this.listNearTerritories);
     }
 
+    /**
+     * Method to get the name of the continent to whom the territory belongs.
+     * @return the name of the continent
+     */
     @Override
-    public String getContinetName() {
+    public String getContinentName() {
         return this.continent;
     }
-    
 }
