@@ -18,7 +18,7 @@ import java.util.Random;
  */
 public class DeckImpl implements Deck {
 
-    private final List<Card> listCards = new ArrayList<>();
+    private final List<CardImpl> listCards = new ArrayList<>();
 
     /**
      * Constructor used to initialize the starting deck at the beginning of the game
@@ -41,11 +41,11 @@ public class DeckImpl implements Deck {
             final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String stringRow = bufferedReader.readLine();
             while (stringRow != null) {
-                Card card;
+                CardImpl card;
                 final String[] cardData = stringRow.split(" ");
                 territory = cardData[0];
                 typeCard = cardData[1];
-                card = new Card(territory, typeCard);
+                card = new CardImpl(territory, typeCard);
                 this.listCards.add(card);
                 stringRow = bufferedReader.readLine();
             }
@@ -63,7 +63,7 @@ public class DeckImpl implements Deck {
      * @param card is the card that has to be added in the deck
      */
     @Override
-    public void addCard(final Card card) {
+    public void addCard(final CardImpl card) {
         listCards.add(card);
     }
 
@@ -72,8 +72,8 @@ public class DeckImpl implements Deck {
      * @return firstCard is the card pulled out from the deck
      */
     @Override
-    public Card pullCard() {
-        Card firstCard;
+    public CardImpl pullCard() {
+        CardImpl firstCard;
         firstCard = listCards.get(0);
         listCards.remove(0);
         return firstCard;
@@ -92,7 +92,7 @@ public class DeckImpl implements Deck {
      * @return the list of cards
      */
     @Override
-    public List<Card> getListCards() {
+    public List<CardImpl> getListCards() {
         return List.copyOf(this.listCards);
     }
 }

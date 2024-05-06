@@ -1,12 +1,10 @@
 package it.unibo.risiko;
 /**
- * The class Card is used to implement the cards of the game. 
- * They can show the player which continents they have at the beginning 
- * of the match or theycan be played to have and addictional number of armies.
+ * An implementation of the interface Card.
  * 
  * @author Anna Malagoli 
  */
-public class CardImpl {
+public class CardImpl implements Card{
     
     private final String typeName;
     private final String territoryName;
@@ -27,6 +25,7 @@ public class CardImpl {
      * Method used to get the territory's name that is on the card.
      * @return the name of the territory
      */
+    @Override
     public String getTerritoryName() {
         return this.territoryName;
     }
@@ -35,6 +34,7 @@ public class CardImpl {
      * Method used to get the type of card.
      * @return the name of the type
      */
+    @Override
     public String getTypeName() {
         return this.typeName;
     }
