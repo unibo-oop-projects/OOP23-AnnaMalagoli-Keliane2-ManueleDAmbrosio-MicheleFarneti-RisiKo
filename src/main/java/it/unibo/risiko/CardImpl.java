@@ -6,7 +6,7 @@ package it.unibo.risiko;
  * 
  * @author Anna Malagoli 
  */
-public class Card {
+public class CardImpl {
     
     private final String typeName;
     private final String territoryName;
@@ -18,7 +18,7 @@ public class Card {
      * @param typeName is the name of the type of the card that can be of 
      * three different types: Fante, Cavaliere, Cannone 
      */
-    public Card(final String territoryName, final String typeName) {
+    public CardImpl(final String territoryName, final String typeName) {
         this.typeName = typeName;
         this.territoryName = territoryName;
     }
