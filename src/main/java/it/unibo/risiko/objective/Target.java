@@ -23,9 +23,10 @@ public interface Target {
     /**
      * This method shows a description about the remaining actions a players has to
      * do in other to complete his target
-     * @return a string that informs on the number of specifics territories the player should conquer to win
+     * @return a string that informs on the number of specifics territories the player 
+     * should conquer to win
      */
-    String remainingActionsToString();
+    String RemainingActionsToString();
 
     /**
      * This method tells us if the goal of a specific player has been achieved
