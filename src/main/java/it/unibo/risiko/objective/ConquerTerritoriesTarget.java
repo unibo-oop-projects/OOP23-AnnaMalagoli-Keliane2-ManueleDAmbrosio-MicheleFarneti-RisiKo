@@ -16,7 +16,7 @@ public class ConquerTerritoriesTarget extends BaseTarget{
     }
 
     @Override
-    public String RemainingActionsToString() {
+    public String remainingActionsToString() {
         return this.remainingActions()==0? 
         "Remainnig territories to conquer = 0. You won!":
         "You have to conquer "+this.remainingActions()+
