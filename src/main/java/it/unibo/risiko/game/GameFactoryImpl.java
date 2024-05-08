@@ -2,6 +2,7 @@ package it.unibo.risiko.game;
 
 import java.util.List;
 
+import it.unibo.risiko.map.GameMap;
 import it.unibo.risiko.player.Player;
 
 public class GameFactoryImpl implements GameFactory{
