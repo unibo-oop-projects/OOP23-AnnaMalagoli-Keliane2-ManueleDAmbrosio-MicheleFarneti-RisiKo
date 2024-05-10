@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ContinentImpl implements Continent {
 
-    private final List<String> listTerritories = new ArrayList<>();
+    private final List<Territory> listTerritories = new ArrayList<>();
     private final String name;
 
     /**
@@ -33,16 +33,16 @@ public class ContinentImpl implements Continent {
      * @return the list of territories
      */
     @Override
-    public List<String> getListTerritories() {
+    public List<Territory> getListTerritories() {
         return List.copyOf(this.listTerritories);
     }
 
     /**
      * Method used to add a territory in the list of territories of the continent.
-     * @param terr is the name of a territory
+     * @param terr is a territory
      */
     @Override
-    public void addTerritory(final String terr) {
+    public void addTerritory(final Territory terr) {
         listTerritories.add(terr);
     } 
 }
