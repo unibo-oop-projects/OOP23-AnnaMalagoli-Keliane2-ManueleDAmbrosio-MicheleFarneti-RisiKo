@@ -21,8 +21,22 @@ public interface Target {
     int remainingActions();
 
     /**
+     * This method shows a description about the remaining actions a players has to
+     * do in other to complete his target
+     * @return a string that informs on the number of specifics territories the player 
+     * should conquer to win
+     */
+    String remainingActionsToString();
+
+    /**
      * This method tells us if the goal of a specific player has been achieved
      * @return true if the objective is achieved, false if not
      */
     Boolean isAchieved();
+
+    /**
+     * This method shows the target's description 
+     * @return a string that describe the objective to achieve
+     */
+    String targetDescription();
 }

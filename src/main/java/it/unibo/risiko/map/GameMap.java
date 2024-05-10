@@ -1,4 +1,4 @@
-package it.unibo.risiko.game;
+package it.unibo.risiko.map;
 
 public interface GameMap {
     int getMaxPlayers();

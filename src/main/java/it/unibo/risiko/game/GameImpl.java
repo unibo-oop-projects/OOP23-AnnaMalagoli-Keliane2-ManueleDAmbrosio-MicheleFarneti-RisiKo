@@ -7,4 +7,5 @@ import it.unibo.risiko.player.Player;
 public class GameImpl implements Game {
 
     private final List<Player> players = new ArrayList<Player>();
+   
 }
