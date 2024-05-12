@@ -21,6 +21,8 @@ import java.util.List;
 public class Territories {
 
     private final List<Territory> listTerritories = new ArrayList<>();
+    /*List to fill  with continets extract from the file */
+    /*private final List<Continent> listContinets = new ArrayList<>();*/
     /**
      * Contructor to set the list of territories by extracting informations 
      * from a file text. If an exeption is thrown the list of territories is empty.
@@ -30,6 +32,9 @@ public class Territories {
     public Territories(final String filePath) {
         final File file = new File(filePath);
         final String absoluteFilePath = file.getAbsolutePath();
+        /*I have to change the method to extract the information of the continets
+         * and the territories from the text file
+         */
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
             try {
@@ -71,4 +76,6 @@ public class Territories {
     public List<Territory> getList() {
         return List.copyOf(listTerritories); 
     }
+
+    /*Addiction of a method to return the list of continets */
 }

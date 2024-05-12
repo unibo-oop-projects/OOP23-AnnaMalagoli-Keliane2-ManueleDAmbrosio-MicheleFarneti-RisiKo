@@ -17,11 +17,11 @@ public interface Continent {
      * Method that returns the list of the territories which are in the continent.
      * @return the list of the territories
      */
-    List<String> getListTerritories();
+    List<Territory> getListTerritories();
 
     /**
      * Method used to add a territory in the list of the continent.
-     * @param terr is the name of the territory that has to be added in the list
+     * @param terr is the territory that has to be added in the list
      */
-    void addTerritory(String terr);
+    void addTerritory(Territory terr);
 }
