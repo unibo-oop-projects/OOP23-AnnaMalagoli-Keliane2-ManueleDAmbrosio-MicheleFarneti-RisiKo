@@ -9,7 +9,7 @@ import it.unibo.risiko.player.Player;
  * This interface contains methods for keeping track of in-game events
  * @author Keliane Tchoumkeu
  */
-public interface Log {
+public interface Register {
     /**
      * This method adds an event in the log
      * @param e the event to be added

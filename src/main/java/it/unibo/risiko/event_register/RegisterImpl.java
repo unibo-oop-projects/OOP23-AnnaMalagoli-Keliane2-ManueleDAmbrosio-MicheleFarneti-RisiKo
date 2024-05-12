@@ -6,10 +6,10 @@ import java.util.List;
 import it.unibo.risiko.event.Event;
 import it.unibo.risiko.player.Player;
 
-public class LogImpl implements Log {
+public class RegisterImpl implements Register {
     List<Event> register;
 
-    public LogImpl() {
+    public RegisterImpl() {
         this.register = new ArrayList<>();
     }
 
