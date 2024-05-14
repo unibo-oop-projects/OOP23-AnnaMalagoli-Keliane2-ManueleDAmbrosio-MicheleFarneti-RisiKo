@@ -14,7 +14,7 @@ public class RegisterImpl implements Register {
     }
 
     @Override
-    public void addEvent(Event e) {
+    public void addEvent(final Event e) {
         this.register.add(e);
     }
 
@@ -32,7 +32,7 @@ public class RegisterImpl implements Register {
     }
 
     @Override
-    public List<Event> getAllEventsPlayer(Player player) {
+    public List<Event> getAllEventsPlayer(final Player player) {
         List<Event> l=new ArrayList<>();
         for (Event e : this.register) {
             if (e.getPlayer().equals(player)) {
