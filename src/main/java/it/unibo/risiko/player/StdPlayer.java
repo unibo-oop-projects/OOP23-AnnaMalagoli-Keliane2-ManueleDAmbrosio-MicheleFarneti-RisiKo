@@ -89,23 +89,25 @@ public class StdPlayer implements Player {
         this.armiesToPlace--;
     }
 
-    public void removeCard(final Card card) {
+    public boolean removeCard(final Card card) {
         if (isOwnedCard(card)) {
             this.ownedCards.remove(card);
             decrementCards();
+            return true;
         }
         else {
-            System.err.println("Card " + card.getTerritoryName() + " not in possession");
+            return false;
         }
     }
 
-    public void removeTerritory(final Territory territory) {
+    public boolean removeTerritory(final Territory territory) {
         if (isOwnedTerritory(territory)) {
             this.ownedTerritories.remove(territory);
             decrementTerritories();
+            return true;
         }
         else {
-            System.err.println("Territory " + territory.getTerritoryName() + " not in possession");
+            return false;
         }
     }
 

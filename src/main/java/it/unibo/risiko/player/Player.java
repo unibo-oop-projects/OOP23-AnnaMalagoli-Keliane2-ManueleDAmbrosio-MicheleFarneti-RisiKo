@@ -31,9 +31,9 @@ public interface Player {
 
     public int getNumberOfCards();
 
-    public void removeCard(final Card card);
+    public boolean removeCard(final Card card);
 
-    public void removeTerritory(final Territory territory);
+    public boolean removeTerritory(final Territory territory);
 
     public boolean isDefeated();
 
