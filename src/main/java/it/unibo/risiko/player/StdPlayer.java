@@ -7,6 +7,7 @@ import java.util.Set;
 
 import it.unibo.risiko.Card;
 import it.unibo.risiko.Territory;
+import it.unibo.risiko.objective.Target;
 
 /**
  * Implementation of Player interface.
@@ -25,10 +26,12 @@ public class StdPlayer implements Player {
     private Set<Card> ownedCards = new HashSet<>();
     private int numberOfCards;
     private int armiesToPlace;
+    private Target target;
 
-    public StdPlayer (final String color, final int armiesToPlace) {
+    public StdPlayer (final String color, final int armiesToPlace, final Target target) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
+        this.target = target;
         this.ownedCards = Collections.emptySet();
         this.ownedTerritories = Collections.emptySet();
         this.numberOfCards = 0;
@@ -78,6 +81,10 @@ public class StdPlayer implements Player {
         return this.numberOfTerritores;
     }
 
+    public Target getTarget() {
+        return this.target;
+    }
+
     public void decrementArmiesToPlace() {
         this.armiesToPlace--;
     }
@@ -104,6 +111,15 @@ public class StdPlayer implements Player {
 
     public boolean isDefeated() {
         return this.ownedTerritories.isEmpty();
+    }
+
+    public String toString() {
+        return "Color = " + this.color_id +
+            "\nTarget = " + this.target + 
+            "\nNumber of cards = " + this.numberOfCards +
+            "\nArmies to place = " + this.armiesToPlace +
+            "\nOwned territories = " + ownedTerritories.toString() +
+            "\nOwned cards =" + ownedCards.toString();
     }
 
     private boolean isOwnedCard(final Card card) {
