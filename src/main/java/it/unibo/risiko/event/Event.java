@@ -19,7 +19,7 @@ public interface Event {
      * This method is used to know the player initiating an event
      * @return the player carrying the event
      */
-    Player getPlayer();
+    Player getEventLeader();
 
     /**
      * This method helps to know the territory used by the player carrying an event
