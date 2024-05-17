@@ -13,6 +13,14 @@ public class Dice {
     
     private static Random random = new Random();
 
+    protected Dice() {}
+
+    /**
+     * This method is used to get a random 
+     * dice number.
+     * 
+     * @return a random number from 1 to 6.
+     */
     public static int diceThrow() {
         return random.nextInt(DICE_MAXIMUM_VALUE - DICE_MINIMUM_VALUE + 1) + DICE_MINIMUM_VALUE;
     }
