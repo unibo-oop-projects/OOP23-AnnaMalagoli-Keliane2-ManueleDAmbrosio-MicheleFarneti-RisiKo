@@ -3,6 +3,10 @@ package it.unibo.risiko.InitialView;
 import java.awt.*;
 import javax.swing.*;
 
+import it.unibo.risiko.event_register.RegisterImpl;
+import it.unibo.risiko.game.GameImpl;
+import it.unibo.risiko.gameView.LoggerView;
+
 public class GameFrame{
     private JFrame frame;
     private PrincipalMenu menuPanel;
