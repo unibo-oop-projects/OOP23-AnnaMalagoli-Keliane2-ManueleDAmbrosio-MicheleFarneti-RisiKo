@@ -35,7 +35,7 @@ public class RegisterImpl implements Register {
     public List<Event> getAllEventsPlayer(final Player player) {
         List<Event> l=new ArrayList<>();
         for (Event e : this.register) {
-            if (e.getPlayer().equals(player)) {
+            if (e.getEventLeader().equals(player)) {
                 l.add(e);
             }
         }
