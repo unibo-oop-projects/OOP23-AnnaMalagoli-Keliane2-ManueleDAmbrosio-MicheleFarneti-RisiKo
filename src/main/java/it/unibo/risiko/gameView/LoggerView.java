@@ -28,6 +28,7 @@ public class LoggerView extends JPanel{
     private String eventList="";
     private List<Player> playerList;
     
+    @SuppressWarnings("unchecked")
     public LoggerView(Game game, Register register){
         this.register=register;
         this.setLayout(new BorderLayout());
@@ -108,6 +109,7 @@ public class LoggerView extends JPanel{
      * Inner Class which help to set a title in the JComboBox 
      * used to select the player whose events we want to see
      */
+    @SuppressWarnings("rawtypes")
     class MyComboBoxRenderer extends JLabel implements ListCellRenderer {
         private String _title;
 
