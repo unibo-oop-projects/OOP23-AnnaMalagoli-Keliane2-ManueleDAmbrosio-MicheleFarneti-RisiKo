@@ -124,11 +124,11 @@ public class StdPlayer implements Player {
             "\nOwned cards =" + ownedCards.toString();
     }
 
-    private boolean isOwnedCard(final Card card) {
+    public boolean isOwnedCard(final Card card) {
         return this.ownedCards.contains(card);
     }
 
-    private boolean isOwnedTerritory(final Territory territory) {
+    public boolean isOwnedTerritory(final Territory territory) {
         return this.ownedTerritories.contains(territory);
     }
 
