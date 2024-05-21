@@ -2,7 +2,7 @@ package it.unibo.risiko.game;
 
 /**
  * This interface manages all of the basic functions that are offered by the application 
- * at its star. It gives the opportunity to keep progress of multiple games during the use of the application
+ * at its start. It gives the opportunity to keep progress of multiple games during the use of the application
  * aswell as allowing to load informations of past games stored in a file
  * 
  * @author Michele Farneti
