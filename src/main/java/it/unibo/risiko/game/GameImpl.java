@@ -9,13 +9,28 @@ import it.unibo.risiko.player.Player;
 
 public class GameImpl implements Game {
 
-    GameMap map;
-    int activePlayer = 0;
+    private GameMap map;
+    private int activePlayer = 0;
     private final List<Player> players = new LinkedList<Player>();
    
     public void startGame(){
         Collections.shuffle(players);
+        /*Attribuzione armate */
         players.forEach( p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
+        /*Attribuzione territori */
+        AssignTerritories();
+        
+    }
+
+    private void AssignTerritories() {
+        var territoriesToAssign = map.getTerritories();
+        Collections.shuffle(territoriesToAssign);
+
+        while (territoriesToAssign.size()>0) {
+            players.get(activePlayer).addTerritory(territoriesToAssign.remove(0));
+            NextTurn();
+        }
+        activePlayer = 0;
     }
 
     public boolean NextTurn(){

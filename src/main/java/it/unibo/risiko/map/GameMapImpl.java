@@ -1,6 +1,9 @@
 package it.unibo.risiko.map;
 
+import java.util.List;
+
 import it.unibo.risiko.Territories;
+import it.unibo.risiko.Territory;
 
 public class GameMapImpl implements GameMap {
 
@@ -29,6 +32,11 @@ public class GameMapImpl implements GameMap {
     @Override
     public int getStratingArmies(int nplayers) {
         return (MINIMUM_ARMIES + ARMIES_STEP*(nplayers-minPlayers));
+    }
+
+    @Override
+    public List<Territory> getTerritories() {
+        return territories.getList();
     }
 
     

@@ -1,5 +1,8 @@
 package it.unibo.risiko.map;
 
+import java.util.List;
+import it.unibo.risiko.Territory;
+
 /**
  * The gameMap class manages all of the enviroment features of the game map, such us
  * keeping track of the territories'list and other settings.
@@ -18,4 +21,9 @@ public interface GameMap {
      * @return The number of armies every player should start with.
      */
     int getStratingArmies(int nplayers);
+
+    /**
+     * @return The list of territories for the Map
+     */
+    List<Territory> getTerritories();
 }
