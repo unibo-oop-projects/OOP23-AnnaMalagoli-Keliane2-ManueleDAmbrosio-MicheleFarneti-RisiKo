@@ -6,7 +6,7 @@ package it.unibo.risiko;
  */
 
 
-public class TripleDiceImpl extends Dice{
+public class TripleDiceImpl extends Dice implements TripleDice{
     private static final int MAX_THROWS = 3;
     private static final int MIN_THROWS = 1;
     private static final int MAX_VAL = 0;
