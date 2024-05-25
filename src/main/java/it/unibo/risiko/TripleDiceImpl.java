@@ -39,6 +39,16 @@ public class TripleDiceImpl extends Dice implements TripleDice {
         return this.results;
     }
 
+    public String toString() {
+        if (numberOfThrows == MAX_THROWS) {
+            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL] + ", " + results[MIN_VAL];
+        } else if (numberOfThrows == MIN_THROWS) {
+            return "Results: " + results[MAX_VAL];
+        } else {
+            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL];
+        }
+    }
+
     private boolean isLegitNumberOfThrows(final int numberOfThrows) {
         return numberOfThrows <= MAX_THROWS && numberOfThrows >= MIN_THROWS;
     }
@@ -70,15 +80,4 @@ public class TripleDiceImpl extends Dice implements TripleDice {
         } else {
         }
     }
-
-    public String toString() {
-        if (numberOfThrows == MAX_THROWS) {
-            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL] + ", " + results[MIN_VAL];
-        } else if (numberOfThrows == MIN_THROWS) {
-            return "Results: " + results[MAX_VAL];
-        } else {
-            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL];
-        }
-    }
-
 }

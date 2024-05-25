@@ -1,8 +1,8 @@
 package it.unibo.risiko.player;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import it.unibo.risiko.Card;
@@ -13,25 +13,18 @@ import it.unibo.risiko.objective.Target;
  * Implementation of Player interface.
  * @author Manuele D'Ambrosio
  */
-
-/*TO DO:
-Aggiungere la gestione degli obbietti.
- */
-
 public class StdPlayer implements Player {
 
     private final String color_id;
     private Set<Territory> ownedTerritories = new HashSet<>();
     private Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
-    private Target target;
+    private Optional<Target> target;
 
-    public StdPlayer (final String color, final int armiesToPlace, final Target target) {
+    public StdPlayer (final String color, final int armiesToPlace) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
-        this.target = target;
-        this.ownedCards = Collections.emptySet();
-        this.ownedTerritories = Collections.emptySet();
+        this.target = Optional.empty();
     }
 
     public void setArmiesToPlace(final int armiesToPlace) {
@@ -74,7 +67,7 @@ public class StdPlayer implements Player {
         return this.ownedTerritories.size();
     }
 
-    public Target getTarget() {
+    public Optional<Target> getTarget() {
         return this.target;
     }
 
