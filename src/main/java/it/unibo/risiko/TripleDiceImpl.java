@@ -2,11 +2,11 @@ package it.unibo.risiko;
 
 /**
  * compare the results of the multiple dice throws.
+ * 
  * @author Manuele D'Ambrosio
  */
 
-
-public class TripleDiceImpl extends Dice implements TripleDice{
+public class TripleDiceImpl extends Dice implements TripleDice {
     private static final int MAX_THROWS = 3;
     private static final int MIN_THROWS = 1;
     private static final int MAX_VAL = 0;
@@ -14,33 +14,21 @@ public class TripleDiceImpl extends Dice implements TripleDice{
     private static final int MIN_VAL = 2;
 
     private int[] results;
-    private int[] temporaryResults;
     private int numberOfThrows;
-
 
     public TripleDiceImpl(final int numberOfThrows) {
         this.numberOfThrows = numberOfThrows;
         if (isLegitNumberOfThrows(numberOfThrows)) {
-            this.results = new int[3];
-            this.temporaryResults = new int[3];
-            this.results[MAX_VAL] = diceThrow(); 
-            this.results[MID_VAL] = diceThrow(); 
-            this.results[MIN_VAL] = diceThrow(); 
-            orderResults(numberOfThrows);
-        }
-        else {
+
+            this.results = new int[numberOfThrows];
+
+            for (int i = 0; i < numberOfThrows; i++) {
+                this.results[i] = diceThrow();
+                orderResults(numberOfThrows);
+            }
+        } else {
             throw new IllegalArgumentException("Number of Throws out of range");
         }
-    }
-
-    /*
-     * This method is only used for tests.
-     */
-    public void setDummyThrows(final int first, final int second, final int third) {
-        this.results[MAX_VAL] = first;
-        this.results[MID_VAL] = second; 
-        this.results[MIN_VAL] = third; 
-        orderResults(this.numberOfThrows);
     }
 
     public int getNumberOfThrows() {
@@ -56,58 +44,41 @@ public class TripleDiceImpl extends Dice implements TripleDice{
     }
 
     private void orderResults(final int numberOfThrows) {
+        int temp = 0;
         if (numberOfThrows == MAX_THROWS) {
-            int val_sum = results[MAX_VAL] + results[MID_VAL] + results[MIN_VAL];
-            temporaryResults[MAX_VAL] = results[MAX_VAL];
-            temporaryResults[MIN_VAL] = results[MIN_VAL];
-            for (int i : results) {
-                if (results[i] > temporaryResults[MAX_VAL]) {
-                    temporaryResults[MAX_VAL] = results[i];
+            // Looking for the max result.
+            for (int i = 0; i < MAX_THROWS; i++) {
+                if (results[i] > temp) {
+                    temp = results[i];
                 }
-                if (results[i] < temporaryResults[MIN_VAL]) {
-                    temporaryResults[MIN_VAL] = results[i];
+                results[MAX_VAL] = temp;
+                // Oredering the other two results.
+                if (results[MIN_VAL] > results[MID_VAL]) {
+                    temp = results[MID_VAL];
+                    results[MID_VAL] = results[MIN_VAL];
+                    results[MIN_VAL] = temp;
                 }
             }
-            temporaryResults[MID_VAL] = val_sum - temporaryResults[MAX_VAL] - temporaryResults[MIN_VAL];
-            results = temporaryResults;
         }
+        // The two results are swapped if not already ordered.
         else if (numberOfThrows == MIN_THROWS + 1) {
-            if (results[MIN_VAL] > results[MAX_VAL]) {
-                temporaryResults[MAX_VAL] = results[MIN_VAL];
-                results[MIN_VAL] = results[MAX_VAL];
-                results[MAX_VAL] = results[MIN_VAL];
+            if (results[MAX_VAL] < results[MID_VAL]) {
+                temp = results[MAX_VAL];
+                results[MAX_VAL] = results[MID_VAL];
+                results[MID_VAL] = temp;
             }
+        } else {
         }
-        else {}
     }
 
-    public static int attackerLostArmies(final TripleDiceImpl attackerThrows, final TripleDice defenderThrows) {
-        int maxLostArmies = Math.min(attackerThrows.getNumberOfThrows(), defenderThrows.getNumberOfThrows());
-        int lostArmies = 0;
-        if (maxLostArmies == MAX_THROWS) {
-            if (attackerThrows.getResults()[MAX_VAL] >= defenderThrows.getResults()[MAX_VAL]) {
-                lostArmies++;
-            }
-            if (attackerThrows.getResults()[MIN_VAL] >= defenderThrows.getResults()[MIN_VAL]) {
-                lostArmies++;
-            }
-            if (attackerThrows.getResults()[MID_VAL] >= defenderThrows.getResults()[MID_VAL]) {
-                lostArmies++;
-            }
+    public String toString() {
+        if (numberOfThrows == MAX_THROWS) {
+            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL] + ", " + results[MIN_VAL];
+        } else if (numberOfThrows == MIN_THROWS) {
+            return "Results: " + results[MAX_VAL];
+        } else {
+            return "Results: " + results[MAX_VAL] + ", " + results[MID_VAL];
         }
-        else if (maxLostArmies == MIN_THROWS) {
-            if (attackerThrows.getResults()[MAX_VAL] >= defenderThrows.getResults()[MAX_VAL]) {
-                lostArmies++;
-            }
-        }
-        else {
-            if (attackerThrows.getResults()[MAX_VAL] >= defenderThrows.getResults()[MAX_VAL]) {
-                lostArmies++;
-            }
-            if (attackerThrows.getResults()[MIN_VAL] >= defenderThrows.getResults()[MIN_VAL]) {
-                lostArmies++;
-            }
-        }
-        return lostArmies;
     }
+
 }
