@@ -6,7 +6,7 @@ import it.unibo.risiko.TripleDiceImpl;
 import it.unibo.risiko.player.Player;
 
 /**
- * This class contains all the functions of the attack phase
+ * This class contains all the functions of the attack phase.
  * 
  * @author Manuele D'Ambrosio
  */
@@ -24,6 +24,15 @@ public class AttackPhaseImpl implements AttackPhase {
     private int attackerLostArmies;
     private int defenderLostArmies;
 
+    /**
+     * Builder method for AttackPhaseImpl class.
+     * 
+     * @param attackingPlayer - The attacking player.
+     * @param attackerTerritory - The territory the attacking player is attacking from.
+     * @param attackingArmies - The number of armies the attacking player is attacking with.
+     * @param defendingPlayer - The defending player.
+     * @param defenderTerritory - The territory the defending player is defending.
+     */
     public AttackPhaseImpl(final Player attackingPlayer, final Territory attackerTerritory, final int attackingArmies,
             final Player defendingPlayer, final Territory defenderTerritory) {
 
@@ -59,6 +68,14 @@ public class AttackPhaseImpl implements AttackPhase {
 
     public int getDefenderLostArmies() {
         return defenderLostArmies;
+    }
+
+    public boolean isTerritoryConquered() {
+        if (defenderLostArmies >= defenderTerritory.getNumberOfArmies()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String toString() {
