@@ -3,6 +3,8 @@ package it.unibo.risiko.game;
 import it.unibo.risiko.TripleDice;
 
 /**
+ * This class contains all the functions of the attack phase.
+ * 
  * @author Manuele D'Ambrosio
  */
 
@@ -41,4 +43,25 @@ public interface AttackPhase {
      * false otherwise.
      */
     public boolean isTerritoryConquered();
+
+    /**
+     * This method is used to remove the lost armies in the
+     * attacker territory and in the defender territory.
+     */
+    public void destroyArmies();
+
+    /**
+     * This method is used to move armies from the attacker
+     * territory in the defender territory and change the 
+     * owner of the territory if the territory is 
+     * conquered.
+     * @param armiesToMove - Number of armies to move in the
+     * conquered territory.
+     * @return True if the territory can be conquered and the
+     * number of armies to move is greater or equal the number 
+     * of attacking armies and lower than the amies in the 
+     * attacker territory, false otherwise.
+     */
+    public boolean conquerTerritory(final int armiesToMove);
 }
+

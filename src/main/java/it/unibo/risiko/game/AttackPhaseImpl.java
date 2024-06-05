@@ -6,7 +6,7 @@ import it.unibo.risiko.TripleDiceImpl;
 import it.unibo.risiko.player.Player;
 
 /**
- * This class contains all the functions of the attack phase.
+ *Implementation of AttackPhase interface.
  * 
  * @author Manuele D'Ambrosio
  */
@@ -78,6 +78,22 @@ public class AttackPhaseImpl implements AttackPhase {
         }
     }
 
+    public void destroyArmies() {
+        defenderTerritory.removeArmies(defenderLostArmies);
+        attackerTerritory.removeArmies(attackerLostArmies);
+    }
+
+    public boolean conquerTerritory(final int armiesToMove) {
+        if (isTerritoryConquered() && isLegitArmiesToMove(armiesToMove)) {
+            defendingPlayer.removeTerritory(defenderTerritory);
+            attackingPlayer.addTerritory(defenderTerritory);
+            defenderTerritory.addArmies(armiesToMove);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public String toString() {
         return "Player " + attackingPlayer.getColor_id() + " is attacking from" +
                 attackerTerritory.getTerritoryName() + " with " +
@@ -86,6 +102,10 @@ public class AttackPhaseImpl implements AttackPhase {
                 defenderTerritory.getTerritoryName() + " with " +
                 defendingArmies() + " armies.";
 
+    }
+
+    private boolean isLegitArmiesToMove(final int armiesToMove) {
+        return (armiesToMove >= attackingArmies && armiesToMove < attackerTerritory.getNumberOfArmies());
     }
 
     private boolean isLegitOwner(final Player player, final Territory territory) {
