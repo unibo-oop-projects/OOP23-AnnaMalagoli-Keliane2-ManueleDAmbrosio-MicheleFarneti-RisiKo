@@ -82,7 +82,7 @@ public class LoggerView extends JPanel{
                 selectedPlayer=Optional.of(playerList.get(j));
             }
         }
-        register.getAllEventsPlayer(selectedPlayer.get()).forEach(i->eventList+=i.toString()+"\n");
+        register.getAllEventsPlayer(selectedPlayer.get()).forEach(i->eventList+=i.getDescription()+"\n");
         updateLogText(logText, eventList);
     }
 
@@ -92,7 +92,7 @@ public class LoggerView extends JPanel{
      */
     private void showAllEvents(JTextArea logText) {
         this.eventList="";
-        register.getAllEvents().forEach(i->eventList+=i.toString()+"\n");
+        register.getAllEvents().forEach(i->eventList+=i.getDescription()+"\n");
         updateLogText(logText, eventList);
     }
 
