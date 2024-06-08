@@ -35,6 +35,10 @@ public class StdPlayer implements Player {
         this.ownedTerritories.addAll(newTerritories);
     }
 
+    public void setTarget(final Optional<Target> target) {
+        this.target = target;
+    }
+
     public void addTerritory(final Territory newTerritory) {
         this.ownedTerritories.add(newTerritory);
     }
