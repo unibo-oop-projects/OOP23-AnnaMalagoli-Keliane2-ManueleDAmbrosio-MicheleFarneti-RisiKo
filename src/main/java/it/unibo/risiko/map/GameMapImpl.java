@@ -36,7 +36,7 @@ public class GameMapImpl implements GameMap {
 
     @Override
     public List<Territory> getTerritories() {
-        return territories.getList();
+        return territories.getListTerritories();
     }
 
     

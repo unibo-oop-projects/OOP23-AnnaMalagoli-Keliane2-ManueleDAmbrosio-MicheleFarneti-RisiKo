@@ -19,7 +19,6 @@ public class GameImpl implements Game {
         players.forEach( p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
         /*Attribuzione territori */
         AssignTerritories();
-        
     }
 
     private void AssignTerritories() {
@@ -44,5 +43,10 @@ public class GameImpl implements Game {
     private boolean skipTurnPossible(){
         return false;
         
+    }
+
+    @Override
+    public List<Player> getPlayersList() {
+        return List.copyOf(players);
     }
 }
