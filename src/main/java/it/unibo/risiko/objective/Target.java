@@ -38,5 +38,5 @@ public interface Target {
      * This method shows the target's description 
      * @return a string that describe the objective to achieve
      */
-    String targetDescription();
+    String showTargetDescription();
 }

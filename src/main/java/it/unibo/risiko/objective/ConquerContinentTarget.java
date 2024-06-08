@@ -33,7 +33,7 @@ public class ConquerContinentTarget extends BaseTarget {
     }
 
     @Override
-    public String targetDescription() {
+    public String showTargetDescription() {
         return "Conquer all the "+this.continent.getName()+" to win the game";
     }
 }

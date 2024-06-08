@@ -24,7 +24,7 @@ public class ConquerTerritoriesTarget extends BaseTarget{
     }
 
     @Override
-    public String targetDescription() {
+    public String showTargetDescription() {
         return "Conquer "+this.territoryWantedNumber+" territories to win the game";
     }
 }

@@ -25,7 +25,7 @@ public class DestroyPlayerTarget extends BaseTarget {
     }
 
     @Override
-    public String targetDescription() {
+    public String showTargetDescription() {
         return "Destroy the player "+this.playerToDestroy.getColor_id()+" to win the game";
     }
 }
