@@ -66,7 +66,7 @@ public class EventImpl implements Event {
 
     @Override
     public String getDescription() {
-        return this.getDescription();
+        return this.description;
     }
     
 }

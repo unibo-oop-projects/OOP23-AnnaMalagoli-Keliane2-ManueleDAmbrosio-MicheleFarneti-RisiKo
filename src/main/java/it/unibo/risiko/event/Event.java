@@ -32,7 +32,14 @@ public interface Event {
      */
     Territory getDefenderTerritory();
 
+    /**
+     * Method used to set the description of the Event
+     */
     void setDescription();
 
+    /**
+     * Method used to get all the information of an Event
+     * @return the Event's description
+     */
     String getDescription();
 }
