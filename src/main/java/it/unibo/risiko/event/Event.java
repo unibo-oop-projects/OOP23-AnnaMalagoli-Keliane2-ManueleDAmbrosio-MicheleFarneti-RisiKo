@@ -32,4 +32,7 @@ public interface Event {
      */
     Territory getDefenderTerritory();
 
+    void setDescription();
+
+    String getDescription();
 }

@@ -9,6 +9,7 @@ public class EventImpl implements Event {
     private Territory defender;
     private Player eventLeader;
     private Player eventLeaderAdversary;
+    private String description;
 
     public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader, Player eventLeaderAdversary) {
         this.type = type;
@@ -16,6 +17,7 @@ public class EventImpl implements Event {
         this.defender = defender;
         this.eventLeader = eventLeader;
         this.eventLeaderAdversary=eventLeaderAdversary;
+        this.setDescription();
     }
 
     @Override
@@ -39,27 +41,32 @@ public class EventImpl implements Event {
     }
 
     @Override
-    public String toString() {
+    public void setDescription() {
         switch (type) {
             case ATTACK:
-                return "Attack of player "+eventLeader.getColor_id()+
+                this.description= "Attack of player "+eventLeader.getColor_id()+
                         " from "+attacker.getTerritoryName()+
                         "( number of armies: "+attacker.getNumberOfArmies()+
                         " )\n to "+defender.getTerritoryName()+
                         " ( number of armies: "+defender.getNumberOfArmies()+
                         " ), territory of "+eventLeaderAdversary.getColor_id();
             case TERRITORY_CONQUEST:
-                return "The player "+eventLeader.getColor_id()+
+                this.description= "The player "+eventLeader.getColor_id()+
                         " has conquered "+defender.getTerritoryName()+
                         "which was the territory of"+eventLeaderAdversary.getColor_id();
             case TROOP_MOVEMENT:
-                return "deployment of "+(attacker.getNumberOfArmies()-1)+
+                this.description= "deployment of "+(attacker.getNumberOfArmies()-1)+
                         " armies of "+eventLeader.getColor_id()+
                         " from "+attacker.getTerritoryName()+
                         " to "+defender.getTerritoryName();
             default:
-                return "Invalid Event";
+                this.description= "Invalid Event";
         }
+    }
+
+    @Override
+    public String getDescription() {
+        return this.getDescription();
     }
     
 }
