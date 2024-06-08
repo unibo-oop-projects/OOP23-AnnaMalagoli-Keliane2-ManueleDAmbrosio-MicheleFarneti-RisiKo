@@ -42,7 +42,7 @@ public class LoggerView extends JPanel{
         JPanel options=new JPanel();
         options.setLayout(new BoxLayout(options,BoxLayout.LINE_AXIS));
         //getting the list of the players
-        List<Player> playerList=game.getListOfPlayers();
+        List<Player> playerList=game.getPlayersList();
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
         String[] list=new String[playerList.size()];
