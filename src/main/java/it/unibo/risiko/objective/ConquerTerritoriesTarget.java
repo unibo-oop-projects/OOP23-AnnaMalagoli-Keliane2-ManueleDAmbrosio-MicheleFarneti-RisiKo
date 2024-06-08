@@ -12,7 +12,7 @@ public class ConquerTerritoriesTarget extends BaseTarget{
 
     @Override
     public int remainingActions() {
-        return Math.max(0,this.territoryWantedNumber-this.getPlayer().getNumberOfTerritories());
+        return Math.max(0,this.territoryWantedNumber-this.getPlayer().getNumberOfTerritores());
     }
 
     @Override
