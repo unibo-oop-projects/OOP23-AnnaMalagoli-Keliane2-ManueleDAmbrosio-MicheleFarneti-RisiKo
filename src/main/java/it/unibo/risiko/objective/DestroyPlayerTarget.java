@@ -12,7 +12,7 @@ public class DestroyPlayerTarget extends BaseTarget {
 
     @Override
     public int remainingActions() {
-        return Math.max(0,playerToDestroy.getNumberOfTerritories());
+        return Math.max(0,playerToDestroy.getNumberOfTerritores());
     }
 
     @Override
