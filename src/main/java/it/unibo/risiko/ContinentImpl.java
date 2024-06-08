@@ -15,7 +15,7 @@ public class ContinentImpl implements Continent {
      * Constructor that is used to set the name of the continent created.
      * @param name is the name of the continent
      */
-    ContinentImpl(final String name) {
+    public ContinentImpl(final String name) {
         this.name = name;
     }
 
