@@ -83,9 +83,18 @@ class MainTest {
     void testTerritories() {
         final String path = "src/test/java/it/unibo/risiko/Territories.txt";
         final Territories territories = new Territories(path);
-        final List<Territory> territoriesList = territories.getList();
+        final Continent continent;
+        final List<Territory> territoriesList = territories.getListTerritories();
+        final List<Continent> continentList = territories.getListContinents();
         assertEquals(territoriesList.get(0).getTerritoryName(), ITALIA);
         assertEquals(territoriesList.get(1).getTerritoryName(), FRANCIA);
+        //System.out.println(continentList.get(0).getName());
+        assertEquals(continentList.get(0).getName(), "Europa");
+        assertEquals(continentList.size(), 1);
+        continent = continentList.get(0);
+        assertEquals(continent.getListTerritories().get(0).getTerritoryName(), ITALIA);
+        //System.out.println(continent.getListTerritories().get(0).getTerritoryName());
+        assertEquals(continent.getListTerritories().get(1).getTerritoryName(), FRANCIA);
     }
 
 }

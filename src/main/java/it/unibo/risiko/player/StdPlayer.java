@@ -1,8 +1,8 @@
 package it.unibo.risiko.player;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import it.unibo.risiko.Card;
@@ -13,29 +13,18 @@ import it.unibo.risiko.objective.Target;
  * Implementation of Player interface.
  * @author Manuele D'Ambrosio
  */
-
-/*TO DO:
-Aggiungere la gestione degli obbietti.
- */
-
 public class StdPlayer implements Player {
 
     private final String color_id;
     private Set<Territory> ownedTerritories = new HashSet<>();
-    private int numberOfTerritores;
     private Set<Card> ownedCards = new HashSet<>();
-    private int numberOfCards;
     private int armiesToPlace;
-    private Target target;
+    private Optional<Target> target;
 
-    public StdPlayer (final String color, final int armiesToPlace, final Target target) {
+    public StdPlayer (final String color, final int armiesToPlace) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
-        this.target = target;
-        this.ownedCards = Collections.emptySet();
-        this.ownedTerritories = Collections.emptySet();
-        this.numberOfCards = 0;
-        this.numberOfTerritores = 0;
+        this.target = Optional.empty();
     }
 
     public void setArmiesToPlace(final int armiesToPlace) {
@@ -44,17 +33,14 @@ public class StdPlayer implements Player {
 
     public void setOwnedTerritories(final Set<Territory> newTerritories) {
         this.ownedTerritories.addAll(newTerritories);
-        this.numberOfTerritores = newTerritories.size();
     }
 
     public void addTerritory(final Territory newTerritory) {
         this.ownedTerritories.add(newTerritory);
-        incrementTerritories();
     }
 
     public void addCard (final Card newCard) {
         this.ownedCards.add(newCard);
-        incrementCards();
     }
 
     public String getColor_id() {
@@ -74,14 +60,14 @@ public class StdPlayer implements Player {
     }
 
     public int getNumberOfCards() {
-        return this.numberOfCards;
+        return this.ownedCards.size();
     }
 
     public int getNumberOfTerritores() {
-        return this.numberOfTerritores;
+        return this.ownedTerritories.size();
     }
 
-    public Target getTarget() {
+    public Optional<Target> getTarget() {
         return this.target;
     }
 
@@ -92,7 +78,6 @@ public class StdPlayer implements Player {
     public boolean removeCard(final Card card) {
         if (isOwnedCard(card)) {
             this.ownedCards.remove(card);
-            decrementCards();
             return true;
         }
         else {
@@ -103,7 +88,6 @@ public class StdPlayer implements Player {
     public boolean removeTerritory(final Territory territory) {
         if (isOwnedTerritory(territory)) {
             this.ownedTerritories.remove(territory);
-            decrementTerritories();
             return true;
         }
         else {
@@ -118,34 +102,18 @@ public class StdPlayer implements Player {
     public String toString() {
         return "Color = " + this.color_id +
             "\nTarget = " + this.target + 
-            "\nNumber of cards = " + this.numberOfCards +
-            "\nArmies to place = " + this.armiesToPlace +
+            "\nNumber of cards = " + getNumberOfCards() +
+            "\nOwned cards = " + ownedCards.toString() +
+            "\nNumber of territories = " + getNumberOfTerritores() +
             "\nOwned territories = " + ownedTerritories.toString() +
-            "\nOwned cards =" + ownedCards.toString();
+            "\nArmies to place = " + this.armiesToPlace;
     }
 
-    private boolean isOwnedCard(final Card card) {
+    public boolean isOwnedCard(final Card card) {
         return this.ownedCards.contains(card);
     }
 
-    private boolean isOwnedTerritory(final Territory territory) {
+    public boolean isOwnedTerritory(final Territory territory) {
         return this.ownedTerritories.contains(territory);
     }
-
-    private void incrementTerritories() {
-        this.numberOfTerritores++;
-    }
-
-    private void decrementTerritories() {
-        this.numberOfTerritores--;
-    }
-
-    private void incrementCards() {
-        this.numberOfCards++;
-    }
-
-    private void decrementCards() {
-        this.numberOfCards--;
-    }
-
 }

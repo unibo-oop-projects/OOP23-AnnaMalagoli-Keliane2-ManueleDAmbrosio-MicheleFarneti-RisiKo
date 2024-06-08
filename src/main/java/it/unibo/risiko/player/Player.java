@@ -7,7 +7,7 @@ import it.unibo.risiko.Card;
 import it.unibo.risiko.Territory;
 
 /**
- * contains player status and informations as well as owned territories and cards.
+ * Contains player status and informations as well as owned territories and cards.
  * @author Manuele D'Ambrosio
  */
 
@@ -87,6 +87,14 @@ public interface Player {
     public int getNumberOfCards();
 
     /**
+     * This method is used to know the number of cards
+     * owned by the player.
+     * 
+     * @return the number of cards owned by the players.
+     */
+    public int getNumberOfTerritores();
+
+    /**
      * This metod is used to remove a card from the 
      * set of cards owned by the player.
      * 
@@ -115,4 +123,25 @@ public interface Player {
      * territories, false otherwise.
      */
     public boolean isDefeated();
+
+    /**
+     * This method is used to know if a player owns a
+     * certain card.
+     * 
+     * @param card - card to check.
+     * @return true if the player owns the card, false
+     * otherwise.
+     */
+    public boolean isOwnedCard(final Card card);
+
+    /**
+     * This method is used to know if a player owns a 
+     * certain territory.
+     * 
+     * @param territory - territory to check.
+     * @return True if the player owns the territory, false 
+     * otherwise.
+     */
+    public boolean isOwnedTerritory(final Territory territory);
+
 }

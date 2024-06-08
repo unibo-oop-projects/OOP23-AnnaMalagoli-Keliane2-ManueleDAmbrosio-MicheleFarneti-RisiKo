@@ -21,6 +21,7 @@ import java.util.List;
 public class Territories {
 
     private final List<Territory> listTerritories = new ArrayList<>();
+    private final List<Continent> listContinents = new ArrayList<>();
     /*List to fill  with continets extract from the file */
     /*private final List<Continent> listContinets = new ArrayList<>();*/
     /**
@@ -46,9 +47,13 @@ public class Territories {
             List<String> listNearTerritory;
 
             stringRow = bufferedReader.readLine();
+
             do {
                 if (stringRow.contains(":")) { 
                     continentName = stringRow.substring(0, stringRow.length() - 1);
+                    if(!this.isInList(continentName)){
+                        this.listContinents.add(new ContinentImpl(continentName));
+                    }
                 } else {
                     final List<String> nations = Arrays.asList(stringRow.split(" "));
                     nameTerritory = nations.get(0);
@@ -56,6 +61,8 @@ public class Territories {
                     listNearTerritory.remove(nameTerritory);
                     final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory);
                     this.listTerritories.add(territory);
+
+                    this.getContinentFromName(continentName).addTerritory(territory);
                 }
                 stringRow = bufferedReader.readLine();
             } while (stringRow != null);
@@ -73,9 +80,30 @@ public class Territories {
      * Method used to get the list of all the territories extracted from the text file.
      * @return the list of territories
      */
-    public List<Territory> getList() {
+    public List<Territory> getListTerritories() {
         return List.copyOf(listTerritories); 
     }
 
-    /*Addiction of a method to return the list of continets */
+    public List<Continent> getListContinents() {
+        return List.copyOf(listContinents); 
+    }
+
+    private boolean isInList(final String continent) {
+        for(var elem : this.listContinents) {
+            if(elem.getName().equals(continent)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Continent getContinentFromName(final String name) {
+        for(var elem : this.listContinents) {
+            if(elem.getName().equals(name)) {
+                return elem;
+            }
+        }
+        return new ContinentImpl("");
+    }
+
 }
