@@ -144,4 +144,13 @@ public interface Player {
      */
     public boolean isOwnedTerritory(final Territory territory);
 
+    /**
+     * This method is used to know if a player is controlled by
+     * a human or AI.
+     * 
+     * @return true if the player is not controlled by
+     * a human, false otherwise.
+     */
+    public boolean isAI();
+
 }

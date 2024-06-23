@@ -11,6 +11,7 @@ import it.unibo.risiko.objective.Target;
 
 /**
  * Implementation of Player interface.
+ * 
  * @author Manuele D'Ambrosio
  */
 public class StdPlayer implements Player {
@@ -21,7 +22,7 @@ public class StdPlayer implements Player {
     private int armiesToPlace;
     private Optional<Target> target;
 
-    public StdPlayer (final String color, final int armiesToPlace) {
+    public StdPlayer(final String color, final int armiesToPlace) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
         this.target = Optional.empty();
@@ -43,7 +44,7 @@ public class StdPlayer implements Player {
         this.ownedTerritories.add(newTerritory);
     }
 
-    public void addCard (final Card newCard) {
+    public void addCard(final Card newCard) {
         this.ownedCards.add(newCard);
     }
 
@@ -83,8 +84,7 @@ public class StdPlayer implements Player {
         if (isOwnedCard(card)) {
             this.ownedCards.remove(card);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -93,8 +93,7 @@ public class StdPlayer implements Player {
         if (isOwnedTerritory(territory)) {
             this.ownedTerritories.remove(territory);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -105,12 +104,12 @@ public class StdPlayer implements Player {
 
     public String toString() {
         return "Color = " + this.color_id +
-            "\nTarget = " + this.target + 
-            "\nNumber of cards = " + getNumberOfCards() +
-            "\nOwned cards = " + ownedCards.toString() +
-            "\nNumber of territories = " + getNumberOfTerritores() +
-            "\nOwned territories = " + ownedTerritories.toString() +
-            "\nArmies to place = " + this.armiesToPlace;
+                "\nTarget = " + this.target +
+                "\nNumber of cards = " + getNumberOfCards() +
+                "\nOwned cards = " + ownedCards.toString() +
+                "\nNumber of territories = " + getNumberOfTerritores() +
+                "\nOwned territories = " + ownedTerritories.toString() +
+                "\nArmies to place = " + this.armiesToPlace;
     }
 
     public boolean isOwnedCard(final Card card) {
@@ -119,5 +118,9 @@ public class StdPlayer implements Player {
 
     public boolean isOwnedTerritory(final Territory territory) {
         return this.ownedTerritories.contains(territory);
+    }
+
+    public boolean isAI() {
+        return false;
     }
 }
