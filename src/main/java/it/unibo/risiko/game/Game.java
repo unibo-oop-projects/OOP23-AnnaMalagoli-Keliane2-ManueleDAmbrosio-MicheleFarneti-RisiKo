@@ -14,9 +14,15 @@ import it.unibo.risiko.player.Player;
 public interface Game {
 
     /**
-     * @return True if the currently active player is allowed to end is turn.
+     * @return Allows the game to go on by updating the active players, but only after checking if he made all the actions needed to skip the turn.
      */
-    boolean NextTurn();
+    boolean nextTurn();
+
+    /**
+     * Initializises the game following the basic Risiko rules, Every player
+     * gets a randomly generated target, the set of owned territories and the right amount of armies.
+     */
+    void startGame();
 
     /**
      * @return The List of the players currently playing the game.

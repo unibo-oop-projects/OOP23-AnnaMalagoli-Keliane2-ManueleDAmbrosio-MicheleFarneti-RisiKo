@@ -2,6 +2,7 @@ package it.unibo.risiko.map;
 
 import java.util.List;
 
+import it.unibo.risiko.Continent;
 import it.unibo.risiko.Territories;
 import it.unibo.risiko.Territory;
 
@@ -37,6 +38,11 @@ public class GameMapImpl implements GameMap {
     @Override
     public List<Territory> getTerritories() {
         return territories.getListTerritories();
+    }
+
+    @Override
+    public List<Continent> getContinents() {
+        return territories.getListContinents();
     }
 
     

@@ -1,6 +1,8 @@
 package it.unibo.risiko.map;
 
 import java.util.List;
+
+import it.unibo.risiko.Continent;
 import it.unibo.risiko.Territory;
 
 /**
@@ -26,4 +28,9 @@ public interface GameMap {
      * @return The list of territories for the Map
      */
     List<Territory> getTerritories();
+
+    /**
+     * @return The list of continents in the map
+     */
+    public List<Continent> getContinents();
 }
