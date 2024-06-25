@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import it.unibo.risiko.Territory;
 import it.unibo.risiko.map.GameMap;
-import it.unibo.risiko.objective.BaseTarget;
 import it.unibo.risiko.objective.ConquerContinentTarget;
 import it.unibo.risiko.objective.ConquerTerritoriesTarget;
 import it.unibo.risiko.objective.DestroyPlayerTarget;
@@ -23,12 +23,15 @@ public class GameImpl implements Game {
 
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
     private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
+    private static final int PLACEABLE_ARMIES_PER_TURN = 3;
 
  
     private GameMap map;
     private int activePlayer = 0;
+    private int armiesPlaced = 0 ;
     private final List<Player> players = new LinkedList<Player>();
     private static final Random randomNumberGenerator = new Random();
+    GameStatus status = GameStatus.TERRITORY_OCCUPATION;
    
     @Override
     public void startGame(){
@@ -37,6 +40,7 @@ public class GameImpl implements Game {
         players.forEach( p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
         /*Attribuzione territori */
         assignTerritories();
+        /*Assegnamento degli obiettivi*/
         assignTargets();
     }
 
@@ -83,6 +87,9 @@ public class GameImpl implements Game {
     public boolean nextTurn(){
         if(skipTurnPossible()){
             activePlayer = (activePlayer+1)%players.size();
+            if(status == GameStatus.TERRITORY_OCCUPATION){
+                armiesPlaced = 0;
+            }
             return true;
         }
         return false;
@@ -92,8 +99,21 @@ public class GameImpl implements Game {
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
     private boolean skipTurnPossible(){
-        return players.get(activePlayer).getArmiesToPlace() == 0;
-        
+        if(status == GameStatus.TERRITORY_OCCUPATION){
+            return(armiesPlaced == 3 || players.get(activePlayer).getArmiesToPlace() == 0);
+        }
+        return players.get(activePlayer).getArmiesToPlace() == 0; 
+    }
+
+    public boolean placeArmies(final Territory territory){
+        if(status == GameStatus.TERRITORY_OCCUPATION){
+            if(armiesPlaced < 3){
+                if(players.get(activePlayer).isOwnedTerritory(territory)){
+                    map.setArmies(territory,1);
+                    armiesPlaced ++;
+                }
+            }
+        }
     }
 
     @Override
