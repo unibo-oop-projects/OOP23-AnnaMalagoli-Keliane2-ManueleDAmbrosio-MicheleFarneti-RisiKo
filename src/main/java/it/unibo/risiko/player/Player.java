@@ -5,6 +5,7 @@ import java.util.Set;
 
 import it.unibo.risiko.Card;
 import it.unibo.risiko.Territory;
+import it.unibo.risiko.objective.Target;
 
 /**
  * Contains player status and informations as well as owned territories and cards.
@@ -30,6 +31,8 @@ public interface Player {
      * owned by the player.
      */
     public void setOwnedTerritories(final Set<Territory> ownedTerritories);
+
+    public void setTarget(final Target target);
 
     /**
      * This method is used to add a territory to the set of
