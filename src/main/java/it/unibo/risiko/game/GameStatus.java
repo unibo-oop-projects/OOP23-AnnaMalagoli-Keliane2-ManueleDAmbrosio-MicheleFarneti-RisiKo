@@ -5,7 +5,7 @@ package it.unibo.risiko.game;
  * Enum used to rappresent the differente sta
  */
 public enum GameStatus {
-    TERRITORY_OCCUPATION,ATTACK,ARMIES_PLACEMENT;
+    TERRITORY_OCCUPATION,ATTACK,ARMIES_PLACEMENT,GAME_OVER;
 
     /**
      * 

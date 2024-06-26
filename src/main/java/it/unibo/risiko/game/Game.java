@@ -33,4 +33,10 @@ public interface Game {
      * @return The current Stage of the game
      */
     GameStatus getGameStatus();
+
+    /**
+     * 
+     * @return True if one of the players has reached is target
+     */
+    boolean gameOver();
 }

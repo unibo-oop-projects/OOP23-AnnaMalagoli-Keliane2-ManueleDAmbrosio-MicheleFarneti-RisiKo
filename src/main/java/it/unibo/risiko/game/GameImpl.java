@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import it.unibo.risiko.DeckImpl;
 import it.unibo.risiko.Territory;
 import it.unibo.risiko.map.GameMap;
 import it.unibo.risiko.objective.ConquerContinentTarget;
@@ -33,8 +32,6 @@ public class GameImpl implements Game {
     private final List<Player> players = new LinkedList<Player>();
     private static final Random randomNumberGenerator = new Random();
     GameStatus status = GameStatus.TERRITORY_OCCUPATION;
-
-
    
     @Override
     public void startGame(){
@@ -143,6 +140,11 @@ public class GameImpl implements Game {
                     armiesPlaced ++;
                 }
             }
+        } else if ( status == GameStatus.ARMIES_PLACEMENT){
+            if(players.get(activePlayer).isOwnedTerritory(territory)){
+                territory.addArmies(nArmies);
+                armiesPlaced ++;
+            }
         }
     }
 
@@ -167,4 +169,10 @@ public class GameImpl implements Game {
         activePlayer = nextPlayer();
     }
 
+    @Override
+    public boolean gameOver() {
+        return players.stream().filter(p -> p.getTarget().isAchieved()==true).count()!=0;
+    }
+
+    
 }

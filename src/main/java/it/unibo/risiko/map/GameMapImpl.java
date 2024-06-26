@@ -17,7 +17,6 @@ public class GameMapImpl implements GameMap {
     private static final int ARMIES_STEP = 5;
 
     private final Territories territories;
-    private final Deck standardDeck;
     private final int maxPlayers;
     private final int minPlayers;
     
@@ -25,7 +24,6 @@ public class GameMapImpl implements GameMap {
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.territories = territories;
-        this.standardDeck = deck;
     }
 
     @Override
@@ -47,13 +45,4 @@ public class GameMapImpl implements GameMap {
     public List<Continent> getContinents() {
         return territories.getListContinents();
     }
-
-    @Override
-    public Deck getDeck() {
-        return ;
-    }
-
-    
-    
-    
 }

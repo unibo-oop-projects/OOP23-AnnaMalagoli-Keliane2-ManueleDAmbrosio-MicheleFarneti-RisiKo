@@ -35,8 +35,4 @@ public interface GameMap {
      */
     public List<Continent> getContinents();
     
-    /**
-     * @return The starting deck for the game
-     */
-    public Deck getDeck();
 }
