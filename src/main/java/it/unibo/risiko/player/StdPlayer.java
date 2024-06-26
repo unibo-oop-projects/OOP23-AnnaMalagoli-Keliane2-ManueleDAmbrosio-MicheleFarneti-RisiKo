@@ -72,8 +72,9 @@ public class StdPlayer implements Player {
         return this.ownedTerritories.size();
     }
 
-    public Optional<Target> getTarget() {
-        return this.target;
+    @Override
+    public Target getTarget() {
+        return this.target.get();
     }
 
     @Override

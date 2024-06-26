@@ -56,6 +56,14 @@ public interface Player {
     public void addCard (final Card newCard);
 
     /**
+     * This method is used to get the target of the 
+     * player.
+     * 
+     * @return the target of the player.
+     */
+    public Target getTarget();
+
+    /**
      * This method is used to get the color of the player.
      * 
      * @return the player color.
