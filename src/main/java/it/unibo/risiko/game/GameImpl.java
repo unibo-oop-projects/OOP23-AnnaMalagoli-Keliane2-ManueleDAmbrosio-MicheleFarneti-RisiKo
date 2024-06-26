@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import it.unibo.risiko.DeckImpl;
 import it.unibo.risiko.Territory;
 import it.unibo.risiko.map.GameMap;
 import it.unibo.risiko.objective.ConquerContinentTarget;
@@ -32,6 +33,8 @@ public class GameImpl implements Game {
     private final List<Player> players = new LinkedList<Player>();
     private static final Random randomNumberGenerator = new Random();
     GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+
+
    
     @Override
     public void startGame(){
@@ -86,9 +89,21 @@ public class GameImpl implements Game {
     @Override
     public boolean nextTurn(){
         if(skipTurnPossible()){
-            activePlayer = (activePlayer+1)%players.size();
             if(status == GameStatus.TERRITORY_OCCUPATION){
+
                 armiesPlaced = 0;
+                if(getTotalArmiesLeftToPlace() == 0){
+                    status = status.next();
+                    players.get(nextPlayer()).computeReinforcements();
+                }
+                updateCurrentPlayer();
+
+            } else if(status == GameStatus.ARMIES_PLACEMENT){
+                status = status.next();
+            } else if (status == GameStatus.ATTACK){
+                status = status.next();
+                players.get(nextPlayer()).computeReinforcements();
+                updateCurrentPlayer();
             }
             return true;
         }
@@ -99,17 +114,32 @@ public class GameImpl implements Game {
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
     private boolean skipTurnPossible(){
+        /* Territory occupation stage, It's only possibile to skip the turn if the player has no armies 
+         * left to place or if he already placed 3 of them. */
         if(status == GameStatus.TERRITORY_OCCUPATION){
-            return(armiesPlaced == 3 || players.get(activePlayer).getArmiesToPlace() == 0);
+            return(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
+        } if (status == GameStatus.ARMIES_PLACEMENT){
+            return players.get(activePlayer).getArmiesToPlace()==0;
+        } else if (status == GameStatus.ATTACK){
+            return true;
         }
+        /* */
         return players.get(activePlayer).getArmiesToPlace() == 0; 
     }
 
-    public boolean placeArmies(final Territory territory){
+    /**
+     * 
+     * @return The totale amount of armies that are still left to be placed among all the players.
+     */
+    private int getTotalArmiesLeftToPlace(){
+        return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
+    }
+
+    public void placeArmies(final Territory territory, final int nArmies){
         if(status == GameStatus.TERRITORY_OCCUPATION){
             if(armiesPlaced < 3){
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
-                    map.setArmies(territory,1);
+                    territory.addArmies(nArmies);
                     armiesPlaced ++;
                 }
             }
@@ -120,4 +150,21 @@ public class GameImpl implements Game {
     public List<Player> getPlayersList() {
         return List.copyOf(players);
     }
+
+    @Override
+    public GameStatus getGameStatus() {
+        return this.status;
+    }
+
+    /**
+     * @return The index of the next active player
+     */
+    private int nextPlayer(){
+        return (activePlayer+1)%players.size();
+    }
+
+    private void updateCurrentPlayer(){
+        activePlayer = nextPlayer();
+    }
+
 }

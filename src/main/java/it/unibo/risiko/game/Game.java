@@ -29,4 +29,8 @@ public interface Game {
      */
     List<Player> getPlayersList();
 
+    /**
+     * @return The current Stage of the game
+     */
+    GameStatus getGameStatus();
 }

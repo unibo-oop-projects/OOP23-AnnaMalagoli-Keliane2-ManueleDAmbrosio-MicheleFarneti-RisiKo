@@ -3,6 +3,7 @@ package it.unibo.risiko.map;
 import java.util.List;
 
 import it.unibo.risiko.Continent;
+import it.unibo.risiko.Deck;
 import it.unibo.risiko.Territories;
 import it.unibo.risiko.Territory;
 
@@ -16,13 +17,15 @@ public class GameMapImpl implements GameMap {
     private static final int ARMIES_STEP = 5;
 
     private final Territories territories;
+    private final Deck standardDeck;
     private final int maxPlayers;
     private final int minPlayers;
     
-    public GameMapImpl(int maxPlayers, int minPlayers,Territories territories){
+    public GameMapImpl(final int maxPlayers,final int minPlayers, final Territories territories, final Deck deck){
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.territories = territories;
+        this.standardDeck = deck;
     }
 
     @Override
@@ -43,6 +46,11 @@ public class GameMapImpl implements GameMap {
     @Override
     public List<Continent> getContinents() {
         return territories.getListContinents();
+    }
+
+    @Override
+    public Deck getDeck() {
+        return ;
     }
 
     
