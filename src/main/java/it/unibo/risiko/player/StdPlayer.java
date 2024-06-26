@@ -76,6 +76,11 @@ public class StdPlayer implements Player {
         return this.target;
     }
 
+    @Override
+    public void computeReinforcements() {
+        this.armiesToPlace = this.ownedTerritories.size()/3;
+    }
+
     public void decrementArmiesToPlace() {
         this.armiesToPlace--;
     }

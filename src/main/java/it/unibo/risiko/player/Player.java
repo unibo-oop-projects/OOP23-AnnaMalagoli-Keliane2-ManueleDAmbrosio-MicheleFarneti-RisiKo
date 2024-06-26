@@ -32,6 +32,11 @@ public interface Player {
      */
     public void setOwnedTerritories(final Set<Territory> ownedTerritories);
 
+    /**
+     * This method is used to set the target of the player.
+     * 
+     * @param target - target of the player.
+     */
     public void setTarget(final Target target);
 
     /**
@@ -96,6 +101,12 @@ public interface Player {
      * @return the number of cards owned by the players.
      */
     public int getNumberOfTerritores();
+
+    /**
+     * This method calculates the number of armies the
+     * player has to place at the start of its turn.
+     */
+    public void computeReinforcements();
 
     /**
      * This metod is used to remove a card from the 
