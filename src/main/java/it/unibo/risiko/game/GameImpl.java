@@ -159,10 +159,16 @@ public class GameImpl implements Game {
     }
 
     /**
-     * @return The index of the next active player
+     * @return The index of the next active player, avoiding all of the elliminated players.
      */
     private int nextPlayer(){
-        return (activePlayer+1)%players.size();
+        if(!players.get((activePlayer+1)%players.size()).isDefeated()){
+            return (activePlayer+1)%players.size();
+        }else{
+            activePlayer = (activePlayer+1)%players.size();
+            return nextPlayer();
+        }
+
     }
 
     private void updateCurrentPlayer(){
@@ -172,7 +178,5 @@ public class GameImpl implements Game {
     @Override
     public boolean gameOver() {
         return players.stream().filter(p -> p.getTarget().isAchieved()==true).count()!=0;
-    }
-
-    
+    } 
 }
