@@ -5,8 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
+
+import it.unibo.risiko.player.Player;
+import it.unibo.risiko.player.SimplePlayerFactory;
 /**
  * Class used to execute the tests on the classes.
  */
@@ -29,13 +34,20 @@ class MainTest {
     void testGenerateDeck() {
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
-        final CardImpl firstCardRemoved;
+        /*final CardImpl firstCardRemoved;
         final CardImpl card = new CardImpl(ITALIA, "Fante");
         final CardImpl cardAdded1 = new CardImpl("Spagna", "Cavalleria");
         final CardImpl cardAdded2 = new CardImpl("Inghilterra", "Fante");
-        final CardImpl cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");
-        final List<CardImpl> deckList = deck.getListCards();
+        final CardImpl cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");*/
+        //final List<CardImpl> deckList = deck.getListCards();
+        final Card firstCardRemoved;
+        final Card card = new CardImpl(ITALIA, "Fante");
+        final Card cardAdded1 = new CardImpl("Spagna", "Cavalleria");
+        final Card cardAdded2 = new CardImpl("Inghilterra", "Fante");
+        final Card cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");
+        final List<Card> deckList = deck.getListCards();
         assertEquals(List.of(card).getClass(), deckList.getClass());
+
         for (final var elem : deck.getListCards()) {
             assertFalse(elem.getTerritoryName().isEmpty());
             assertFalse(elem.getTypeName().isEmpty());
@@ -56,6 +68,50 @@ class MainTest {
          * deck which card's order it's not predictable
          */
         /*deck.getListCards().stream().forEach(x -> System.out.println(x.getTerritoryName() + " " + x.getTypeName()));*/
+    }
+    
+    @Test
+    void testPlaysOfCards() {
+        final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
+        final Deck deck = new DeckImpl(path);
+        final Card card1 = new CardImpl(ITALIA, "Cavaliere");
+        final Card card2 = new CardImpl("Spagna", "Cavaliere");
+        final Card card3 = new CardImpl("Inghilterra", "Fante");
+        final Card card4 = new CardImpl(FRANCIA, "Cavaliere");
+        deck.addCard(card1);
+        deck.addCard(card2);
+        deck.addCard(card3);
+        deck.addCard(card4);
+
+        Set<Territory> playerTerritories = new HashSet<Territory>();
+        playerTerritories.add(new TerritoryImpl("Spagna", "Europa", List.of(ITALIA, FRANCIA)));
+        Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0);
+        player.setOwnedTerritories(playerTerritories);
+        player.addCard(card1);
+        player.addCard(card2);
+        player.addCard(card4);
+
+        deck.playCards(card1, card2, card4, player);
+        //System.out.println(player.getArmiesToPlace());
+        assertEquals( 10, player.getArmiesToPlace());
+    }
+
+    /**Test per verificare funzionamento del metodo getCardFromNameTerritory */
+    @Test
+    void testGetCardFromNameTerritory() {
+        final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
+        final Deck deck = new DeckImpl(path);
+        final Card card1 = new CardImpl(ITALIA, "Cavaliere");
+        final Card card2 = new CardImpl("Spagna", "Cavaliere");
+        final Card card3 = new CardImpl("Inghilterra", "Fante");
+        final Card card4 = new CardImpl(FRANCIA, "Cavaliere");
+        deck.addCard(card1);
+        deck.addCard(card2);
+        deck.addCard(card3);
+        deck.addCard(card4);
+        
+        assertEquals(card3, deck.getCardByTerritoryName("Inghilterra"));
+        assertEquals(card3.getTerritoryName(), deck.getCardByTerritoryName(card3.getTerritoryName()).getTerritoryName());
     }
 
     /**
@@ -95,6 +151,13 @@ class MainTest {
         assertEquals(continent.getListTerritories().get(0).getTerritoryName(), ITALIA);
         //System.out.println(continent.getListTerritories().get(0).getTerritoryName());
         assertEquals(continent.getListTerritories().get(1).getTerritoryName(), FRANCIA);
+        //aggiunta di 3 armate in Italia
+        territories.addArmiesInTerritory(ITALIA, 3);
+        for (var elem : territoriesList) {
+            if (elem.getTerritoryName().equals(ITALIA)) {
+                assertEquals(elem.getNumberOfArmies(), 3);
+            }
+        }
     }
 
 }

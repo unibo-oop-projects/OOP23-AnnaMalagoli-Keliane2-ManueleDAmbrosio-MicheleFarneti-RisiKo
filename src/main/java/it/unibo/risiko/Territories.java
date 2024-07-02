@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 /**
  * The Territories class is used by the controller at the start of the game to generate 
  * the list of territories that are in the map. The informations about the territories are 
@@ -22,8 +23,7 @@ public class Territories {
 
     private final List<Territory> listTerritories = new ArrayList<>();
     private final List<Continent> listContinents = new ArrayList<>();
-    /*List to fill  with continets extract from the file */
-    /*private final List<Continent> listContinets = new ArrayList<>();*/
+    
     /**
      * Contructor to set the list of territories by extracting informations 
      * from a file text. If an exeption is thrown the list of territories is empty.
@@ -33,9 +33,6 @@ public class Territories {
     public Territories(final String filePath) {
         final File file = new File(filePath);
         final String absoluteFilePath = file.getAbsolutePath();
-        /*I have to change the method to extract the information of the continets
-         * and the territories from the text file
-         */
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
             try {
@@ -84,10 +81,20 @@ public class Territories {
         return List.copyOf(listTerritories); 
     }
 
+    /**
+     * Method used to get the list of continents extracted from the text file.
+     * @return the list of territories
+     */
     public List<Continent> getListContinents() {
         return List.copyOf(listContinents); 
     }
 
+    /**
+     * Method to verify if a continent is already present in the list of continents.
+     * @param continent is the name of the continent
+     * @return -true if the continent is in the list of continents
+     *         -false if the continet has to be inserted into the list of continents
+     */
     private boolean isInList(final String continent) {
         for(var elem : this.listContinents) {
             if(elem.getName().equals(continent)) {
@@ -97,6 +104,12 @@ public class Territories {
         return false;
     }
 
+    /**
+     * Method to extract from the list of continents the continent with
+     * a specified name.
+     * @param name is the name of a continent
+     * @return a continent object
+     */
     private Continent getContinentFromName(final String name) {
         for(var elem : this.listContinents) {
             if(elem.getName().equals(name)) {
@@ -106,4 +119,31 @@ public class Territories {
         return new ContinentImpl("");
     }
 
+    /**
+     * Method to add a specified number of armies in a territory.
+     * @param territoryName is the name of the territory in which we
+     * want to add armies
+     * @param numArmies is the number of armies that we want to add in the territory
+     */
+    public void addArmiesInTerritory(String territoryName, int numArmies) {
+        for(var terr : this.listTerritories) {
+            if(terr.getTerritoryName().equals(territoryName)) {
+                terr.addArmies(numArmies);
+            }
+        }
+    }
+
+    /**
+     * Method to remove a specified number of armies from a territory.
+     * @param territoryName is the name of the territory in which we
+     * want to remove armies
+     * @param numArmies is the number of armies that we want to remove from the territory
+     */
+    public void removeArmiesInTerritory(String territoryName, int numArmies) {
+        for(var terr : this.listTerritories) {
+            if(terr.getTerritoryName().equals(territoryName)) {
+                terr.removeArmies(numArmies);
+            }
+        }
+    }
 }
