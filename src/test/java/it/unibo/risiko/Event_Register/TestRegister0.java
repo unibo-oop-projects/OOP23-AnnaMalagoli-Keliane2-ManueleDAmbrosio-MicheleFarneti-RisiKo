@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +36,8 @@ public class TestRegister0 {
 
     @Test
     void testAddEvents(){
-        this.eventLeader.setTarget(Optional.of(elTarget));
-        this.eventLeaderAdversary.setTarget(Optional.of(elaTarget));
+        this.eventLeader.setTarget(elTarget);
+        this.eventLeaderAdversary.setTarget(elaTarget);
         Register register=new RegisterImpl();
         register.addEvent(e1);
         register.addEvent(e2);

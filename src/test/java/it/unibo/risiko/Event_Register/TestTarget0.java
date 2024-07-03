@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +34,7 @@ public class TestTarget0 {
         p1.addTerritory(italy);
         Player p3=new StdPlayer("green", 0);
         Target playerDestroyTarget=new DestroyPlayerTarget(p3, p1);
-        p1.setTarget(Optional.of(playerDestroyTarget));
+        p1.setTarget(playerDestroyTarget);
         assertEquals(2, playerDestroyTarget.remainingActions());
         assertFalse(playerDestroyTarget.isAchieved());
         p1.addTerritory(nigeria);
@@ -59,7 +58,7 @@ public class TestTarget0 {
         africa.addTerritory(cameroon);
         africa.addTerritory(tchad);
         Target continentTarget=new ConquerContinentTarget(p2, africa);
-        p2.setTarget(Optional.of(continentTarget));
+        p2.setTarget(continentTarget);
         assertEquals(3, continentTarget.remainingActions());
         assertFalse(continentTarget.isAchieved());
         p2.addTerritory(cameroon);
@@ -77,7 +76,7 @@ public class TestTarget0 {
         //testing remainingActions and isAchieved of ConquerTerritoryTarget
         Player p3=new StdPlayer("green", 0);
         Target territoryTarget=new ConquerTerritoriesTarget(p3, 3);
-        p3.setTarget(Optional.of(territoryTarget));
+        p3.setTarget(territoryTarget);
         assertEquals(3, territoryTarget.remainingActions());
         assertFalse(territoryTarget.isAchieved());
         p3.addTerritory(cameroon);
