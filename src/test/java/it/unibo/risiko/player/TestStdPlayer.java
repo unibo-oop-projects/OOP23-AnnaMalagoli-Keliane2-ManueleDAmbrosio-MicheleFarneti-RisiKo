@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.CardImpl;
+import it.unibo.risiko.model.cards.CardImpl;
+import it.unibo.risiko.model.player.StdPlayer;
 
 /**
  * @author Manuele D'Ambrosio

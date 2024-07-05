@@ -1,9 +1,5 @@
 package it.unibo.risiko.Event_Register;
 
-import it.unibo.risiko.objective.Target;
-import it.unibo.risiko.player.Player;
-import it.unibo.risiko.player.StdPlayer;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,13 +8,16 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.Continent;
-import it.unibo.risiko.ContinentImpl;
-import it.unibo.risiko.Territory;
-import it.unibo.risiko.TerritoryImpl;
-import it.unibo.risiko.objective.ConquerContinentTarget;
-import it.unibo.risiko.objective.ConquerTerritoriesTarget;
-import it.unibo.risiko.objective.DestroyPlayerTarget;
+import it.unibo.risiko.model.map.Continent;
+import it.unibo.risiko.model.map.ContinentImpl;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.objective.ConquerContinentTarget;
+import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
+import it.unibo.risiko.model.objective.DestroyPlayerTarget;
+import it.unibo.risiko.model.objective.Target;
+import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.model.player.StdPlayer;
 
 public class TestTarget0 {
     private Territory nigeria=new TerritoryImpl("Nigeria", "Africa", List.of("Cameroon","Tchad","Niger"));

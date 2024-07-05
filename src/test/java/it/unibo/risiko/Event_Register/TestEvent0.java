@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.Territory;
-import it.unibo.risiko.TerritoryImpl;
-import it.unibo.risiko.event.Event;
-import it.unibo.risiko.event.EventImpl;
-import it.unibo.risiko.event.EventType;
-import it.unibo.risiko.player.Player;
-import it.unibo.risiko.player.StdPlayer;
+import it.unibo.risiko.model.event.Event;
+import it.unibo.risiko.model.event.EventImpl;
+import it.unibo.risiko.model.event.EventType;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.model.player.StdPlayer;
 
 
 public class TestEvent0 {
