@@ -15,7 +15,9 @@ dependencies {
     val jUnitVersion = "5.10.1"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    implementation("com.google.code.gson:gson:2.11.0")
 }
+
 
 tasks.test {
     useJUnitPlatform()
