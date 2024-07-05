@@ -53,6 +53,4 @@ public class GameManagerImpl implements GameManager{
     public boolean isThereSpaceToSave() {
         return !(MAX_SAVEGAMES==saveGames.size());
     }
-    
-    
 }
