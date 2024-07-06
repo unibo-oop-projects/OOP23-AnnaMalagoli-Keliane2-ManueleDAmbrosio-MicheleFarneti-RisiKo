@@ -20,13 +20,12 @@ public class GameController implements GameViewObserver{
     private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
     private static final String resourcesPackageString = "build" + FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "main" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     
-
     /**
     * Initialization of the Game controller with a GameManager as model field and a Java Swing view 
     *@author Michele Farneti
     */
     public GameController(){
-        model = new GameManagerImpl(saveGamesFilePath);
+        model = new GameManagerImpl(resourcesPackageString+mapImagePath);
         view = new GameViewImpl(1600,900,resourcesPackageString+mapImagePath);
         this.view.setObserver(this);
         this.view.start();
