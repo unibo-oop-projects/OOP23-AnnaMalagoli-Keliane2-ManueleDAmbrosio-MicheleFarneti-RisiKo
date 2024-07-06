@@ -1,0 +1,84 @@
+Europe:
+Great-Britain West-Europe North-Europe Scandinavia Iceland
+Europe:
+Iceland Great-Britain Scandinavia Greenland
+Europe:
+Scandinavia Ukraine North-Europe Great-Britain
+Europe:
+North-Europe West-Europe South-Europe Ukraine Scandinavia Great-Britain
+Europe:
+West-Europe Great-Britain North-Europe South-Europe North-Africa
+Europe:
+South-Europe Egypt North-Europe Ukraine Middle-East
+Europe:
+Ukraine South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
+Africa:
+North-Africa West-Europe Brazil Congo East-Africa Egypt
+Africa:
+Egypt North-Africa East-Africa Middle-East South-Europe
+Africa:
+Congo North-Africa Southern-Africa East-Africa
+Africa:
+East-Africa Congo Egypt North-Africa Southern-Africa Madagascar Middle-East
+Africa:
+Southern-Africa Madagascar Congo East-Africa
+Africa:
+Madagascar Southern-Africa East-Africa
+Oceania:
+East-Australia Western-Australia New-Guinea
+Oceania:
+New-Guinea Indonesia Western-Australia East-Australia
+Oceania:
+Western-Australia New-Guinea East-Australia Indonesia
+Oceania:
+Indonesia New-Guinea Western-Australia Siam
+South-America:
+Venezuela Brazil Peru Central-America
+South-America:
+Peru Argentina Venezuela Brazil
+South-America:
+Argentina Peru Brazil
+South-America:
+Brazil Peru Argentina Venezuela
+North-America:
+Alaska Kamchatka Northwest-Territories Alberta
+North-America:
+Alberta Alaska Northwest-Territories Ontario West-United-States
+North-America:
+Central-America Venezuela West-United-States Eastern-U.S.
+North-America:
+Eastern-U.S. Central-America West-United-States Ontario Quebec
+North-America:
+Greenland Quebec Ontario Northwest-Territories Iceland
+North-America:
+Northwest-Territories Alaska Alberta Greenland Ontario
+North-America:
+Ontario Northwest-Territories Greenland Alberta Eastern-U.S. Quebec
+North-America:
+Quebec Greenland Eastern-U.S. Ontario
+North-America:
+West-United-States Central-America Eastern-U.S. Alberta
+Asia:
+Urals Ukraine Afghanistan Siberia China
+Asia:
+Siberia Urals Yakutia Chita Mongolia China
+Asia:
+Yakutia Siberia Chita Kamchatka
+Asia:
+Chita Yakutia Mongolia Kamchatka Siberia
+Asia:
+Kamchatka Chita Yakutia Alaska Japan Mongolia
+Asia:
+Japan Kamchatka Mongolia
+Asia:
+Mongolia Japan Siberia Chita Kamchatka China
+Asia:
+Afghanistan Ukraine Urals China India Middle-East
+Asia:
+Middle-East Afghanistan India Ukraine Egypt East-Africa South-Europe
+Asia:
+India China Afghanistan Siam Middle-East
+Asia:
+China India Afghanistan Urals Mongolia Siberia Siam
+Asia:
+Siam China India Indonesia
