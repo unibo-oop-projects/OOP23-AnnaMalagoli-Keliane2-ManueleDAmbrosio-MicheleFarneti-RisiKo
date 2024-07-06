@@ -1,8 +1,11 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
+import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
+import it.unibo.risiko.view.gameView.gameViewComponents.Position;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,10 +13,16 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -31,8 +40,34 @@ public class GameViewImpl implements GameView{
     private final static int BACKGROUND_LAYER = 0;
     private final static Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63,58,20);
     private final static Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255,204,0);
+    private static final Integer tanksWidth = 45;
+    private static final Integer tanksHeight = 45;
     private final Integer GAME_FRAME_WIDTH;
     private final Integer GAME_FRAME_HEIGHT;
+    private static final Map<String,Position> tanksCoordinates = new HashMap<String,Position>(){{
+        put("Alaska",new Position(10,10));
+        put("North West Territory",new Position(20,30));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(10,10));
+        put("Alaska",new Position(120,120));
+
+    }};
+    private HashMap<JButton,Territory> tankMap = new HashMap<JButton,Territory>();
     private GameViewObserver gameViewObserver;
     private JFrame gameFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
@@ -132,6 +167,12 @@ public class GameViewImpl implements GameView{
             System.out.println(e.getMessage());
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void showTanks(List<Territory> territories) {
+        territories.stream().forEach(territory -> tankMap.put(new ColoredImageButton("/tanks/tank"), territory));
+        tankMap.entrySet().stream().forEach(e -> e.getKey().setBounds(tanksCoordinates.get(e.getValue().getTerritoryName()).x(), tanksCoordinates.get(e.getValue().getTerritoryName()).y(), tanksWidth, tanksHeight));
     }
     
 }
