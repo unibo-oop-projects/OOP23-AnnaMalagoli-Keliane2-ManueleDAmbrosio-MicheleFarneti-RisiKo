@@ -7,17 +7,17 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.Territory;
-import it.unibo.risiko.TerritoryImpl;
-import it.unibo.risiko.event.Event;
-import it.unibo.risiko.event.EventImpl;
-import it.unibo.risiko.event.EventType;
-import it.unibo.risiko.event_register.Register;
-import it.unibo.risiko.event_register.RegisterImpl;
-import it.unibo.risiko.objective.ConquerTerritoriesTarget;
-import it.unibo.risiko.objective.Target;
-import it.unibo.risiko.player.Player;
-import it.unibo.risiko.player.StdPlayer;
+import it.unibo.risiko.model.event.Event;
+import it.unibo.risiko.model.event.EventImpl;
+import it.unibo.risiko.model.event.EventType;
+import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.event_register.RegisterImpl;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
+import it.unibo.risiko.model.objective.Target;
+import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.model.player.StdPlayer;
 
 public class TestRegister0 {
     

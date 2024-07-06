@@ -10,8 +10,16 @@ import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.player.Player;
-import it.unibo.risiko.player.SimplePlayerFactory;
+import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.cards.CardImpl;
+import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.cards.DeckImpl;
+import it.unibo.risiko.model.map.Continent;
+import it.unibo.risiko.model.map.Territories;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.model.player.SimplePlayerFactory;
 /**
  * Class used to execute the tests on the classes.
  */
