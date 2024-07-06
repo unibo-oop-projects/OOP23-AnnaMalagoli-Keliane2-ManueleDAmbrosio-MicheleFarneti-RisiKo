@@ -1,9 +1,12 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.List;
 
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
+import it.unibo.risiko.model.player.PlayerFactory;
+import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -13,7 +16,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  */
 public class GameController implements GameViewObserver{
-    private final GameManager model;
+    private final GameManager gameManager;
     private final GameView view;
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames" + FILE_SEPARATOR +"savegames.json";
@@ -25,9 +28,27 @@ public class GameController implements GameViewObserver{
     *@author Michele Farneti
     */
     public GameController(){
-        model = new GameManagerImpl(resourcesPackageString+mapImagePath);
+        gameManager = new GameManagerImpl(resourcesPackageString+mapImagePath);
         view = new GameViewImpl(1600,900,resourcesPackageString+mapImagePath);
         this.view.setObserver(this);
         this.view.start();
-    }    
+        setupView();
+    }
+    
+    /**
+     * Setups the view with all of the infos from the gameManager's current game
+     * @author Michele Farneti
+     */
+    private void setupView(){
+        //this.view.showTanks(this.gameManager.getCurrentGame().get().);
+        // if(this.gameManager.getCurrentGame().isPresent()){
+        //     this.view.showTurnIcons(this.gameManager.getCurrentGame().get().getPlayersList());
+        // }
+
+        //TEST RIMUOVERE
+        PlayerFactory pf = new SimplePlayerFactory();
+        var provaplayer = pf.createStandardPlayer("red", 0);
+        var provaplayer2 = pf.createAIPlayer("blue", 0);
+        this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
+    }
 }

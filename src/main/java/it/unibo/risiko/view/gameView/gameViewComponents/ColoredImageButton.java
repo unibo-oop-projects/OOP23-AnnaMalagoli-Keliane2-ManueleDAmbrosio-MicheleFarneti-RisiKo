@@ -14,29 +14,47 @@ import javax.swing.JButton;
  * @author Michele Farneti
  */
 public class ColoredImageButton extends JButton{
-    private final String STANDARD_COLOR = "255255255";
+    private final String STANDARD_COLOR = "white";
     private static final String resourcesPackageString = "build/resources/main/it/unibo/risiko";
     private static final String fileFormat = ".png";
 
-    private String imageUrl;
+    private String imageUri;
     private String imageColor = STANDARD_COLOR;
     
-    public ColoredImageButton(String imageUrl)
+    /**
+     * @param imageUri The url of the image to be set as backgroud of the button
+     */
+    public ColoredImageButton(final String imageUri)
     {
-        this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
+    }
+
+    /**
+     * Constructor wich sets the button background image and also sets its bounds
+     * @param imageUrl
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
+    public ColoredImageButton(final String imageUrl, final int x, final int y,final  int width, final int height)
+    {
+        this.imageUri = imageUrl;
+        this.setBounds(x, y, width, height);
+        this.setOpaque(false);
     }
 
     /**
      * @param rgbImageColor A string raprresenting the color in rgb format.
      */
-    public void setColor(String rgbImageColor){
+    public void setColor(final String rgbImageColor){
         imageColor = rgbImageColor;
     }
 
     @Override
-    protected void paintComponent(Graphics g)
+    protected void paintComponent(final Graphics g)
     {
-        String coloredImageUrl = resourcesPackageString + imageUrl + imageColor+fileFormat;
+        String coloredImageUrl = resourcesPackageString + imageUri + imageColor+fileFormat;
         try {
             Image image = ImageIO.read(new File(coloredImageUrl));
             g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
