@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Optional;
 
 import it.unibo.risiko.player.Player;
 
@@ -43,7 +44,7 @@ public class DeckImpl implements Deck {
             final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String stringRow = bufferedReader.readLine();
             while (stringRow != null) {
-                CardImpl card;
+                Card card;
                 final String[] cardData = stringRow.split(" ");
                 territory = cardData[0];
                 typeCard = cardData[1];
@@ -98,15 +99,21 @@ public class DeckImpl implements Deck {
         return List.copyOf(this.listCards);
     }
 
-    /**Method used to get a card from the name of the territory usare Optional*/
-    public Card getCardByTerritoryName(String territoryName) {
-        for(var card : this.listCards) {
+    /**
+     * Method used to get a card from the name of the 
+     * territory in the list of cards of the player.
+     * @param territoryName is the name of the territory
+     * @param player is the one we need to check the possession of a card
+     * @return an empty optional if case the player does not
+     * have the card or an optional that contains the required card 
+     */
+    public Optional<Card> getCardByTerritoryName(String territoryName, Player player) {
+        for(var card : player.getOwnedCards()) {
             if(card.getTerritoryName().equals(territoryName)) {
-                return card;
+                return Optional.of(card);
             }
         }
-        //DA MODIFICARE usare Optional
-        return new CardImpl("", "");
+        return Optional.empty();
     }
 
     /**
@@ -140,6 +147,9 @@ public class DeckImpl implements Deck {
                 if(oneCardOfAllTypes(cards)) {
                     numberOfArmies = 10;
                 }
+                if(jollyAndTwoEqualCards(cards)){
+                    numberOfArmies = 12;
+                }
                 /*If the three cards generate a combo that has been specified before
                 then they are removed from the player's list of cards, they are inserted 
                 in the deck and the number of armies to place by the player is increased.*/
@@ -168,6 +178,40 @@ public class DeckImpl implements Deck {
             outputMessage = "The player does not have the chosen cards";
         }
         return outputMessage;
+    }
+
+    /**
+     * Method used to check if there is a combo with a jolly card.
+     * @param cards is the list of cards that the player wants to play 
+     * @return true if a jolly is present and if the other two cards 
+     * are of the same type, false otherwise
+     */
+    private boolean jollyAndTwoEqualCards(List<Card> cards) {
+        int contJolly = 0;
+        int contCannon = 0;
+        int contInfantry = 0;
+        int contCavalry = 0;
+        for (var card : cards) {
+            if (card.getTypeName().equals("Jolly")) {
+                contJolly++;
+            } else {
+                if (card.getTypeName().equals("Cannon")) {
+                    contCannon++;
+                } else {
+                    if (card.getTypeName().equals("Cavalry")) {
+                        contCavalry++;
+                    } else {
+                        contInfantry++;
+                    }
+                }
+            }
+        }
+        if(contJolly == 1){
+            if(contCannon == 2 || contCavalry == 2 || contInfantry == 2){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

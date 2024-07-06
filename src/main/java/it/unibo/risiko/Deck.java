@@ -1,6 +1,7 @@
 package it.unibo.risiko;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.risiko.player.Player;
 /** 
@@ -44,10 +45,10 @@ public interface Deck {
     String playCards(Card card1, Card card2, Card card3, Player player/* , Territories terr*/);
 
     /**
-     * FORSE DA CAMBIARE giocatore
-     * Method to extract the card with a certain territory name form the deck.
+     * Method to extract the card with a certain territory name from the list of cards of the player.
      * @param territoryName is the name of the territory whose we want to extract the card
-     * @return the card
+     * @param player that owns the card
+     * @return the card if present into an optional
      */
-    Card getCardByTerritoryName(String territoryName);
+    Optional<Card> getCardByTerritoryName(String territoryName, Player player);
 }
