@@ -27,6 +27,13 @@ public class GradientPanel extends JPanel{
         this.gradientLevel = gradientLevel;
     }
 
+    /**
+     * @param topColor A new color to be set as topcolor
+     */
+    public void setTopColor(Color topColor){
+        this.topColor = topColor;
+    }
+
     @Override
     protected void paintComponent(Graphics g)
     {
