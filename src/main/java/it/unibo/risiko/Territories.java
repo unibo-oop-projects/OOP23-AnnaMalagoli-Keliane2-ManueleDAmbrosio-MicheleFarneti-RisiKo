@@ -23,7 +23,6 @@ public class Territories {
 
     private final List<Territory> listTerritories = new ArrayList<>();
     private final List<Continent> listContinents = new ArrayList<>();
-    
     /**
      * Contructor to set the list of territories by extracting informations 
      * from a file text. If an exeption is thrown the list of territories is empty.
@@ -48,7 +47,7 @@ public class Territories {
             do {
                 if (stringRow.contains(":")) { 
                     continentName = stringRow.substring(0, stringRow.length() - 1);
-                    if(!this.isInList(continentName)){
+                    if (!this.isInList(continentName)) {
                         this.listContinents.add(new ContinentImpl(continentName));
                     }
                 } else {
@@ -96,8 +95,8 @@ public class Territories {
      *         -false if the continet has to be inserted into the list of continents
      */
     private boolean isInList(final String continent) {
-        for(var elem : this.listContinents) {
-            if(elem.getName().equals(continent)) {
+        for (var elem : this.listContinents) {
+            if (elem.getName().equals(continent)) {
                 return true;
             }
         }
@@ -111,8 +110,8 @@ public class Territories {
      * @return a continent object
      */
     private Continent getContinentFromName(final String name) {
-        for(var elem : this.listContinents) {
-            if(elem.getName().equals(name)) {
+        for (var elem : this.listContinents) {
+            if (elem.getName().equals(name)) {
                 return elem;
             }
         }
@@ -125,9 +124,9 @@ public class Territories {
      * want to add armies
      * @param numArmies is the number of armies that we want to add in the territory
      */
-    public void addArmiesInTerritory(String territoryName, int numArmies) {
-        for(var terr : this.listTerritories) {
-            if(terr.getTerritoryName().equals(territoryName)) {
+    public void addArmiesInTerritory(final String territoryName, final int numArmies) {
+        for (var terr : this.listTerritories) {
+            if (terr.getTerritoryName().equals(territoryName)) {
                 terr.addArmies(numArmies);
             }
         }
@@ -139,11 +138,91 @@ public class Territories {
      * want to remove armies
      * @param numArmies is the number of armies that we want to remove from the territory
      */
-    public void removeArmiesInTerritory(String territoryName, int numArmies) {
-        for(var terr : this.listTerritories) {
-            if(terr.getTerritoryName().equals(territoryName)) {
+    public void removeArmiesInTerritory(final String territoryName, final int numArmies) {
+        for (var terr : this.listTerritories) {
+            if (terr.getTerritoryName().equals(territoryName)) {
                 terr.removeArmies(numArmies);
             }
         }
+    }
+
+    /**
+     * Method to move a certain amount of armies from a territory to a 
+     * neightbor territory.
+     * @param srcName is the name of the territory that initially contains the armies
+     * the player wants to move
+     * @param dstName is the name of the destination territory of the armies
+     * @param numArmies is the number of armies that the player wants to move
+     * @return a string that explain the error that occured if the name of a territory 
+     * is invalid, if the number of armies the player wants to move
+     * is greater or equal of the number of armies in the source territory (srcName) 
+     * and if the two territories are not adjacent. If the operation succedes the method
+     * return an empty string.
+     */
+    public String moveArmiesFromPlaceToPlace(final String srcName, final String dstName, final int numArmies) {
+        String outputMessage = "";
+        Optional<Territory> opt;
+        Territory srcTerritory;
+        Territory dstTerritory;
+
+        /*Is necessary to have the two territories object by calling a private method 
+        contained in the class and verify that the optional returned by the method is
+        not empty.*/
+        opt = getTerritoryFromName(srcName);
+        if (opt.isPresent()) {
+            srcTerritory = opt.get();
+            opt = getTerritoryFromName(dstName);
+            if (opt.isPresent()) {
+                dstTerritory = opt.get();
+                /*Before moving the armies between the two territories
+                 * we have to make sure that the operation is possible.
+                 */
+                if (territoriesAreNear(srcTerritory, dstTerritory)) {
+                    if (numArmies > 0 && numArmies < srcTerritory.getNumberOfArmies()) {
+                        this.removeArmiesInTerritory(srcName, numArmies);
+                        this.addArmiesInTerritory(dstName, numArmies);
+                    } else {
+                        outputMessage = "The number of armies selected for the operation is not valid.";
+                    }
+                } else {
+                    outputMessage = "The two territories inserted are not near.";
+                }
+            } else {
+                outputMessage = "Errore, il territorio destinazione cercato non è presente.";
+            }
+        } else {
+            outputMessage = "Errore, il territorio sorgente cercato non è presente.";
+        }
+        return outputMessage;
+    }
+
+    /**
+     * Method to verify if the two territories passed in input are adjacent.
+     * @param terr1 is the first territory
+     * @param terr2 is the second territory
+     * @return true if they are adjacent, or false if they are not adjacent
+     */
+    private boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
+        for (var elem : terr1.getListOfNearTerritories()) {
+            if (elem.equals(terr2.getTerritoryName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method to get a territory by his name.
+     * @param name is the name of the territory
+     * @return an optional that is empty if the territory is not present or
+     * that contains the territory searched if present
+     */
+    private Optional<Territory> getTerritoryFromName(final String name) {
+        for (var terr : this.listTerritories) {
+            if (terr.getTerritoryName().equals(name)) {
+                return Optional.of(terr);
+            }
+        }
+        return Optional.empty();
     }
 }

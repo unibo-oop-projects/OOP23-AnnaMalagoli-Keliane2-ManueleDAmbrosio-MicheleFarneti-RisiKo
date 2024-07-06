@@ -99,19 +99,19 @@ class MainTest {
     /**Test per verificare funzionamento del metodo getCardFromNameTerritory */
     @Test
     void testGetCardFromNameTerritory() {
+        Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0);
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
         final Card card1 = new CardImpl(ITALIA, "Cavaliere");
         final Card card2 = new CardImpl("Spagna", "Cavaliere");
         final Card card3 = new CardImpl("Inghilterra", "Fante");
         final Card card4 = new CardImpl(FRANCIA, "Cavaliere");
-        deck.addCard(card1);
-        deck.addCard(card2);
-        deck.addCard(card3);
-        deck.addCard(card4);
-        
-        assertEquals(card3, deck.getCardByTerritoryName("Inghilterra"));
-        assertEquals(card3.getTerritoryName(), deck.getCardByTerritoryName(card3.getTerritoryName()).getTerritoryName());
+        player.addCard(card1);
+        player.addCard(card2);
+        player.addCard(card3);
+        player.addCard(card4);
+        assertEquals(card3, deck.getCardByTerritoryName("Inghilterra", player).get());
+        assertEquals(card3.getTerritoryName(), deck.getCardByTerritoryName(card3.getTerritoryName(), player).get().getTerritoryName());
     }
 
     /**
@@ -158,6 +158,22 @@ class MainTest {
                 assertEquals(elem.getNumberOfArmies(), 3);
             }
         }
+    }
+
+    @Test
+    public void testMovementOfArmiesBetweenTwoTerritory() {
+        final String path = "src/test/java/it/unibo/risiko/Territories.txt";
+        final Territories territories = new Territories(path);
+        /*Verify if the movement of 3 armies between ITALY and SPAIN is permetted
+         * and does as expected.
+        */
+        territories.addArmiesInTerritory(ITALIA, 4);
+        Territory France = territories.getListTerritories().get(1);
+        Territory Italy = territories.getListTerritories().get(0);
+        int movedArmies = Italy.getNumberOfArmies() - 1;
+        territories.moveArmiesFromPlaceToPlace(ITALIA, FRANCIA, movedArmies);
+        assertEquals(1, Italy.getNumberOfArmies());
+        assertEquals(movedArmies, France.getNumberOfArmies());
     }
 
 }
