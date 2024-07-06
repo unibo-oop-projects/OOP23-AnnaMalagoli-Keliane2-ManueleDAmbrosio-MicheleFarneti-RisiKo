@@ -12,6 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import it.unibo.risiko.model.cards.Card;
 /**
  * Creation of the class JPanelChoice which is a panel that shows three different
  * selection cells that contain the territories of the cards owned by the player.
