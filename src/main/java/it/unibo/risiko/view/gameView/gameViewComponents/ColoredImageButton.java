@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 /**
  * ColoredImageButton enables to create a button with a given image as background, 
@@ -20,6 +21,9 @@ public class ColoredImageButton extends JButton{
     private final String STANDARD_COLOR = "white";
     private static final String resourcesPackageString = "build/resources/main/it/unibo/risiko";
     private static final String fileFormat = ".png";
+    private static final Border ATTACKING_COUNTRY_BORDER_COLOR= BorderFactory.createLineBorder(Color.RED);
+    private static final Border DEFENDING_COUNTRY_BORDER_COLOR= BorderFactory.createLineBorder(Color.BLUE);
+    private static final int BORDER_THICKNESS = 2;
 
     private String imageUri;
     private String imageColor = STANDARD_COLOR;
@@ -49,7 +53,7 @@ public class ColoredImageButton extends JButton{
     }
 
     /**
-     * @param mageColor A string raprresenting the color in rgb format.
+     * @param imageColor A string raprresenting the color in rgb format.
      */
     public void setColor(final String imageColor){
         this.imageColor = imageColor;
@@ -65,5 +69,12 @@ public class ColoredImageButton extends JButton{
         } catch (IOException e) {
             System.out.println("Failed to load image " + coloredImageUrl);
         }
+    }
+
+    /**
+     * Sets a prederminated border of a giveng color
+     */
+    public void setCustomBorder(Color borderColor){
+        this.setBorder(BorderFactory.createLineBorder(borderColor,BORDER_THICKNESS));
     }
 }

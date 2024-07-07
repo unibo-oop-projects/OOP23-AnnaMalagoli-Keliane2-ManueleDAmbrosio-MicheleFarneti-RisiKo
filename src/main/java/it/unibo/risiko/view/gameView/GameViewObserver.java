@@ -9,5 +9,6 @@ public interface GameViewObserver {
      * Tells the controller that the user is triyng to skip to the next game phase.
      * @author Michele Farneti
      */
-    void skikpTurn();
+    void skipTurn();
+
 }

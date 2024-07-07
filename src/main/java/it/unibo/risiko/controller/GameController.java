@@ -67,7 +67,7 @@ public class GameController implements GameViewObserver{
     }
 
     @Override
-    public void skikpTurn() {
+    public void skipTurn() {
         if(gameManager.getCurrentGame().get().nextTurn()){
             view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer());
         }

@@ -1,5 +1,6 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
@@ -36,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.RowFilter.Entry;
 
@@ -122,7 +124,7 @@ public class GameViewImpl implements GameView{
         put("China",new Position(995,200));
         put("Siam",new Position(995,270));
     }};
-    private HashMap<ColoredImageButton,Territory> tanksMap = new HashMap<ColoredImageButton,Territory>();
+    private HashMap<Territory,ColoredImageButton> tanksMap = new HashMap<Territory,ColoredImageButton>();
     private HashMap<ColoredImageButton,Player> iconsMap = new HashMap<ColoredImageButton,Player>();
     private GameViewObserver gameViewObserver;
     private JFrame gameFrame = new JFrame();
@@ -203,7 +205,7 @@ public class GameViewImpl implements GameView{
         var skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(skipButton,5,0);  
-        skipButton.addActionListener(e -> gameViewObserver.skikpTurn());  
+        skipButton.addActionListener(e -> gameViewObserver.skipTurn());  
         turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -276,13 +278,13 @@ public class GameViewImpl implements GameView{
 
     @Override
     public void showTanks(List<Territory> territories) {
-        territories.stream().forEach(territory -> tanksMap.put(new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR +"tank_"), territory));
+        territories.stream().forEach(territory -> tanksMap.put(territory,new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR +"tank_")));
         for (var tank : tanksMap.entrySet()) {
-            tank.getKey().setBounds(tanksCoordinates.get(tank.getValue().getTerritoryName()).x(), tanksCoordinates.get(tank.getValue().getTerritoryName()).y(), TANKS_WIDTH, TANKS_HEIGTH);
-            mapLayoutPane.add(tank.getKey(),TANK_LAYER,0);
-            tank.getKey().addActionListener( e -> tankClicked(tank.getValue()));
+            tank.getValue().setBounds(tanksCoordinates.get(tank.getKey().getTerritoryName()).x(), tanksCoordinates.get(tank.getKey().getTerritoryName()).y(), TANKS_WIDTH, TANKS_HEIGTH);
+            mapLayoutPane.add(tank.getValue(),TANK_LAYER,0);
+            tank.getValue().addActionListener( e -> tankClicked(tank.getKey()));
         }
-        tanksMap.entrySet().stream().forEach(e -> mapLayoutPane.add(e.getKey(),TANK_LAYER,0));
+        tanksMap.entrySet().stream().forEach(e -> mapLayoutPane.add(e.getValue(),TANK_LAYER,0));
     }
 
     @Override
@@ -337,6 +339,11 @@ public class GameViewImpl implements GameView{
             default:
             return new Color(255,255,255);
         }
+    }
+
+    @Override
+    public void showFightingTerritory(Territory territory, boolean isAttacker) {
+        tanksMap.get(territory).setCustomBorder(isAttacker? Color.RED : Color.BLUE);
     }
     
 }

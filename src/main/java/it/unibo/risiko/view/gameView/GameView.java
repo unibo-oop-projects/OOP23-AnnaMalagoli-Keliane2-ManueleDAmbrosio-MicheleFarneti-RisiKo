@@ -43,4 +43,11 @@ public interface GameView {
      * @author Michele Farneti
      */
     void setCurrentPlayer(Player player);
+
+    /**
+     * Highlights a territory in a different way either if it is attacking ord defending
+     * @param territory The territory wich is going to be higlighted as attacker
+     * @param isAttacker
+     */
+    void showFightingTerritory(Territory territory, boolean isAttacker);
 }
