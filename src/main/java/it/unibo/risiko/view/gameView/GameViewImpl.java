@@ -7,6 +7,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
+import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
 
@@ -49,12 +50,22 @@ public class GameViewImpl implements GameView{
 
     private final static Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63,58,20);
     private final static Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255,204,0);
+
     private static final Integer TANKS_WIDTH= 45;
     private static final Integer TANKS_HEIGTH = 45;
+
     private static final Integer TURN_ICON_WIDTH = 60;
     private static final Integer TURN_ICON_HEIGHT = 60;
     private static final Integer TURNBAR_START_X= 10;
     private static final Integer TURNBAR_START_Y = 10;
+
+    private static final Integer ATTACKBAR_BUTTONS_WIDTH = 150;
+    private static final Integer ATTACKBAR_BUTTONS_HEIGHT = 50;
+    private static final Integer ATTACKBAR_BUTTONS_DISTANCE = 20;
+
+    private static final Integer TURN_TANK_WIDTH = 100;
+    private static final Integer TURN_TANK_HEIGHT = 100;
+
     private final Integer GAME_FRAME_WIDTH;
     private final Integer GAME_FRAME_HEIGHT;
     private static final Map<String,Position> tanksCoordinates = new HashMap<String,Position>(){{
@@ -117,30 +128,53 @@ public class GameViewImpl implements GameView{
         mapLayoutPane.setPreferredSize(new Dimension((int)(gamePanel.getWidth()),(int)(gamePanel.getHeight()*MAP_PANEL_HEIGHT_PERCENTAGE)));
         paintMap(mapImagePath);
 
-        //AttackBAr initiialization
-        attackBarLayoutPane.setPreferredSize(new Dimension((int)(gamePanel.getWidth()),(int)(gamePanel.getHeight()*0.3)));
-        gamePanel.add(attackBarLayoutPane);
-        attackBarLayoutPane.setBackground(Color.pink);
-        attackBarLayoutPane.setOpaque(true);
-
         //Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY,Color.WHITE,MAP_GRADIENT_LEVEL);
         mapBackgroundPanel.setBounds(0,0,mapLayoutPane.getWidth(),mapLayoutPane.getHeight());
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane,mapBackgroundPanel);
+        setupAttackBar();
+    }
 
+    /**
+     * Sets up the attackbar part of the view
+     */
+    private void setupAttackBar() {
+        //AttackBAr initiialization
+        attackBarLayoutPane.setPreferredSize(new Dimension((int)(gamePanel.getWidth()),(int)(gamePanel.getHeight()*0.3)));
+        gamePanel.add(attackBarLayoutPane);
+        attackBarLayoutPane.setBackground(Color.pink);
+        attackBarLayoutPane.setOpaque(true);
+        
         //AttackBar backgorund setting
         GradientPanel attackBarBackgroundPanel = new GradientPanel(ATTACK_BAR_FOREGROUND_COLOR,ATTACK_BAR_BACKGROUND_COLOR,ATTACK_BAR_GRADIENT_LEVEL);
         attackBarBackgroundPanel.setBounds(0,0,(int)attackBarLayoutPane.getPreferredSize().getWidth(),(int)attackBarLayoutPane.getPreferredSize().getHeight());
         attackBarBackgroundPanel.setOpaque(true);
-        setLayerdPaneBackground(attackBarLayoutPane,attackBarBackgroundPanel);
-
+        setLayerdPaneBackground(attackBarLayoutPane,attackBarBackgroundPanel);   
         //Turns bar
         turnsBarPanel = new GradientPanel(Color.WHITE, new Color(245,245,245), 7);
         turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH*6, TURN_ICON_HEIGHT);
         attackBarLayoutPane.add(turnsBarPanel,TURNSBAR_LAYER,0);
+
+       var attackButton = new CustomButton("ATTACK");
+       attackButton.setBounds(gamePanel.getWidth()/2-ATTACKBAR_BUTTONS_WIDTH-ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
+       attackBarLayoutPane.add(attackButton,5,0);
+
+       var skipButton = new CustomButton("SKIP");
+       skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
+       attackBarLayoutPane.add(skipButton,5,0);
+
+       var turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
+       turnTank.setBorderPainted(false);
+       turnTank.setEnabled(false);
+       attackBarLayoutPane.add(turnTank,5,0);
     }
 
+    /**
+     * Sets a Jpanel as a layerdPane background
+     * @param layeredPane
+     * @param background
+     */
     private void setLayerdPaneBackground(JLayeredPane layeredPane, JPanel background){
         layeredPane.add(background,BACKGROUND_LAYER,0);
     }
