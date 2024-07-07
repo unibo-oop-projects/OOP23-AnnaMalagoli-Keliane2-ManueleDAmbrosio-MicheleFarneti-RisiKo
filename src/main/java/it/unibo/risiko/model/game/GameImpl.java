@@ -33,7 +33,7 @@ public class GameImpl implements Game {
     private final List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
 
-    public GameImpl(final GameMap map, final List<Player> players){
+    protected GameImpl(final GameMap map, final List<Player> players){
         this.map = map;
         this.players.addAll(players);
     }

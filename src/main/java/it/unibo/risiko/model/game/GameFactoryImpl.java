@@ -9,8 +9,8 @@ import it.unibo.risiko.model.player.Player;
 public class GameFactoryImpl implements GameFactory{
 
     private int nPlayers;
-    GameMap map;
-    List<Player> players;
+    private GameMap map;
+    private List<Player> players;
 
     public GameFactoryImpl(GameMap map) {
         this.map= map;
@@ -32,8 +32,9 @@ public class GameFactoryImpl implements GameFactory{
 
     @Override
     public Game initializeGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initializeGame'");
+        Game newGame = new GameImpl(map, players);
+        newGame.startGame();
+        return newGame;
     }
 
     @Override
