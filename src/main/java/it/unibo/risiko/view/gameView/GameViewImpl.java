@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.RowFilter.Entry;
 
 public class GameViewImpl implements GameView{
 
@@ -41,6 +43,7 @@ public class GameViewImpl implements GameView{
 
     private final static Integer MAP_GRADIENT_LEVEL = 1;
     private final static Integer ATTACK_BAR_GRADIENT_LEVEL = 7;
+    private final static Integer TURNS_BAR_GRADIENT_LEVEL = 1;
 
     private final static int MAP_LAYER = 1;
     private final static int TANK_LAYER = 2;
@@ -102,6 +105,9 @@ public class GameViewImpl implements GameView{
     private JPanel mapPanel;
     private JPanel turnsBarPanel;
 
+    private ColoredImageButton turnTank;
+    private GradientPanel attackBarBackgroundPanel;
+
     /**
      * Initialzize the GUI for the game creating all of its main components.
      * @param frameWidth
@@ -140,34 +146,31 @@ public class GameViewImpl implements GameView{
      * Sets up the attackbar part of the view
      */
     private void setupAttackBar() {
-        //AttackBAr initiialization
+        //AttackBar initiialization
         attackBarLayoutPane.setPreferredSize(new Dimension((int)(gamePanel.getWidth()),(int)(gamePanel.getHeight()*0.3)));
         gamePanel.add(attackBarLayoutPane);
-        attackBarLayoutPane.setBackground(Color.pink);
         attackBarLayoutPane.setOpaque(true);
         
         //AttackBar backgorund setting
-        GradientPanel attackBarBackgroundPanel = new GradientPanel(ATTACK_BAR_FOREGROUND_COLOR,ATTACK_BAR_BACKGROUND_COLOR,ATTACK_BAR_GRADIENT_LEVEL);
+        attackBarBackgroundPanel = new GradientPanel(ATTACK_BAR_FOREGROUND_COLOR,ATTACK_BAR_BACKGROUND_COLOR,ATTACK_BAR_GRADIENT_LEVEL);
         attackBarBackgroundPanel.setBounds(0,0,(int)attackBarLayoutPane.getPreferredSize().getWidth(),(int)attackBarLayoutPane.getPreferredSize().getHeight());
         attackBarBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(attackBarLayoutPane,attackBarBackgroundPanel);   
         //Turns bar
-        turnsBarPanel = new GradientPanel(Color.WHITE, new Color(245,245,245), 7);
+        turnsBarPanel = new GradientPanel(Color.WHITE,ATTACK_BAR_FOREGROUND_COLOR, TURNS_BAR_GRADIENT_LEVEL);
         turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH*6, TURN_ICON_HEIGHT);
         attackBarLayoutPane.add(turnsBarPanel,TURNSBAR_LAYER,0);
 
-       var attackButton = new CustomButton("ATTACK");
-       attackButton.setBounds(gamePanel.getWidth()/2-ATTACKBAR_BUTTONS_WIDTH-ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
-       attackBarLayoutPane.add(attackButton,5,0);
-
-       var skipButton = new CustomButton("SKIP");
-       skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
-       attackBarLayoutPane.add(skipButton,5,0);
-
-       var turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
-       turnTank.setBorderPainted(false);
-       turnTank.setEnabled(false);
-       attackBarLayoutPane.add(turnTank,5,0);
+        var attackButton = new CustomButton("ATTACK");
+        attackButton.setBounds(gamePanel.getWidth()/2-ATTACKBAR_BUTTONS_WIDTH-ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
+        attackBarLayoutPane.add(attackButton,5,0);  
+        var skipButton = new CustomButton("SKIP");
+        skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
+        attackBarLayoutPane.add(skipButton,5,0);    
+        turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
+        turnTank.setBorderPainted(false);
+        turnTank.setEnabled(false);
+        attackBarLayoutPane.add(turnTank,5,0);
     }
 
     /**
@@ -235,12 +238,18 @@ public class GameViewImpl implements GameView{
         for (int playerIndex = 0; playerIndex < playersList.size(); playerIndex ++) { 
             if( playersList.get(playerIndex).isAI()) {
                 iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR +"aiplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
+                System.out.println(computeIconStartingX(playerIndex));
             }else{
                 iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR +"standardplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
             }
         }
-        iconsMap.entrySet().stream().forEach(e -> e.getKey().setColor(e.getValue().getColor_id()));
-        iconsMap.entrySet().stream().forEach(e -> attackBarLayoutPane.add(e.getKey(),TURN_ICON_LAYER,0));
+        
+        for (var icon : iconsMap.entrySet()) {
+            icon.getKey().setColor(icon.getValue().getColor_id());
+            icon.getKey().setEnabled(false);
+            icon.getKey().setBorder(BorderFactory.createLineBorder(stringToColor(icon.getValue().getColor_id().toLowerCase()),3));
+            attackBarLayoutPane.add(icon.getKey(),TURN_ICON_LAYER,0);
+        }
     }
 
     /**
@@ -249,6 +258,33 @@ public class GameViewImpl implements GameView{
      */
     private int computeIconStartingX(final int playerIndex){
         return (playerIndex * TURN_ICON_WIDTH)+TURNBAR_START_X; 
+    }
+
+    @Override
+    public void setCurrentPlayer(Player player) {
+        String currentPlayerColor = player.getColor_id();
+        turnTank.setColor(currentPlayerColor);
+        iconsMap.entrySet().stream().forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(player))? true : false));
+        attackBarBackgroundPanel.setTopColor(stringToColor(currentPlayerColor));
+    }
+
+    private Color stringToColor(String color_id){
+        switch (color_id) {
+            case "cyan":
+                return new Color(0,255,255);
+            case "blue":
+                return new Color(0,0,255);
+            case "green":
+                return new Color(0,255,0);
+            case "red":
+                return new Color(255,0,0);
+            case "pink":
+                return new Color(255,0,255);
+            case "yellow":
+                return new Color(255,255,0);
+            default:
+            return new Color(255,255,255);
+        }
     }
     
 }

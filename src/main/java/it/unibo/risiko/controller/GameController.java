@@ -45,10 +45,10 @@ public class GameController implements GameViewObserver{
         //     this.view.showTurnIcons(this.gameManager.getCurrentGame().get().getPlayersList());
         // }
 
-        //TEST RIMUOVERE
-        PlayerFactory pf = new SimplePlayerFactory();
-        var provaplayer = pf.createStandardPlayer("red", 0);
-        var provaplayer2 = pf.createAIPlayer("blue", 0);
-        this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
+        // PlayerFactory pf = new SimplePlayerFactory();
+        // var provaplayer = pf.createStandardPlayer("red", 0);
+        // var provaplayer2 = pf.createAIPlayer("blue", 0);
+        // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
+        // this.view.setCurrentPlayer(provaplayer2);
     }
 }

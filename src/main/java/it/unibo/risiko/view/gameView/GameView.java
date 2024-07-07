@@ -37,4 +37,9 @@ public interface GameView {
      */
     void showTurnIcons(List<Player> playersList);
     
+    /**
+     * Edits the view in order to show wich player is the current player.
+     * @param player
+     */
+    void setCurrentPlayer(Player player);
 }

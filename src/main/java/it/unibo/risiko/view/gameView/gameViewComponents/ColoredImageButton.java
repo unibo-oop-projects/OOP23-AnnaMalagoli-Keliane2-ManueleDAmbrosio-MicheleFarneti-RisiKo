@@ -1,12 +1,15 @@
 package it.unibo.risiko.view.gameView.gameViewComponents;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.border.BevelBorder;
 
 /**
  * ColoredImageButton enables to create a button with a given image as background, 
@@ -42,13 +45,14 @@ public class ColoredImageButton extends JButton{
         this.imageUri = imageUrl;
         this.setBounds(x, y, width, height);
         this.setOpaque(false);
+        this.setBorderPainted(false);
     }
 
     /**
-     * @param rgbImageColor A string raprresenting the color in rgb format.
+     * @param mageColor A string raprresenting the color in rgb format.
      */
-    public void setColor(final String rgbImageColor){
-        imageColor = rgbImageColor;
+    public void setColor(final String imageColor){
+        this.imageColor = imageColor;
     }
 
     @Override
