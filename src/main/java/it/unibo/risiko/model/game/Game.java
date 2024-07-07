@@ -39,4 +39,10 @@ public interface Game {
      * @return True if one of the players has reached is target
      */
     boolean gameOver();
+
+    /**
+     * 
+     * @return The player whose turn it is
+     */
+    Player getCurrentPlayer();
 }

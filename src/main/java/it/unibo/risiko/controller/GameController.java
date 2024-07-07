@@ -3,6 +3,7 @@ package it.unibo.risiko.controller;
 import java.io.File;
 import java.util.List;
 
+import it.unibo.risiko.model.game.GameImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.player.PlayerFactory;
@@ -50,10 +51,14 @@ public class GameController implements GameViewObserver{
         // var provaplayer2 = pf.createAIPlayer("blue", 0);
         // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
         // this.view.setCurrentPlayer(provaplayer2);
+        Game provagame = new GameImpl();
+        view.showTanks(null);
     }
 
     @Override
     public void skikpTurn() {
-        var result = gameManager.getCurrentGame().get().nextTurn();
+        if(gameManager.getCurrentGame().get().nextTurn()){
+            view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer());
+        }
     }
 }

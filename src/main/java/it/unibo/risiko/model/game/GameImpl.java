@@ -24,14 +24,19 @@ public class GameImpl implements Game {
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
     private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
     private static final int PLACEABLE_ARMIES_PER_TURN = 3;
+    private static final Random randomNumberGenerator = new Random();
 
- 
-    private GameMap map;
+    private final GameMap map;
+
     private int activePlayer = 0;
     private int armiesPlaced = 0 ;
     private final List<Player> players = new LinkedList<Player>();
-    private static final Random randomNumberGenerator = new Random();
-    GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+    private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+
+    public GameImpl(final GameMap map, final List<Player> players){
+        this.map = map;
+        this.players.addAll(players);
+    }
    
     @Override
     public void startGame(){
@@ -178,5 +183,10 @@ public class GameImpl implements Game {
     @Override
     public boolean gameOver() {
         return players.stream().filter(p -> p.getTarget().isAchieved()==true).count()!=0;
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return players.get(activePlayer);
     } 
 }
