@@ -34,6 +34,8 @@ public class AttackViewImpl {
     private static final String PATH = "build" + SEP + "resources" + SEP + "main" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice";
     private static final int DEFAULT_FONT_SIZE = 20;
+    private static final int DEFAULT_ATTACKING_ARMIES = 1;
+    private static final int DEFAULT_MOVING_ARMIES = 1;
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color SECONDARY_COLOR = new Color(255, 204, 0);
     private static final Color TEXT_COLOR = new Color(200, 200, 200);
@@ -64,10 +66,9 @@ public class AttackViewImpl {
         this.attacking = attacking;
         this.defending = defending;
         this.attackingTerritoryArmies = attackingTerritoryArmies;
-        this.attackersNumber = 1;
-        this.armiesToMove = 0;
+        this.attackersNumber = DEFAULT_ATTACKING_ARMIES;
+        this.armiesToMove = DEFAULT_MOVING_ARMIES;
         this.territoryConquered = false;
-        this.attackerLostArmies = 0;
 
         attackPanel.setLayout(new BorderLayout());
         attackPanel.setSize(height, width);
@@ -100,13 +101,15 @@ public class AttackViewImpl {
     }
 
     private JButton selectorButton(final String text) {
+        final int THICKNESS = 3;
+        final int SIZE_FACTOR = 2;
         JButton button = new JButton();
         button.setFont(changeFontSize(DEFAULT_FONT_SIZE));
         button.setForeground(BLACK_COLOR);
         button.setText(text);
         button.setBackground(SECONDARY_COLOR);
-        button.setBorder(BorderFactory.createLineBorder(BLACK_COLOR, 3));
-        button.setPreferredSize(new Dimension(DEFAULT_FONT_SIZE * 2, DEFAULT_FONT_SIZE * 2));
+        button.setBorder(BorderFactory.createLineBorder(BLACK_COLOR, THICKNESS));
+        button.setPreferredSize(new Dimension(DEFAULT_FONT_SIZE * SIZE_FACTOR, DEFAULT_FONT_SIZE * SIZE_FACTOR));
 
         return button;
     }
@@ -124,6 +127,8 @@ public class AttackViewImpl {
     }
 
     private JPanel selectorPanel(String selectorText) {
+        final int MIN_ATTACKING_ARMIES = 1;
+        final int MAX_ATTACKING_ARMIES = 3;
         JPanel selectorPanel = new JPanel();
         JTextField textField = standardTextField(selectorText);
         JTextField textValue = standardTextField(Integer.toString(attackersNumber));
@@ -132,16 +137,16 @@ public class AttackViewImpl {
 
         decreaser.setEnabled(false);
         decreaser.addActionListener(e -> {
-            decrease(textValue, 1);
-            if (attackersNumber <= 1) {
+            decrease(textValue, MIN_ATTACKING_ARMIES);
+            if (attackersNumber <= MIN_ATTACKING_ARMIES) {
                 decreaser.setEnabled(false);
             }
             increaser.setEnabled(true);
         });
 
         increaser.addActionListener(e -> {
-            increase(textValue, 3);
-            if (attackersNumber >= 3) {
+            increase(textValue, MAX_ATTACKING_ARMIES);
+            if (attackersNumber >= MAX_ATTACKING_ARMIES) {
                 increaser.setEnabled(false);
             }
             decreaser.setEnabled(true);
@@ -169,11 +174,12 @@ public class AttackViewImpl {
     }
 
     private JPanel topPanel() {
+        final int HEIGHT_FACTOR = 6;
         JPanel topPanel = new JPanel();
 
         topPanel.setLayout(new FlowLayout());
         topPanel.setBackground(BLACK_COLOR);
-        topPanel.setPreferredSize(new Dimension(width, height / 6));
+        topPanel.setPreferredSize(new Dimension(width, height / HEIGHT_FACTOR));
         topPanel.add(titlePanel());
         topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "));
 
@@ -181,13 +187,15 @@ public class AttackViewImpl {
     }
 
     private JPanel sidePanel(String diceType) {
+        final int SIZE_FACTOR = 3;
+        final int WIDTH_FACTOR = 2;
         JPanel sidePanel = new JPanel();
-        int size = height / 3;
+        int size = height / SIZE_FACTOR;
         String path = PATH + "Standard" + diceType + "Dice.png";
 
         sidePanel.setBackground(BACKGROUND_COLOR);
         sidePanel.setLayout(new BorderLayout());
-        sidePanel.setPreferredSize(new Dimension(width / 2, height));
+        sidePanel.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height));
 
         try {
             ImageIcon icon = new ImageIcon(ImageIO.read(new File(path)));
@@ -202,11 +210,13 @@ public class AttackViewImpl {
     }
 
     private JPanel bottomPanel(String buttonText, ActionListener e) {
+        final int SIZE_FACTOR = 3;
+        final int HEIGHT_FACTOR = 2;
         JPanel bottomPanel = new JPanel();
         JButton continueButton = selectorButton(buttonText);
 
-        continueButton.setPreferredSize(new Dimension(width / 3, DEFAULT_FONT_SIZE * 2));
-        bottomPanel.setPreferredSize(new Dimension(width, DEFAULT_FONT_SIZE * 3));
+        continueButton.setPreferredSize(new Dimension(width / SIZE_FACTOR, DEFAULT_FONT_SIZE * HEIGHT_FACTOR));
+        bottomPanel.setPreferredSize(new Dimension(width, DEFAULT_FONT_SIZE * SIZE_FACTOR));
         bottomPanel.setBackground(BLACK_COLOR);
         bottomPanel.add(continueButton);
         continueButton.addActionListener(e);
@@ -215,11 +225,13 @@ public class AttackViewImpl {
     }
 
     private JPanel resultsPanel() {
+        final int WIDTH_FACTOR = 2;
+        final int HEIGHT_FACTOR = 10;
         JPanel resultsPanel = new JPanel();
         JTextField attackerResult = standardTextField("LOST: " + attackerLostArmies);
         JTextField defenderResult = standardTextField("LOST: " + (attackersNumber - attackerLostArmies));
-        attackerResult.setPreferredSize(new Dimension(width / 2, height / 10));
-        defenderResult.setPreferredSize(new Dimension(width / 2, height / 10));
+        attackerResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
+        defenderResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
         resultsPanel.setBackground(BACKGROUND_COLOR);
         resultsPanel.setLayout(new BorderLayout());
         resultsPanel.add(attackerResult, BorderLayout.WEST);
@@ -228,6 +240,7 @@ public class AttackViewImpl {
     }
 
     private JPanel dicePanel(String diceColor) {
+        final int WIDTH_FACTOR = 2;
         String diceType = diceColor + "Dice" + "_";
         JPanel dicePanel = new JPanel();
         List<Integer> dices = new ArrayList<>();
@@ -236,7 +249,7 @@ public class AttackViewImpl {
         dicePanel.setLayout(new GridLayout(3, 1));
         dicePanel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         dicePanel.setBackground(BACKGROUND_COLOR);
-        dicePanel.setPreferredSize(new Dimension(width / 2, height));
+        dicePanel.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height));
 
         if (diceColor.equals("Blue")) {
             dices = defDice;
@@ -264,11 +277,13 @@ public class AttackViewImpl {
     }
 
     private boolean drawDicePanels() {
+        final int ROWS = 2;
+        final int COLS = 1;
         if (attDice.isEmpty() || defDice.isEmpty()) {
             return false;
         } else {
             JPanel southPanel = new JPanel();
-            southPanel.setLayout(new GridLayout(2, 1));
+            southPanel.setLayout(new GridLayout(ROWS, COLS));
             attackPanel.removeAll();
             attackPanel.add(titlePanel(), BorderLayout.NORTH);
             southPanel.add(resultsPanel());
@@ -286,7 +301,7 @@ public class AttackViewImpl {
         if (territoryConquered) {
             attackPanel.removeAll();
             attackPanel.add(conquerPanel(attackersNumber - attackerLostArmies,
-                    attackingTerritoryArmies - attackerLostArmies - 1), BorderLayout.CENTER);
+                    attackingTerritoryArmies - attackerLostArmies - DEFAULT_ATTACKING_ARMIES), BorderLayout.CENTER);
             attackPanel.revalidate();
             attackPanel.repaint();
             return true;
@@ -295,6 +310,8 @@ public class AttackViewImpl {
     }
 
     private JPanel conquerPanel(int minArmies, int maxArmies) {
+        final int MID_HEIGHT_FACTOR = 2;
+        final int TEXT_HEIGHT_FACTOR = 5;
         JPanel conquerPanel = new JPanel();
         JPanel midPanel = new JPanel();
         JTextField conquerText = standardTextField("CONQUERED: " + defending);
@@ -321,7 +338,7 @@ public class AttackViewImpl {
         });
         midPanel.setLayout(new FlowLayout());
         midPanel.setBackground(BLACK_COLOR);
-        midPanel.setPreferredSize(new Dimension(width, height / 2));
+        midPanel.setPreferredSize(new Dimension(width, height / MID_HEIGHT_FACTOR));
         midPanel.add(adviceText);
         midPanel.add(decreaser);
         midPanel.add(movingArmies);
@@ -329,7 +346,7 @@ public class AttackViewImpl {
 
         conquerPanel.setLayout(new BorderLayout());
         conquerPanel.setBackground(BLACK_COLOR);
-        conquerText.setPreferredSize(new Dimension(width, height / 5));
+        conquerText.setPreferredSize(new Dimension(width, height / TEXT_HEIGHT_FACTOR));
         conquerPanel.add(conquerText, BorderLayout.NORTH);
         conquerPanel.add(midPanel, BorderLayout.CENTER);
         conquerPanel.add(bottomPanel("CLOSE", null), BorderLayout.SOUTH); // Da sistemare con il controller
