@@ -16,11 +16,13 @@ public class GameMapImpl implements GameMap {
     private final Territories territories;
     private final int maxPlayers;
     private final int minPlayers;
+    private final String name;
     
-    public GameMapImpl(final int maxPlayers,final int minPlayers, final Territories territories, final Deck deck){
+    public GameMapImpl(final int maxPlayers,final int minPlayers, final Territories territories, final Deck deck, String name){
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.territories = territories;
+        this.name = name;
     }
 
     @Override
@@ -41,5 +43,10 @@ public class GameMapImpl implements GameMap {
     @Override
     public List<Continent> getContinents() {
         return territories.getListContinents();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

@@ -40,6 +40,7 @@ public interface GameView {
     /**
      * Edits the view in order to show wich player is the current player.
      * @param player
+     * @author Michele Farneti
      */
     void setCurrentPlayer(Player player);
 }
