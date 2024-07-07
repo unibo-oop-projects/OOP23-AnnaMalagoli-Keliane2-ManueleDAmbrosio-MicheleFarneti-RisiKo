@@ -14,6 +14,7 @@ import it.unibo.risiko.view.gameView.gameViewComponents.Position;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.RowFilter.Entry;
 
 public class GameViewImpl implements GameView{
@@ -63,6 +66,8 @@ public class GameViewImpl implements GameView{
     private static final Integer TURN_ICON_HEIGHT = 60;
     private static final Integer TURNBAR_START_X= 10;
     private static final Integer TURNBAR_START_Y = 10;
+
+    private static final Integer COUNTRYBAR_START_Y = 80;
 
     private static final Integer ATTACKBAR_BUTTONS_WIDTH = 150;
     private static final Integer ATTACKBAR_BUTTONS_HEIGHT = 50;
@@ -127,6 +132,7 @@ public class GameViewImpl implements GameView{
     private JPanel gamePanel = new JPanel();
     private JPanel mapPanel;
     private JPanel turnsBarPanel;
+    private JTextArea countryBarPanel;
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -183,6 +189,12 @@ public class GameViewImpl implements GameView{
         turnsBarPanel = new GradientPanel(Color.WHITE,ATTACK_BAR_FOREGROUND_COLOR, TURNS_BAR_GRADIENT_LEVEL);
         turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH*6, TURN_ICON_HEIGHT);
         attackBarLayoutPane.add(turnsBarPanel,TURNSBAR_LAYER,0);
+        //Country bar
+        countryBarPanel = new JTextArea();
+        countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y, TURN_ICON_WIDTH*6, TURN_ICON_HEIGHT/2);
+        attackBarLayoutPane.add(countryBarPanel,TURNSBAR_LAYER,0);
+        countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
+        countryBarPanel.setEditable(false);
 
         var attackButton = new CustomButton("ATTACK");
         attackButton.setBounds(gamePanel.getWidth()/2-ATTACKBAR_BUTTONS_WIDTH-ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
@@ -205,6 +217,17 @@ public class GameViewImpl implements GameView{
      */
     private void setLayerdPaneBackground(JLayeredPane layeredPane, JPanel background){
         layeredPane.add(background,BACKGROUND_LAYER,0);
+    }
+
+    /** 
+     * This funcion manages whenever a tank rapresenting a tank gets clicked
+     * @param territory The territory that got clicked
+     */
+    private void tankClicked(Territory territory){
+        System.out.println("AA");
+        countryBarPanel.setText(territory.getTerritoryName().toUpperCase());
+        countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
+        countryBarPanel.setFont(new Font("Arial", Font.BOLD, 25));
     }
 
     /**
@@ -254,7 +277,11 @@ public class GameViewImpl implements GameView{
     @Override
     public void showTanks(List<Territory> territories) {
         territories.stream().forEach(territory -> tanksMap.put(new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR +"tank_"), territory));
-        tanksMap.entrySet().stream().forEach(e -> e.getKey().setBounds(tanksCoordinates.get(e.getValue().getTerritoryName()).x(), tanksCoordinates.get(e.getValue().getTerritoryName()).y(), TANKS_WIDTH, TANKS_HEIGTH));
+        for (var tank : tanksMap.entrySet()) {
+            tank.getKey().setBounds(tanksCoordinates.get(tank.getValue().getTerritoryName()).x(), tanksCoordinates.get(tank.getValue().getTerritoryName()).y(), TANKS_WIDTH, TANKS_HEIGTH);
+            mapLayoutPane.add(tank.getKey(),TANK_LAYER,0);
+            tank.getKey().addActionListener( e -> tankClicked(tank.getValue()));
+        }
         tanksMap.entrySet().stream().forEach(e -> mapLayoutPane.add(e.getKey(),TANK_LAYER,0));
     }
 
