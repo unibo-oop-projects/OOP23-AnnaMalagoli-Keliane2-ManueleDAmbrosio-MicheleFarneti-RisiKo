@@ -188,5 +188,10 @@ public class GameImpl implements Game {
     @Override
     public Player getCurrentPlayer() {
         return players.get(activePlayer);
+    }
+
+    @Override
+    public List<Territory> getTerritoriesList() {
+        return map.getTerritories();
     } 
 }

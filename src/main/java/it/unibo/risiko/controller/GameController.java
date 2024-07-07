@@ -1,12 +1,20 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
+import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.cards.DeckImpl;
+import it.unibo.risiko.model.game.Game;
+import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.model.game.GameImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.map.GameMapImpl;
+import it.unibo.risiko.model.map.Territories;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.view.gameView.GameView;
@@ -52,8 +60,10 @@ public class GameController implements GameViewObserver{
         // var provaplayer2 = pf.createAIPlayer("blue", 0);
         // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
         // this.view.setCurrentPlayer(provaplayer2);
-        //Game provagame = new GameImpl(new GameMapImpl(0, 0, null, null, saveGamesFilePath));
-        view.showTanks(null);
+        
+        Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
+        System.out.println(provaTerritory);
+        view.showTanks(List.of(provaTerritory));
     }
 
     @Override

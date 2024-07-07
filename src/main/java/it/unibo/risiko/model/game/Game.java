@@ -2,6 +2,7 @@ package it.unibo.risiko.model.game;
 
 import java.util.List;
 
+import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -28,6 +29,11 @@ public interface Game {
      * @return The List of the players currently playing the game.
      */
     List<Player> getPlayersList();
+
+    /**
+     * @return The List of the territories in the map
+     */
+    List<Territory> getTerritoriesList();
 
     /**
      * @return The current Stage of the game
