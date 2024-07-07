@@ -51,4 +51,9 @@ public class GameController implements GameViewObserver{
         // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
         // this.view.setCurrentPlayer(provaplayer2);
     }
+
+    @Override
+    public void skikpTurn() {
+        var result = gameManager.getCurrentGame().get().nextTurn();
+    }
 }

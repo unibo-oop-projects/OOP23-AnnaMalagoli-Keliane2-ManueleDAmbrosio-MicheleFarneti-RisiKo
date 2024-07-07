@@ -15,6 +15,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -164,9 +166,11 @@ public class GameViewImpl implements GameView{
         var attackButton = new CustomButton("ATTACK");
         attackButton.setBounds(gamePanel.getWidth()/2-ATTACKBAR_BUTTONS_WIDTH-ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton,5,0);  
+
         var skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
-        attackBarLayoutPane.add(skipButton,5,0);    
+        attackBarLayoutPane.add(skipButton,5,0);  
+        skipButton.addActionListener(e -> gameViewObserver.skikpTurn());  
         turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
