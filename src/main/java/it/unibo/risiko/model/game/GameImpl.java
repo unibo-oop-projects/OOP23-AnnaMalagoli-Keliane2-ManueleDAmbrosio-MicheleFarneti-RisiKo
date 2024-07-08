@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Optional;
 
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
@@ -182,7 +183,16 @@ public class GameImpl implements Game {
 
     @Override
     public boolean gameOver() {
-        return players.stream().filter(p -> p.getTarget().isAchieved()==true).count()!=0;
+        Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()==true).findAny();
+        if(winner.isPresent()){
+            if(winner.get().equals(players.get(activePlayer))){
+                return true;
+            }
+            else{
+                players.get(activePlayer).setTarget(new ConquerTerritoriesTarget(players.get(activePlayer),randomNumberGenerator.nextInt(Math.toIntExact(Math.round(map.getTerritories().size()*MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),Math.toIntExact(Math.round(map.getTerritories().size()*MAX_TERRITORIES_TO_CONQUER_PERCENTAGE)))));
+            }
+        }
+        return false;
     }
 
     @Override
@@ -193,5 +203,5 @@ public class GameImpl implements Game {
     @Override
     public List<Territory> getTerritoriesList() {
         return map.getTerritories();
-    } 
+    }
 }
