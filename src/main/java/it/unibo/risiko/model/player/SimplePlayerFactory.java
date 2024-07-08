@@ -20,13 +20,13 @@ public class SimplePlayerFactory implements PlayerFactory {
     }
 
     @Override
-    public StdPlayer createStandardPlayer() {
-        return new StdPlayer(nextColor());
+    public Player createStandardPlayer() {
+        return new StdPlayer(nextColor(), false);
     }
 
     @Override
-    public EasyModePlayer createAIPlayer() {
-        return new EasyModePlayerImpl(nextColor());
+    public Player createAIPlayer() {
+        return new StdPlayer(nextColor(), true);
     }
 
     private String nextColor() {

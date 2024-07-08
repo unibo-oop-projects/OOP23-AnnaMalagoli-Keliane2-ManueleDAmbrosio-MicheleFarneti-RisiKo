@@ -1,6 +1,7 @@
 package it.unibo.risiko.model.player;
 
-import it.unibo.risiko.model.map.Territories;
+import java.util.List;
+
 import it.unibo.risiko.model.map.Territory;
 
 /**
@@ -17,9 +18,10 @@ public interface EasyModePlayer {
      * by the AI player and which the player wants
      * to attack from. 
      * 
+     * @param territoryList - List of the territories in the current map.
      * @return the next territory the AI wants to attack from.
      */
-    Territory getNextAttackingTerritory();
+    Territory getNextAttackingTerritory(List<Territory> territoryList);
 
     /**
      * This method is used to get a territory the AI player
@@ -41,8 +43,11 @@ public interface EasyModePlayer {
     /**
      * This method is used for position the new armies
      * received at the start of each turn.
+     * 
+     * @return the territory where the armies will be
+     * positioned.
      */
-    void decidePositioning();
+    Territory decidePositioning();
 
     /**
      * This method is used to decide the next attacking territory and
@@ -52,6 +57,6 @@ public interface EasyModePlayer {
      * @return true if the AI player can declare an attack, false
      * otherwise.
      */
-    boolean decideAttack(Territories listOfTerritories);
+    boolean decideAttack(final List<Territory> territoryList);
 
 }

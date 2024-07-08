@@ -22,15 +22,17 @@ public class StdPlayer implements Player {
     private Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
     private Optional<Target> target;
+    private boolean isAI;
 
-    protected StdPlayer(final String color, final int armiesToPlace) {
+    protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.color_id = color;
         this.armiesToPlace = armiesToPlace;
         this.target = Optional.empty();
+        this.isAI = isAI;
     }
 
-    protected StdPlayer(final String color) {
-        this(color, INITIAL_ARMIES);
+    protected StdPlayer(final String color, final boolean isAI) {
+        this(color, INITIAL_ARMIES, isAI);
     }
 
     @Override
@@ -150,6 +152,6 @@ public class StdPlayer implements Player {
 
     @Override
     public boolean isAI() {
-        return false;
+        return this.isAI;
     }
 }

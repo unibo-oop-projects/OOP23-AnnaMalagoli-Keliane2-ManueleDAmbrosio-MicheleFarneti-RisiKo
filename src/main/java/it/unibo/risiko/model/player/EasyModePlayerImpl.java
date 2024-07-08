@@ -1,11 +1,11 @@
 package it.unibo.risiko.model.player;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
-import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 
 /**
@@ -14,28 +14,28 @@ import it.unibo.risiko.model.map.Territory;
  * @author Manuele D'Ambrosio
  */
 
-public class EasyModePlayerImpl extends StdPlayer implements EasyModePlayer {
-    private static final int NUMBER_OF_ATTACKS = 3; 
-    private static final int INITIAL_ARMIES = 0;
-
-    private int NumberOfAttacks;
+public class EasyModePlayerImpl implements EasyModePlayer {
+    private static final int MINIMUM_ARMIES = 1;
+    private static final int INITIAL_INDEX = 0;
+    private Player player;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
+    private int territoryIndex;
 
-    protected EasyModePlayerImpl(final String color, final int armiesToPlace) {
-        super(color, armiesToPlace);
-        NumberOfAttacks = NUMBER_OF_ATTACKS;
-        nextAttackingTerritory = Optional.empty();
-        nextAttackedTerritory = Optional.empty();
-    }
-
-    protected EasyModePlayerImpl(final String color) {
-        this(color, INITIAL_ARMIES);
+    protected EasyModePlayerImpl(final Player player) {
+        this.player = player;
+        this.territoryIndex = INITIAL_INDEX;
     }
 
     @Override
-    public Territory getNextAttackingTerritory() {
-        return this.nextAttackingTerritory.get();
+    public Territory getNextAttackingTerritory(List<Territory> territoryList) {
+        Territory attackingTerritory;
+        Iterator<Territory> it = player.getOwnedTerritories().iterator();
+        attackingTerritory = it.next();
+        while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
+            attackingTerritory = it.next();
+        }
+        return attackingTerritory;
     }
 
     @Override
@@ -45,73 +45,46 @@ public class EasyModePlayerImpl extends StdPlayer implements EasyModePlayer {
 
     @Override
     public int getArmiesToMove() {
-        return nextAttackingTerritory.get().getNumberOfArmies() - 1;
+        return nextAttackingTerritory.get().getNumberOfArmies() - MINIMUM_ARMIES;
     }
 
     @Override
-    public void decidePositioning() {
-        int armiesToPlace = super.getArmiesToPlace();
-        int armiesPartition = armiesToPlace/super.getNumberOfTerritores();
-        for (Territory territory : super.getOwnedTerritories()) {
-            if (armiesToPlace >= armiesPartition) {
-                territory.addArmies(armiesPartition);
-                armiesToPlace = armiesToPlace - armiesPartition;
-            }
-            else {
-                territory.addArmies(armiesToPlace);
-            }
-        }
-        super.setArmiesToPlace(armiesToPlace);
+    public Territory decidePositioning() {
+        int index = territoryIndex;
+        territoryIndex++;
+        return player.getOwnedTerritories().stream().collect(Collectors.toList()).get(index);
     }
 
     @Override
-    public boolean decideAttack(final Territories listOfTerritories) {
-        for (Territory attackingTerritory : listOfTerritories.getListTerritories()) {
-            if (isOwnedTerritory(attackingTerritory) && canAttack()) {
-                if (attackingTerritory.getNumberOfArmies() > NUMBER_OF_ATTACKS) {
-                    nextAttackingTerritory = Optional.of(attackingTerritory);
-                    if (findAdjacentEnemy(attackingTerritory, listOfTerritories)) {
-                        NumberOfAttacks--;
-                        return true;
-                    }
-                }
+    public boolean decideAttack(final List<Territory> territoryList) {
+        Territory attackingTerritory;
+        int existenceCheker = 0;
+        Iterator<Territory> it = player.getOwnedTerritories().iterator();
+        attackingTerritory = it.next();
+        while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
+            attackingTerritory = it.next();
+            existenceCheker++;
+            if (existenceCheker >= player.getOwnedTerritories().size()) {
+                return false;
             }
         }
-        resetNumberOfAttacks();
-        return false;
-    }
-
-    @Override
-    public boolean isAI() {
+        nextAttackingTerritory = Optional.of(attackingTerritory);
         return true;
     }
 
-    private void resetNumberOfAttacks() {
-        NumberOfAttacks = NUMBER_OF_ATTACKS;
-    }
-
-    private boolean canAttack() {
-        return NumberOfAttacks > 0;
-    }
-
-    private boolean findAdjacentEnemy(final Territory territory, final Territories listOfTerritories) {
-
-        List<String> adjacentTerritoriesNames = territory.getListOfNearTerritories();
-        Set<Territory> adjacentTerritories = new HashSet<>();
-        for (String territoryName : adjacentTerritoriesNames) {
-            for (Territory adjacentTerritory : listOfTerritories.getListTerritories()) { 
-                if (adjacentTerritory.getTerritoryName() == territoryName) {
-                    adjacentTerritories.add(adjacentTerritory);
-                }
-            }
+    private boolean findAdjacentEnemy(final Territory territory, final List<Territory> territoryList) {
+        final int FIRST_INDEX = 0;
+        List<String> adjacentNames = territory.getListOfNearTerritories();
+        List<Territory> adjacentTerritories = new ArrayList<>();
+        for (Territory t : territoryList) {
+            if (adjacentNames.contains(t.getTerritoryName())) {
+                adjacentTerritories.add(t);
+            }            
         }
-        for (Territory defendingTerritory : adjacentTerritories) {
-            if (!isOwnedTerritory(defendingTerritory)) {
-                nextAttackedTerritory = Optional.of(defendingTerritory);
-                return true;
-            }
+        if (adjacentTerritories.isEmpty()) {
+            return false;
         }
-        return false;
+        nextAttackedTerritory = Optional.of(adjacentTerritories.get(FIRST_INDEX));
+        return true;
     }
-
 }
