@@ -1,7 +1,5 @@
 package it.unibo.risiko.view.gameView;
 
-import it.unibo.risiko.model.map.Territory;
-
 /**
  * Observer used by the view to interact with the controller by calling it's
  * void methods
@@ -18,28 +16,14 @@ public interface GameViewObserver {
     void skipTurn();
 
     /**
-     * Method used to set the name of the map.
+     * Method used to start a new game.
      * 
      * @param mapName - name of the map.
-     * @author Manuele D'Ambrosio
-     */
-    void setMapName(String mapName);
-
-    /**
-     * Method used to set the number of players controlled by humans.
-     * 
      * @param numberOfStandardPlayers - number of players controlled by humans.
-     * @author Manuele D'Ambrosio
-     */
-    void setStandardPlayers(int numberOfStandardPlayers);
-
-    /**
-     * Method used to set the number of players controlled by the computer.
-     * 
      * @param numberOfAIPlayers - number of players controlled by the computer.
-     * @author Manuele D'Ambrosio
+     * @author Manuele D'Ambrosio.
      */
-    void setAIPlayers(int numberOfAIPlayers);
+    public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers);
 
     /**
      * Method used to set the number of attacking armies.

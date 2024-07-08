@@ -60,9 +60,7 @@ public class NewGameInitViewImpl extends JPanel {
 
     private void startGame() {
         if (totalPlayers <= MAX_PLAYERS) {
-            observer.setMapName(mapName);
-            observer.setStandardPlayers(humanPlayers);
-            observer.setAIPlayers(aiPlayers);
+            observer.startNewGame(mapName, humanPlayers, aiPlayers);
             this.setVisible(false);
         }
     }
