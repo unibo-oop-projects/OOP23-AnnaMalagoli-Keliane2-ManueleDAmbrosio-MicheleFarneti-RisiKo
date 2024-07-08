@@ -1,5 +1,7 @@
 package it.unibo.risiko.model.game;
 
+import java.util.List;
+
 import it.unibo.risiko.model.dice.TripleDice;
 import it.unibo.risiko.model.dice.TripleDiceImpl;
 import it.unibo.risiko.model.map.Territory;
@@ -56,12 +58,12 @@ public class AttackPhaseImpl implements AttackPhase {
         }
     }
 
-    public TripleDice getAttackerDiceThrows() {
-        return this.attackerDiceThrows;
+    public List<Integer> getAttackerDiceThrows() {
+        return this.attackerDiceThrows.getResults();
     }
 
-    public TripleDice getDefenderDiceThrows() {
-        return this.defenderDiceThrows;
+    public List<Integer> getDefenderDiceThrows() {
+        return this.defenderDiceThrows.getResults();
     }
 
     public int getAttackerLostArmies() {
@@ -131,7 +133,6 @@ public class AttackPhaseImpl implements AttackPhase {
     }
 
     private int computeDefenderLostArmies() {
-        return Math.min(attackerDiceThrows.getNumberOfThrows(), defenderDiceThrows.getNumberOfThrows())
-                - attackerLostArmies;
+        return defendingArmies() - attackerLostArmies;
     }
 }

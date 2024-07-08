@@ -1,6 +1,6 @@
 package it.unibo.risiko.model.game;
 
-import it.unibo.risiko.model.dice.TripleDice;
+import java.util.List;
 
 /**
  * This class contains all the functions of the attack phase.
@@ -12,15 +12,15 @@ public interface AttackPhase {
 
     /**
      * This method is used to get the dice throws of the attacker.
-     * @return the attacker's dice throws.
+     * @return a list representing the attacker's dice throws.
      */
-    public TripleDice getAttackerDiceThrows();
+    public List<Integer> getAttackerDiceThrows();
 
     /**
      * This method is used to get the dice throws of the defender.
-     * @return the defender's dice throws.
+     * @return a list representing the defender's dice throws.
      */
-    public TripleDice getDefenderDiceThrows();
+    public List<Integer> getDefenderDiceThrows();
 
     /**
      * This method is used to get the number of armies lost by
