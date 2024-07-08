@@ -29,12 +29,12 @@ import java.util.List;
  * @author Manuele D'Ambrosio
  */
 
- /*
-  * TODO:
-  *Sistemare l'action listener dell'ultimo continue panel.
-  */
+/*
+ * TODO:
+ * Sistemare l'action listener dell'ultimo continue panel.
+ */
 
-public class AttackViewImpl extends JPanel{
+public class AttackViewImpl extends JPanel implements AttackView{
     private static final String SEP = File.separator;
     private static final String PATH = "build" + SEP + "resources" + SEP + "main" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice";
@@ -48,6 +48,7 @@ public class AttackViewImpl extends JPanel{
     final int height;
     final int width;
 
+    private GameViewObserver observer;
     private List<Integer> attDice;
     private List<Integer> defDice;
     private String attacking;
@@ -56,12 +57,14 @@ public class AttackViewImpl extends JPanel{
     private int attackersNumber;
     private int armiesToMove;
     private int attackerLostArmies;
+    private int defenderLostArmies;
     private boolean territoryConquered;
 
     public AttackViewImpl(final int height, final int width, final String attacking, final String defending,
-            final int attackingTerritoryArmies) {
+            final int attackingTerritoryArmies, final GameViewObserver observer) {
         this.height = height;
         this.width = width;
+        this.observer = observer;
 
         this.attDice = new ArrayList<>();
         this.defDice = new ArrayList<>();
@@ -78,7 +81,10 @@ public class AttackViewImpl extends JPanel{
         this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
         this.add(topPanel(), BorderLayout.NORTH);
-        this.add(new ContinuePanel("THROW!",width, e -> drawDicePanels()), BorderLayout.SOUTH);
+        this.add(new ContinuePanel("THROW!", width, e -> {
+            drawDicePanels();
+            observer.setAttackingArmies(attackersNumber);
+        }), BorderLayout.SOUTH);
         this.add(sidePanel("Attacker"), BorderLayout.WEST);
         this.add(sidePanel("Defender"), BorderLayout.EAST);
 
@@ -204,7 +210,7 @@ public class AttackViewImpl extends JPanel{
         final int HEIGHT_FACTOR = 10;
         JPanel resultsPanel = new JPanel();
         JTextField attackerResult = new StandardTextField("LOST: " + attackerLostArmies);
-        JTextField defenderResult = new StandardTextField("LOST: " + (attackersNumber - attackerLostArmies));
+        JTextField defenderResult = new StandardTextField("LOST: " + defenderLostArmies);
         attackerResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
         defenderResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
         resultsPanel.setBackground(BACKGROUND_COLOR);
@@ -262,7 +268,7 @@ public class AttackViewImpl extends JPanel{
             this.removeAll();
             this.add(titlePanel(), BorderLayout.NORTH);
             southPanel.add(resultsPanel());
-            southPanel.add(new ContinuePanel("CONTINUE!",width, e -> drawConquerPanel()));
+            southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel()));
             this.add(southPanel, BorderLayout.SOUTH);
             this.add(dicePanel("Red"), BorderLayout.WEST);
             this.add(dicePanel("Blue"), BorderLayout.EAST);
@@ -324,33 +330,37 @@ public class AttackViewImpl extends JPanel{
         conquerText.setPreferredSize(new Dimension(width, height / TEXT_HEIGHT_FACTOR));
         conquerPanel.add(conquerText, BorderLayout.NORTH);
         conquerPanel.add(midPanel, BorderLayout.CENTER);
-        conquerPanel.add(new ContinuePanel("CLOSE",width, null), BorderLayout.SOUTH); // Da sistemare con il controller
+        conquerPanel.add(new ContinuePanel("CLOSE", width, e -> {
+            observer.setMovingArmies(armiesToMove);
+            this.setVisible(false);
+        }), BorderLayout.SOUTH);
 
         return conquerPanel;
     }
 
-    public void setAtt(int d1, int d2, int d3) {
-        attDice = List.of(d1, d2, d3);
+    @Override
+    public void setAtt(final List<Integer> attDice) {
+        this.attDice = attDice;
     }
 
-    public void setDef(int d1, int d2, int d3) {
-        defDice = List.of(d1, d2, d3);
+    @Override
+    public void setDef(final List<Integer> defDice) {
+        this.defDice = defDice;
     }
 
-    public int getNumberOfAttackers() {
-        return this.attackersNumber;
+    @Override
+    public void setDefenderLostArmies(final int defenderLostArmies) {
+        this.defenderLostArmies = defenderLostArmies;
     }
 
-    public void setAttackersLostArmies(final int attackerLostArmies) {
+    @Override
+    public void setAttackerLostArmies(final int attackerLostArmies) {
         this.attackerLostArmies = attackerLostArmies;
     }
 
-    public int getArmiesToMove() {
-        return this.armiesToMove;
-    }
-
-    public void territoryConquered(final boolean isTerritoryConquered) {
-        this.territoryConquered = isTerritoryConquered;
+    @Override
+    public void isTerritoryConquered(final boolean territoryConquered) {
+        this.territoryConquered = territoryConquered;
     }
 
 }

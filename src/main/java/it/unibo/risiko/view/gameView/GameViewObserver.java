@@ -42,6 +42,23 @@ public interface GameViewObserver {
     void setAIPlayers(int numberOfAIPlayers);
 
     /**
+     * Method used to set the number of attacking armies.
+     * 
+     * @param numberOfAttackingAmies - Number of armies that are attacking.
+     * @author Manuele D'Ambrosio.
+     */
+    void setAttackingArmies(int numberOfAttackingAmies);
+
+    /**
+     * Method used to set the number of armies to move in a 
+     * conquered territory.
+     * 
+     * @param numberOfMovingArmies - Number of armies to move.
+     * @author Manuele D'Ambrosio.
+     */
+    void setMovingArmies(int numberOfMovingArmies);
+
+    /**
      * Tells the controller that the user clicked on a territory
      * 
      * @author Michele Farneti
