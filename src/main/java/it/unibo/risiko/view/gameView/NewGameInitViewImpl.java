@@ -52,7 +52,7 @@ public class NewGameInitViewImpl extends JPanel {
         this.add(mapSelectorPanel(mapList));
         this.add(playersSelectorPanel("PLAYERS: "));
         this.add(playersSelectorPanel("BOTS: "));
-        this.add(new ContinuePanel("START", width, e -> startGame())); //MODIFICA
+        this.add(new ContinuePanel("START", width, e -> startGame()));
 
         this.setVisible(true);
 
