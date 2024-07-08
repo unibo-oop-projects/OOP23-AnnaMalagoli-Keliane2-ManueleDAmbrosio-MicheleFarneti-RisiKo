@@ -9,6 +9,7 @@ import it.unibo.risiko.model.objective.Target;
 
 /**
  * Contains player status and informations as well as owned territories and cards.
+ * 
  * @author Manuele D'Ambrosio
  */
 
@@ -115,6 +116,11 @@ public interface Player {
      * player has to place at the start of its turn.
      */
     public void computeReinforcements();
+
+    /**
+     * This method reduces by one the armies to place.
+     */
+    public void decrementArmiesToPlace();
 
     /**
      * This metod is used to remove a card from the 
