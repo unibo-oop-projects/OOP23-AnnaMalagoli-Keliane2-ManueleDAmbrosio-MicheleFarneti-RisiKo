@@ -49,7 +49,6 @@ public class ColoredImageButton extends JButton{
         this.imageUri = imageUrl;
         this.setBounds(x, y, width, height);
         this.setOpaque(false);
-        this.setBorderPainted(false);
     }
 
     /**
