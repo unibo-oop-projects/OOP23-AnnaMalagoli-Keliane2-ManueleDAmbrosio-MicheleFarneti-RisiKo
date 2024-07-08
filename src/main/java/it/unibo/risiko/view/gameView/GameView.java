@@ -28,21 +28,21 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(List<Territory> territories);
+    void showTanks(List<String> territories);
 
     /**
      * Setups the turn's icon bar with the players' info
      * @param playersList
      * @author Michele Farneti
      */
-    void showTurnIcons(List<Player> playersList);
+    void showTurnIcons(List<String> playersList);
     
     /**
      * Edits the view in order to show wich player is the current player.
      * @param player
      * @author Michele Farneti
      */
-    void setCurrentPlayer(Player player);
+    void setCurrentPlayer(String playerColor, Integer nArmies);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord defending
@@ -50,12 +50,15 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(Territory territory, boolean isAttacker);
+    void showFightingTerritory(String territory, boolean isAttacker);
 
     /**
-     * Update the game view, changing the tank's colors based on territory
-     *  occuaption and updating the armies count labels
+     * Update the game view, changing a tank based on territory
+     *  occuaption and updating the armies count label
+     * @param territoryName
+     * @param playerColor
+     * @param armiesCount
      * @author Michele Farneti
      * */
-    void redrawView(List<Player> players);
+    void redrawTank(String territroyName, String playerColor, Integer armiesCount);
 }

@@ -1,5 +1,7 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.model.map.Territory;
+
 /**
  * Observer used by the view to interact with the controller by calling it's
  * void methods
@@ -38,5 +40,12 @@ public interface GameViewObserver {
      * @author Manuele D'Ambrosio
      */
     void setAIPlayers(int numberOfAIPlayers);
+
+    /**
+     * Tells the controller that the user clicked on a territory
+     * 
+     * @author Michele Farneti
+     */
+    void territorySelected(String territory);
 
 }

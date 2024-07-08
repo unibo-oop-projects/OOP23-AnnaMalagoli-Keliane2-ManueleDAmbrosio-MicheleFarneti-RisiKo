@@ -3,6 +3,7 @@ package it.unibo.risiko.controller;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collector;
 
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
@@ -11,6 +12,7 @@ import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.model.game.GameImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
@@ -61,15 +63,52 @@ public class GameController implements GameViewObserver{
         // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
         // this.view.setCurrentPlayer(provaplayer2);
         
-        Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
-        System.out.println(provaTerritory);
-        view.showTanks(List.of(provaTerritory));
+        // Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
+        // System.out.println(provaTerritory);
+        // view.showTanks(List.of(provaTerritory).stream().map(t -> t.getTerritoryName()).toList());
     }
 
     @Override
     public void skipTurn() {
         if(gameManager.getCurrentGame().get().nextTurn()){
-            view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer());
+            view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
         }
+    }
+
+    @Override
+    public void territorySelected(String territoryName) {
+        var territory = getTerritoryFromString(territoryName);
+        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+            case TERRITORY_OCCUPATION:
+                gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                break;
+            case ARMIES_PLACEMENT:
+                gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                break;
+            case ATTACK:
+                //DA FARE
+                break;
+            default: 
+                break;
+        }
+    }
+
+    /**
+     * Finds a terrritory in the currentGame territories list starting from its name
+     * @param territoryName
+     * @return The territory with the given name
+     */
+    private Territory getTerritoryFromString(String territoryName){
+        return gameManager.getCurrentGame().get().getTerritoriesList().stream().filter(t -> t.getTerritoryName().equals(territoryName)).findFirst().get();
+    }
+    
+    /**
+     * Updates the gmae view by changhing the map and the turns
+     */
+    private void redrawView(){
+        gameManager.getCurrentGame().get().getPlayersList().stream()
+            .forEach(p -> p.getOwnedTerritories().stream()
+                .forEach(t -> view.redrawTank(t.getTerritoryName(), p.getColor_id(), t.getNumberOfArmies())));
+        view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
     }
 }
