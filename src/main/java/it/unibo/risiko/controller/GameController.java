@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collector;
+import java.util.stream.IntStream;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
@@ -11,6 +12,7 @@ import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.Game;
+import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.model.game.GameImpl;
 import it.unibo.risiko.model.game.GameManager;
@@ -23,6 +25,7 @@ import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.player.StdPlayer;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -218,20 +221,29 @@ public class GameController implements GameViewObserver{
     }
 
     @Override
-    public void setMapName(String mapName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setMapName'");
+    public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
+        GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName));
+        PlayerFactory playerFactory = new SimplePlayerFactory();
+        for(int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index ++){
+            if(index < numberOfStandardPlayers){
+                gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
+            }
+            else{
+                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+            }
+        }
+        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
     }
 
     @Override
-    public void setStandardPlayers(int numberOfStandardPlayers) {
+    public void setAttackingArmies(int numberOfAttackingAmies) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStandardPlayers'");
+        throw new UnsupportedOperationException("Unimplemented method 'setAttackingArmies'");
     }
 
     @Override
-    public void setAIPlayers(int numberOfAIPlayers) {
+    public void setMovingArmies(int numberOfMovingArmies) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setAIPlayers'");
+        throw new UnsupportedOperationException("Unimplemented method 'setMovingArmies'");
     }
 }
