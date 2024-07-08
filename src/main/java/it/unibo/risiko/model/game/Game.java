@@ -60,4 +60,11 @@ public interface Game {
      * @param nArmies
      */
     public void placeArmies(final Territory territory, final int nArmies);
+
+    /**
+     * 
+     * @param territory
+     * @return The owner of the given territory
+     */
+    public Player getOwner(final Territory territory);
 }
