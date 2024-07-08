@@ -130,13 +130,13 @@ public class GameImpl implements Game {
     }
 
     /**
-     * 
      * @return The totale amount of armies that are still left to be placed among all the players.
      */
     private int getTotalArmiesLeftToPlace(){
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
     }
 
+    @Override
     public void placeArmies(final Territory territory, final int nArmies){
         if(status == GameStatus.TERRITORY_OCCUPATION){
             if(armiesPlaced < 3){

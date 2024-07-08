@@ -51,4 +51,12 @@ public interface Game {
      * @return The player whose turn it is
      */
     Player getCurrentPlayer();
+
+    /**
+     * The amount of armies selected is added to the player's territory if the current player 
+     * owns it
+     * @param territory
+     * @param nArmies
+     */
+    public void placeArmies(final Territory territory, final int nArmies);
 }

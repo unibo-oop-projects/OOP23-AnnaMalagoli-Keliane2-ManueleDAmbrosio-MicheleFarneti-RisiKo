@@ -1,11 +1,7 @@
 package it.unibo.risiko.view.gameView;
 
-import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.model.player.PlayerFactory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
-import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
@@ -136,8 +132,8 @@ public class GameViewImpl implements GameView{
     }};
 
     //private HashMap<Territory,ColoredImageButton> tanksMap = new HashMap<Territory,ColoredImageButton>();
-    private HashMap<Territory,TerritoryPlaceHolder> tanksMap = new HashMap<>();
-    private HashMap<ColoredImageButton,Player> iconsMap = new HashMap<ColoredImageButton,Player>();
+    private HashMap<String,TerritoryPlaceHolder> tanksMap = new HashMap<>();
+    private HashMap<ColoredImageButton,String> iconsMap = new HashMap<>();
     private GameViewObserver gameViewObserver;
     private JFrame gameFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
@@ -252,10 +248,11 @@ public class GameViewImpl implements GameView{
      * This funcion manages whenever a tank rapresenting a tank gets clicked
      * @param territory The territory that got clicked
      */
-    private void tankClicked(Territory territory){
-        countryBarPanel.setText(territory.getTerritoryName().toUpperCase());
+    private void tankClicked(String territory){
+        countryBarPanel.setText(territory.toUpperCase());
         countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
         countryBarPanel.setFont(new Font("Arial", Font.BOLD, 25));
+        gameViewObserver.territorySelected(territory);
     }
 
     /**
@@ -303,10 +300,10 @@ public class GameViewImpl implements GameView{
     }
 
     @Override
-    public void showTanks(List<Territory> territories) {
+    public void showTanks(List<String> territories) {
         territories.stream().forEach(territory -> tanksMap.put(territory,new TerritoryPlaceHolder(new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR +"tank_"),new JLabel("0"))));
         for (var tank : tanksMap.entrySet()) {
-            tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey().getTerritoryName()).x(), tanksCoordinates.get(tank.getKey().getTerritoryName()).y(), TANKS_WIDTH, TANKS_HEIGTH);
+            tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(), tanksCoordinates.get(tank.getKey()).y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(),TANK_LAYER,0);
             tank.getValue().button().addActionListener( e -> tankClicked(tank.getKey()));
             tank.getValue().button().setBorderPainted(false);
@@ -325,19 +322,19 @@ public class GameViewImpl implements GameView{
     }
 
     @Override
-    public void showTurnIcons(List<Player> playersList) {
+    public void showTurnIcons(List<String> playersList) {
         for (int playerIndex = 0; playerIndex < playersList.size(); playerIndex ++) { 
-            if( playersList.get(playerIndex).isAI()) {
-                iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR +"aiplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
-            }else{
-                iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR +"standardplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
-            }
+            //if( playersList.get(playerIndex).isAI()) {
+            //    iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR +"aiplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
+            //}else{
+            iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR +"standardplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
+            //}
         }
         
         for (var icon : iconsMap.entrySet()) {
-            icon.getKey().setColor(icon.getValue().getColor_id());
+            icon.getKey().setColor(icon.getValue());
             icon.getKey().setEnabled(false);
-            icon.getKey().setBorder(BorderFactory.createLineBorder(stringToColor(icon.getValue().getColor_id().toLowerCase()),3));
+            icon.getKey().setBorder(BorderFactory.createLineBorder(stringToColor(icon.getValue().toLowerCase()),3));
             attackBarLayoutPane.add(icon.getKey(),TURN_ICON_LAYER,0);
         }
     }
@@ -351,12 +348,12 @@ public class GameViewImpl implements GameView{
     }
 
     @Override
-    public void setCurrentPlayer(Player player) {
-        String currentPlayerColor = player.getColor_id();
+    public void setCurrentPlayer(String playerColor, Integer nArmies) {
+        String currentPlayerColor = playerColor;
         turnTank.setColor(currentPlayerColor);
-        iconsMap.entrySet().stream().forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(player))? true : false));
+        iconsMap.entrySet().stream().forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(playerColor))? true : false));
         attackBarBackgroundPanel.setTopColor(stringToColor(currentPlayerColor));
-        playerArmiesLabel.setText(Integer.toString(player.getArmiesToPlace()));
+        playerArmiesLabel.setText(nArmies.toString());
     }
 
     private Color stringToColor(String color_id){
@@ -379,29 +376,14 @@ public class GameViewImpl implements GameView{
     }
 
     @Override
-    public void showFightingTerritory(Territory territory, boolean isAttacker) {
+    public void showFightingTerritory(String territory, boolean isAttacker) {
         tanksMap.get(territory).button().setCustomBorder(isAttacker? Color.RED : Color.BLUE);
         tanksMap.get(territory).button().setBorderPainted(true);
     }
 
     @Override
-    public void redrawView(List<Player> players) {
-        players.stream()
-            .forEach(p -> p.getOwnedTerritories()
-                .stream()
-                .forEach( t-> updateTank(tanksMap.get(t), p.getColor_id(),t.getNumberOfArmies()) ));
-    }
-    
-    /**
-     * Updates the appearence of a tank by adding updating the number of armies and by setting
-     * it of the color of it's owner.
-     * @param tankButton
-     * @param color
-     * @param nArmies
-     * @author Michele Farneti
-     */
-    private void updateTank(TerritoryPlaceHolder tankButton, String color, int nArmies){
-        tankButton.button().setColor(color);
-        tankButton.armiesCount().setText("nArmies");
+    public void redrawTank(String countryName, String playerColor, Integer armiesCount ) {
+        tanksMap.get(countryName).button().setColor(playerColor);
+        tanksMap.get(countryName).armiesCount().setText(armiesCount.toString());
     }
 }
