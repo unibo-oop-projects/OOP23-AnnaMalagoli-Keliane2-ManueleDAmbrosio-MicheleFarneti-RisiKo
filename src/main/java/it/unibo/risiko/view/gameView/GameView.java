@@ -71,4 +71,11 @@ public interface GameView {
      * @author Michele Farneti
      * */
     void redrawTank(String territroyName, String playerColor, Integer armiesCount);
+
+    /**
+     * Updates the gameView making it show who is the winner of the game
+     * @param winnerColor
+     * @author Michele Farneti
+     */
+    void gameOver(String winnerColor);
 }

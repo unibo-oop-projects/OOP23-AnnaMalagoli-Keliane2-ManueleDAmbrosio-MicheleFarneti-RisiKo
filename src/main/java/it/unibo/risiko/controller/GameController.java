@@ -67,10 +67,11 @@ public class GameController implements GameViewObserver{
         //var provaplayer2 = pf.createAIPlayer("blue", 0);
         // this.view.setCurrentPlayer(provaplayer2);
         
-        Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
+        //Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
         // System.out.println(provaTerritory);
-        view.showTanks(List.of(provaTerritory).stream().map(t -> t.getTerritoryName()).toList());
-        showTurnIcons();
+        //view.showTanks(List.of(provaTerritory).stream().map(t -> t.getTerritoryName()).toList());
+        //showTurnIcons();
+        view.gameOver("red");
     }
 
     /**
@@ -135,7 +136,11 @@ public class GameController implements GameViewObserver{
      * @author Michele Farneti
      */
     private void startAttack() {
+        //ATTACK
         resetAttack();
+        if(gameManager.getCurrentGame().get().gameOver()){
+            this.view.gameOver(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id());
+        }
     }
 
     /**
@@ -182,5 +187,23 @@ public class GameController implements GameViewObserver{
             .forEach(p -> p.getOwnedTerritories().stream()
                 .forEach(t -> view.redrawTank(t.getTerritoryName(), p.getColor_id(), t.getNumberOfArmies())));
         view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
+    }
+
+    @Override
+    public void setMapName(String mapName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setMapName'");
+    }
+
+    @Override
+    public void setStandardPlayers(int numberOfStandardPlayers) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStandardPlayers'");
+    }
+
+    @Override
+    public void setAIPlayers(int numberOfAIPlayers) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAIPlayers'");
     }
 }

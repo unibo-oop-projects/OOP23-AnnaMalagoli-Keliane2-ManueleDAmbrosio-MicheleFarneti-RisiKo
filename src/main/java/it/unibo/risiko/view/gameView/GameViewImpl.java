@@ -40,6 +40,8 @@ import javax.swing.RowFilter.Entry;
 
 public class GameViewImpl implements GameView{
 
+    private static final Integer WINNER_FONT_SIZE = 30;
+
     private static final String FILE_SEPARATOR = File.separator;
 
     private final static Double GAME_PANEL_WIDTH_PERCENTAGE = 0.8;
@@ -130,6 +132,8 @@ public class GameViewImpl implements GameView{
         put("China",new Position(995,200));
         put("Siam",new Position(995,270));
     }};
+
+    private static final Integer WINNER_LAYER = 3;
 
     //private HashMap<Territory,ColoredImageButton> tanksMap = new HashMap<Territory,ColoredImageButton>();
     private HashMap<String,TerritoryPlaceHolder> tanksMap = new HashMap<>();
@@ -389,5 +393,21 @@ public class GameViewImpl implements GameView{
     public void resetFightingTerritories(String attackerTerritory, String defenderTerritory) {
         tanksMap.get(attackerTerritory).button().setBorderPainted(false);
         tanksMap.get(defenderTerritory).button().setBorderPainted(false);
+    }
+
+    @Override
+    public void gameOver(String winnerColor) {
+        var winnerPanel = new GradientPanel(Color.BLACK,stringToColor(winnerColor), MAP_GRADIENT_LEVEL);
+        winnerPanel.setBackground(Color.RED);
+        winnerPanel.setBounds(0,0,gameFrame.getWidth(), gameFrame.getHeight());
+        winnerPanel.setOpaque(true);
+
+        var winnerWriting = new JTextField(winnerColor.toUpperCase() + " player has won the Game!");
+        winnerWriting.setFont(new Font("Arial",Font.BOLD,WINNER_FONT_SIZE));
+        winnerWriting.setForeground(stringToColor(winnerColor));
+        winnerWriting.setOpaque(false);
+        winnerWriting.setBorder(BorderFactory.createEmptyBorder());
+        winnerPanel.add(winnerWriting);
+        baseLayoutPane.add(winnerPanel,WINNER_LAYER,0);
     }
 }
