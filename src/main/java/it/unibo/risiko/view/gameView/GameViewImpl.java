@@ -362,5 +362,24 @@ public class GameViewImpl implements GameView{
         tanksMap.get(territory).button().setCustomBorder(isAttacker? Color.RED : Color.BLUE);
         tanksMap.get(territory).button().setBorderPainted(true);
     }
+
+    @Override
+    public void redrawView(List<Player> players) {
+        players.stream()
+            .forEach(p -> p.getOwnedTerritories()
+                .stream()
+                .forEach( t-> updateTank(tanksMap.get(t), p.getColor_id(),t.getNumberOfArmies()) ));
+    }
     
+    /**
+     * Updates the appearence of a tank by adding updating the number of armies and by setting
+     * it of the color of it's owner.
+     * @param tankButton
+     * @param color
+     * @param nArmies
+     */
+    private void updateTank(TerritoryPlaceHolder tankButton, String color, int nArmies){
+        tankButton.button().setColor(color);
+        tankButton.armiesCount().setText("nArmies");
+    }
 }

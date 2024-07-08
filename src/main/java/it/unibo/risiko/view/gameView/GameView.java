@@ -48,6 +48,14 @@ public interface GameView {
      * Highlights a territory in a different way either if it is attacking ord defending
      * @param territory The territory wich is going to be higlighted as attacker
      * @param isAttacker
+     * @author Michele Farneti
      */
     void showFightingTerritory(Territory territory, boolean isAttacker);
+
+    /**
+     * Update the game view, changing the tank's colors based on territory
+     *  occuaption and updating the armies count labels
+     * @author Michele Farneti
+     * */
+    void redrawView(List<Player> players);
 }
