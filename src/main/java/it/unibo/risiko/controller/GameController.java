@@ -20,6 +20,7 @@ import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.view.gameView.GameView;
@@ -88,7 +89,7 @@ public class GameController implements GameViewObserver{
     @Override
     public void skipTurn() {
         if(gameManager.getCurrentGame().get().nextTurn()){
-            view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
+            view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
         }
     }
 
@@ -122,6 +123,10 @@ public class GameController implements GameViewObserver{
                     }else if(defenderTerritory.isEmpty() && !currentPlayerOwns(getTerritoryFromString(territoryName)) ){
                         setFighter(territoryName, false);
                         startAttack();
+                        resetAttack();
+                        if(gameManager.getCurrentGame().get().gameOver()){
+                            this.view.gameOver(currentPlayer().get().getColor_id());
+                        }
                     }
                 }
                 break;
@@ -133,14 +138,37 @@ public class GameController implements GameViewObserver{
     /**
      * Creates a new attack once attacker territory and defender territory are correctly set,
      * then updates the view.
-     * @author Michele Farneti
+     * @author 
      */
     private void startAttack() {
-        //ATTACK
-        resetAttack();
-        if(gameManager.getCurrentGame().get().gameOver()){
-            this.view.gameOver(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id());
+        // Optional<Territory> attackerTerritory
+        // Optional<Territory> defenderTerritory
+        currentPlayer().get();
+        
+    }
+
+    /**
+     * 
+     * @return If present, the current player of the current game, otherwise an empy optional.
+     * @author Michele Farneti
+     */
+    private Optional<Player> currentPlayer(){
+        if(gameManager.getCurrentGame().isPresent()){
+            return Optional.of(gameManager.getCurrentGame().get().getCurrentPlayer());
         }
+        else{
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * 
+     * @param territory
+     * @return The owner of the territory in the current game
+     * @author Michele Farneti
+     */
+    private Player getOwner(Territory territory){
+        return gameManager.getCurrentGame().get().getOwner(territory);
     }
 
     /**
@@ -175,7 +203,7 @@ public class GameController implements GameViewObserver{
      * @author Michele Farneti
      */
     private boolean currentPlayerOwns(Territory territory){
-        return gameManager.getCurrentGame().get().getCurrentPlayer().isOwnedTerritory(territory);
+        return currentPlayer().get().isOwnedTerritory(territory);
     }
     
     /**
@@ -186,7 +214,7 @@ public class GameController implements GameViewObserver{
         gameManager.getCurrentGame().get().getPlayersList().stream()
             .forEach(p -> p.getOwnedTerritories().stream()
                 .forEach(t -> view.redrawTank(t.getTerritoryName(), p.getColor_id(), t.getNumberOfArmies())));
-        view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
+        view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
     }
 
     @Override

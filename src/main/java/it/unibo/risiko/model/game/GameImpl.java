@@ -204,4 +204,9 @@ public class GameImpl implements Game {
     public List<Territory> getTerritoriesList() {
         return map.getTerritories();
     }
+
+    @Override
+    public Player getOwner(Territory territory) {
+        return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch( t-> t.equals(territory))).findFirst().get();
+    }
 }
