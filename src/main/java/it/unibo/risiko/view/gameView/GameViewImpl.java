@@ -78,10 +78,15 @@ public class GameViewImpl implements GameView{
 
     private static final Integer TURN_TANK_WIDTH = 100;
     private static final Integer TURN_TANK_HEIGHT = 100;
+    private static final Integer TURN_TANK_LAYER = 5;
 
     private static final int ARMIES_LABEL_HEIGHT = 15;
     private static final int ARMIES_LABEL_WIDTH = 15;
-    private static final int ARMIESCOUNT_FONT_SIZE = 14;
+    private static final int ARMIES_LABEL_FONT_SIZE = 14;
+
+    private static final int PLAYER_ARMIES_LABEL_HEIGHT = 23;
+    private static final int PLAYER_ARMIES_LABEL_WIDTH = 23;
+    private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 20;
 
     private final Integer GAME_FRAME_WIDTH;
     private final Integer GAME_FRAME_HEIGHT;
@@ -141,6 +146,7 @@ public class GameViewImpl implements GameView{
     private JPanel gamePanel = new JPanel();
     private JPanel mapPanel;
     private JPanel turnsBarPanel;
+    private JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
 
     private ColoredImageButton turnTank;
@@ -213,10 +219,24 @@ public class GameViewImpl implements GameView{
         skipButton.setBounds(gamePanel.getWidth()/2+ATTACKBAR_BUTTONS_DISTANCE, 100,ATTACKBAR_BUTTONS_WIDTH,ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(skipButton,5,0);  
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());  
+
         turnTank = new ColoredImageButton(FILE_SEPARATOR+"tanks"+FILE_SEPARATOR+"tank_",gamePanel.getWidth()/2-(TURN_TANK_WIDTH)/2,0,TURN_TANK_WIDTH,TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
-        attackBarLayoutPane.add(turnTank,5,0);
+
+        playerArmiesLabel.setBounds(
+            turnTank.getBounds().x+TURN_TANK_WIDTH
+            , turnTank.getBounds().y+TURN_TANK_HEIGHT/3
+            ,PLAYER_ARMIES_LABEL_WIDTH
+            ,PLAYER_ARMIES_LABEL_HEIGHT);
+        playerArmiesLabel.setFont(new Font("Arial",Font.BOLD,PLAYER_ARMIES_LABEL_FONT_SIZE));
+        playerArmiesLabel.setText("20");
+        playerArmiesLabel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
+        playerArmiesLabel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
+        playerArmiesLabel.setOpaque(true);
+
+        attackBarLayoutPane.add(turnTank,TURN_TANK_LAYER,0);
+        attackBarLayoutPane.add(playerArmiesLabel,TURN_TANK_LAYER+1,0);
     }
 
     /**
@@ -298,7 +318,7 @@ public class GameViewImpl implements GameView{
                 ,ARMIES_LABEL_WIDTH
                 ,ARMIES_LABEL_HEIGHT);
             tank.getValue().armiesCount().setForeground(Color.white);
-            tank.getValue().armiesCount().setFont(new Font("Arial",Font.BOLD, ARMIESCOUNT_FONT_SIZE));
+            tank.getValue().armiesCount().setFont(new Font("Arial",Font.BOLD, ARMIES_LABEL_FONT_SIZE));
             mapLayoutPane.add(tank.getValue().button(),TANK_LAYER,0);
             mapLayoutPane.add(tank.getValue().armiesCount(),TANK_LAYER,0);
         }
@@ -336,6 +356,7 @@ public class GameViewImpl implements GameView{
         turnTank.setColor(currentPlayerColor);
         iconsMap.entrySet().stream().forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(player))? true : false));
         attackBarBackgroundPanel.setTopColor(stringToColor(currentPlayerColor));
+        playerArmiesLabel.setText(Integer.toString(player.getArmiesToPlace()));
     }
 
     private Color stringToColor(String color_id){
@@ -377,6 +398,7 @@ public class GameViewImpl implements GameView{
      * @param tankButton
      * @param color
      * @param nArmies
+     * @author Michele Farneti
      */
     private void updateTank(TerritoryPlaceHolder tankButton, String color, int nArmies){
         tankButton.button().setColor(color);
