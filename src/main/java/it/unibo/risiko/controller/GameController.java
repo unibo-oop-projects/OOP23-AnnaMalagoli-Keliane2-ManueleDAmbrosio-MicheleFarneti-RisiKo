@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collector;
+import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
+import it.unibo.risiko.model.game.AttackPhase;
+import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.Game;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.model.game.GameImpl;
@@ -34,7 +37,9 @@ public class GameController implements GameViewObserver{
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames" + FILE_SEPARATOR +"savegames.json";
     private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
     private static final String resourcesPackageString = "build" + FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "main" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
-    
+    private Optional<Territory> attackerTerritory = Optional.empty();
+    private Optional<Territory> defenderTerritory = Optional.empty();
+
     /**
     * Initialization of the Game controller with a GameManager as model field and a Java Swing view 
     *@author Michele Farneti
@@ -57,15 +62,26 @@ public class GameController implements GameViewObserver{
         //     this.view.showTurnIcons(this.gameManager.getCurrentGame().get().getPlayersList());
         // }
 
-        // PlayerFactory pf = new SimplePlayerFactory();
-        // var provaplayer = pf.createStandardPlayer("red", 0);
-        // var provaplayer2 = pf.createAIPlayer("blue", 0);
-        // this.view.showTurnIcons(List.of(provaplayer,provaplayer2));
+        //PlayerFactory pf = new SimplePlayerFactory();
+        //var provaplayer = pf.createStandardPlayer("red", 0);
+        //var provaplayer2 = pf.createAIPlayer("blue", 0);
         // this.view.setCurrentPlayer(provaplayer2);
         
-        // Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
+        Territory provaTerritory = new TerritoryImpl("India", "South america", new LinkedList<>());
         // System.out.println(provaTerritory);
-        // view.showTanks(List.of(provaTerritory).stream().map(t -> t.getTerritoryName()).toList());
+        view.showTanks(List.of(provaTerritory).stream().map(t -> t.getTerritoryName()).toList());
+        showTurnIcons();
+    }
+
+    /**
+     * Updates the view in such a way to show the players icons
+     * @author Michele Farneti
+     */
+    private void showTurnIcons() {
+        for(int i = 0; i < gameManager.getCurrentGame().get().getPlayersList().size(); i++){
+            var player = gameManager.getCurrentGame().get().getPlayersList().get(i);
+            this.view.showTurnIcon(player.getColor_id(), i, player.isAI());
+        }
     }
 
     @Override
@@ -73,6 +89,17 @@ public class GameController implements GameViewObserver{
         if(gameManager.getCurrentGame().get().nextTurn()){
             view.setCurrentPlayer(gameManager.getCurrentGame().get().getCurrentPlayer().getColor_id(), gameManager.getCurrentGame().get().getCurrentPlayer().getArmiesToPlace());
         }
+    }
+
+    /**
+     * Resets the current territories set as attacker and defender
+     * @author Michele Farneti
+     */
+    private void resetAttack(){
+        view.resetFightingTerritories(attackerTerritory.get().getTerritoryName(),defenderTerritory.get().getTerritoryName());
+        attackerTerritory = Optional.empty();
+        defenderTerritory = Optional.empty();
+        redrawView();
     }
 
     @Override
@@ -86,7 +113,16 @@ public class GameController implements GameViewObserver{
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
                 break;
             case ATTACK:
-                //DA FARE
+                if(attackerTerritory.isEmpty() && currentPlayerOwns(territory)){
+                    setFighter(territoryName,true);
+                }else{
+                    if(currentPlayerOwns(getTerritoryFromString(territoryName))){
+                        setFighter(territoryName,true);
+                    }else if(defenderTerritory.isEmpty() && !currentPlayerOwns(getTerritoryFromString(territoryName)) ){
+                        setFighter(territoryName, false);
+                        startAttack();
+                    }
+                }
                 break;
             default: 
                 break;
@@ -94,16 +130,52 @@ public class GameController implements GameViewObserver{
     }
 
     /**
+     * Creates a new attack once attacker territory and defender territory are correctly set,
+     * then updates the view.
+     * @author Michele Farneti
+     */
+    private void startAttack() {
+        resetAttack();
+    }
+
+    /**
+     * The territory passed as argument is set as AttackerTerritory and is Higligted by the GUI
+     * @param territoryName
+     * @author Michele Farneti
+     */
+    private void setFighter(String territoryName, boolean isAttacker){
+        if(isAttacker){
+            attackerTerritory = Optional.of(getTerritoryFromString(territoryName));
+            view.showFightingTerritory(territoryName, true);
+        }else{
+            defenderTerritory= Optional.of(getTerritoryFromString(territoryName));
+            view.showFightingTerritory(territoryName, false);
+        }
+    }
+
+    /**
      * Finds a terrritory in the currentGame territories list starting from its name
      * @param territoryName
      * @return The territory with the given name
+     * @author Michele Farneti
      */
     private Territory getTerritoryFromString(String territoryName){
         return gameManager.getCurrentGame().get().getTerritoriesList().stream().filter(t -> t.getTerritoryName().equals(territoryName)).findFirst().get();
     }
+
+    /**
+     * Checks if the current player of the current game owns a territory
+     * @param territory
+     * @return true if the player owns the territory
+     * @author Michele Farneti
+     */
+    private boolean currentPlayerOwns(Territory territory){
+        return gameManager.getCurrentGame().get().getCurrentPlayer().isOwnedTerritory(territory);
+    }
     
     /**
-     * Updates the gmae view by changhing the map and the turns
+     * Updates the game view by changhing the map and the turns
+     * @author Michele Farneti
      */
     private void redrawView(){
         gameManager.getCurrentGame().get().getPlayersList().stream()

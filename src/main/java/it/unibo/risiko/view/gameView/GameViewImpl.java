@@ -322,15 +322,13 @@ public class GameViewImpl implements GameView{
     }
 
     @Override
-    public void showTurnIcons(List<String> playersList) {
-        for (int playerIndex = 0; playerIndex < playersList.size(); playerIndex ++) { 
-            //if( playersList.get(playerIndex).isAI()) {
-            //    iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR +"aiplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
-            //}else{
-            iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR +"standardplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),playersList.get(playerIndex));
-            //}
+    public void showTurnIcon(String player, int playerIndex, boolean isAI) {
+        if(isAI) {
+            iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR +"aiplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),player);
+        }else{
+            iconsMap.put(new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR +"standardplayer_",computeIconStartingX(playerIndex),TURNBAR_START_Y,TURN_ICON_WIDTH,TURN_ICON_HEIGHT),player);
         }
-        
+
         for (var icon : iconsMap.entrySet()) {
             icon.getKey().setColor(icon.getValue());
             icon.getKey().setEnabled(false);
@@ -385,5 +383,11 @@ public class GameViewImpl implements GameView{
     public void redrawTank(String countryName, String playerColor, Integer armiesCount ) {
         tanksMap.get(countryName).button().setColor(playerColor);
         tanksMap.get(countryName).armiesCount().setText(armiesCount.toString());
+    }
+
+    @Override
+    public void resetFightingTerritories(String attackerTerritory, String defenderTerritory) {
+        tanksMap.get(attackerTerritory).button().setBorderPainted(false);
+        tanksMap.get(defenderTerritory).button().setBorderPainted(false);
     }
 }

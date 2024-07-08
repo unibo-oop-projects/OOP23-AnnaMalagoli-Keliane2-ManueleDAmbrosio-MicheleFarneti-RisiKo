@@ -31,11 +31,13 @@ public interface GameView {
     void showTanks(List<String> territories);
 
     /**
-     * Setups the turn's icon bar with the players' info
-     * @param playersList
+     * Setups one turn icon bar with the players' info
+     * @param playersColor
+     * @param playersIndex
+     * @param isAI
      * @author Michele Farneti
      */
-    void showTurnIcons(List<String> playersList);
+    void showTurnIcon(String playerColor, int playerIndex, boolean isAI);
     
     /**
      * Edits the view in order to show wich player is the current player.
@@ -51,6 +53,14 @@ public interface GameView {
      * @author Michele Farneti
      */
     void showFightingTerritory(String territory, boolean isAttacker);
+
+    /**
+     * Deletes higlights of the territories that just fighted
+     * @param attackerTerritory
+     * @param defenderTerritory
+     * @author Michele Farneti
+     */
+    void resetFightingTerritories(String attackerTerritory, String defenderTerritory);
 
     /**
      * Update the game view, changing a tank based on territory
