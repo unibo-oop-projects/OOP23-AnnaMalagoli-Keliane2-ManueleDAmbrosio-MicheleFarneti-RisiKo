@@ -56,6 +56,7 @@ public class GameViewImpl implements GameView{
     private final static int TURN_ICON_LAYER = 3;
     private final static int TURNSBAR_LAYER = 2;
     private final static int BACKGROUND_LAYER = 0;
+    private static final Integer TOP_LAYER = 5;
 
     private final static Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63,58,20);
     private final static Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255,204,0);
@@ -132,8 +133,6 @@ public class GameViewImpl implements GameView{
         put("China",new Position(995,200));
         put("Siam",new Position(995,270));
     }};
-
-    private static final Integer WINNER_LAYER = 3;
 
     //private HashMap<Territory,ColoredImageButton> tanksMap = new HashMap<Territory,ColoredImageButton>();
     private HashMap<String,TerritoryPlaceHolder> tanksMap = new HashMap<>();
@@ -240,13 +239,35 @@ public class GameViewImpl implements GameView{
     }
 
     /**
-     * Sets a Jpanel as a layerdPane background
+     * Sets a Jpanel as a JlayerdPane background
      * @param layeredPane
      * @param background
+     * @author Michele Farneti
      */
     private void setLayerdPaneBackground(JLayeredPane layeredPane, JPanel background){
-        layeredPane.add(background,BACKGROUND_LAYER,0);
+        setLayerdPaneLayer(layeredPane, background, BACKGROUND_LAYER);
     }
+
+    /**
+     * Sets a Jpanel at a Jlayerde pane top level
+     * @param layeredPane
+     * @param overlay
+     * @author Michele Farneti
+     */
+    private void setLayerdPaneOverlay(JLayeredPane layeredPane, JPanel overlay){
+        setLayerdPaneLayer(layeredPane, overlay, TOP_LAYER);
+    }
+
+    /**
+     * Sets a Jpanel at a Jlayerde given layer
+     * @param layeredPane
+     * @param jpanel
+     * @author Michele Farneti
+     */
+    private void setLayerdPaneLayer(JLayeredPane layeredPane, JPanel jpanel, Integer layer){
+        layeredPane.add(jpanel,layer,0);
+    }
+
 
     /** 
      * This funcion manages whenever a tank rapresenting a tank gets clicked
@@ -408,6 +429,8 @@ public class GameViewImpl implements GameView{
         winnerWriting.setOpaque(false);
         winnerWriting.setBorder(BorderFactory.createEmptyBorder());
         winnerPanel.add(winnerWriting);
-        baseLayoutPane.add(winnerPanel,WINNER_LAYER,0);
+        setLayerdPaneOverlay(baseLayoutPane, winnerPanel);
     }
+
+    
 }

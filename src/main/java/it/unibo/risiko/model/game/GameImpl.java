@@ -93,7 +93,6 @@ public class GameImpl implements Game {
     public boolean nextTurn(){
         if(skipTurnPossible()){
             if(status == GameStatus.TERRITORY_OCCUPATION){
-
                 armiesPlaced = 0;
                 if(getTotalArmiesLeftToPlace() == 0){
                     status = status.next();
@@ -144,12 +143,14 @@ public class GameImpl implements Game {
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
                     territory.addArmies(nArmies);
                     armiesPlaced ++;
+                    players.get(activePlayer).decrementArmiesToPlace();
                 }
             }
         } else if ( status == GameStatus.ARMIES_PLACEMENT){
             if(players.get(activePlayer).isOwnedTerritory(territory)){
                 territory.addArmies(nArmies);
                 armiesPlaced ++;
+                players.get(activePlayer).decrementArmiesToPlace();
             }
         }
     }
