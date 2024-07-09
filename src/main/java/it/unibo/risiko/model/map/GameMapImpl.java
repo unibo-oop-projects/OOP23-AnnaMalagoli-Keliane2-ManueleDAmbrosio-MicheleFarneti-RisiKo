@@ -20,7 +20,7 @@ public class GameMapImpl implements GameMap {
     private static final Integer MAX_PLAYERS_SMALL_MAPS = 2;
     private static final Integer MAX_PLAYERS_BIG_MAPS = 6;
 
-    private static final int MINIMUM_ARMIES = 20;
+    private static final int MINIMUM_ARMIES = 25;
     private static final int ARMIES_STEP = 5;
 
     private Territories territories;

@@ -72,4 +72,17 @@ public interface Game {
      * @return The owner of the given territory
      */
     public Player getOwner(final Territory territory);
+
+    /**
+     * 
+     * If possible, sets the Game status to ATTACKING, allowing the player to attack next
+     */
+    void setAttacking();
+
+    /**
+     * 
+     * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK allowing the gameLoop to restart
+     */
+    void endAttack();
+
 }

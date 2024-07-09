@@ -1,6 +1,7 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,8 +102,8 @@ public class GameController implements GameViewObserver {
      * @author Michele Farneti
      */
     private void resetAttack() {
-        view.resetFightingTerritories(attackerTerritory.get().getTerritoryName(),
-                defenderTerritory.get().getTerritoryName());
+        attackerTerritory.ifPresent( t -> view.resetFightingTerritory(t.getTerritoryName()));
+        defenderTerritory.ifPresent( t -> view.resetFightingTerritory(t.getTerritoryName()));
         attackerTerritory = Optional.empty();
         defenderTerritory = Optional.empty();
         redrawView();
@@ -118,27 +119,32 @@ public class GameController implements GameViewObserver {
             case ARMIES_PLACEMENT:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
                 break;
-            case ATTACK:
-                if (attackerTerritory.isEmpty() && currentPlayerOwns(territory)) {
+            case ATTACKING:
+                if(currentPlayerOwns(territory)){
                     setFighter(territoryName, true);
-                } else {
-                    if (currentPlayerOwns(getTerritoryFromString(territoryName))) {
-                        setFighter(territoryName, true);
-                    } else if (defenderTerritory.isEmpty()
-                            && !currentPlayerOwns(getTerritoryFromString(territoryName))) {
-                        setFighter(territoryName, false);
+                }
+                else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
+                    setFighter(territoryName, false);
                         startAttack();
                         resetAttack();
-                        if (gameManager.getCurrentGame().get().gameOver()) {
-                            this.view.gameOver(currentPlayer().get().getColor_id());
-                        }
-                    }
+                        checkWinner();
                 }
                 break;
             default:
                 break;
         }
         redrawView();
+    }
+
+    /** 
+     * 
+     * Checks if the current player won the game, eventually displaying
+     * a gameover window
+     *  */
+    private void checkWinner(){
+        if (gameManager.getCurrentGame().get().gameOver()) {
+            this.view.gameOver(currentPlayer().get().getColor_id());
+        }
     }
 
     /**
@@ -214,6 +220,7 @@ public class GameController implements GameViewObserver {
      */
     private void setFighter(String territoryName, boolean isAttacker) {
         if (isAttacker) {
+            resetAttack();
             attackerTerritory = Optional.of(getTerritoryFromString(territoryName));
             view.showFightingTerritory(territoryName, true);
         } else {
@@ -272,5 +279,10 @@ public class GameController implements GameViewObserver {
 
         gameManager.AddNewCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
+    }
+
+    @Override
+    public void setAttacking() {
+        gameManager.getCurrentGame().get().setAttacking();
     }
 }

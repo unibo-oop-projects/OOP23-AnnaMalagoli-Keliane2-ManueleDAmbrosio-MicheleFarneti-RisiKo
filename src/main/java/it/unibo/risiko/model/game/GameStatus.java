@@ -5,7 +5,7 @@ package it.unibo.risiko.model.game;
  * Enum used to rappresent the differente sta
  */
 public enum GameStatus {
-    TERRITORY_OCCUPATION,ATTACK,ARMIES_PLACEMENT,GAME_OVER;
+    TERRITORY_OCCUPATION,ATTACKING,READY_TO_ATTACK,ARMIES_PLACEMENT,GAME_OVER;
 
     /**
      * 
@@ -16,11 +16,11 @@ public enum GameStatus {
             case TERRITORY_OCCUPATION:
                 return ARMIES_PLACEMENT;
             case ARMIES_PLACEMENT:
-                return ATTACK;
-            case ATTACK:
+                return READY_TO_ATTACK;
+            case READY_TO_ATTACK:
                 return ARMIES_PLACEMENT;
             default:
-                return ATTACK;
+                return READY_TO_ATTACK;
         }
     }
 }

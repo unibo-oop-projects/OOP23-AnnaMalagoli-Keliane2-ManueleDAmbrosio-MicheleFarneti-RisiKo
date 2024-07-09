@@ -59,4 +59,11 @@ public interface GameViewObserver {
      */
     void territorySelected(String territory);
 
+    /**
+     * Tells the controller that the player wants to enter the attack phase.
+     * 
+     * @author Michele Farneti
+     */
+    void setAttacking();
+
 }

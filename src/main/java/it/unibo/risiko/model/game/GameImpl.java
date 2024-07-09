@@ -95,37 +95,40 @@ public class GameImpl implements Game {
             if(status == GameStatus.TERRITORY_OCCUPATION){
                 armiesPlaced = 0;
                 if(getTotalArmiesLeftToPlace() == 0){
-                    status = status.next();
                     players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                    updateCurrentPlayer();
+                    status = status.next();
+                } else{
+                    updateCurrentPlayer();
                 }
-                updateCurrentPlayer();
+                return true;
             } else if(status == GameStatus.ARMIES_PLACEMENT){
                 status = status.next();
-            } else if (status == GameStatus.ATTACK){
+            } else if (status == GameStatus.READY_TO_ATTACK){
                 status = status.next();
                 players.get(nextPlayerIfNotDefeated()).computeReinforcements();
                 updateCurrentPlayer();
+                return true;
             }
-            return true;
         }
         return false;
     }
+
 
     /**
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
     private boolean skipTurnPossible(){
-        /* Territory occupation stage, It's only possibile to skip the turn if the player has no armies 
-         * left to place or if he already placed 3 of them. */
-        if(status == GameStatus.TERRITORY_OCCUPATION){
-            return(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
-        } if (status == GameStatus.ARMIES_PLACEMENT){
-            return players.get(activePlayer).getArmiesToPlace()==0;
-        } else if (status == GameStatus.ATTACK){
-            return true;
+        switch (status) {
+            case TERRITORY_OCCUPATION:
+                return(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
+            case ARMIES_PLACEMENT:
+                return players.get(activePlayer).getArmiesToPlace()==0;
+            case READY_TO_ATTACK:
+                return true;
+            default:
+                return players.get(activePlayer).getArmiesToPlace() == 0; 
         }
-        /* */
-        return players.get(activePlayer).getArmiesToPlace() == 0; 
     }
 
     /**
@@ -149,8 +152,8 @@ public class GameImpl implements Game {
             } else if ( status == GameStatus.ARMIES_PLACEMENT){
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
                     territory.addArmies(nArmies);
-                    armiesPlaced ++;
                     players.get(activePlayer).decrementArmiesToPlace();
+                    nextTurn();
                 }
             }
         }
@@ -226,5 +229,19 @@ public class GameImpl implements Game {
     @Override
     public String getMapName() {
         return this.map.getName();
+    }
+
+    @Override
+    public void setAttacking() {
+        if(status == GameStatus.READY_TO_ATTACK){
+            status = GameStatus.ATTACKING;
+        }
+    }
+
+    @Override
+    public void endAttack() {
+        if(status == GameStatus.ATTACKING){
+            status = GameStatus.READY_TO_ATTACK;
+        }
     }
 }

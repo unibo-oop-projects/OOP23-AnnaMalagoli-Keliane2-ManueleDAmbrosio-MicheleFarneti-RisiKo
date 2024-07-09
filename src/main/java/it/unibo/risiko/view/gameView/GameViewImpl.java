@@ -231,6 +231,7 @@ public class GameViewImpl implements GameView {
         attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton, 5, 0);
+        attackButton.addActionListener(e -> gameViewObserver.setAttacking());
 
         var skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
@@ -450,9 +451,8 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void resetFightingTerritories(String attackerTerritory, String defenderTerritory) {
-        tanksMap.get(attackerTerritory).button().setBorderPainted(false);
-        tanksMap.get(defenderTerritory).button().setBorderPainted(false);
+    public void resetFightingTerritory(String figtingTerritory) {
+        tanksMap.get(figtingTerritory).button().setBorderPainted(false);
     }
 
     @Override
