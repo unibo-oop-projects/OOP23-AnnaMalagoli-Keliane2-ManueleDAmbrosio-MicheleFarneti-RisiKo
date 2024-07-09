@@ -222,17 +222,17 @@ public class GameController implements GameViewObserver{
 
     @Override
     public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
-        GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName));
-        PlayerFactory playerFactory = new SimplePlayerFactory();
-        for(int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index ++){
-            if(index < numberOfStandardPlayers){
-                gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
-            }
-            else{
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
-            }
-        }
-        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
+        // GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName));
+        // PlayerFactory playerFactory = new SimplePlayerFactory();
+        // for(int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index ++){
+        //     if(index < numberOfStandardPlayers){
+        //         gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
+        //     }
+        //     else{
+        //         gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+        //     }
+        // }
+        // gameManager.AddNewCurrentGame(gameFactory.initializeGame());
     }
 
     @Override
