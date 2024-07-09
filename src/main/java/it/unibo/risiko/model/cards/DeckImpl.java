@@ -261,13 +261,13 @@ public class DeckImpl implements Deck {
         int numInfantry = 0;
         int numCavalry = 0;
         for(var card : cards) {
-            if(card.getTypeName().equals("Cannone")) {
+            if(card.getTypeName().equals("Cannon")) {
                 numCannons++;
             }
-            if(card.getTypeName().equals("Fante")) {
+            if(card.getTypeName().equals("Infantry")) {
                 numInfantry++;
             }
-            if(card.getTypeName().equals("Cavaliere")) {
+            if(card.getTypeName().equals("Cavalry")) {
                 numCavalry++;
             }
         }
@@ -306,7 +306,7 @@ public class DeckImpl implements Deck {
     private boolean playedThreeCannons(List<Card> cards) {
         int numberOfCannons = 0;
         for(var card : cards){
-            if(card.getTypeName().equals("Cannone")) {
+            if(card.getTypeName().equals("Cannon")) {
                 numberOfCannons++;
             }
         }
@@ -325,7 +325,7 @@ public class DeckImpl implements Deck {
     private boolean playedThreeInfantry(List<Card> cards) {
         int numberOfInfantry = 0;
         for(var card : cards){
-            if(card.getTypeName().equals("Fante")) {
+            if(card.getTypeName().equals("Infantry")) {
                 numberOfInfantry++;
             }
         }
@@ -343,16 +343,15 @@ public class DeckImpl implements Deck {
      */
     private boolean playedThreeCavalry(List<Card> cards) {
         int numberOfCavalry = 0;
-        for(var card : cards){
-            if(card.getTypeName().equals("Cavaliere")) {
+        for (var card : cards) {
+            if (card.getTypeName().equals("Cavalry")) {
                 numberOfCavalry++;
             }
         }
-        if(numberOfCavalry == 3) {
+        if (numberOfCavalry == 3) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
 }

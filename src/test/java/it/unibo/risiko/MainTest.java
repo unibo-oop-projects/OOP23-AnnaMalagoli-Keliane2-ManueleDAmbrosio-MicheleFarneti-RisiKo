@@ -20,6 +20,7 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.player.StdPlayer;//DA FARE MODIFICA NEI DUE TEST
 /**
  * Class used to execute the tests on the classes.
  */
@@ -49,10 +50,10 @@ class MainTest {
         final CardImpl cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");*/
         //final List<CardImpl> deckList = deck.getListCards();
         final Card firstCardRemoved;
-        final Card card = new CardImpl(ITALIA, "Fante");
-        final Card cardAdded1 = new CardImpl("Spagna", "Cavalleria");
-        final Card cardAdded2 = new CardImpl("Inghilterra", "Fante");
-        final Card cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");
+        final Card card = new CardImpl(ITALIA, "Infantry");
+        final Card cardAdded1 = new CardImpl("Spagna", "Cavalry");
+        final Card cardAdded2 = new CardImpl("Inghilterra", "Infantry");
+        final Card cardAdded3 = new CardImpl(FRANCIA, "Cavalry");
         final List<Card> deckList = deck.getListCards();
         assertEquals(List.of(card).getClass(), deckList.getClass());
 
@@ -82,10 +83,10 @@ class MainTest {
     void testPlaysOfCards() {
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
-        final Card card1 = new CardImpl(ITALIA, "Cavaliere");
-        final Card card2 = new CardImpl("Spagna", "Cavaliere");
-        final Card card3 = new CardImpl("Inghilterra", "Fante");
-        final Card card4 = new CardImpl(FRANCIA, "Cavaliere");
+        final Card card1 = new CardImpl(ITALIA, "Cavalry");
+        final Card card2 = new CardImpl("Spagna", "Cavalry");
+        final Card card3 = new CardImpl("Inghilterra", "Infantry");
+        final Card card4 = new CardImpl(FRANCIA, "Cavalry");
         deck.addCard(card1);
         deck.addCard(card2);
         deck.addCard(card3);
@@ -107,13 +108,14 @@ class MainTest {
     /**Test per verificare funzionamento del metodo getCardFromNameTerritory */
     @Test
     void testGetCardFromNameTerritory() {
-        Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0);
+        /*Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0 )*/
+        Player player = new SimplePlayerFactory().createStandardPlayer();
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
-        final Card card1 = new CardImpl(ITALIA, "Cavaliere");
-        final Card card2 = new CardImpl("Spagna", "Cavaliere");
-        final Card card3 = new CardImpl("Inghilterra", "Fante");
-        final Card card4 = new CardImpl(FRANCIA, "Cavaliere");
+        final Card card1 = new CardImpl(ITALIA, "Cavalry");
+        final Card card2 = new CardImpl("Spagna", "Cavalry");
+        final Card card3 = new CardImpl("Inghilterra", "Infantry");
+        final Card card4 = new CardImpl(FRANCIA, "Cavalry");
         player.addCard(card1);
         player.addCard(card2);
         player.addCard(card3);

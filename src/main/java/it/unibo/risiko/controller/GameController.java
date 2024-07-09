@@ -1,27 +1,15 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.IntStream;
+
 import java.util.Optional;
 
-import it.unibo.risiko.model.cards.Deck;
-import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
-import it.unibo.risiko.model.game.Game;
-import it.unibo.risiko.model.game.GameFactory;
-import it.unibo.risiko.model.game.GameFactoryImpl;
-import it.unibo.risiko.model.game.GameImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
-import it.unibo.risiko.model.game.GameStatus;
-import it.unibo.risiko.model.map.GameMapImpl;
-import it.unibo.risiko.model.map.Territories;
+
 import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
@@ -58,7 +46,7 @@ public class GameController implements GameViewObserver {
      * @author Michele Farneti
      */
     public GameController() {
-        gameManager = new GameManagerImpl(resourcesPackageString + mapImagePath);
+        gameManager = new GameManagerImpl(saveGamesFilePath, resourcesPackageString);
         view = new GameViewImpl(1600, 900, resourcesPackageString + mapImagePath);
         this.view.setObserver(this);
         this.view.start();
@@ -71,23 +59,9 @@ public class GameController implements GameViewObserver {
      * @author Michele Farneti
      */
     private void setupView() {
-        // this.view.showTanks(this.gameManager.getCurrentGame().get().);
-        // if(this.gameManager.getCurrentGame().isPresent()){
-        // this.view.showTurnIcons(this.gameManager.getCurrentGame().get().getPlayersList());
-        // }
-
-        // PlayerFactory pf = new SimplePlayerFactory();
-        // var provaplayer = pf.createStandardPlayer("red", 0);
-        // var provaplayer2 = pf.createAIPlayer("blue", 0);
-        // this.view.setCurrentPlayer(provaplayer2);
-
-        // Territory provaTerritory = new TerritoryImpl("India", "South america", new
-        // LinkedList<>());
-        // System.out.println(provaTerritory);
-        // view.showTanks(List.of(provaTerritory).stream().map(t ->
-        // t.getTerritoryName()).toList());
-        // showTurnIcons();
-        view.gameOver("red");
+        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList().stream().map(t -> t.getTerritoryName())
+                .toList());
+        showTurnIcons();
     }
 
     /**
@@ -264,16 +238,18 @@ public class GameController implements GameViewObserver {
 
     @Override
     public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
-        GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName));
-        PlayerFactory playerFactory = new SimplePlayerFactory();
-        for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
-            if (index < numberOfStandardPlayers) {
-                gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
-            } else {
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
-            }
-        }
-        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
+        // GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName));
+        // PlayerFactory playerFactory = new SimplePlayerFactory();
+        // for(int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index
+        // ++){
+        // if(index < numberOfStandardPlayers){
+        // gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
+        // }
+        // else{
+        // gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+        // }
+        // }
+        // gameManager.AddNewCurrentGame(gameFactory.initializeGame());
     }
 
 }

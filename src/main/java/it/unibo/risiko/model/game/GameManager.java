@@ -1,10 +1,13 @@
 package it.unibo.risiko.model.game;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
- * This interface manages all of the basic functions that are offered by the application 
- * at its start. It gives the opportunity to keep progress of multiple games during the use of the application
+ * This interface manages all of the basic functions that are offered by the
+ * application
+ * at its start. It gives the opportunity to keep progress of multiple games
+ * during the use of the application
  * aswell as allowing to load informations of past games stored in a file
  * 
  * @author Michele Farneti
@@ -21,8 +24,8 @@ public interface GameManager {
     /**
      * 
      * @param game A new game to be set as current
-     * @return True if the game was succesfuly set as a new currentGame, False if 
-     * there is no more space to save the current game.
+     * @return True if the game was succesfuly set as a new currentGame, False if
+     *         there is no more space to save the current game.
      */
     boolean AddNewCurrentGame(Game game);
 
@@ -51,7 +54,20 @@ public interface GameManager {
 
     /**
      * Saves all of the games saved in the gameManager as a Json file
+     * 
      * @return True if the Games where saved correctly on file, false otherwise.
      */
     boolean saveGameOnFile(String saveGamesFilePath);
+
+    /**
+     * 
+     * @return The list of map names currently avilable to play
+     */
+    List<String> getAvialableMaps();
+
+    /**
+     * 
+     * @return The string rappresenting the path to reach the game resources.
+     */
+    String getResourcesPath();
 }
