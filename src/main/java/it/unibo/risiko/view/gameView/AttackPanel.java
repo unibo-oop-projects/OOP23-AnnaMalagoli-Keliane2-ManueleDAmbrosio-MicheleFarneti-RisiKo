@@ -34,7 +34,7 @@ import java.util.List;
  * Sistemare l'action listener dell'ultimo continue panel.
  */
 
-public class AttackViewImpl extends JPanel implements AttackView{
+public class AttackPanel extends JPanel {
     private static final String SEP = File.separator;
     private static final String PATH = "build" + SEP + "resources" + SEP + "main" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice";
@@ -60,7 +60,7 @@ public class AttackViewImpl extends JPanel implements AttackView{
     private int defenderLostArmies;
     private boolean territoryConquered;
 
-    public AttackViewImpl(final int height, final int width, final String attacking, final String defending,
+    public AttackPanel(final int height, final int width, final String attacking, final String defending,
             final int attackingTerritoryArmies, final GameViewObserver observer) {
         this.height = height;
         this.width = width;
@@ -87,6 +87,8 @@ public class AttackViewImpl extends JPanel implements AttackView{
         }), BorderLayout.SOUTH);
         this.add(sidePanel("Attacker"), BorderLayout.WEST);
         this.add(sidePanel("Defender"), BorderLayout.EAST);
+
+        this.setVisible(false);
 
     }
 
@@ -268,7 +270,7 @@ public class AttackViewImpl extends JPanel implements AttackView{
             this.removeAll();
             this.add(titlePanel(), BorderLayout.NORTH);
             southPanel.add(resultsPanel());
-            southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel()));
+            southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel())); //DA MODIFICARE
             this.add(southPanel, BorderLayout.SOUTH);
             this.add(dicePanel("Red"), BorderLayout.WEST);
             this.add(dicePanel("Blue"), BorderLayout.EAST);
@@ -332,33 +334,27 @@ public class AttackViewImpl extends JPanel implements AttackView{
         conquerPanel.add(midPanel, BorderLayout.CENTER);
         conquerPanel.add(new ContinuePanel("CLOSE", width, e -> {
             observer.setMovingArmies(armiesToMove);
-            this.setVisible(false);
         }), BorderLayout.SOUTH);
 
         return conquerPanel;
     }
 
-    @Override
     public void setAtt(final List<Integer> attDice) {
         this.attDice = attDice;
     }
 
-    @Override
     public void setDef(final List<Integer> defDice) {
         this.defDice = defDice;
     }
 
-    @Override
     public void setDefenderLostArmies(final int defenderLostArmies) {
         this.defenderLostArmies = defenderLostArmies;
     }
 
-    @Override
     public void setAttackerLostArmies(final int attackerLostArmies) {
         this.attackerLostArmies = attackerLostArmies;
     }
 
-    @Override
     public void isTerritoryConquered(final boolean territoryConquered) {
         this.territoryConquered = territoryConquered;
     }

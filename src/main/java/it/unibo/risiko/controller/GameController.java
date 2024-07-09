@@ -9,7 +9,10 @@ import it.unibo.risiko.model.game.GameManagerImpl;
 
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
-
+import it.unibo.risiko.model.player.PlayerFactory;
+import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.player.StdPlayer;
+import it.unibo.risiko.view.gameView.AttackPanel;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -19,6 +22,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * model.
  * 
  * @author Michele Farneti
+ * @author Manuele D'Ambrosio
  */
 public class GameController implements GameViewObserver {
     private final GameManager gameManager;
@@ -126,13 +130,25 @@ public class GameController implements GameViewObserver {
      * correctly set,
      * then updates the view.
      * 
-     * @author
+     * @author Manuele D'Ambrosio
      */
     private void startAttack() {
         // Optional<Territory> attackerTerritory
         // Optional<Territory> defenderTerritory
         currentPlayer().get();
 
+    }
+
+    @Override
+    public void setAttackingArmies(int numberOfAttackingAmies) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAttackingArmies'");
+    }
+
+    @Override
+    public void setMovingArmies(int numberOfMovingArmies) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setMovingArmies'");
     }
 
     /**
@@ -227,15 +243,4 @@ public class GameController implements GameViewObserver {
         // gameManager.AddNewCurrentGame(gameFactory.initializeGame());
     }
 
-    @Override
-    public void setAttackingArmies(int numberOfAttackingAmies) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setAttackingArmies'");
-    }
-
-    @Override
-    public void setMovingArmies(int numberOfMovingArmies) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setMovingArmies'");
-    }
 }

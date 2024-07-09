@@ -460,4 +460,35 @@ public class GameViewImpl implements GameView {
         setLayerdPaneOverlay(baseLayoutPane, winnerPanel);
     }
 
+    @Override
+    public void setAtt(List<Integer> attDice) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAtt'");
+    }
+
+    @Override
+    public void setDef(List<Integer> defDice) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDef'");
+    }
+
+    @Override
+    public void isTerritoryConquered(boolean territoryConquered) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isTerritoryConquered'");
+    }
+
+    @Override
+    public void setAttackerLostArmies(int attackerLostArmies) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAttackerLostArmies'");
+    }
+
+    @Override
+    public void setDefenderLostArmies(int defenderLostArmies) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDefenderLostArmies'");
+    }
+
+    
 }

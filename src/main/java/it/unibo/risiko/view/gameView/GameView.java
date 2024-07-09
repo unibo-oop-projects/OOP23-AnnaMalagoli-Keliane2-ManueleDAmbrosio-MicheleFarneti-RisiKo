@@ -7,6 +7,7 @@ import it.unibo.risiko.model.player.Player;
 /**
  * The view interface for the game phase of the application
  * @author Michele Farneti
+ * @author Manuele D'Ambrosio
  */
 public interface GameView {
 
@@ -78,4 +79,48 @@ public interface GameView {
      * @author Michele Farneti
      */
     void gameOver(String winnerColor);
+
+    /**
+     * Method used to set the attacker's dice throws.
+     * 
+     * @param attDice - results list of the attacker dices.
+     * @author Manuele D'Ambrosio
+     */
+    public void setAtt(final List<Integer> attDice);
+
+    /**
+     * Method used to set the defender's dice throws. 
+     * 
+     * @param defDice - Results list of the defender dices.
+     * @author Manuele D'Ambrosio
+     */
+     public void setDef(final List<Integer> defDice);
+
+    /**
+     * This method is used to know if the attacked territory has
+     * been conquered.
+     * 
+     * @param territoryConquered - True if the territory has been
+     * conquered, false otherwise.
+     * @author Manuele D'Ambrosio
+     */
+    public void isTerritoryConquered(final boolean territoryConquered);
+
+    /**
+     * Method used to set the number of armies lost by the
+     * attacker.
+     * 
+     * @param attackerLostArmies - Number of armies lost by the attacker.
+     * @author Manuele D'Ambrosio
+     */
+    public void setAttackerLostArmies(final int attackerLostArmies);
+
+    /**
+     * Method used to set the number of armies lost by the 
+     * defender.
+     * 
+     * @param defenderLostArmies - Number of armies lost by the defender.
+     * @author Manuele D'Ambrosio
+     */
+    public void setDefenderLostArmies(final int defenderLostArmies);
 }
