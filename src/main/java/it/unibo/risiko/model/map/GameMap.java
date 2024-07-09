@@ -5,15 +5,18 @@ import java.util.List;
 import it.unibo.risiko.model.cards.Deck;
 
 /**
- * The gameMap class manages all of the enviroment features of the game map, such us
+ * The gameMap class manages all of the enviroment features of the game map,
+ * such us
  * keeping track of the territories'list and other settings.
+ * 
  * @author Michele Farneti
  */
 
 public interface GameMap {
 
     /**
-     * @return The max number of players allowed to play a game in the map at the same time.
+     * @return The max number of players allowed to play a game in the map at the
+     *         same time.
      */
     int getMaxPlayers();
 
@@ -37,5 +40,9 @@ public interface GameMap {
      * @return The map's name
      */
     public String getName();
-    
+
+    /**
+     * @return The starting deck
+     */
+    public Deck getDeck();
 }
