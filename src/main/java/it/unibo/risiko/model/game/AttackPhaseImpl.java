@@ -1,12 +1,14 @@
 package it.unibo.risiko.model.game;
 
+import java.util.List;
+
 import it.unibo.risiko.model.dice.TripleDice;
 import it.unibo.risiko.model.dice.TripleDiceImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**
- *Implementation of AttackPhase interface.
+ * Implementation of AttackPhase interface.
  * 
  * @author Manuele D'Ambrosio
  */
@@ -27,10 +29,12 @@ public class AttackPhaseImpl implements AttackPhase {
     /**
      * Builder method for AttackPhaseImpl class.
      * 
-     * @param attackingPlayer - The attacking player.
-     * @param attackerTerritory - The territory the attacking player is attacking from.
-     * @param attackingArmies - The number of armies the attacking player is attacking with.
-     * @param defendingPlayer - The defending player.
+     * @param attackingPlayer   - The attacking player.
+     * @param attackerTerritory - The territory the attacking player is attacking
+     *                          from.
+     * @param attackingArmies   - The number of armies the attacking player is
+     *                          attacking with.
+     * @param defendingPlayer   - The defending player.
      * @param defenderTerritory - The territory the defending player is defending.
      */
     public AttackPhaseImpl(final Player attackingPlayer, final Territory attackerTerritory, final int attackingArmies,
@@ -54,12 +58,12 @@ public class AttackPhaseImpl implements AttackPhase {
         }
     }
 
-    public TripleDice getAttackerDiceThrows() {
-        return this.attackerDiceThrows;
+    public List<Integer> getAttackerDiceThrows() {
+        return this.attackerDiceThrows.getResults();
     }
 
-    public TripleDice getDefenderDiceThrows() {
-        return this.defenderDiceThrows;
+    public List<Integer> getDefenderDiceThrows() {
+        return this.defenderDiceThrows.getResults();
     }
 
     public int getAttackerLostArmies() {
@@ -129,6 +133,6 @@ public class AttackPhaseImpl implements AttackPhase {
     }
 
     private int computeDefenderLostArmies() {
-        return Math.min(attackerDiceThrows.getNumberOfThrows(), defenderDiceThrows.getNumberOfThrows()) - attackerLostArmies;
+        return defendingArmies() - attackerLostArmies;
     }
 }

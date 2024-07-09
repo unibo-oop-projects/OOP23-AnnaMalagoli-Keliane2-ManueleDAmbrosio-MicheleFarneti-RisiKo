@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Optional;
 
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
@@ -24,14 +25,19 @@ public class GameImpl implements Game {
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
     private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
     private static final int PLACEABLE_ARMIES_PER_TURN = 3;
+    private static final Random randomNumberGenerator = new Random();
 
- 
-    private GameMap map;
+    private final GameMap map;
+
     private int activePlayer = 0;
     private int armiesPlaced = 0 ;
     private final List<Player> players = new LinkedList<Player>();
-    private static final Random randomNumberGenerator = new Random();
-    GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+    private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+
+    protected GameImpl(final GameMap map, final List<Player> players){
+        this.map = map;
+        this.players.addAll(players);
+    }
    
     @Override
     public void startGame(){
@@ -87,7 +93,6 @@ public class GameImpl implements Game {
     public boolean nextTurn(){
         if(skipTurnPossible()){
             if(status == GameStatus.TERRITORY_OCCUPATION){
-
                 armiesPlaced = 0;
                 if(getTotalArmiesLeftToPlace() == 0){
                     status = status.next();
@@ -125,25 +130,27 @@ public class GameImpl implements Game {
     }
 
     /**
-     * 
      * @return The totale amount of armies that are still left to be placed among all the players.
      */
     private int getTotalArmiesLeftToPlace(){
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
     }
 
+    @Override
     public void placeArmies(final Territory territory, final int nArmies){
         if(status == GameStatus.TERRITORY_OCCUPATION){
             if(armiesPlaced < 3){
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
                     territory.addArmies(nArmies);
                     armiesPlaced ++;
+                    players.get(activePlayer).decrementArmiesToPlace();
                 }
             }
         } else if ( status == GameStatus.ARMIES_PLACEMENT){
             if(players.get(activePlayer).isOwnedTerritory(territory)){
                 territory.addArmies(nArmies);
                 armiesPlaced ++;
+                players.get(activePlayer).decrementArmiesToPlace();
             }
         }
     }
@@ -177,6 +184,30 @@ public class GameImpl implements Game {
 
     @Override
     public boolean gameOver() {
-        return players.stream().filter(p -> p.getTarget().isAchieved()==true).count()!=0;
-    } 
+        Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()==true).findAny();
+        if(winner.isPresent()){
+            if(winner.get().equals(players.get(activePlayer))){
+                return true;
+            }
+            else{
+                players.get(activePlayer).setTarget(new ConquerTerritoriesTarget(players.get(activePlayer),randomNumberGenerator.nextInt(Math.toIntExact(Math.round(map.getTerritories().size()*MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),Math.toIntExact(Math.round(map.getTerritories().size()*MAX_TERRITORIES_TO_CONQUER_PERCENTAGE)))));
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return players.get(activePlayer);
+    }
+
+    @Override
+    public List<Territory> getTerritoriesList() {
+        return map.getTerritories();
+    }
+
+    @Override
+    public Player getOwner(Territory territory) {
+        return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch( t-> t.equals(territory))).findFirst().get();
+    }
 }

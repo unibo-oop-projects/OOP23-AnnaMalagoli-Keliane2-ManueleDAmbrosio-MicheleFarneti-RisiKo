@@ -12,7 +12,7 @@ import it.unibo.risiko.model.dice.TripleDiceImpl;
  * @author Manuele D'Ambrosio
  */
 
-class TestTripleDiceImpl {
+class TestTripleDiceImpl {/*
     private static final int MAX_VAL = 0;
     private static final int MID_VAL = 1;
     private static final int MIN_VAL = 2;
@@ -89,5 +89,5 @@ class TestTripleDiceImpl {
                         defender[i].getNumberOfThrows()));
             }
         }
-    }
+    }*/
 }

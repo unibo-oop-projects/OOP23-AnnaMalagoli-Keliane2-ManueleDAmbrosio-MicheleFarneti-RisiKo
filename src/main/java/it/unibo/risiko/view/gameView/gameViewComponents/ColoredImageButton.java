@@ -1,12 +1,16 @@
 package it.unibo.risiko.view.gameView.gameViewComponents;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 /**
  * ColoredImageButton enables to create a button with a given image as background, 
@@ -14,34 +18,62 @@ import javax.swing.JButton;
  * @author Michele Farneti
  */
 public class ColoredImageButton extends JButton{
-    private final String STANDARD_COLOR = "255255255";
+    private final String STANDARD_COLOR = "white";
     private static final String resourcesPackageString = "build/resources/main/it/unibo/risiko";
     private static final String fileFormat = ".png";
+    private static final Border ATTACKING_COUNTRY_BORDER_COLOR= BorderFactory.createLineBorder(Color.RED);
+    private static final Border DEFENDING_COUNTRY_BORDER_COLOR= BorderFactory.createLineBorder(Color.BLUE);
+    private static final int BORDER_THICKNESS = 2;
 
-    private String imageUrl;
+    private String imageUri;
     private String imageColor = STANDARD_COLOR;
     
-    public ColoredImageButton(String imageUrl)
+    /**
+     * @param imageUri The url of the image to be set as backgroud of the button
+     */
+    public ColoredImageButton(final String imageUri)
     {
-        this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
     }
 
     /**
-     * @param rgbImageColor A string raprresenting the color in rgb format.
+     * Constructor wich sets the button background image and also sets its bounds
+     * @param imageUrl
+     * @param x
+     * @param y
+     * @param width
+     * @param height
      */
-    public void setColor(String rgbImageColor){
-        imageColor = rgbImageColor;
+    public ColoredImageButton(final String imageUrl, final int x, final int y,final  int width, final int height)
+    {
+        this.imageUri = imageUrl;
+        this.setBounds(x, y, width, height);
+        this.setOpaque(false);
+    }
+
+    /**
+     * @param imageColor A string raprresenting the color in rgb format.
+     */
+    public void setColor(final String imageColor){
+        this.imageColor = imageColor;
     }
 
     @Override
-    protected void paintComponent(Graphics g)
+    protected void paintComponent(final Graphics g)
     {
-        String coloredImageUrl = resourcesPackageString + imageUrl + imageColor+fileFormat;
+        String coloredImageUrl = resourcesPackageString + imageUri + imageColor+fileFormat;
         try {
             Image image = ImageIO.read(new File(coloredImageUrl));
             g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         } catch (IOException e) {
             System.out.println("Failed to load image " + coloredImageUrl);
         }
+    }
+
+    /**
+     * Sets a prederminated border of a giveng color
+     */
+    public void setCustomBorder(Color borderColor){
+        this.setBorder(BorderFactory.createLineBorder(borderColor,BORDER_THICKNESS));
     }
 }

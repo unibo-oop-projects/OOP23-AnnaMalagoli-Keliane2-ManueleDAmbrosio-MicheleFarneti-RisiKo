@@ -32,5 +32,10 @@ public interface GameMap {
      * @return The list of continents in the map
      */
     public List<Continent> getContinents();
+
+    /**
+     * @return The map's name
+     */
+    public String getName();
     
 }

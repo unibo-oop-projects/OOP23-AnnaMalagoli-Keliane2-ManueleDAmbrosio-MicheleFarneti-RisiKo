@@ -1,7 +1,9 @@
 package it.unibo.risiko.model.game;
 
 import java.util.List;
+import java.util.Optional;
 
+import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -30,6 +32,11 @@ public interface Game {
     List<Player> getPlayersList();
 
     /**
+     * @return The List of the territories in the map
+     */
+    List<Territory> getTerritoriesList();
+
+    /**
      * @return The current Stage of the game
      */
     GameStatus getGameStatus();
@@ -39,4 +46,25 @@ public interface Game {
      * @return True if one of the players has reached is target
      */
     boolean gameOver();
+
+    /**
+     * 
+     * @return The player whose turn it is
+     */
+    Player getCurrentPlayer();
+
+    /**
+     * The amount of armies selected is added to the player's territory if the current player 
+     * owns it
+     * @param territory
+     * @param nArmies
+     */
+    public void placeArmies(final Territory territory, final int nArmies);
+
+    /**
+     * 
+     * @param territory
+     * @return The owner of the given territory
+     */
+    public Player getOwner(final Territory territory);
 }
