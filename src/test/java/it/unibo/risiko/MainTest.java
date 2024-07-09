@@ -20,6 +20,7 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.player.StdPlayer;//DA FARE MODIFICA NEI DUE TEST
 /**
  * Class used to execute the tests on the classes.
  */
@@ -107,7 +108,8 @@ class MainTest {
     /**Test per verificare funzionamento del metodo getCardFromNameTerritory */
     @Test
     void testGetCardFromNameTerritory() {
-        Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0);
+        /*Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0 )*/
+        Player player = new SimplePlayerFactory().createStandardPlayer();
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
         final Card card1 = new CardImpl(ITALIA, "Cavalry");
