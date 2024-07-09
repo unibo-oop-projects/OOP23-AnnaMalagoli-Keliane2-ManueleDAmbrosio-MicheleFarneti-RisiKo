@@ -11,10 +11,6 @@ import it.unibo.risiko.model.game.GameManagerImpl;
 
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.model.player.PlayerFactory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
-import it.unibo.risiko.model.player.StdPlayer;
-import it.unibo.risiko.view.gameView.AttackPanel;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -154,10 +150,18 @@ public class GameController implements GameViewObserver {
     }
 
     @Override
-    public void setMovingArmies(int numberOfMovingArmies) {
+    public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
             view.drawConquerPanel();
-        } //DA MODIFICARE L'APERTURA DEL PANEL.
+        } else {
+            view.closeAttackPanel();
+        }
+    }
+
+    @Override
+    public void setMovingArmies(int numberOfMovingArmies) {
+        attackPhase.conquerTerritory(numberOfMovingArmies);
+        view.closeAttackPanel();
     }
 
     /**

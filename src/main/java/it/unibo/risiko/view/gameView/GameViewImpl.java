@@ -489,6 +489,11 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
+    public void closeAttackPanel() {
+        attackPanel.setVisible(false); //NEED TO CHECK IF THE PANEL CLOSES
+    }
+
+    @Override
     public void drawDicePanels() {
         attackPanel.drawDicePanels();
     }

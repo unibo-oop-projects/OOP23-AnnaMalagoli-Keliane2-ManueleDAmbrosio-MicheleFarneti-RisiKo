@@ -34,11 +34,18 @@ public interface GameViewObserver {
      */
     void setAttackingArmies(int numberOfAttackingAmies);
 
+
+    /**
+     * If a territory has been conquered opens the conquer panel,
+     * otherwise closes the attack panel.
+     * 
+     * @author Manuele D'Ambrosio
+     */
+    void conquerIfPossible();
+
     /**
      * Method used to set the number of armies to move in a 
      * conquered territory.
-     * If a territory in not coquered during the attack
-     * it simply closes the attack panel.
      * 
      * @param numberOfMovingArmies - Number of armies to move.
      * @author Manuele D'Ambrosio.

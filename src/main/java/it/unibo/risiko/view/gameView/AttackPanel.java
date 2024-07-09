@@ -264,7 +264,7 @@ public class AttackPanel extends JPanel {
         this.removeAll();
         this.add(titlePanel(), BorderLayout.NORTH);
         southPanel.add(resultsPanel());
-        southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel())); // DA MODIFICARE
+        southPanel.add(new ContinuePanel("CONTINUE!", width, e -> observer.conquerIfPossible())); // DA MODIFICARE
         this.add(southPanel, BorderLayout.SOUTH);
         this.add(dicePanel("Red"), BorderLayout.WEST);
         this.add(dicePanel("Blue"), BorderLayout.EAST);

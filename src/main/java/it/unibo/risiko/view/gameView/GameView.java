@@ -118,6 +118,13 @@ public interface GameView {
     void drawConquerPanel();
 
     /**
+     * Closes the attack panel at the end of the attack.
+     * 
+     * @author Manuele D'Ambrosio
+     */
+    void closeAttackPanel();
+
+    /**
      * Method used to set the attacker's dice throws.
      * 
      * @param attDice - results list of the attacker dices.
