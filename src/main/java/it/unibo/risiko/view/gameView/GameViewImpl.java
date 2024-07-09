@@ -409,12 +409,13 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void setCurrentPlayer(String playerColor, Integer nArmies) {
-        String currentPlayerColor = playerColor;
-        turnTank.setColor(currentPlayerColor);
+        turnTank.setColor(playerColor);
         iconsMap.entrySet().stream()
                 .forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(playerColor)) ? true : false));
-        attackBarBackgroundPanel.setTopColor(stringToColor(currentPlayerColor));
+        attackBarBackgroundPanel.setTopColor(stringToColor(playerColor));
         playerArmiesLabel.setText(nArmies.toString());
+        mainFrame.validate();
+        mainFrame.repaint();
     }
 
     private Color stringToColor(String color_id) {

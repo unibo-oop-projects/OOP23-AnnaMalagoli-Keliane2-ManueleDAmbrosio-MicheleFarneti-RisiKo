@@ -91,6 +91,7 @@ public class GameController implements GameViewObserver {
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            redrawView();
         }
     }
 
@@ -112,7 +113,7 @@ public class GameController implements GameViewObserver {
         var territory = getTerritoryFromString(territoryName);
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                gameManager.getCurrentGame().get().placeArmies(territory, 1);       
                 break;
             case ARMIES_PLACEMENT:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
@@ -137,6 +138,7 @@ public class GameController implements GameViewObserver {
             default:
                 break;
         }
+        redrawView();
     }
 
     /**
@@ -249,7 +251,6 @@ public class GameController implements GameViewObserver {
      * @author Michele Farneti
      */
     private void redrawView() {
-        System.out.println(gameManager.getCurrentGame().get().getPlayersList());
         gameManager.getCurrentGame().get().getPlayersList().stream()
                 .forEach(p -> p.getOwnedTerritories().stream()
                         .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));

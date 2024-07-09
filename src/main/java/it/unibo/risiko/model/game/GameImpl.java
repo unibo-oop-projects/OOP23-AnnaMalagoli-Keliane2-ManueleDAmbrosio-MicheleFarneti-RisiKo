@@ -73,7 +73,8 @@ public class GameImpl implements Game {
     }
 
     /**
-     * Private function used to split the map territories between the players in the game 
+     * Private function used to split the map territories between the players in the game, it also
+     * places one army per territory for each player 
      */
     private void assignTerritories() {
         var territoriesToAssign = map.getTerritories();
@@ -81,6 +82,8 @@ public class GameImpl implements Game {
 
        for (Territory territory : territoriesToAssign) {
             players.get(activePlayer).addTerritory(territory);
+            territory.addArmies(1);
+            players.get(activePlayer).decrementArmiesToPlace();
             activePlayer = nextPlayer();
         }
         activePlayer = 0;
@@ -96,7 +99,6 @@ public class GameImpl implements Game {
                     players.get(nextPlayerIfNotDefeated()).computeReinforcements();
                 }
                 updateCurrentPlayer();
-
             } else if(status == GameStatus.ARMIES_PLACEMENT){
                 status = status.next();
             } else if (status == GameStatus.ATTACK){
@@ -135,19 +137,21 @@ public class GameImpl implements Game {
 
     @Override
     public void placeArmies(final Territory territory, final int nArmies){
-        if(status == GameStatus.TERRITORY_OCCUPATION){
-            if(armiesPlaced < 3){
+        if(players.get(activePlayer).getArmiesToPlace()>0){
+            if(status == GameStatus.TERRITORY_OCCUPATION){
+                if(armiesPlaced < 3){
+                    if(players.get(activePlayer).isOwnedTerritory(territory)){
+                        territory.addArmies(nArmies);
+                        armiesPlaced ++;
+                        players.get(activePlayer).decrementArmiesToPlace();
+                    }
+                }
+            } else if ( status == GameStatus.ARMIES_PLACEMENT){
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
                     territory.addArmies(nArmies);
                     armiesPlaced ++;
                     players.get(activePlayer).decrementArmiesToPlace();
                 }
-            }
-        } else if ( status == GameStatus.ARMIES_PLACEMENT){
-            if(players.get(activePlayer).isOwnedTerritory(territory)){
-                territory.addArmies(nArmies);
-                armiesPlaced ++;
-                players.get(activePlayer).decrementArmiesToPlace();
             }
         }
     }
