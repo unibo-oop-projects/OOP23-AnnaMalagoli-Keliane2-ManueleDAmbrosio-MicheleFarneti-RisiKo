@@ -18,7 +18,7 @@ import it.unibo.risiko.model.cards.Card;
  * selection cells that contain the territories of the cards owned by the player.
  * This panel is used to play three cards to gain new armies.
  */
-public class JPanelChoice extends JPanel{
+public class JPanelChoice extends JPanel {
 
     private String firstChoice = "";
     private String secondChoice = "";
@@ -50,7 +50,7 @@ public class JPanelChoice extends JPanel{
          *of the cards owned by the player and the type of the card.
          */
         String type;
-        for(var card : playerCards) {
+        for (var card : playerCards) {
             type = "";
             if (card.getTypeName().equals("Cannon")) {
                 type = "CAN";
@@ -77,12 +77,13 @@ public class JPanelChoice extends JPanel{
         */
         JButton but = new JButton("Play selected cards");
         this.add(but, BorderLayout.SOUTH);
-        but.addActionListener(new ActionListener(){
+        but.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 //dopo che sono stati selezionati i territori delle carte da giocare si clicca sul bottone per 
                 //chiamare la funzione nel controller che si occupa, dati i nomi dei territori, di restituire le carte
-                //e chiamare metodo deck per effettuare l'operazione se possibile verificando risultato (se != "" -> errore stampa sul frame messaggio JDialog)
+                //e chiamare metodo deck per effettuare l'operazione se possibile verificando risultato 
+                //(se != "" -> errore stampa sul frame messaggio JDialog)
                 /*gestione della scelta */
                 final String[] firstTerritoryName = firstChoiceTerritories.getSelectedItem().split(" ");
                 final String[] secondTerritoryName = secondChoiceTerritories.getSelectedItem().split(" ");
@@ -92,7 +93,7 @@ public class JPanelChoice extends JPanel{
                 thirdChoice = thirdTerritoryName[0];
                 //CHIAMATA DI METODO AL MODEL PER RESTITUIRE LE STRINGHE contenenti i nomi territori selezionati
             }
-		});
+        });
     }
 
     /**
@@ -104,23 +105,21 @@ public class JPanelChoice extends JPanel{
     private JButton createInfoButton() {
         Icon infoIcon = new ImageIcon("src\\main\\java\\it\\unibo\\risiko\\resources\\images\\infoImage.png");
         JButton infoButton = new JButton(infoIcon);
-        String message = "Choose three territories whose cards\n" +
-        "you already own to play those cards." +
-        "There are 5 possible combos:\n" + 
-        "-cannon + infantry + cavalry -> +10 armies\n" +
-        "-cannon + cannon + cannon -> +4 armies\n" +
-        "-infantry + infantry + infantry -> +6 armies\n" +
-        "-cavalry + cavalry + cavalry -> +8 armies\n" +
-        "-jolly + two cards of the same type -> +12 armies";
+        String message = "Choose three territories whose cards\n"
+        + "you already own to play those cards."
+        + "There are 5 possible combos:\n"
+        + "-cannon + infantry + cavalry -> +10 armies\n"
+        + "-cannon + cannon + cannon -> +4 armies\n"
+        + "-infantry + infantry + infantry -> +6 armies\n"
+        + "-cavalry + cavalry + cavalry -> +8 armies\n"
+        + "-jolly + two cards of the same type -> +12 armies";
         infoButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(infoButton, message, "How to play the three cards", JOptionPane.INFORMATION_MESSAGE);
+            public void actionPerformed(final ActionEvent e) {
+                JOptionPane.showMessageDialog(infoButton, message, "How to play the cards", JOptionPane.INFORMATION_MESSAGE);
             }
-            
         });
         return infoButton;
     }
 
 }
-

@@ -12,12 +12,11 @@ public interface Card {
      * Method used to get the type of card.
      * @return the type of the card
      */
-    public String getTypeName();
+    String getTypeName();
 
     /**
      * Method used to get the territory's name that is on the card.
      * @return the name of the territory
      */
-    public String getTerritoryName();
-    
+    String getTerritoryName();
 }

@@ -202,7 +202,7 @@ public class Territories {
      * @param terr2 is the second territory
      * @return true if they are adjacent, or false if they are not adjacent
      */
-    private boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
+    public boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
         for (var elem : terr1.getListOfNearTerritories()) {
             if (elem.equals(terr2.getTerritoryName())) {
                 return true;
