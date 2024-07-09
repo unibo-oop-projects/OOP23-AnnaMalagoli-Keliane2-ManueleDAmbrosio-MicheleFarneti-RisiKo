@@ -19,6 +19,7 @@ import javax.swing.JPanel;
  * the third cell is used by the player to choose the number of armies that
  * he wants to move. The player can move a maximum of 100 armies, leaving at
  * least one army in the first selected territory.
+ * @author Anna Malagoli 
  */
 public class JPanelMovementArmies extends JPanel {
 

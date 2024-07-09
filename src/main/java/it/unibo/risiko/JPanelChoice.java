@@ -17,6 +17,7 @@ import it.unibo.risiko.model.cards.Card;
  * Creation of the class JPanelChoice which is a panel that shows three different
  * selection cells that contain the territories of the cards owned by the player.
  * This panel is used to play three cards to gain new armies.
+ * @author Anna Malagoli 
  */
 public class JPanelChoice extends JPanel {
 
