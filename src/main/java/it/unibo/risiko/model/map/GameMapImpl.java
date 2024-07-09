@@ -35,9 +35,9 @@ public class GameMapImpl implements GameMap {
         this.name = mapName;
 
         if(this.territories.getListContinents().size()<= 3){
-            maxPlayers =2 ;
+            maxPlayers = MAX_PLAYERS_SMALL_MAPS ;
         }else{
-            maxPlayers = 6;
+            maxPlayers = MAX_PLAYERS_BIG_MAPS;
         }
     }
 
