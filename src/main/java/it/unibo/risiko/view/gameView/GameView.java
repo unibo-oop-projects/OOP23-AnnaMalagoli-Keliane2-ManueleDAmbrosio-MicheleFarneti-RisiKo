@@ -26,6 +26,19 @@ public interface GameView {
     void start();
 
     /**
+     * 
+     * @author Michele Farneti
+     */
+    void showInitializationWindow(List<String> mapNames);
+
+    /**
+     * Shows the game window used for displaying the events happening in the 
+     * @param mapImagePath The name of the map
+     * @author Michele Farneti
+     */
+    void showGameWindow(String mapName);
+
+    /**
      * Activates the placing and the viewing of the tanks buttons over their
      * respective territories
      * 
@@ -72,7 +85,7 @@ public interface GameView {
     void resetFightingTerritories(String attackerTerritory, String defenderTerritory);
 
     /**
-     * Update the game view, changing a tank based on territory
+     * Updates the game view, changing a tank based on territory
      * occuaption and updating the armies count label
      * 
      * @param territoryName

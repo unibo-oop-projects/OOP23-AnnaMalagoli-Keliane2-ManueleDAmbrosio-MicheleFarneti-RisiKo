@@ -31,7 +31,7 @@ public class GameImpl implements Game {
 
     private int activePlayer = 0;
     private int armiesPlaced = 0 ;
-    private final List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
 
     protected GameImpl(final GameMap map, final List<Player> players){
@@ -42,11 +42,8 @@ public class GameImpl implements Game {
     @Override
     public void startGame(){
         Collections.shuffle(players);
-        /*Attribuzione armate */
         players.forEach( p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
-        /*Attribuzione territori */
         assignTerritories();
-        /*Assegnamento degli obiettivi*/
         assignTargets();
     }
 
@@ -82,9 +79,9 @@ public class GameImpl implements Game {
         var territoriesToAssign = map.getTerritories();
         Collections.shuffle(territoriesToAssign);
 
-        while (territoriesToAssign.size()>0){
-            players.get(activePlayer).addTerritory(territoriesToAssign.remove(0));
-            nextTurn();
+       for (Territory territory : territoriesToAssign) {
+            players.get(activePlayer).addTerritory(territory);
+            activePlayer = nextPlayer();
         }
         activePlayer = 0;
     }
@@ -96,7 +93,7 @@ public class GameImpl implements Game {
                 armiesPlaced = 0;
                 if(getTotalArmiesLeftToPlace() == 0){
                     status = status.next();
-                    players.get(nextPlayer()).computeReinforcements();
+                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
                 }
                 updateCurrentPlayer();
 
@@ -104,7 +101,7 @@ public class GameImpl implements Game {
                 status = status.next();
             } else if (status == GameStatus.ATTACK){
                 status = status.next();
-                players.get(nextPlayer()).computeReinforcements();
+                players.get(nextPlayerIfNotDefeated()).computeReinforcements();
                 updateCurrentPlayer();
             }
             return true;
@@ -168,18 +165,29 @@ public class GameImpl implements Game {
     /**
      * @return The index of the next active player, avoiding all of the elliminated players.
      */
-    private int nextPlayer(){
-        if(!players.get((activePlayer+1)%players.size()).isDefeated()){
-            return (activePlayer+1)%players.size();
+    private int nextPlayerIfNotDefeated(){
+        if(!(players.get((activePlayer+1)%players.size()).isDefeated())){
+            return nextPlayer();
         }else{
-            activePlayer = (activePlayer+1)%players.size();
+            activePlayer = nextPlayer();
             return nextPlayer();
         }
 
     }
 
+    /**
+     * 
+     * @return The index of the next player, independently if it is Defeated or not
+     */
+    private int nextPlayer(){
+        return (activePlayer+1)%players.size();
+    }
+
+    /**
+     * Sets as new activePlayer the next player in line
+     */
     private void updateCurrentPlayer(){
-        activePlayer = nextPlayer();
+        activePlayer = nextPlayerIfNotDefeated();
     }
 
     @Override
@@ -209,5 +217,10 @@ public class GameImpl implements Game {
     @Override
     public Player getOwner(Territory territory) {
         return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch( t-> t.equals(territory))).findFirst().get();
+    }
+
+    @Override
+    public String getMapName() {
+        return this.map.getName();
     }
 }

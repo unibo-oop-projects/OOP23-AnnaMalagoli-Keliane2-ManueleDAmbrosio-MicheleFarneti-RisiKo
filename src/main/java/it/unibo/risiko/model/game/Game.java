@@ -21,6 +21,11 @@ public interface Game {
     boolean nextTurn();
 
     /**
+     * @return the name of the Map being played.
+     */
+    String getMapName();
+
+    /**
      * Initializises the game following the basic Risiko rules, Every player
      * gets a randomly generated target, the set of owned territories and the right amount of armies.
      */

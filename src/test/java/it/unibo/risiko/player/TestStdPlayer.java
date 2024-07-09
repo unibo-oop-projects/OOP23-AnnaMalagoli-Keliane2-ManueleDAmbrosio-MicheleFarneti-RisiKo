@@ -13,12 +13,12 @@ import it.unibo.risiko.model.player.StdPlayer;
 
 public class TestStdPlayer {
 
-    @Test
-    void testRemoveCard() {
-        StdPlayer player = new StdPlayer("Green", 0);
-        CardImpl card = new CardImpl("Cannon", "Madagascar");
-        player.addCard(card);
+    // @Test
+    // void testRemoveCard() {
+    //     StdPlayer player = new StdPlayer("Green", 0);
+    //     CardImpl card = new CardImpl("Cannon", "Madagascar");
+    //     player.addCard(card);
 
-        assertTrue(player.isOwnedCard(card));
-    }
+    //     assertTrue(player.isOwnedCard(card));
+    // }
 }

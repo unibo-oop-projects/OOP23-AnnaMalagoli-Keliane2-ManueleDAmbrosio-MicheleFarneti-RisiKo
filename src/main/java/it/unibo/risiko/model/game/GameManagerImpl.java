@@ -1,13 +1,11 @@
 package it.unibo.risiko.model.game;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +26,7 @@ public class GameManagerImpl implements GameManager {
 
     private static final int MAX_SAVEGAMES = 3;
 
-    private Optional<Game> currentGame;
+    private Optional<Game> currentGame = Optional.empty();
     private final Set<Game> saveGames;
     private final String resourcesPath;
 
@@ -109,7 +107,8 @@ public class GameManagerImpl implements GameManager {
     public List<String> getAvialableMaps() {
         var mapsFoldersLocations = resourcesPath + "maps";
         try {
-            return Files.list(Path.of(mapsFoldersLocations)).map(p -> p.getFileName().toString()).collect(Collectors.toList());
+            return Files.list(Path.of(mapsFoldersLocations)).map(p -> p.getFileName().toString())
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             return List.of();
         }
