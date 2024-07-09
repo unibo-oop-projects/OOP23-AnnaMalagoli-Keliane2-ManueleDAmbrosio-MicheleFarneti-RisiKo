@@ -58,7 +58,6 @@ public class AttackPanel extends JPanel {
     private int armiesToMove;
     private int attackerLostArmies;
     private int defenderLostArmies;
-    private boolean territoryConquered;
 
     public AttackPanel(final int height, final int width, final String attacking, final String defending,
             final int attackingTerritoryArmies, final GameViewObserver observer) {
@@ -73,7 +72,6 @@ public class AttackPanel extends JPanel {
         this.attackingTerritoryArmies = attackingTerritoryArmies;
         this.attackersNumber = DEFAULT_ATTACKING_ARMIES;
         this.armiesToMove = DEFAULT_MOVING_ARMIES;
-        this.territoryConquered = false;
 
         this.setLayout(new BorderLayout());
         this.setSize(height, width);
@@ -82,7 +80,6 @@ public class AttackPanel extends JPanel {
 
         this.add(topPanel(), BorderLayout.NORTH);
         this.add(new ContinuePanel("THROW!", width, e -> {
-            drawDicePanels();
             observer.setAttackingArmies(attackersNumber);
         }), BorderLayout.SOUTH);
         this.add(sidePanel("Attacker"), BorderLayout.WEST);
@@ -259,37 +256,29 @@ public class AttackPanel extends JPanel {
         return dicePanel;
     }
 
-    private boolean drawDicePanels() {
+    public void drawDicePanels() {
         final int ROWS = 2;
         final int COLS = 1;
-        if (attDice.isEmpty() || defDice.isEmpty()) {
-            return false;
-        } else {
-            JPanel southPanel = new JPanel();
-            southPanel.setLayout(new GridLayout(ROWS, COLS));
-            this.removeAll();
-            this.add(titlePanel(), BorderLayout.NORTH);
-            southPanel.add(resultsPanel());
-            southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel())); //DA MODIFICARE
-            this.add(southPanel, BorderLayout.SOUTH);
-            this.add(dicePanel("Red"), BorderLayout.WEST);
-            this.add(dicePanel("Blue"), BorderLayout.EAST);
-            this.revalidate();
-            this.repaint();
-            return true;
-        }
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new GridLayout(ROWS, COLS));
+        this.removeAll();
+        this.add(titlePanel(), BorderLayout.NORTH);
+        southPanel.add(resultsPanel());
+        southPanel.add(new ContinuePanel("CONTINUE!", width, e -> drawConquerPanel())); // DA MODIFICARE
+        this.add(southPanel, BorderLayout.SOUTH);
+        this.add(dicePanel("Red"), BorderLayout.WEST);
+        this.add(dicePanel("Blue"), BorderLayout.EAST);
+        this.revalidate();
+        this.repaint();
+
     }
 
-    private boolean drawConquerPanel() {
-        if (territoryConquered) {
-            this.removeAll();
-            this.add(conquerPanel(attackersNumber - attackerLostArmies,
-                    attackingTerritoryArmies - attackerLostArmies - DEFAULT_ATTACKING_ARMIES), BorderLayout.CENTER);
-            this.revalidate();
-            this.repaint();
-            return true;
-        }
-        return false;
+    public void drawConquerPanel() {
+        this.removeAll();
+        this.add(conquerPanel(attackersNumber - attackerLostArmies,
+                attackingTerritoryArmies - attackerLostArmies - DEFAULT_ATTACKING_ARMIES), BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
     }
 
     private JPanel conquerPanel(int minArmies, int maxArmies) {
@@ -353,10 +342,6 @@ public class AttackPanel extends JPanel {
 
     public void setAttackerLostArmies(final int attackerLostArmies) {
         this.attackerLostArmies = attackerLostArmies;
-    }
-
-    public void isTerritoryConquered(final boolean territoryConquered) {
-        this.territoryConquered = territoryConquered;
     }
 
 }

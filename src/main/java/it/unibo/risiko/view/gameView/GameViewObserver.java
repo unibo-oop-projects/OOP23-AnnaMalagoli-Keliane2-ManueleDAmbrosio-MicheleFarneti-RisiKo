@@ -26,7 +26,8 @@ public interface GameViewObserver {
     public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers);
 
     /**
-     * Method used to set the number of attacking armies.
+     * Method that compute the attack after setting the number of 
+     * attacking armies and updates the view
      * 
      * @param numberOfAttackingAmies - Number of armies that are attacking.
      * @author Manuele D'Ambrosio.
@@ -36,6 +37,8 @@ public interface GameViewObserver {
     /**
      * Method used to set the number of armies to move in a 
      * conquered territory.
+     * If a territory in not coquered during the attack
+     * it simply closes the attack panel.
      * 
      * @param numberOfMovingArmies - Number of armies to move.
      * @author Manuele D'Ambrosio.
