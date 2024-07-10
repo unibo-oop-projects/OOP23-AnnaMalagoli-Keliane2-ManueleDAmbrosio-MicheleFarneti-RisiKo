@@ -1,6 +1,5 @@
 package it.unibo.risiko;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -43,6 +42,12 @@ class TestTripleDiceImpl {
         attDice.setDummyResults(6, 4, 2);
         defDice.setDummyResults(3, 3, 3);
         assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 1);
+        attDice.setDummyResults(6, 6, 6);
+        defDice.setDummyResults(6, 6, 5);
+        assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 2);
+        attDice.setDummyResults(1, 1, 1);
+        defDice.setDummyResults(1, 1, 1);
+        assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 3);
 
     }
 }

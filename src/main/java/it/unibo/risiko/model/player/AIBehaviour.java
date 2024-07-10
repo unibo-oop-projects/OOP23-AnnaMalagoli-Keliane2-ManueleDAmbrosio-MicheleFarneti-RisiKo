@@ -32,6 +32,14 @@ public interface AIBehaviour {
     Territory getNextAttackedTerritory();
 
     /**
+     * This methos is used to get the number of armies
+     * that are attacking.
+     * 
+     * @return the number of attacking armies
+     */
+    int decideAttackingArmies();
+
+    /**
      * This method is used to get the number of armies
      * to move from the attacking territory to the 
      * conquered territory.

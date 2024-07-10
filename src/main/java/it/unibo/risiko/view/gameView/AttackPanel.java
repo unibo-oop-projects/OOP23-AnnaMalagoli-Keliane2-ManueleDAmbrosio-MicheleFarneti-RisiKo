@@ -29,14 +29,9 @@ import java.util.List;
  * @author Manuele D'Ambrosio
  */
 
-/*
- * TODO:
- * Sistemare l'action listener dell'ultimo continue panel.
- */
-
 public class AttackPanel extends JPanel {
     private static final String SEP = File.separator;
-    private static final String PATH = "build" + SEP + "resources" + SEP + "main" + SEP + "it" + SEP + "unibo" + SEP
+    private static final String PATH = "src" + SEP + "main" + SEP + "resouces" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice";
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final int DEFAULT_ATTACKING_ARMIES = 1;
@@ -74,7 +69,7 @@ public class AttackPanel extends JPanel {
         this.armiesToMove = DEFAULT_MOVING_ARMIES;
 
         this.setLayout(new BorderLayout());
-        this.setSize(height, width);
+        this.setSize(width, height);
         this.setBackground(BACKGROUND_COLOR);
         this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
@@ -104,7 +99,7 @@ public class AttackPanel extends JPanel {
     }
 
     private Font changeFontSize(int fontSize) {
-        return new Font("Copperplate", Font.BOLD, fontSize);
+        return new Font("Arial", Font.BOLD, fontSize);
     }
 
     private JButton selectorButton(final String text) {
@@ -172,11 +167,11 @@ public class AttackPanel extends JPanel {
         final int HEIGHT_FACTOR = 6;
         JPanel topPanel = new JPanel();
 
-        topPanel.setLayout(new FlowLayout());
+        topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(BLACK_COLOR);
         topPanel.setPreferredSize(new Dimension(width, height / HEIGHT_FACTOR));
-        topPanel.add(titlePanel());
-        topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "));
+        topPanel.add(titlePanel(), BorderLayout.NORTH);
+        topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "), BorderLayout.SOUTH);
 
         return topPanel;
     }

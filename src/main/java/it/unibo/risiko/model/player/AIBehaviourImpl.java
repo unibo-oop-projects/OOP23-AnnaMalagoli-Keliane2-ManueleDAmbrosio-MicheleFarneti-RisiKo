@@ -17,6 +17,7 @@ import it.unibo.risiko.model.map.Territory;
 public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
+    private static final int MAX_ATTACKING_ARMIES = 3;
     private Player player;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
@@ -29,13 +30,7 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public Territory getNextAttackingTerritory(List<Territory> territoryList) {
-        Territory attackingTerritory;
-        Iterator<Territory> it = player.getOwnedTerritories().iterator();
-        attackingTerritory = it.next();
-        while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
-            attackingTerritory = it.next();
-        }
-        return attackingTerritory;
+        return this.nextAttackingTerritory.get();
     }
 
     @Override
@@ -68,6 +63,9 @@ public class AIBehaviourImpl implements AIBehaviour {
                 return false;
             }
         }
+        if (attackingTerritory.getNumberOfArmies() <= MINIMUM_ARMIES) {
+            return false;
+        }
         nextAttackingTerritory = Optional.of(attackingTerritory);
         return true;
     }
@@ -79,12 +77,19 @@ public class AIBehaviourImpl implements AIBehaviour {
         for (Territory t : territoryList) {
             if (adjacentNames.contains(t.getTerritoryName())) {
                 adjacentTerritories.add(t);
-            }            
+            }
         }
         if (adjacentTerritories.isEmpty()) {
             return false;
         }
         nextAttackedTerritory = Optional.of(adjacentTerritories.get(FIRST_INDEX));
         return true;
+    }
+
+    @Override
+    public int decideAttackingArmies() {
+        return nextAttackingTerritory.get().getNumberOfArmies() < MAX_ATTACKING_ARMIES
+                ? nextAttackedTerritory.get().getNumberOfArmies()
+                : MAX_ATTACKING_ARMIES;
     }
 }
