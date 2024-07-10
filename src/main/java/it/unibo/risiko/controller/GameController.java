@@ -126,10 +126,10 @@ public class GameController implements GameViewObserver {
                     setFighter(territoryName, true);
                 }
                 else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
-                    setFighter(territoryName, false);
+                    if(gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),getTerritoryFromString(territoryName))){
+                        setFighter(territoryName, false);
                         startAttack();
-                        resetAttack();
-                        checkWinner();
+                    }
                 }
                 break;
             default:
@@ -181,12 +181,16 @@ public class GameController implements GameViewObserver {
         } else {
             view.closeAttackPanel();
         }
+        redrawView();
+        resetAttack();
+        checkWinner();
     }
 
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         attackPhase.conquerTerritory(numberOfMovingArmies);
         view.closeAttackPanel();
+        redrawView();
     }
 
     /**

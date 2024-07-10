@@ -86,4 +86,6 @@ public interface Game {
      */
     void endAttack();
 
+    boolean areTerritoriesNear(Territory territory1, Territory territory2);
+
 }

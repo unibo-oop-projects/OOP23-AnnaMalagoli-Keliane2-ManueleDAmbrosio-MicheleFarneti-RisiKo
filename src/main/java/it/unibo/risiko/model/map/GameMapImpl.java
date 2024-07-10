@@ -68,4 +68,9 @@ public class GameMapImpl implements GameMap {
     public Deck getDeck() {
         return deck;
     }
+
+    @Override
+    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
+        return territories.territoriesAreNear(territory1,territory2);
+    }
 }

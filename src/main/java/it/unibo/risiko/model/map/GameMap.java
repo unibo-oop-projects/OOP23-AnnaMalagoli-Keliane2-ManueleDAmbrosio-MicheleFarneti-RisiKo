@@ -69,4 +69,6 @@ public interface GameMap {
         }catch(IOException e){}
         return MAX_PLAYERS_SMALL_MAPS;  
     }
+
+    public boolean areTerritoriesNear(Territory territory1, Territory territory2);
 }

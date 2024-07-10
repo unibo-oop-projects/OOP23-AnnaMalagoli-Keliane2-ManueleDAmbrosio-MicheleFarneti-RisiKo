@@ -297,4 +297,9 @@ public class GameImpl implements Game {
             status = GameStatus.READY_TO_ATTACK;
         }
     }
+
+    @Override
+    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
+        return map.areTerritoriesNear(territory1, territory2);
+    }
 }
