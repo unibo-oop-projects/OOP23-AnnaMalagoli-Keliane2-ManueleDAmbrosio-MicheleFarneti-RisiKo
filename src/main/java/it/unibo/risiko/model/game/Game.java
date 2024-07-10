@@ -21,6 +21,11 @@ public interface Game {
     boolean nextTurn();
 
     /**
+     * @return the name of the Map being played.
+     */
+    String getMapName();
+
+    /**
      * Initializises the game following the basic Risiko rules, Every player
      * gets a randomly generated target, the set of owned territories and the right amount of armies.
      */
@@ -67,4 +72,17 @@ public interface Game {
      * @return The owner of the given territory
      */
     public Player getOwner(final Territory territory);
+
+    /**
+     * 
+     * If possible, sets the Game status to ATTACKING, allowing the player to attack next
+     */
+    void setAttacking();
+
+    /**
+     * 
+     * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK allowing the gameLoop to restart
+     */
+    void endAttack();
+
 }

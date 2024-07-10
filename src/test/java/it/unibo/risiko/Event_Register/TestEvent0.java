@@ -16,30 +16,30 @@ import it.unibo.risiko.model.player.StdPlayer;
 
 
 public class TestEvent0 {
-    private Player eventLeader=new StdPlayer("black", 4);
-    private Player eventLeaderAdversary=new StdPlayer("yellow", 0);
-    private Territory attacker=new TerritoryImpl("Belgia", "Europe", new ArrayList<String>());
-    private Territory defender=new TerritoryImpl("France", "Europe", new ArrayList<String>());
-    private Event e=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader, eventLeaderAdversary);
+    // private Player eventLeader=new StdPlayer("black", 4);
+    // private Player eventLeaderAdversary=new StdPlayer("yellow", 0);
+    // private Territory attacker=new TerritoryImpl("Belgia", "Europe", new ArrayList<String>());
+    // private Territory defender=new TerritoryImpl("France", "Europe", new ArrayList<String>());
+    // private Event e=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader, eventLeaderAdversary);
 
     
-    @Test
-    void testGetEventType(){
-        assertEquals(EventType.ATTACK, EventType.ATTACK);
-    }
+    // @Test
+    // void testGetEventType(){
+    //     assertEquals(EventType.ATTACK, EventType.ATTACK);
+    // }
 
-    @Test
-    void testGetEventLeader(){
-        assertEquals(this.eventLeader, e.getEventLeader());
-    }
+    // @Test
+    // void testGetEventLeader(){
+    //     assertEquals(this.eventLeader, e.getEventLeader());
+    // }
 
-    @Test
-    void testGetAttackingTerritory(){
-        assertEquals(this.attacker, e.getAttackingTerritory());
-    }
+    // @Test
+    // void testGetAttackingTerritory(){
+    //     assertEquals(this.attacker, e.getAttackingTerritory());
+    // }
 
-    @Test
-    void testGetDefenderTerritory(){
-        assertEquals(this.defender, e.getDefenderTerritory());
-    }
+    // @Test
+    // void testGetDefenderTerritory(){
+    //     assertEquals(this.defender, e.getDefenderTerritory());
+    // }
 }

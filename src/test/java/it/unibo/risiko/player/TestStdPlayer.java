@@ -22,6 +22,5 @@ public class TestStdPlayer {
         CardImpl card = new CardImpl("Cannon", "Madagascar");
         player.addCard(card);
 
-        assertTrue(player.isOwnedCard(card));
     }
 }

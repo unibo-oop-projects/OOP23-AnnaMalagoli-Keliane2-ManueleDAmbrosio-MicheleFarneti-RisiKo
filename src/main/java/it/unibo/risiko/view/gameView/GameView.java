@@ -26,6 +26,20 @@ public interface GameView {
     void start();
 
     /**
+     * 
+     * @author Michele Farneti
+     */
+    void showInitializationWindow(List<String> mapNames);
+
+    /**
+     * Shows the game window used for displaying the events happening in the
+     * 
+     * @param mapImagePath The name of the map
+     * @author Michele Farneti
+     */
+    void showGameWindow(String mapName);
+
+    /**
      * Activates the placing and the viewing of the tanks buttons over their
      * respective territories
      * 
@@ -63,16 +77,15 @@ public interface GameView {
     void showFightingTerritory(String territory, boolean isAttacker);
 
     /**
-     * Deletes higlights of the territories that just fighted
+     * Deletes higlightings for a fighting territory
      * 
-     * @param attackerTerritory
-     * @param defenderTerritory
+     * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritories(String attackerTerritory, String defenderTerritory);
+    void resetFightingTerritory(String fightingTerritory);
 
     /**
-     * Update the game view, changing a tank based on territory
+     * Updates the game view, changing a tank based on territory
      * occuaption and updating the armies count label
      * 
      * @param territoryName
@@ -93,9 +106,10 @@ public interface GameView {
     /**
      * Updates the @GameView making it show the attack panel.
      * 
-     * @param attacking - Name of the attacking territory.
-     * @param defending - Name of the the defending territory
-     * @param attackingTerritoryArmies - Number of armies in the attacking territory.
+     * @param attacking                - Name of the attacking territory.
+     * @param defending                - Name of the the defending territory
+     * @param attackingTerritoryArmies - Number of armies in the attacking
+     *                                 territory.
      * @author Manuele D'Ambrosio
      */
     void createAttack(final String attacking, final String defending,

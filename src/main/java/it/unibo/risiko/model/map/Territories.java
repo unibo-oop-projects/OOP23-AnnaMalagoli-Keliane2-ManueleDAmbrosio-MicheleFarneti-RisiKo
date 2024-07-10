@@ -77,7 +77,7 @@ public class Territories {
      * @return the list of territories
      */
     public List<Territory> getListTerritories() {
-        return List.copyOf(listTerritories); 
+        return listTerritories; 
     }
 
     /**
@@ -85,7 +85,7 @@ public class Territories {
      * @return the list of territories
      */
     public List<Continent> getListContinents() {
-        return List.copyOf(listContinents); 
+        return listContinents; 
     }
 
     /**

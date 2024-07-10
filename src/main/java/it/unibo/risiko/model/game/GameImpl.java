@@ -31,7 +31,7 @@ public class GameImpl implements Game {
 
     private int activePlayer = 0;
     private int armiesPlaced = 0 ;
-    private final List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
 
     protected GameImpl(final GameMap map, final List<Player> players){
@@ -42,11 +42,8 @@ public class GameImpl implements Game {
     @Override
     public void startGame(){
         Collections.shuffle(players);
-        /*Attribuzione armate */
         players.forEach( p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
-        /*Attribuzione territori */
         assignTerritories();
-        /*Assegnamento degli obiettivi*/
         assignTargets();
     }
 
@@ -76,15 +73,18 @@ public class GameImpl implements Game {
     }
 
     /**
-     * Private function used to split the map territories between the players in the game 
+     * Private function used to split the map territories between the players in the game, it also
+     * places one army per territory for each player 
      */
     private void assignTerritories() {
         var territoriesToAssign = map.getTerritories();
         Collections.shuffle(territoriesToAssign);
 
-        while (territoriesToAssign.size()>0){
-            players.get(activePlayer).addTerritory(territoriesToAssign.remove(0));
-            nextTurn();
+       for (Territory territory : territoriesToAssign) {
+            players.get(activePlayer).addTerritory(territory);
+            territory.addArmies(1);
+            players.get(activePlayer).decrementArmiesToPlace();
+            activePlayer = nextPlayer();
         }
         activePlayer = 0;
     }
@@ -95,38 +95,40 @@ public class GameImpl implements Game {
             if(status == GameStatus.TERRITORY_OCCUPATION){
                 armiesPlaced = 0;
                 if(getTotalArmiesLeftToPlace() == 0){
+                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                    updateCurrentPlayer();
                     status = status.next();
-                    players.get(nextPlayer()).computeReinforcements();
+                } else{
+                    updateCurrentPlayer();
                 }
-                updateCurrentPlayer();
-
+                return true;
             } else if(status == GameStatus.ARMIES_PLACEMENT){
                 status = status.next();
-            } else if (status == GameStatus.ATTACK){
+            } else if (status == GameStatus.READY_TO_ATTACK){
                 status = status.next();
-                players.get(nextPlayer()).computeReinforcements();
+                players.get(nextPlayerIfNotDefeated()).computeReinforcements();
                 updateCurrentPlayer();
+                return true;
             }
-            return true;
         }
         return false;
     }
+
 
     /**
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
     private boolean skipTurnPossible(){
-        /* Territory occupation stage, It's only possibile to skip the turn if the player has no armies 
-         * left to place or if he already placed 3 of them. */
-        if(status == GameStatus.TERRITORY_OCCUPATION){
-            return(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
-        } if (status == GameStatus.ARMIES_PLACEMENT){
-            return players.get(activePlayer).getArmiesToPlace()==0;
-        } else if (status == GameStatus.ATTACK){
-            return true;
+        switch (status) {
+            case TERRITORY_OCCUPATION:
+                return(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
+            case ARMIES_PLACEMENT:
+                return players.get(activePlayer).getArmiesToPlace()==0;
+            case READY_TO_ATTACK:
+                return true;
+            default:
+                return players.get(activePlayer).getArmiesToPlace() == 0; 
         }
-        /* */
-        return players.get(activePlayer).getArmiesToPlace() == 0; 
     }
 
     /**
@@ -138,19 +140,21 @@ public class GameImpl implements Game {
 
     @Override
     public void placeArmies(final Territory territory, final int nArmies){
-        if(status == GameStatus.TERRITORY_OCCUPATION){
-            if(armiesPlaced < 3){
+        if(players.get(activePlayer).getArmiesToPlace()>0){
+            if(status == GameStatus.TERRITORY_OCCUPATION){
+                if(armiesPlaced < 3){
+                    if(players.get(activePlayer).isOwnedTerritory(territory)){
+                        territory.addArmies(nArmies);
+                        armiesPlaced ++;
+                        players.get(activePlayer).decrementArmiesToPlace();
+                    }
+                }
+            } else if ( status == GameStatus.ARMIES_PLACEMENT){
                 if(players.get(activePlayer).isOwnedTerritory(territory)){
                     territory.addArmies(nArmies);
-                    armiesPlaced ++;
                     players.get(activePlayer).decrementArmiesToPlace();
+                    nextTurn();
                 }
-            }
-        } else if ( status == GameStatus.ARMIES_PLACEMENT){
-            if(players.get(activePlayer).isOwnedTerritory(territory)){
-                territory.addArmies(nArmies);
-                armiesPlaced ++;
-                players.get(activePlayer).decrementArmiesToPlace();
             }
         }
     }
@@ -168,18 +172,29 @@ public class GameImpl implements Game {
     /**
      * @return The index of the next active player, avoiding all of the elliminated players.
      */
-    private int nextPlayer(){
-        if(!players.get((activePlayer+1)%players.size()).isDefeated()){
-            return (activePlayer+1)%players.size();
+    private int nextPlayerIfNotDefeated(){
+        if(!(players.get((activePlayer+1)%players.size()).isDefeated())){
+            return nextPlayer();
         }else{
-            activePlayer = (activePlayer+1)%players.size();
+            activePlayer = nextPlayer();
             return nextPlayer();
         }
 
     }
 
+    /**
+     * 
+     * @return The index of the next player, independently if it is Defeated or not
+     */
+    private int nextPlayer(){
+        return (activePlayer+1)%players.size();
+    }
+
+    /**
+     * Sets as new activePlayer the next player in line
+     */
     private void updateCurrentPlayer(){
-        activePlayer = nextPlayer();
+        activePlayer = nextPlayerIfNotDefeated();
     }
 
     @Override
@@ -209,5 +224,24 @@ public class GameImpl implements Game {
     @Override
     public Player getOwner(Territory territory) {
         return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch( t-> t.equals(territory))).findFirst().get();
+    }
+
+    @Override
+    public String getMapName() {
+        return this.map.getName();
+    }
+
+    @Override
+    public void setAttacking() {
+        if(status == GameStatus.READY_TO_ATTACK){
+            status = GameStatus.ATTACKING;
+        }
+    }
+
+    @Override
+    public void endAttack() {
+        if(status == GameStatus.ATTACKING){
+            status = GameStatus.READY_TO_ATTACK;
+        }
     }
 }

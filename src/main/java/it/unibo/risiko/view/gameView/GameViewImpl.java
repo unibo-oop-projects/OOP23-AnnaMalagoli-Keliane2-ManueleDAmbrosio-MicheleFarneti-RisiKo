@@ -115,7 +115,7 @@ public class GameViewImpl implements GameView {
             put("Central-America", new Position(170, 270));
             put("Eastern-U.S.", new Position(210, 170));
             put("Greenland", new Position(450, 15));
-            put("NorthWest-Territories", new Position(160, 50));
+            put("Northwest-Territories", new Position(160, 50));
             put("Ontario", new Position(220, 100));
             put("Quebec", new Position(300, 100));
             put("West-United-States", new Position(100, 160));
@@ -139,7 +139,7 @@ public class GameViewImpl implements GameView {
     private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
     private HashMap<ColoredImageButton, String> iconsMap = new HashMap<>();
     private GameViewObserver gameViewObserver;
-    private JFrame gameFrame = new JFrame();
+    private JFrame mainFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
     private JLayeredPane mapLayoutPane = new JLayeredPane();
     private JLayeredPane attackBarLayoutPane = new JLayeredPane();
@@ -153,25 +153,32 @@ public class GameViewImpl implements GameView {
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
 
+    private final String resourcesLocator;
+
     /**
-     * Initialzize the GUI for the game creating all of its main components.
+     * Initialzizes the GUI for the game creating all of its main components.
      * 
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(Integer frameWidth, Integer frameHeight, String mapImagePath) {
+    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator) {
         GAME_FRAME_WIDTH = frameWidth;
         GAME_FRAME_HEIGHT = frameHeight;
+        this.resourcesLocator = resourcesLocator;
 
-        gameFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
-        gameFrame.setTitle("Risiko!");
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.add(baseLayoutPane, BorderLayout.CENTER);
+        mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
+        mainFrame.setTitle("Risiko!");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    @Override
+    public void showGameWindow(String mapName){
+        mainFrame.add(baseLayoutPane, BorderLayout.CENTER);
 
         // GamePanel and Basic layout initialization
         baseLayoutPane.setBounds(0, 0, GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT);
         baseLayoutPane.add(gamePanel, 0, 0);
-        gamePanel.setBounds(0, 0, (int) (gameFrame.getWidth() * GAME_PANEL_WIDTH_PERCENTAGE), gameFrame.getHeight());
+        gamePanel.setBounds(0, 0, (int) (mainFrame.getWidth() * GAME_PANEL_WIDTH_PERCENTAGE), mainFrame.getHeight());
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 
         // Painting of the map
@@ -180,7 +187,7 @@ public class GameViewImpl implements GameView {
         mapLayoutPane.setBounds(0, 0, (int) mapLayoutPaneSize.getWidth(), (int) mapLayoutPaneSize.getHeight());
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap(mapImagePath);
+        paintMap(resourcesLocator + "maps" + FILE_SEPARATOR + mapName+ FILE_SEPARATOR + mapName + ".png" );
 
         // Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
@@ -189,6 +196,7 @@ public class GameViewImpl implements GameView {
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
         setupAttackBar();
     }
+
 
     /**
      * Sets up the attackbar part of the view
@@ -223,6 +231,7 @@ public class GameViewImpl implements GameView {
         attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton, 5, 0);
+        attackButton.addActionListener(e -> gameViewObserver.setAttacking());
 
         var skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
@@ -301,6 +310,7 @@ public class GameViewImpl implements GameView {
      * @param mapPath The path of the image of the selected map
      */
     private void paintMap(String mapPath) {
+        System.out.println(mapPath);
         Optional<Image> mapImage = readImage(mapPath);
         if (mapImage.isPresent()) {
             mapPanel = new BackgroundImagePanel(mapImage.get());
@@ -321,7 +331,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void start() {
-        this.gameFrame.setVisible(true);
+        this.mainFrame.setVisible(true);
     }
 
     /**
@@ -342,8 +352,10 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showTanks(List<String> territories) {
+
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
                 new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"), new JLabel("0"))));
+        
         for (var tank : tanksMap.entrySet()) {
             tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(),
                     tanksCoordinates.get(tank.getKey()).y(), TANKS_WIDTH, TANKS_HEIGTH);
@@ -398,12 +410,13 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void setCurrentPlayer(String playerColor, Integer nArmies) {
-        String currentPlayerColor = playerColor;
-        turnTank.setColor(currentPlayerColor);
+        turnTank.setColor(playerColor);
         iconsMap.entrySet().stream()
                 .forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(playerColor)) ? true : false));
-        attackBarBackgroundPanel.setTopColor(stringToColor(currentPlayerColor));
+        attackBarBackgroundPanel.setTopColor(stringToColor(playerColor));
         playerArmiesLabel.setText(nArmies.toString());
+        mainFrame.validate();
+        mainFrame.repaint();
     }
 
     private Color stringToColor(String color_id) {
@@ -438,16 +451,15 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void resetFightingTerritories(String attackerTerritory, String defenderTerritory) {
-        tanksMap.get(attackerTerritory).button().setBorderPainted(false);
-        tanksMap.get(defenderTerritory).button().setBorderPainted(false);
+    public void resetFightingTerritory(String figtingTerritory) {
+        tanksMap.get(figtingTerritory).button().setBorderPainted(false);
     }
 
     @Override
     public void gameOver(String winnerColor) {
         var winnerPanel = new GradientPanel(Color.BLACK, stringToColor(winnerColor), MAP_GRADIENT_LEVEL);
         winnerPanel.setBackground(Color.RED);
-        winnerPanel.setBounds(0, 0, gameFrame.getWidth(), gameFrame.getHeight());
+        winnerPanel.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
         winnerPanel.setOpaque(true);
 
         var winnerWriting = new JTextField(winnerColor.toUpperCase() + " player has won the Game!");
@@ -501,6 +513,14 @@ public class GameViewImpl implements GameView {
     @Override
     public void drawConquerPanel() {
         attackPanel.drawConquerPanel();
+    }
+
+
+    @Override
+    public void showInitializationWindow(List<String> mapNames) {
+        var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames, gameViewObserver);
+        mainFrame.add(initializationPanel,BorderLayout.CENTER);
+        mainFrame.validate();
     }
 
 }
