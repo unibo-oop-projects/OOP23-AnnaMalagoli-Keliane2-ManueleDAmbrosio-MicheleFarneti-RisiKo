@@ -494,7 +494,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
-        final int SIZE_FACTOR = 3;
+        final int SIZE_FACTOR = 2;
         attackPanel = new AttackPanel(GAME_FRAME_HEIGHT / SIZE_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR, attacking, defending,
                 attackingTerritoryArmies, gameViewObserver);
         attackPanel.setLocation(GAME_FRAME_WIDTH / SIZE_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR);
@@ -504,7 +504,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void closeAttackPanel() {
-        attackPanel.setVisible(false); // NEED TO CHECK IF THE PANEL CLOSES
+        attackPanel.setVisible(false);
     }
 
     @Override
