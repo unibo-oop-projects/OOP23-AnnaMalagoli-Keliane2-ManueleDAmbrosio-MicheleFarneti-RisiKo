@@ -62,11 +62,9 @@ public class PrincipalMenu extends JPanel {
     /**
      * this method organise everything so that a saved game
      * can continue
-     * @return true if the saved game has been correctly loaded
-     * false otherwise
      */
-    private boolean continueSavedGame() {
-        this.gameFrame.getController().initializeNewGame();
+    private void continueSavedGame() {
+        //this.gameFrame.getController().initializeNewGame();
     }
 
     /**
