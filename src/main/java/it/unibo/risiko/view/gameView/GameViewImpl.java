@@ -159,6 +159,9 @@ public class GameViewImpl implements GameView {
     private JButton skipButton;
     private JButton attackButton;
 
+    private int mapWidth;
+    private int mapHeight;
+
     /**
      * Initialzizes the GUI for the game creating all of its main components.
      * 
@@ -193,6 +196,8 @@ public class GameViewImpl implements GameView {
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
         paintMap(resourcesLocator + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName + ".png");
+        mapWidth = mapLayoutPane.getSize().width;
+        mapHeight = mapLayoutPane.getSize().height;
 
         // Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
@@ -275,7 +280,7 @@ public class GameViewImpl implements GameView {
         playerArmiesLabel.setOpaque(true);
 
         attackBarLayoutPane.add(turnTank, TURN_TANK_LAYER, 0);
-        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);     
+        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);
     }
 
     /**
@@ -370,6 +375,17 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /**
+     * 
+     * @return The coordinates of a tank rapresenting a territory on the map,
+     *         relatively to the map dimension.
+     * @authot Michele Farneti
+     */
+    private Position getRelativePoition(Position position) {;
+        return new Position(Math.round(position.x() * (mapWidth / 1280f)),
+                Math.round(position.y() * (mapHeight / 630f)));
+    }
+
     @Override
     public void showTanks(List<String> territories) {
 
@@ -378,8 +394,9 @@ public class GameViewImpl implements GameView {
                 new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
-            tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(),
-                    tanksCoordinates.get(tank.getKey()).y(), TANKS_WIDTH, TANKS_HEIGTH);
+            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
+            tank.getValue().button().setBounds(relativePosition.x(),
+                    relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
             tank.getValue().button().addActionListener(e -> tankClicked(tank.getKey()));
             tank.getValue().button().setBorderPainted(false);
@@ -545,7 +562,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showInitializationWindow(Map<String,Integer> mapNames) {
+    public void showInitializationWindow(Map<String, Integer> mapNames) {
         var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);
