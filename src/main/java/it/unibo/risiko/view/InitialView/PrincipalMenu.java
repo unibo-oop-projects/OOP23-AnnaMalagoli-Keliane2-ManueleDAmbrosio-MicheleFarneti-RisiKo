@@ -20,10 +20,9 @@ public class PrincipalMenu extends JPanel {
     private GameFrame gameFrame;
     //private JLabel picture;
     private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
-    private GameController controller;
-    public PrincipalMenu(GameFrame f, GameController controller){
+
+    public PrincipalMenu(GameFrame f){
         this.gameFrame=f;
-        this.controller=controller;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(700, 700));
@@ -67,15 +66,15 @@ public class PrincipalMenu extends JPanel {
      * false otherwise
      */
     private boolean continueSavedGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'continueSavedGame'");
+        this.gameFrame.getController().initializeNewGame();
     }
 
     /**
      * This method starts a new game
      */
     private void startNewGame() {
-        this.controller.initializeNewGame();
+        new GameController();
+        //this.gameFrame.
     }
 
     /**

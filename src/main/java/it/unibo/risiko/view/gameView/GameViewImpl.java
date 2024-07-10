@@ -1,6 +1,5 @@
 package it.unibo.risiko.view.gameView;
 
-import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
@@ -23,6 +22,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -78,8 +78,8 @@ public class GameViewImpl implements GameView {
     private static final Integer TURN_TANK_HEIGHT = 100;
     private static final Integer TURN_TANK_LAYER = 5;
 
-    private static final int ARMIES_LABEL_HEIGHT = 15;
-    private static final int ARMIES_LABEL_WIDTH = 15;
+    private static final int ARMIES_LABEL_HEIGHT = 17;
+    private static final int ARMIES_LABEL_WIDTH = 17;
     private static final int ARMIES_LABEL_FONT_SIZE = 14;
 
     private static final int PLAYER_ARMIES_LABEL_HEIGHT = 23;
@@ -140,8 +140,7 @@ public class GameViewImpl implements GameView {
     private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
     private HashMap<ColoredImageButton, String> iconsMap = new HashMap<>();
     private GameViewObserver gameViewObserver;
-    private JPanel mainFrame = new JPanel();
-    private GameFrame gameFrame = new GameFrame();
+    private JFrame mainFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
     private JLayeredPane mapLayoutPane = new JLayeredPane();
     private JLayeredPane attackBarLayoutPane = new JLayeredPane();
@@ -157,24 +156,31 @@ public class GameViewImpl implements GameView {
 
     private final String resourcesLocator;
 
+    private JButton skipButton;
+    private JButton attackButton;
+
+    private int mapWidth;
+    private int mapHeight;
+
     /**
      * Initialzizes the GUI for the game creating all of its main components.
      * 
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator, GameFrame gameFrame) {
+    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator) {
         GAME_FRAME_WIDTH = frameWidth;
         GAME_FRAME_HEIGHT = frameHeight;
         this.resourcesLocator = resourcesLocator;
-        this.gameFrame=gameFrame;
+
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
-        //mainFrame.setTitle("Risiko!!");
+        //mainFrame.setTitle("Risiko!");
         //mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override
     public void showGameWindow(String mapName) {
+        mainFrame.getContentPane().removeAll();
         mainFrame.add(baseLayoutPane, BorderLayout.CENTER);
 
         // GamePanel and Basic layout initialization
@@ -190,6 +196,8 @@ public class GameViewImpl implements GameView {
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
         paintMap(resourcesLocator + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName + ".png");
+        mapWidth = mapLayoutPane.getSize().width;
+        mapHeight = mapLayoutPane.getSize().height;
 
         // Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
@@ -197,6 +205,23 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
         setupAttackBar();
+
+    }
+
+    /**
+     * 
+     * Private function used to deactivate gameView's buttons, used whenever the
+     * attack panel pops up
+     * so that the user can't mess around with the rest of the game.
+     * 
+     * @param enabled True if the buttons are going to get enabled, false if it's
+     *                going to deactivate them
+     * @author Michele Farneti
+     */
+    private void setGameViewButtonsEnabled(Boolean enabled) {
+        tanksMap.entrySet().forEach(e -> e.getValue().button().setEnabled(enabled));
+        skipButton.setEnabled(enabled);
+        attackButton.setEnabled(enabled);
     }
 
     /**
@@ -228,19 +253,19 @@ public class GameViewImpl implements GameView {
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         countryBarPanel.setEditable(false);
 
-        var attackButton = new CustomButton("ATTACK");
+        attackButton = new CustomButton("ATTACK");
         attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton, 5, 0);
         attackButton.addActionListener(e -> gameViewObserver.setAttacking());
 
-        var skipButton = new CustomButton("SKIP");
+        skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
                 ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(skipButton, 5, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
 
-        turnTank = new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
+        turnTank = new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -311,7 +336,6 @@ public class GameViewImpl implements GameView {
      * @param mapPath The path of the image of the selected map
      */
     private void paintMap(String mapPath) {
-        System.out.println(mapPath);
         Optional<Image> mapImage = readImage(mapPath);
         if (mapImage.isPresent()) {
             mapPanel = new BackgroundImagePanel(mapImage.get());
@@ -332,7 +356,6 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void start() {
-        this.gameFrame.updatePanel(mainFrame);
         this.mainFrame.setVisible(true);
     }
 
@@ -352,15 +375,28 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /**
+     * 
+     * @return The coordinates of a tank rapresenting a territory on the map,
+     *         relatively to the map dimension.
+     * @authot Michele Farneti
+     */
+    private Position getRelativePoition(Position position) {;
+        return new Position(Math.round(position.x() * (mapWidth / 1280f)),
+                Math.round(position.y() * (mapHeight / 630f)));
+    }
+
     @Override
     public void showTanks(List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
-                new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"), new JLabel("0"))));
+                new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
+                new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
-            tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(),
-                    tanksCoordinates.get(tank.getKey()).y(), TANKS_WIDTH, TANKS_HEIGTH);
+            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
+            tank.getValue().button().setBounds(relativePosition.x(),
+                    relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
             tank.getValue().button().addActionListener(e -> tankClicked(tank.getKey()));
             tank.getValue().button().setBorderPainted(false);
@@ -372,7 +408,9 @@ public class GameViewImpl implements GameView {
                     (int) tank.getValue().button().getBounds().getLocation().getY() + TANKS_HEIGTH
                             - ARMIES_LABEL_HEIGHT,
                     ARMIES_LABEL_WIDTH, ARMIES_LABEL_HEIGHT);
-            tank.getValue().armiesCount().setForeground(Color.white);
+            tank.getValue().armiesCount().setBackground(Color.white);
+            tank.getValue().armiesCount().setForeground(Color.black);
+            tank.getValue().armiesCount().setOpaque(true);
             tank.getValue().armiesCount().setFont(new Font("Arial", Font.BOLD, ARMIES_LABEL_FONT_SIZE));
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
             mapLayoutPane.add(tank.getValue().armiesCount(), TANK_LAYER, 0);
@@ -383,12 +421,14 @@ public class GameViewImpl implements GameView {
     public void showTurnIcon(String player, int playerIndex, boolean isAI) {
         if (isAI) {
             iconsMap.put(
-                    new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
+                    new ColoredImageButton(resourcesLocator,
+                            FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         } else {
             iconsMap.put(
-                    new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
+                    new ColoredImageButton(resourcesLocator,
+                            FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         }
@@ -453,8 +493,8 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void resetFightingTerritory(String figtingTerritory) {
-        tanksMap.get(figtingTerritory).button().setBorderPainted(false);
+    public void resetFightingTerritory(String fightingTerritory) {
+        tanksMap.get(fightingTerritory).button().setBorderPainted(false);
     }
 
     @Override
@@ -495,17 +535,25 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
-        final int SIZE_FACTOR = 3;
-        attackPanel = new AttackPanel(GAME_FRAME_HEIGHT / SIZE_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR, attacking, defending,
-                attackingTerritoryArmies, gameViewObserver);
-        attackPanel.setLocation(GAME_FRAME_WIDTH / SIZE_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR);
+        setGameViewButtonsEnabled(false);
+        final int SIZE_FACTOR = 2;
+        final int LOCATION_FACTOR = 6;
+        attackPanel = new AttackPanel(
+                GAME_FRAME_HEIGHT / SIZE_FACTOR,
+                GAME_FRAME_WIDTH / SIZE_FACTOR,
+                attacking,
+                defending,
+                attackingTerritoryArmies,
+                gameViewObserver);
+        attackPanel.setLocation(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR);
         attackPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, attackPanel);
     }
 
     @Override
     public void closeAttackPanel() {
-        attackPanel.setVisible(false); // NEED TO CHECK IF THE PANEL CLOSES
+        setGameViewButtonsEnabled(true);
+        attackPanel.setVisible(false);
     }
 
     @Override
@@ -519,12 +567,11 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showInitializationWindow(List<String> mapNames) {
+    public void showInitializationWindow(Map<String, Integer> mapNames) {
         var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
                 gameViewObserver);
-        //mainFrame.add(initializationPanel, BorderLayout.CENTER);
-        //mainFrame.validate();
-        gameFrame.updatePanel(initializationPanel);
+        mainFrame.add(initializationPanel, BorderLayout.CENTER);
+        mainFrame.validate();
     }
 
 }

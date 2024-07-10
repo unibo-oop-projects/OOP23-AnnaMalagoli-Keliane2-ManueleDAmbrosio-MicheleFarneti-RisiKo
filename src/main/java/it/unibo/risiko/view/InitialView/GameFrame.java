@@ -4,15 +4,14 @@ import java.awt.*;
 import javax.swing.*;
 
 import it.unibo.risiko.controller.GameController;
+
 public class GameFrame{
     private JFrame frame;
     private PrincipalMenu menuPanel;
     private OptionSubMenu optionMenu;
-    private GameController controller;
 
     public GameFrame() { 
-        this.controller=new GameController(this);
-        this.menuPanel=new PrincipalMenu(this,this.controller);
+        this.menuPanel=new PrincipalMenu(this);
         this.optionMenu=new OptionSubMenu(this.menuPanel);
         this.frame = new JFrame("***Risiko***");
         this.frame.setLayout(new BorderLayout());
@@ -61,5 +60,10 @@ public class GameFrame{
 
     public static void main(String[] args) {
         new GameFrame();
+    }
+
+    public GameController getController() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getController'");
     }
 }
