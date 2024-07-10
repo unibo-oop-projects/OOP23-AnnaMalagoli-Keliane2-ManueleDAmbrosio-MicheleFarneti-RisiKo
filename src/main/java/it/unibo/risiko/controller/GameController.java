@@ -94,6 +94,7 @@ public class GameController implements GameViewObserver {
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            System.out.println(currentPlayer().get().getTarget().showTargetDescription());
             redrawView();
         }
     }
@@ -142,6 +143,7 @@ public class GameController implements GameViewObserver {
      * 
      * Checks if the current player won the game, eventually displaying
      * a gameover window
+     * @author Michele Farneti
      *  */
     private void checkWinner(){
         if (gameManager.getCurrentGame().get().gameOver()) {
@@ -180,10 +182,11 @@ public class GameController implements GameViewObserver {
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
+            redrawView();
+            checkWinner();
         }
-        redrawView();
         resetAttack();
-        checkWinner();
+        gameManager.getCurrentGame().get().endAttack();
     }
 
     @Override
@@ -191,6 +194,7 @@ public class GameController implements GameViewObserver {
         attackPhase.conquerTerritory(numberOfMovingArmies);
         view.closeAttackPanel();
         redrawView();
+        checkWinner();
     }
 
     /**

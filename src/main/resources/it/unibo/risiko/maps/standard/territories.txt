@@ -57,7 +57,7 @@ Ontario Northwest-Territories Greenland Alberta Eastern-U.S. Quebec
 North-America:
 Quebec Greenland Eastern-U.S. Ontario
 North-America:
-West-United-States Central-America Eastern-U.S. Alberta
+West-United-States Central-America Eastern-U.S. Alberta Ontario
 Asia:
 Urals Ukraine Afghanistan Siberia China
 Asia:
