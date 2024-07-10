@@ -19,15 +19,4 @@ public interface GameFactory {
      * @return A new Game ready to be played,.
      */
     Game initializeGame();
-
-    /**
-     * Allows to specify, within the chosen map limits, the number of players for the game.
-     * @return True if the number of players is within the map limits
-     */
-    boolean setPlayersNumber(int nPLayers);
-
-    /**
-     * @return The count of the players already setted
-     */
-    int getPlayersCount();
 }

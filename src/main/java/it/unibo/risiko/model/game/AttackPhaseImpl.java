@@ -21,6 +21,7 @@ public class AttackPhaseImpl implements AttackPhase {
     private Territory attackerTerritory;
     private Territory defenderTerritory;
     private int attackingArmies;
+    private int defendingArmies;
     private TripleDiceImpl attackerDiceThrows;
     private TripleDiceImpl defenderDiceThrows;
     private int attackerLostArmies;
@@ -48,8 +49,9 @@ public class AttackPhaseImpl implements AttackPhase {
             this.defenderTerritory = defenderTerritory;
             this.attackerTerritory = attackerTerritory;
             this.attackingArmies = attackingArmies;
+            this.defendingArmies = assignDefendingArmies();
             this.attackerDiceThrows = new TripleDiceImpl(attackingArmies);
-            this.defenderDiceThrows = new TripleDiceImpl(defendingArmies());
+            this.defenderDiceThrows = new TripleDiceImpl(defendingArmies);
             this.attackerLostArmies = computeAttackerLostArmies();
             this.defenderLostArmies = computeDefenderLostArmies();
         } else {
@@ -91,6 +93,7 @@ public class AttackPhaseImpl implements AttackPhase {
         if (isTerritoryConquered() && isLegitArmiesToMove(armiesToMove)) {
             defendingPlayer.removeTerritory(defenderTerritory);
             attackingPlayer.addTerritory(defenderTerritory);
+            attackerTerritory.removeArmies(armiesToMove);
             defenderTerritory.addArmies(armiesToMove);
             return true;
         } else {
@@ -104,7 +107,7 @@ public class AttackPhaseImpl implements AttackPhase {
                 attackingArmies + " armies." +
                 "\nPlayer " + defendingPlayer.getColor_id() + " is defending " +
                 defenderTerritory.getTerritoryName() + " with " +
-                defendingArmies() + " armies.";
+                defendingArmies + " armies.";
 
     }
 
@@ -120,12 +123,10 @@ public class AttackPhaseImpl implements AttackPhase {
         return (territory.getNumberOfArmies() > attackingArmies);
     }
 
-    private int defendingArmies() {
-        if (defenderTerritory.getNumberOfArmies() >= MAX_DEFENDING_ARMIES) {
-            return MAX_DEFENDING_ARMIES;
-        } else {
-            return defenderTerritory.getNumberOfArmies();
-        }
+    private int assignDefendingArmies() {
+        return defenderTerritory.getNumberOfArmies() >= MAX_DEFENDING_ARMIES
+                ? MAX_DEFENDING_ARMIES
+                : defenderTerritory.getNumberOfArmies();
     }
 
     private int computeAttackerLostArmies() {
@@ -133,6 +134,6 @@ public class AttackPhaseImpl implements AttackPhase {
     }
 
     private int computeDefenderLostArmies() {
-        return defendingArmies() - attackerLostArmies;
+        return Math.min(attackingArmies, defendingArmies) - attackerLostArmies;
     }
 }

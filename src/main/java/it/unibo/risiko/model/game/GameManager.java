@@ -1,6 +1,7 @@
 package it.unibo.risiko.model.game;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -63,7 +64,7 @@ public interface GameManager {
      * 
      * @return The list of map names currently avilable to play
      */
-    List<String> getAvialableMaps();
+    Map<String,Integer> getAvailableMaps();
 
     /**
      * 

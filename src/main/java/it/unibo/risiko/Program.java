@@ -4,7 +4,7 @@ import it.unibo.risiko.controller.GameController;
 
 public class Program {
     public static void main(final String[] args) {
-        GameController risiko = new GameController();
+        new GameController();
     }
 }
 

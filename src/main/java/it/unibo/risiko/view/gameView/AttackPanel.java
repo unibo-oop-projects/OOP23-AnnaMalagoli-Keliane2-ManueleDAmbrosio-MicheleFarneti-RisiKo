@@ -31,8 +31,8 @@ import java.util.List;
 
 public class AttackPanel extends JPanel {
     private static final String SEP = File.separator;
-    private static final String PATH = "src" + SEP + "main" + SEP + "resouces" + SEP + "it" + SEP + "unibo" + SEP
-            + "risiko" + SEP + "dice";
+    private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
+            + "risiko" + SEP + "dice" + SEP;
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final int DEFAULT_ATTACKING_ARMIES = 1;
     private static final int DEFAULT_MOVING_ARMIES = 1;
@@ -85,7 +85,7 @@ public class AttackPanel extends JPanel {
     }
 
     private void increase(final JTextField textValue, final int max) {
-        if (attackersNumber < max && attackersNumber < attackingTerritoryArmies) {
+        if (attackersNumber < max && attackersNumber < attackingTerritoryArmies - DEFAULT_MOVING_ARMIES) {
             attackersNumber++;
             textValue.setText(Integer.toString(attackersNumber));
         }
@@ -117,6 +117,7 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel selectorPanel(String selectorText) {
+        final int TEXT_VALUE_WIDTH = 2;
         final int MIN_ATTACKING_ARMIES = 1;
         final int MAX_ATTACKING_ARMIES = 3;
         JPanel selectorPanel = new JPanel();
@@ -136,12 +137,14 @@ public class AttackPanel extends JPanel {
 
         increaser.addActionListener(e -> {
             increase(textValue, MAX_ATTACKING_ARMIES);
-            if (attackersNumber >= MAX_ATTACKING_ARMIES) {
+            if (attackersNumber >= MAX_ATTACKING_ARMIES || attackersNumber >= attackingTerritoryArmies) {
                 increaser.setEnabled(false);
             }
             decreaser.setEnabled(true);
         });
 
+        textValue.setPreferredSize(new Dimension(textValue.getPreferredSize().width * TEXT_VALUE_WIDTH,
+                textValue.getPreferredSize().height));
         selectorPanel.setLayout(new FlowLayout());
         selectorPanel.setBackground(BLACK_COLOR);
         selectorPanel.add(textField);
@@ -177,8 +180,8 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel sidePanel(String diceType) {
-        final int SIZE_FACTOR = 3;
-        final int WIDTH_FACTOR = 2;
+        final int SIZE_FACTOR = 4;
+        final int WIDTH_FACTOR = 3;
         JPanel sidePanel = new JPanel();
         int size = height / SIZE_FACTOR;
         String path = PATH + "Standard" + diceType + "Dice.png";
@@ -277,6 +280,7 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel conquerPanel(int minArmies, int maxArmies) {
+        final int TEXT_WIDTH_FACTOR = 3;
         final int MID_HEIGHT_FACTOR = 2;
         final int TEXT_HEIGHT_FACTOR = 5;
         JPanel conquerPanel = new JPanel();
@@ -287,6 +291,9 @@ public class AttackPanel extends JPanel {
         JButton decreaser = selectorButton("-");
         JButton increaser = selectorButton("+");
 
+        movingArmies.setPreferredSize(
+                new Dimension(movingArmies.getPreferredSize().width * TEXT_WIDTH_FACTOR,
+                        movingArmies.getPreferredSize().height));
         armiesToMove = minArmies;
         decreaser.setEnabled(false);
         decreaser.addActionListener(e -> {

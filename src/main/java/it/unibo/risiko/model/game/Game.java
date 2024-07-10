@@ -63,8 +63,9 @@ public interface Game {
      * owns it
      * @param territory
      * @param nArmies
+     * @return True if it was possbile to place the armies, false otherwise.
      */
-    public void placeArmies(final Territory territory, final int nArmies);
+    public boolean placeArmies(final Territory territory, final int nArmies);
 
     /**
      * 
@@ -84,5 +85,7 @@ public interface Game {
      * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK allowing the gameLoop to restart
      */
     void endAttack();
+
+    boolean areTerritoriesNear(Territory territory1, Territory territory2);
 
 }

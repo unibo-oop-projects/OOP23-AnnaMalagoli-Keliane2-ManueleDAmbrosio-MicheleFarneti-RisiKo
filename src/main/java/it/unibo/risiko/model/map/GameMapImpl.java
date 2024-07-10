@@ -17,10 +17,7 @@ public class GameMapImpl implements GameMap {
     
     private static final Integer minPlayers = 2;
 
-    private static final Integer MAX_PLAYERS_SMALL_MAPS = 2;
-    private static final Integer MAX_PLAYERS_BIG_MAPS = 6;
-
-    private static final int MINIMUM_ARMIES = 25;
+    private static final int MINIMUM_ARMIES = 20;
     private static final int ARMIES_STEP = 5;
 
     private Territories territories;
@@ -35,15 +32,15 @@ public class GameMapImpl implements GameMap {
         this.territories = new Territories(buildResourceLocator("territories.txt")); 
         this.deck = new DeckImpl(buildResourceLocator("cards.txt")); 
 
-        if(this.territories.getListContinents().size()<= 3){
-            maxPlayers = MAX_PLAYERS_SMALL_MAPS ;
-        }else{
-            maxPlayers = MAX_PLAYERS_BIG_MAPS;
-        }
+        maxPlayers = GameMap.getMaxPlayers(buildResourceLocator());
     }
 
     private String buildResourceLocator(String resourceName){
         return resourcesPackageString + "maps"+ FILE_SEPARATOR + name + FILE_SEPARATOR + resourceName;
+    }
+
+    private String buildResourceLocator(){
+        return buildResourceLocator("");
     }
 
     @Override
@@ -53,7 +50,7 @@ public class GameMapImpl implements GameMap {
 
     @Override
     public int getStratingArmies(int nplayers) {
-        return (MINIMUM_ARMIES + ARMIES_STEP*(nplayers-minPlayers));
+        return (MINIMUM_ARMIES + ARMIES_STEP*(maxPlayers-nplayers));
     }
 
     @Override
@@ -74,5 +71,10 @@ public class GameMapImpl implements GameMap {
     @Override
     public Deck getDeck() {
         return deck;
+    }
+
+    @Override
+    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
+        return territories.territoriesAreNear(territory1,territory2);
     }
 }

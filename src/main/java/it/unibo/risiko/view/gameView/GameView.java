@@ -1,6 +1,7 @@
 package it.unibo.risiko.view.gameView;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The view interface for the game phase of the application
@@ -28,8 +29,9 @@ public interface GameView {
     /**
      * 
      * @author Michele Farneti
+     * @param mapNames A map with the name of the GameMap names and associated maxPlayers
      */
-    void showInitializationWindow(List<String> mapNames);
+    void showInitializationWindow(Map<String,Integer> mapNames);
 
     /**
      * Shows the game window used for displaying the events happening in the

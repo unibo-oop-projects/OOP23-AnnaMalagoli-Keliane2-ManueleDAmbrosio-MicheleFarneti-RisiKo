@@ -1,8 +1,10 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.game.AttackPhase;
@@ -16,7 +18,6 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
-import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -35,8 +36,8 @@ public class GameController implements GameViewObserver {
     private static final String saveGamesFilePath = "resources" + FILE_SEPARATOR + "savegames"
             + FILE_SEPARATOR + "savegames.json";
     private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
-    private static final String resourcesPackageString = "build" + FILE_SEPARATOR + "resources" + FILE_SEPARATOR
-            + "main" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko" + FILE_SEPARATOR;
+    private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
+            + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko" + FILE_SEPARATOR;
     private Optional<Territory> attackerTerritory = Optional.empty();
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
@@ -47,21 +48,21 @@ public class GameController implements GameViewObserver {
      * 
      * @author Michele Farneti
      */
-    public GameController(GameFrame gameFrame) {
+    public GameController() {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
 
-        view = new GameViewImpl(1600, 900,resourcesPackageString, gameFrame);
+        view = new GameViewImpl(1600,900,resourcesPackageString);
         this.view.start();
         this.view.setObserver(this);
-        //initializeNewGame();
+        initializeNewGame();
     }
 
     /**
      * Method used by the controller to tell the view to show the gameInitiliazation
      * Window
      */
-    public void initializeNewGame() {
-        view.showInitializationWindow(gameManager.getAvialableMaps());
+    private void initializeNewGame() {
+        view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
     /**
@@ -92,7 +93,9 @@ public class GameController implements GameViewObserver {
     @Override
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
+            resetAttack();
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            System.out.println(currentPlayer().get().getTarget().showTargetDescription());
             redrawView();
         }
     }
@@ -121,14 +124,14 @@ public class GameController implements GameViewObserver {
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
                 break;
             case ATTACKING:
-                if(currentPlayerOwns(territory)){
+                if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
                     setFighter(territoryName, true);
                 }
                 else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
-                    setFighter(territoryName, false);
+                    if(gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),getTerritoryFromString(territoryName))){
+                        setFighter(territoryName, false);
                         startAttack();
-                        resetAttack();
-                        checkWinner();
+                    }
                 }
                 break;
             default:
@@ -141,6 +144,7 @@ public class GameController implements GameViewObserver {
      * 
      * Checks if the current player won the game, eventually displaying
      * a gameover window
+     * @author Michele Farneti
      *  */
     private void checkWinner(){
         if (gameManager.getCurrentGame().get().gameOver()) {
@@ -179,13 +183,19 @@ public class GameController implements GameViewObserver {
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
+            redrawView();
+            checkWinner();
         }
+        resetAttack();
+        gameManager.getCurrentGame().get().endAttack();
     }
 
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         attackPhase.conquerTerritory(numberOfMovingArmies);
         view.closeAttackPanel();
+        redrawView();
+        checkWinner();
     }
 
     /**
@@ -274,10 +284,9 @@ public class GameController implements GameViewObserver {
             if (index < numberOfStandardPlayers) {
                 gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
             } else {
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+                gameFactory.addNewPlayer(playerFactory.createAIPlayer());     
             }
         }
-
         gameManager.AddNewCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
     }
