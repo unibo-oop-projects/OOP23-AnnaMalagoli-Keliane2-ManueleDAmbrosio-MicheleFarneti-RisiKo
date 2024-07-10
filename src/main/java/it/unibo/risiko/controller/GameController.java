@@ -93,6 +93,7 @@ public class GameController implements GameViewObserver {
     @Override
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
+            resetAttack();
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
             System.out.println(currentPlayer().get().getTarget().showTargetDescription());
             redrawView();
@@ -283,10 +284,9 @@ public class GameController implements GameViewObserver {
             if (index < numberOfStandardPlayers) {
                 gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
             } else {
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+                gameFactory.addNewPlayer(playerFactory.createAIPlayer());     
             }
         }
-
         gameManager.AddNewCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
     }

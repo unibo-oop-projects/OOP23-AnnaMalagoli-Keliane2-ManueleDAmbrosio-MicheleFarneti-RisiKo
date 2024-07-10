@@ -103,21 +103,27 @@ public class GameImpl implements Game {
     @Override
     public boolean nextTurn() {
         if (skipTurnPossible()) {
-            if (status == GameStatus.TERRITORY_OCCUPATION) {
-                armiesPlaced = 0;
-                if (getTotalArmiesLeftToPlace() == 0) {
-                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+            switch (status) {
+                case TERRITORY_OCCUPATION:
+                    armiesPlaced = 0;
+                    if (getTotalArmiesLeftToPlace() == 0) {
+                        players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                        status = status.next();
+                    } 
+                    updateCurrentPlayer();
+                    return true;
+                case ARMIES_PLACEMENT:
                     status = status.next();
-                } 
-                updateCurrentPlayer();
-                return true;
-            } else if (status == GameStatus.ARMIES_PLACEMENT) {
-                status = status.next();
-            } else if (status == GameStatus.READY_TO_ATTACK) {
-                status = status.next();
-                players.get(nextPlayerIfNotDefeated()).computeReinforcements();
-                updateCurrentPlayer();
-                return true;
+                    return true;
+                case ATTACKING:
+                    status = GameStatus.READY_TO_ATTACK;
+                case READY_TO_ATTACK:
+                    status = status.next();
+                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                    updateCurrentPlayer();
+                    return true;
+                default:
+                    break;
             }
         }
         return false;
@@ -133,6 +139,7 @@ public class GameImpl implements Game {
             case ARMIES_PLACEMENT:
                 return players.get(activePlayer).getArmiesToPlace() == 0;
             case READY_TO_ATTACK:
+            case ATTACKING:
                 return true;
             default:
                 return players.get(activePlayer).getArmiesToPlace() == 0;
