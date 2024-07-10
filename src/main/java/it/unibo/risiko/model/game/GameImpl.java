@@ -12,6 +12,7 @@ import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
 import it.unibo.risiko.model.objective.DestroyPlayerTarget;
 import it.unibo.risiko.model.objective.Target;
 import it.unibo.risiko.model.objective.TargetType;
+import it.unibo.risiko.model.player.AIBehaviourImpl;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -87,7 +88,7 @@ public class GameImpl implements Game {
             activePlayer = nextPlayer();
         }
         activePlayer = 0;
-        handleAIBehavior();
+        handleAIBehaviour();
     }
 
     @Override
@@ -140,7 +141,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void placeArmies(final Territory territory, final int nArmies){
+    public boolean placeArmies(final Territory territory, final int nArmies){
         if(players.get(activePlayer).getArmiesToPlace()>0){
             if(status == GameStatus.TERRITORY_OCCUPATION){
                 if(armiesPlaced < 3){
@@ -148,6 +149,7 @@ public class GameImpl implements Game {
                         territory.addArmies(nArmies);
                         armiesPlaced ++;
                         players.get(activePlayer).decrementArmiesToPlace();
+                        return true;
                     }
                 }
             } else if ( status == GameStatus.ARMIES_PLACEMENT){
@@ -155,9 +157,11 @@ public class GameImpl implements Game {
                     territory.addArmies(nArmies);
                     players.get(activePlayer).decrementArmiesToPlace();
                     nextTurn();
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     @Override
@@ -197,12 +201,30 @@ public class GameImpl implements Game {
      */
     private void updateCurrentPlayer(){
         activePlayer = nextPlayerIfNotDefeated();
-        handleAIBehavior();
+        handleAIBehaviour();
     }
 
-    /** Based on the game status, handles AI's behavior */
-    private void handleAIBehavior() {
-        if(players.get(activePlayer).isAI()){
+    /** 
+     * 
+     * Based on the game status, handles AI's behavior
+     * 
+     */
+    private void handleAIBehaviour() {
+        if(getCurrentPlayer().isAI()){
+            var AIBehaviour = new AIBehaviourImpl(getCurrentPlayer());
+            switch (status) {
+                case TERRITORY_OCCUPATION:
+                case ARMIES_PLACEMENT:
+                        while(this.placeArmies(AIBehaviour.decidePositioning(),1));
+                        this.nextTurn();
+                    break;
+                case READY_TO_ATTACK:
+                    if(AIBehaviour.decideAttack(getTerritoriesList())){
+                        //TO DO
+                    }
+                    this.nextTurn();
+                    break;
+            }
         }
     }
 

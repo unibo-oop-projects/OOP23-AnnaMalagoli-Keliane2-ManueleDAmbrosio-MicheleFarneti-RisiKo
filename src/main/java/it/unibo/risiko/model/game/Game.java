@@ -63,8 +63,9 @@ public interface Game {
      * owns it
      * @param territory
      * @param nArmies
+     * @return True if it was possbile to place the armies, false otherwise.
      */
-    public void placeArmies(final Territory territory, final int nArmies);
+    public boolean placeArmies(final Territory territory, final int nArmies);
 
     /**
      * 
