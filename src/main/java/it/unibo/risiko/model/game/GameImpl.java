@@ -230,7 +230,7 @@ public class GameImpl implements Game {
                     if (aiBehaviour.decideAttack(getTerritoriesList())) {
                         AttackPhase attackPhase = new AttackPhaseImpl(
                             getCurrentPlayer(), 
-                            aiBehaviour.getNextAttackingTerritory(getTerritoriesList()),
+                            aiBehaviour.getNextAttackingTerritory(),
                             aiBehaviour.decideAttackingArmies(),
                             getOwner(aiBehaviour.getNextAttackedTerritory()),
                             aiBehaviour.getNextAttackedTerritory());
