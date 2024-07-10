@@ -117,6 +117,7 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel selectorPanel(String selectorText) {
+        final int TEXT_VALUE_WIDTH = 2;
         final int MIN_ATTACKING_ARMIES = 1;
         final int MAX_ATTACKING_ARMIES = 3;
         JPanel selectorPanel = new JPanel();
@@ -136,12 +137,14 @@ public class AttackPanel extends JPanel {
 
         increaser.addActionListener(e -> {
             increase(textValue, MAX_ATTACKING_ARMIES);
-            if (attackersNumber >= MAX_ATTACKING_ARMIES) {
+            if (attackersNumber >= MAX_ATTACKING_ARMIES || attackersNumber >= attackingTerritoryArmies) {
                 increaser.setEnabled(false);
             }
             decreaser.setEnabled(true);
         });
 
+        textValue.setPreferredSize(new Dimension(textValue.getPreferredSize().width * TEXT_VALUE_WIDTH,
+                textValue.getPreferredSize().height));
         selectorPanel.setLayout(new FlowLayout());
         selectorPanel.setBackground(BLACK_COLOR);
         selectorPanel.add(textField);
@@ -277,6 +280,7 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel conquerPanel(int minArmies, int maxArmies) {
+        final int TEXT_WIDTH_FACTOR = 3;
         final int MID_HEIGHT_FACTOR = 2;
         final int TEXT_HEIGHT_FACTOR = 5;
         JPanel conquerPanel = new JPanel();
@@ -287,6 +291,9 @@ public class AttackPanel extends JPanel {
         JButton decreaser = selectorButton("-");
         JButton increaser = selectorButton("+");
 
+        movingArmies.setPreferredSize(
+                new Dimension(movingArmies.getPreferredSize().width * TEXT_WIDTH_FACTOR,
+                        movingArmies.getPreferredSize().height));
         armiesToMove = minArmies;
         decreaser.setEnabled(false);
         decreaser.addActionListener(e -> {

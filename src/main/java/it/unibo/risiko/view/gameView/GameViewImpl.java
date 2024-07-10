@@ -275,7 +275,7 @@ public class GameViewImpl implements GameView {
         playerArmiesLabel.setOpaque(true);
 
         attackBarLayoutPane.add(turnTank, TURN_TANK_LAYER, 0);
-        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);     
+        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);
     }
 
     /**
@@ -520,10 +520,15 @@ public class GameViewImpl implements GameView {
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
         setGameViewButtonsEnabled(false);
         final int SIZE_FACTOR = 2;
-        attackPanel = new AttackPanel(GAME_FRAME_HEIGHT / SIZE_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR, attacking,
+        final int LOCATION_FACTOR = 6;
+        attackPanel = new AttackPanel(
+                GAME_FRAME_HEIGHT / SIZE_FACTOR,
+                GAME_FRAME_WIDTH / SIZE_FACTOR,
+                attacking,
                 defending,
-                attackingTerritoryArmies, gameViewObserver);
-        attackPanel.setLocation(GAME_FRAME_WIDTH / SIZE_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR);
+                attackingTerritoryArmies,
+                gameViewObserver);
+        attackPanel.setLocation(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR);
         attackPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, attackPanel);
     }
@@ -545,7 +550,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showInitializationWindow(Map<String,Integer> mapNames) {
+    public void showInitializationWindow(Map<String, Integer> mapNames) {
         var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);

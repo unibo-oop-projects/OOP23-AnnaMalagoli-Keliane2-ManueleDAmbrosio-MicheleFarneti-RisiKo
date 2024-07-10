@@ -1,8 +1,10 @@
 package it.unibo.risiko.view.gameView;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +46,6 @@ public class NewGameInitViewImpl extends JPanel {
 
     public NewGameInitViewImpl(final int width, final int height, final Map<String, Integer> maps,
             GameViewObserver observer) {
-        final int ROWS = 5;
-        final int COLS = 1;
         this.width = width;
         this.height = height;
         this.observer = observer;
@@ -61,32 +61,28 @@ public class NewGameInitViewImpl extends JPanel {
         updateMaxPlayers();
 
         this.setBackground(BACKGROUND_COLOR);
-        this.setLayout(new GridLayout(ROWS, COLS));
+        this.setLayout(new BorderLayout());
 
-        this.add(new StandardTextField("NEW GAME"));
-        this.add(mapSelectorPanel(mapList));
-        this.add(playersSelectorPanel("PLAYERS: ", true));
-        this.add(playersSelectorPanel("BOTS: ", false));
+        this.add(titlePanel(), BorderLayout.NORTH);
+        this.add(centralPanel(), BorderLayout.CENTER);
         this.add(new ContinuePanel("START", width, e -> {
             if (startable) {
                 observer.startNewGame(mapName, humanPlayers, aiPlayers);
             }
-        }));
+        }), BorderLayout.SOUTH);
         this.setVisible(true);
 
     }
 
     private void redrawPlayerPanels() {
         this.removeAll();
-        this.add(new StandardTextField("NEW GAME"));
-        this.add(mapSelectorPanel(mapList));
-        this.add(playersSelectorPanel("PLAYERS: ", true));
-        this.add(playersSelectorPanel("BOTS: ", false));
+        this.add(titlePanel(), BorderLayout.NORTH);
+        this.add(centralPanel(), BorderLayout.CENTER);
         this.add(new ContinuePanel("START", width, e -> {
             if (startable) {
                 observer.startNewGame(mapName, humanPlayers, aiPlayers);
             }
-        }));
+        }), BorderLayout.SOUTH);
         this.revalidate();
         this.repaint();
     }
@@ -136,18 +132,44 @@ public class NewGameInitViewImpl extends JPanel {
         this.startable = isStartable;
     }
 
+    private JTextField titlePanel() {
+        final int TITLE_HEIGHT = height / 6;
+        JTextField title = new StandardTextField("NEW GAME");
+        title.setPreferredSize(new Dimension(width, TITLE_HEIGHT));
+        title.setFont(new Font("Arial", Font.BOLD, 26));
+
+        return title;
+    }
+
+    private JPanel centralPanel() {
+        final int CENTRAL_PANEL_HEIGHT = width / 3;
+        final int ROWS = 3;
+        final int COLS = 1;
+        JPanel central = new JPanel();
+        central.setLayout(new GridLayout(ROWS, COLS));
+        central.setPreferredSize(new Dimension(width, CENTRAL_PANEL_HEIGHT));
+        central.add(mapSelectorPanel(mapList));
+        central.add(playersSelectorPanel("PLAYERS: ", true));
+        central.add(playersSelectorPanel("BOTS: ", false));
+
+        return central;
+    }
+
     private JPanel mapSelectorPanel(final List<String> mapList) {
-        final int TEXT_WIDTH = 100;
+        final int TEXT_WIDTH = width / 6;
         final int HEIGHT_SIZE = 4;
+        final Font selectorFont = new Font("Arial", Font.BOLD, 26);
         int numberOfMaps = mapList.size();
         JPanel mapSelectorPanel = new JPanel();
         JTextField mapSelectionText = new StandardTextField("SELECT THE MAP YOU WANT TO PLAY: ");
-        JTextField nameTextField = new StandardTextField(mapName);
+        JTextField nameTextField = new StandardTextField(mapName.toUpperCase());
         JButton nextName = new DefaultButton("NEXT");
 
         mapSelectionText.setBackground(BACKGROUND_COLOR);
+        mapSelectionText.setFont(selectorFont);
         nameTextField.setForeground(MAP_TEXT_COLOR);
         nameTextField.setBackground(BACKGROUND_COLOR);
+        nameTextField.setFont(selectorFont);
         nameTextField.setPreferredSize(new Dimension(TEXT_WIDTH, mapSelectionText.getPreferredSize().height));
 
         nextName.setPreferredSize(new Dimension(TEXT_WIDTH, mapSelectionText.getPreferredSize().height));
@@ -159,7 +181,7 @@ public class NewGameInitViewImpl extends JPanel {
             resetPlayers();
             updateMaxPlayers();
             mapName = mapList.get(mapIndex);
-            nameTextField.setText(mapName);
+            nameTextField.setText(mapName.toUpperCase());
             redrawPlayerPanels();
         });
 
@@ -174,6 +196,7 @@ public class NewGameInitViewImpl extends JPanel {
     }
 
     private JPanel playersSelectorPanel(final String playerType, final boolean isHuman) {
+        final int PLAYER_SELECTOR_HEIGHT = height / 5;
         JPanel playerSelectorPanel = new JPanel();
         JTextField typeText = new StandardTextField(playerType);
         JTextField value = new StandardTextField(Integer.toString(NO_PLAYERS));
@@ -211,6 +234,7 @@ public class NewGameInitViewImpl extends JPanel {
 
         typeText.setBackground(BACKGROUND_COLOR);
         value.setBackground(BACKGROUND_COLOR);
+        playerSelectorPanel.setPreferredSize(new Dimension(width, PLAYER_SELECTOR_HEIGHT));
         playerSelectorPanel.setLayout(new FlowLayout());
         playerSelectorPanel.setBackground(BACKGROUND_COLOR);
         playerSelectorPanel.add(typeText);
