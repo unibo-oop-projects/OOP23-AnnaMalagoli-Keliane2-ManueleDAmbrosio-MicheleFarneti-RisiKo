@@ -51,7 +51,7 @@ public class GameController implements GameViewObserver {
     public GameController() {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
 
-        view = new GameViewImpl(1600, 900,resourcesPackageString);
+        view = new GameViewImpl(1600,900,resourcesPackageString);
         this.view.start();
         this.view.setObserver(this);
         initializeNewGame();
@@ -123,7 +123,7 @@ public class GameController implements GameViewObserver {
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
                 break;
             case ATTACKING:
-                if(currentPlayerOwns(territory)){
+                if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
                     setFighter(territoryName, true);
                 }
                 else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
