@@ -22,6 +22,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -155,6 +156,9 @@ public class GameViewImpl implements GameView {
 
     private final String resourcesLocator;
 
+    private JButton skipButton;
+    private JButton attackButton;
+
     /**
      * Initialzizes the GUI for the game creating all of its main components.
      * 
@@ -173,6 +177,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showGameWindow(String mapName) {
+        mainFrame.getContentPane().removeAll();
         mainFrame.add(baseLayoutPane, BorderLayout.CENTER);
 
         // GamePanel and Basic layout initialization
@@ -195,6 +200,23 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
         setupAttackBar();
+
+    }
+
+    /**
+     * 
+     * Private function used to deactivate gameView's buttons, used whenever the
+     * attack panel pops up
+     * so that the user can't mess around with the rest of the game.
+     * 
+     * @param enabled True if the buttons are going to get enabled, false if it's
+     *                going to deactivate them
+     * @author Michele Farneti
+     */
+    private void setGameViewButtonsEnabled(Boolean enabled) {
+        tanksMap.entrySet().forEach(e -> e.getValue().button().setEnabled(enabled));
+        skipButton.setEnabled(enabled);
+        attackButton.setEnabled(enabled);
     }
 
     /**
@@ -226,19 +248,19 @@ public class GameViewImpl implements GameView {
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         countryBarPanel.setEditable(false);
 
-        var attackButton = new CustomButton("ATTACK");
+        attackButton = new CustomButton("ATTACK");
         attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton, 5, 0);
         attackButton.addActionListener(e -> gameViewObserver.setAttacking());
 
-        var skipButton = new CustomButton("SKIP");
+        skipButton = new CustomButton("SKIP");
         skipButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
                 ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(skipButton, 5, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
 
-        turnTank = new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
+        turnTank = new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -253,7 +275,7 @@ public class GameViewImpl implements GameView {
         playerArmiesLabel.setOpaque(true);
 
         attackBarLayoutPane.add(turnTank, TURN_TANK_LAYER, 0);
-        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);
+        attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);     
     }
 
     /**
@@ -309,7 +331,6 @@ public class GameViewImpl implements GameView {
      * @param mapPath The path of the image of the selected map
      */
     private void paintMap(String mapPath) {
-        System.out.println(mapPath);
         Optional<Image> mapImage = readImage(mapPath);
         if (mapImage.isPresent()) {
             mapPanel = new BackgroundImagePanel(mapImage.get());
@@ -353,7 +374,8 @@ public class GameViewImpl implements GameView {
     public void showTanks(List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
-                new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"), new JLabel("0"))));
+                new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
+                new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
             tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(),
@@ -382,12 +404,14 @@ public class GameViewImpl implements GameView {
     public void showTurnIcon(String player, int playerIndex, boolean isAI) {
         if (isAI) {
             iconsMap.put(
-                    new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
+                    new ColoredImageButton(resourcesLocator,
+                            FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         } else {
             iconsMap.put(
-                    new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
+                    new ColoredImageButton(resourcesLocator,
+                            FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         }
@@ -494,8 +518,10 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
+        setGameViewButtonsEnabled(false);
         final int SIZE_FACTOR = 3;
-        attackPanel = new AttackPanel(GAME_FRAME_HEIGHT / SIZE_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR, attacking, defending,
+        attackPanel = new AttackPanel(GAME_FRAME_HEIGHT / SIZE_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR, attacking,
+                defending,
                 attackingTerritoryArmies, gameViewObserver);
         attackPanel.setLocation(GAME_FRAME_WIDTH / SIZE_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR);
         attackPanel.setVisible(true);
@@ -504,6 +530,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void closeAttackPanel() {
+        setGameViewButtonsEnabled(true);
         attackPanel.setVisible(false); // NEED TO CHECK IF THE PANEL CLOSES
     }
 
