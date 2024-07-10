@@ -32,7 +32,7 @@ import java.util.List;
 public class AttackPanel extends JPanel {
     private static final String SEP = File.separator;
     private static final String PATH = "src" + SEP + "main" + SEP + "resouces" + SEP + "it" + SEP + "unibo" + SEP
-            + "risiko" + SEP + "dice";
+            + "risiko" + SEP + "dice" + SEP;
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final int DEFAULT_ATTACKING_ARMIES = 1;
     private static final int DEFAULT_MOVING_ARMIES = 1;
@@ -177,8 +177,8 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel sidePanel(String diceType) {
-        final int SIZE_FACTOR = 3;
-        final int WIDTH_FACTOR = 2;
+        final int SIZE_FACTOR = 4;
+        final int WIDTH_FACTOR = 3;
         JPanel sidePanel = new JPanel();
         int size = height / SIZE_FACTOR;
         String path = PATH + "Standard" + diceType + "Dice.png";
