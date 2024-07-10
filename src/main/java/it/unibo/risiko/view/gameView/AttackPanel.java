@@ -31,7 +31,7 @@ import java.util.List;
 
 public class AttackPanel extends JPanel {
     private static final String SEP = File.separator;
-    private static final String PATH = "src" + SEP + "main" + SEP + "resouces" + SEP + "it" + SEP + "unibo" + SEP
+    private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice" + SEP;
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final int DEFAULT_ATTACKING_ARMIES = 1;

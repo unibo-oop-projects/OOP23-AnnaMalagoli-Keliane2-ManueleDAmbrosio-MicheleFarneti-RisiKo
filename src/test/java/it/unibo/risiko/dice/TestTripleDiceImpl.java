@@ -1,4 +1,4 @@
-package it.unibo.risiko;
+package it.unibo.risiko.dice;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
