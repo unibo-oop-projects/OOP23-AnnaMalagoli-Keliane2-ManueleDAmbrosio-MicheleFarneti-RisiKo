@@ -17,9 +17,6 @@ public class GameMapImpl implements GameMap {
     
     private static final Integer minPlayers = 2;
 
-    private static final Integer MAX_PLAYERS_SMALL_MAPS = 2;
-    private static final Integer MAX_PLAYERS_BIG_MAPS = 6;
-
     private static final int MINIMUM_ARMIES = 25;
     private static final int ARMIES_STEP = 5;
 
@@ -35,11 +32,7 @@ public class GameMapImpl implements GameMap {
         this.territories = new Territories(buildResourceLocator("territories.txt")); 
         this.deck = new DeckImpl(buildResourceLocator("cards.txt")); 
 
-        if(this.territories.getListContinents().size()<= 3){
-            maxPlayers = MAX_PLAYERS_SMALL_MAPS ;
-        }else{
-            maxPlayers = MAX_PLAYERS_BIG_MAPS;
-        }
+        maxPlayers = GameMap.getMaxPlayers(buildResourceLocator("territories.txt"));
     }
 
     private String buildResourceLocator(String resourceName){

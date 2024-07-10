@@ -545,7 +545,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showInitializationWindow(List<String> mapNames) {
+    public void showInitializationWindow(Map<String,Integer> mapNames) {
         var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);

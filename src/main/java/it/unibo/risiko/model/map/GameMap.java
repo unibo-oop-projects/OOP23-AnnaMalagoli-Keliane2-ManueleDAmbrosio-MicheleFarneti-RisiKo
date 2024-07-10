@@ -1,5 +1,9 @@
 package it.unibo.risiko.model.map;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import it.unibo.risiko.model.cards.Deck;
@@ -45,4 +49,24 @@ public interface GameMap {
      * @return The starting deck
      */
     public Deck getDeck();
+
+    /**
+     * 
+     * @param mapPath The path for the map's folder in the file system.
+     * @return The maxNUmberOfPLayers for the map
+     */
+    public static Integer getMaxPlayers(String mapPath){
+        final Integer MAX_PLAYERS_SMALL_MAPS = 2;
+        final Integer MAX_PLAYERS_BIG_MAPS = 6;
+        final Integer BIG_MAP_LIMIT = 30;
+        try{
+            var territoriesNumber = Files.lines(Path.of(mapPath + File.separator + "territories.txt")).count()/2;
+            if(territoriesNumber >= BIG_MAP_LIMIT){
+                return MAX_PLAYERS_BIG_MAPS;
+            }else{
+                return MAX_PLAYERS_SMALL_MAPS;
+            }
+        }catch(IOException e){}
+        return MAX_PLAYERS_SMALL_MAPS;  
+    }
 }

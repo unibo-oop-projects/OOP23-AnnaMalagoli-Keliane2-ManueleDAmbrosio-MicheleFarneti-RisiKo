@@ -1,8 +1,10 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.game.AttackPhase;
@@ -60,7 +62,7 @@ public class GameController implements GameViewObserver {
      * Window
      */
     private void initializeNewGame() {
-        view.showInitializationWindow(gameManager.getAvialableMaps());
+        view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
     /**
