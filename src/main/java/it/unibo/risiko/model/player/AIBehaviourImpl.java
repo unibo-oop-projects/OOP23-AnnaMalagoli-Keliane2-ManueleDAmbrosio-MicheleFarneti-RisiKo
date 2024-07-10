@@ -14,7 +14,7 @@ import it.unibo.risiko.model.map.Territory;
  * @author Manuele D'Ambrosio
  */
 
-public class EasyModePlayerImpl implements EasyModePlayer {
+public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private Player player;
@@ -22,7 +22,7 @@ public class EasyModePlayerImpl implements EasyModePlayer {
     private Optional<Territory> nextAttackedTerritory;
     private int territoryIndex;
 
-    protected EasyModePlayerImpl(final Player player) {
+    public AIBehaviourImpl(final Player player) {
         this.player = player;
         this.territoryIndex = INITIAL_INDEX;
     }

@@ -11,7 +11,7 @@ import it.unibo.risiko.model.map.Territory;
  * @author Manuele D'Ambrosio
  */
 
-public interface EasyModePlayer {
+public interface AIBehaviour {
 
     /**
      * This method is used to get a territory owned

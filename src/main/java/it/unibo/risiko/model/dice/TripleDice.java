@@ -33,7 +33,7 @@ public interface TripleDice {
         }
         for (int result : defenderThrows.getResults()) {
             if (result != NOT_A_THROW) {
-                attackerArmies++;
+                defenderArmies++;
             }
         }
         maxLostArmies = Math.min(attackerArmies, defenderArmies);
