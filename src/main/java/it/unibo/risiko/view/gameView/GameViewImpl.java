@@ -77,8 +77,8 @@ public class GameViewImpl implements GameView {
     private static final Integer TURN_TANK_HEIGHT = 100;
     private static final Integer TURN_TANK_LAYER = 5;
 
-    private static final int ARMIES_LABEL_HEIGHT = 15;
-    private static final int ARMIES_LABEL_WIDTH = 15;
+    private static final int ARMIES_LABEL_HEIGHT = 17;
+    private static final int ARMIES_LABEL_WIDTH = 17;
     private static final int ARMIES_LABEL_FONT_SIZE = 14;
 
     private static final int PLAYER_ARMIES_LABEL_HEIGHT = 23;
@@ -369,7 +369,9 @@ public class GameViewImpl implements GameView {
                     (int) tank.getValue().button().getBounds().getLocation().getY() + TANKS_HEIGTH
                             - ARMIES_LABEL_HEIGHT,
                     ARMIES_LABEL_WIDTH, ARMIES_LABEL_HEIGHT);
-            tank.getValue().armiesCount().setForeground(Color.white);
+            tank.getValue().armiesCount().setBackground(Color.white);
+            tank.getValue().armiesCount().setForeground(Color.black);
+            tank.getValue().armiesCount().setOpaque(true);
             tank.getValue().armiesCount().setFont(new Font("Arial", Font.BOLD, ARMIES_LABEL_FONT_SIZE));
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
             mapLayoutPane.add(tank.getValue().armiesCount(), TANK_LAYER, 0);
@@ -450,8 +452,8 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void resetFightingTerritory(String figtingTerritory) {
-        tanksMap.get(figtingTerritory).button().setBorderPainted(false);
+    public void resetFightingTerritory(String fightingTerritory) {
+        tanksMap.get(fightingTerritory).button().setBorderPainted(false);
     }
 
     @Override
