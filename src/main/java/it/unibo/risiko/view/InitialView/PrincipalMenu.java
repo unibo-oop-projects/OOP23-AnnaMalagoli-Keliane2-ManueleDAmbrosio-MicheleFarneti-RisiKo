@@ -14,13 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import it.unibo.risiko.controller.GameController;
+
 public class PrincipalMenu extends JPanel {
     private GameFrame gameFrame;
-    private JLabel picture;
-    private ImageIcon backgroundImage = new ImageIcon("src\\main\\java\\it\\unibo\\risiko\\resources\\images\\background.jpg");
-
-    public PrincipalMenu(GameFrame f){
+    //private JLabel picture;
+    private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
+    private GameController controller;
+    public PrincipalMenu(GameFrame f, GameController controller){
         this.gameFrame=f;
+        this.controller=controller;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(700, 700));
@@ -72,8 +75,7 @@ public class PrincipalMenu extends JPanel {
      * This method starts a new game
      */
     private void startNewGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startNewGame'");
+        this.controller.initializeNewGame();
     }
 
     /**

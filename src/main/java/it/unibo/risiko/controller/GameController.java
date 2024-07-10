@@ -16,6 +16,7 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
+import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -46,20 +47,20 @@ public class GameController implements GameViewObserver {
      * 
      * @author Michele Farneti
      */
-    public GameController() {
+    public GameController(GameFrame gameFrame) {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
 
-        view = new GameViewImpl(1600, 900,resourcesPackageString);
+        view = new GameViewImpl(1600, 900,resourcesPackageString, gameFrame);
         this.view.start();
         this.view.setObserver(this);
-        initializeNewGame();
+        //initializeNewGame();
     }
 
     /**
      * Method used by the controller to tell the view to show the gameInitiliazation
      * Window
      */
-    private void initializeNewGame() {
+    public void initializeNewGame() {
         view.showInitializationWindow(gameManager.getAvialableMaps());
     }
 

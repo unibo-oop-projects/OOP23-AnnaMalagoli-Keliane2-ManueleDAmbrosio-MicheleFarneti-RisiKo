@@ -2,13 +2,17 @@ package it.unibo.risiko.view.InitialView;
 
 import java.awt.*;
 import javax.swing.*;
+
+import it.unibo.risiko.controller.GameController;
 public class GameFrame{
     private JFrame frame;
     private PrincipalMenu menuPanel;
     private OptionSubMenu optionMenu;
+    private GameController controller;
 
     public GameFrame() { 
-        this.menuPanel=new PrincipalMenu(this);
+        this.controller=new GameController(this);
+        this.menuPanel=new PrincipalMenu(this,this.controller);
         this.optionMenu=new OptionSubMenu(this.menuPanel);
         this.frame = new JFrame("***Risiko***");
         this.frame.setLayout(new BorderLayout());
@@ -43,7 +47,7 @@ public class GameFrame{
      */
     private void show() {
         this.frame.pack();
-        this.frame.setLocationRelativeTo(null);
+        //this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true);
     }
 

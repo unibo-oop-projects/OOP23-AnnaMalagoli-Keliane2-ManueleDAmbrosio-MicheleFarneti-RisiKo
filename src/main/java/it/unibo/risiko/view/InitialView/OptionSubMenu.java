@@ -24,7 +24,7 @@ import javax.swing.JTextArea;
 public class OptionSubMenu extends JPanel{
     private String screenResolution="700x700";
     private ButtonGroup grp;
-    private ImageIcon backgroundImage = new ImageIcon("src\\main\\java\\it\\unibo\\risiko\\resources\\images\\background.jpg");
+    private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
     public OptionSubMenu(PrincipalMenu p) {
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
@@ -37,7 +37,7 @@ public class OptionSubMenu extends JPanel{
         this.add(Box.createRigidArea(new Dimension(0,5)));
         grp=createRisolutions(risPane);
         risPane.setLayout(new BoxLayout(risPane, BoxLayout.PAGE_AXIS));
-        risPane.setBorder(BorderFactory.createEmptyBorder(0,28,0,25));
+        risPane.setBorder(BorderFactory.createEmptyBorder(0,25,0,21));
         //laying out rules button
         JButton regolamento=p.addButtonToMenu("Game Rules", this);
         //creation of the panel containing the buttons back and save.
@@ -90,7 +90,7 @@ public class OptionSubMenu extends JPanel{
      * @return a string that contains the rules of the game
      */
     private String getGameRules() {
-        String rules="", line, fileName="src\\main\\java\\it\\unibo\\risiko\\resources\\gameRules\\rules.txt";
+        String rules="", line, fileName="src\\main\\resources\\it\\unibo\\risiko\\gameRules\\rules.txt";
 
         try{
             FileReader fileReader=new FileReader(fileName);
@@ -150,9 +150,9 @@ public class OptionSubMenu extends JPanel{
         ButtonGroup g=new ButtonGroup();
         JPanel p1=createResolutionSubPanels();
         JPanel p2=createResolutionSubPanels();
-        createRadioButton(g,p1,"800x600");
+        createRadioButton(g,p1,"1600x900");
         createRadioButton(g,p1,"1820x1080");
-        createRadioButton(g,p2,"980x720");
+        createRadioButton(g,p2,"1800x950");
         createRadioButton(g,p2,"1024x1024");
         p.add(p1);
         p.add(p2);

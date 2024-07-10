@@ -1,5 +1,6 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
@@ -139,7 +140,8 @@ public class GameViewImpl implements GameView {
     private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
     private HashMap<ColoredImageButton, String> iconsMap = new HashMap<>();
     private GameViewObserver gameViewObserver;
-    private JFrame mainFrame = new JFrame();
+    private JPanel mainFrame = new JPanel();
+    private GameFrame gameFrame = new GameFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
     private JLayeredPane mapLayoutPane = new JLayeredPane();
     private JLayeredPane attackBarLayoutPane = new JLayeredPane();
@@ -161,14 +163,14 @@ public class GameViewImpl implements GameView {
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator) {
+    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator, GameFrame gameFrame) {
         GAME_FRAME_WIDTH = frameWidth;
         GAME_FRAME_HEIGHT = frameHeight;
         this.resourcesLocator = resourcesLocator;
-
+        this.gameFrame=gameFrame;
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
-        mainFrame.setTitle("Risiko!");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //mainFrame.setTitle("Risiko!!");
+        //mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override
@@ -330,6 +332,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void start() {
+        this.gameFrame.updatePanel(mainFrame);
         this.mainFrame.setVisible(true);
     }
 
@@ -519,8 +522,9 @@ public class GameViewImpl implements GameView {
     public void showInitializationWindow(List<String> mapNames) {
         var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
                 gameViewObserver);
-        mainFrame.add(initializationPanel, BorderLayout.CENTER);
-        mainFrame.validate();
+        //mainFrame.add(initializationPanel, BorderLayout.CENTER);
+        //mainFrame.validate();
+        gameFrame.updatePanel(initializationPanel);
     }
 
 }
