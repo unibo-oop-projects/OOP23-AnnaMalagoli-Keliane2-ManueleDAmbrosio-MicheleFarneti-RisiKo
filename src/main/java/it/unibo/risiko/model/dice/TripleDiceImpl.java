@@ -20,8 +20,13 @@ public class TripleDiceImpl extends Dice implements TripleDice {
     private List<Integer> results = new ArrayList<>();
 
     public TripleDiceImpl(final int numberOfThrows) {
+        int diceThrows = numberOfThrows;
+        if (diceThrows > MAX_THROWS) {
+            diceThrows = MAX_THROWS;
+        }
+
         for (int i = 0; i < MAX_THROWS; i++) {
-            if (i < numberOfThrows) {
+            if (i < diceThrows) {
                 results.add(i, diceThrow());
             } else {
                 results.add(i, NOT_A_THROW);
@@ -45,6 +50,11 @@ public class TripleDiceImpl extends Dice implements TripleDice {
     private void orderResults() {
         Collections.sort(results);
         Collections.reverse(results);
+    }
+
+    //This method is only used for tests.
+    public void setDummyResults(final int d1, final int d2, final int d3) {
+        this.results = List.of(d1, d2, d3);
     }
 
 }

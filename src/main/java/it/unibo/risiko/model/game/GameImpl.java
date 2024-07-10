@@ -12,8 +12,6 @@ import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
 import it.unibo.risiko.model.objective.DestroyPlayerTarget;
 import it.unibo.risiko.model.objective.Target;
 import it.unibo.risiko.model.objective.TargetType;
-import it.unibo.risiko.model.player.EasyModePlayer;
-import it.unibo.risiko.model.player.EasyModePlayerImpl;
 import it.unibo.risiko.model.player.Player;
 
 /**
