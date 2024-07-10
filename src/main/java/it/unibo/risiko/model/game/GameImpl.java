@@ -13,6 +13,7 @@ import it.unibo.risiko.model.objective.DestroyPlayerTarget;
 import it.unibo.risiko.model.objective.Target;
 import it.unibo.risiko.model.objective.TargetType;
 import it.unibo.risiko.model.player.EasyModePlayer;
+import it.unibo.risiko.model.player.EasyModePlayerImpl;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -204,15 +205,6 @@ public class GameImpl implements Game {
     /** Based on the game status, handles AI's behavior */
     private void handleAIBehavior() {
         if(players.get(activePlayer).isAI()){
-            var AIplayer = (EasyModePlayer)players.get(activePlayer);
-            switch (status) {
-                case TERRITORY_OCCUPATION:
-                    placeArmies(AIplayer.decidePositioning(),PLACEABLE_ARMIES_PER_TURN);
-                    break;
-            
-                default:
-                    break;
-            }
         }
     }
 

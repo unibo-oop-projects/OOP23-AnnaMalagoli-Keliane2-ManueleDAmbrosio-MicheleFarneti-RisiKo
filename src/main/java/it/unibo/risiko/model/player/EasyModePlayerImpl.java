@@ -22,7 +22,7 @@ public class EasyModePlayerImpl implements EasyModePlayer {
     private Optional<Territory> nextAttackedTerritory;
     private int territoryIndex;
 
-    protected EasyModePlayerImpl(final Player player) {
+    public EasyModePlayerImpl(final Player player) {
         this.player = player;
         this.territoryIndex = INITIAL_INDEX;
     }
