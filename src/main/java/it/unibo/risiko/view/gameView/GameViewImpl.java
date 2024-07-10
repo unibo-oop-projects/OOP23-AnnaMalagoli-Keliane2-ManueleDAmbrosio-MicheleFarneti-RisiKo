@@ -238,7 +238,7 @@ public class GameViewImpl implements GameView {
         attackBarLayoutPane.add(skipButton, 5, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
 
-        turnTank = new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
+        turnTank = new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -353,7 +353,7 @@ public class GameViewImpl implements GameView {
     public void showTanks(List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
-                new ColoredImageButton(FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"), new JLabel("0"))));
+                new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"), new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
             tank.getValue().button().setBounds(tanksCoordinates.get(tank.getKey()).x(),
@@ -382,12 +382,12 @@ public class GameViewImpl implements GameView {
     public void showTurnIcon(String player, int playerIndex, boolean isAI) {
         if (isAI) {
             iconsMap.put(
-                    new ColoredImageButton(FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
+                    new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         } else {
             iconsMap.put(
-                    new ColoredImageButton(FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
+                    new ColoredImageButton(resourcesLocator,FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         }
