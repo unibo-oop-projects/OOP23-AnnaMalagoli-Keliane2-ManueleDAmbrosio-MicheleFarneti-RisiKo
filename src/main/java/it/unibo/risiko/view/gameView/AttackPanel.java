@@ -85,7 +85,7 @@ public class AttackPanel extends JPanel {
     }
 
     private void increase(final JTextField textValue, final int max) {
-        if (attackersNumber < max && attackersNumber < attackingTerritoryArmies) {
+        if (attackersNumber < max && attackersNumber < attackingTerritoryArmies - DEFAULT_MOVING_ARMIES) {
             attackersNumber++;
             textValue.setText(Integer.toString(attackersNumber));
         }

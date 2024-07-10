@@ -66,7 +66,7 @@ public class NewGameInitViewImpl extends JPanel {
         this.add(titlePanel(), BorderLayout.NORTH);
         this.add(centralPanel(), BorderLayout.CENTER);
         this.add(new ContinuePanel("START", width, e -> {
-            if (startable) {
+            if (startable && humanPlayers != NO_PLAYERS) {
                 observer.startNewGame(mapName, humanPlayers, aiPlayers);
             }
         }), BorderLayout.SOUTH);
