@@ -29,7 +29,7 @@ public class AIBehaviourImpl implements AIBehaviour {
     }
 
     @Override
-    public Territory getNextAttackingTerritory(List<Territory> territoryList) {
+    public Territory getNextAttackingTerritory() {
         return this.nextAttackingTerritory.get();
     }
 

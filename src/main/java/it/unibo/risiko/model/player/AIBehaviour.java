@@ -21,7 +21,7 @@ public interface AIBehaviour {
      * @param territoryList - List of the territories in the current map.
      * @return the next territory the AI wants to attack from.
      */
-    Territory getNextAttackingTerritory(List<Territory> territoryList);
+    Territory getNextAttackingTerritory();
 
     /**
      * This method is used to get a territory the AI player
