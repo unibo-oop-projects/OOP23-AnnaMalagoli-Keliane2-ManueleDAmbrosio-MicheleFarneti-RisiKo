@@ -64,15 +64,16 @@ public class PrincipalMenu extends JPanel {
      * can continue
      */
     private void continueSavedGame() {
-        //this.gameFrame.getController().initializeNewGame();
+        this.gameFrame.unshow();
+        this.gameFrame.getController().setupGameView(this.gameFrame.getFrameRisolution());
     }
 
     /**
      * This method starts a new game
      */
     private void startNewGame() {
-        new GameController();
-        //this.gameFrame.
+        this.gameFrame.unshow();
+        this.gameFrame.getController().initializeNewGame(this.gameFrame.getFrameRisolution());
     }
 
     /**

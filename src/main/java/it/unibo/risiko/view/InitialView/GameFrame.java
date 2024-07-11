@@ -9,10 +9,12 @@ public class GameFrame{
     private JFrame frame;
     private PrincipalMenu menuPanel;
     private OptionSubMenu optionMenu;
+    private GameController controller;
 
     public GameFrame() { 
-        this.menuPanel=new PrincipalMenu(this);
-        this.optionMenu=new OptionSubMenu(this.menuPanel);
+        this.controller = new GameController(this);
+        this.menuPanel = new PrincipalMenu(this);
+        this.optionMenu = new OptionSubMenu(this.menuPanel);
         this.frame = new JFrame("***Risiko***");
         this.frame.setLayout(new BorderLayout());
         this.updatePanel(menuPanel);
@@ -46,7 +48,7 @@ public class GameFrame{
      */
     private void show() {
         this.frame.pack();
-        //this.frame.setLocationRelativeTo(null);
+        this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true);
     }
 
@@ -58,12 +60,23 @@ public class GameFrame{
         return this.optionMenu;
     }
 
-    public static void main(String[] args) {
-        new GameFrame();
+    public Dimension getFrameRisolution(){
+        return this.frame.getSize();
     }
 
+    /**
+     * @return the controller associated to the game view
+     */
     public GameController getController() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getController'");
+        return this.controller;
+    }
+
+    //method used to remove the initial frame
+    public void unshow() {
+        this.frame.setVisible(false);
+    }
+
+    public static void main(String[] args) {
+        new GameFrame();
     }
 }

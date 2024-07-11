@@ -1,5 +1,6 @@
 package it.unibo.risiko.controller;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,6 +19,7 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
+import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -41,6 +43,7 @@ public class GameController implements GameViewObserver {
     private Optional<Territory> attackerTerritory = Optional.empty();
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
+    private GameFrame gameFrame;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -48,20 +51,21 @@ public class GameController implements GameViewObserver {
      * 
      * @author Michele Farneti
      */
-    public GameController() {
+    public GameController(GameFrame gameFrame) {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
-
+        this.gameFrame=gameFrame;
         view = new GameViewImpl(1600,900,resourcesPackageString);
         this.view.start();
         this.view.setObserver(this);
-        initializeNewGame();
+        //initializeNewGame();
     }
 
     /**
      * Method used by the controller to tell the view to show the gameInitiliazation
      * Window
+     * @param dimension 
      */
-    private void initializeNewGame() {
+    public void initializeNewGame(Dimension risolution) {
         view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
@@ -69,8 +73,9 @@ public class GameController implements GameViewObserver {
      * Setups the view with all of the infos from the gameManager's current game
      * 
      * @author Michele Farneti
+     * @param dimension 
      */
-    private void setupGameView() {
+    public void setupGameView(Dimension risolution) {
         view.showGameWindow(gameManager.getCurrentGame().get().getMapName());
         view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList().stream().map(t -> t.getTerritoryName())
                 .toList());
@@ -288,7 +293,7 @@ public class GameController implements GameViewObserver {
             }
         }
         gameManager.AddNewCurrentGame(gameFactory.initializeGame());
-        this.setupGameView();
+        this.setupGameView(this.gameFrame.getFrameRisolution());
     }
 
     @Override
