@@ -174,8 +174,8 @@ public class GameViewImpl implements GameView {
         this.resourcesLocator = resourcesLocator;
 
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
-        //mainFrame.setTitle("Risiko!");
-        //mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setTitle("Risiko!");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override

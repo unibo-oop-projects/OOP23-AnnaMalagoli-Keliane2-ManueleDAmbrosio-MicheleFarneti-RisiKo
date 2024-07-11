@@ -73,7 +73,7 @@ public class GameFrame{
 
     //method used to remove the initial frame
     public void unshow() {
-        this.frame.setVisible(false);
+        this.frame.dispose();
     }
 
     public static void main(String[] args) {
