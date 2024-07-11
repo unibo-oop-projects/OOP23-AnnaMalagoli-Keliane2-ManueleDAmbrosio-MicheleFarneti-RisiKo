@@ -18,22 +18,22 @@ public interface GameViewObserver {
     /**
      * Method used to start a new game.
      * 
-     * @param mapName - name of the map.
+     * @param mapName                 - name of the map.
      * @param numberOfStandardPlayers - number of players controlled by humans.
-     * @param numberOfAIPlayers - number of players controlled by the computer.
+     * @param numberOfAIPlayers       - number of players controlled by the
+     *                                computer.
      * @author Manuele D'Ambrosio.
      */
     public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers);
 
     /**
-     * Method that compute the attack after setting the number of 
+     * Method that compute the attack after setting the number of
      * attacking armies and updates the view
      * 
      * @param numberOfAttackingAmies - Number of armies that are attacking.
      * @author Manuele D'Ambrosio.
      */
     void setAttackingArmies(int numberOfAttackingAmies);
-
 
     /**
      * If a territory has been conquered opens the conquer panel,
@@ -44,7 +44,7 @@ public interface GameViewObserver {
     void conquerIfPossible();
 
     /**
-     * Method used to set the number of armies to move in a 
+     * Method used to set the number of armies to move in a
      * conquered territory.
      * 
      * @param numberOfMovingArmies - Number of armies to move.
