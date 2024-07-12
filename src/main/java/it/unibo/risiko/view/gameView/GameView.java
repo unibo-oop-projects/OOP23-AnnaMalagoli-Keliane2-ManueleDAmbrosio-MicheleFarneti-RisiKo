@@ -176,6 +176,8 @@ public interface GameView {
      */
     public void setDefenderLostArmies(final int defenderLostArmies);
 
+    public void createMoveArmies(final List<Territory> listTerritories);
+    
     /**
      * 
      * Displays current plauer's target
