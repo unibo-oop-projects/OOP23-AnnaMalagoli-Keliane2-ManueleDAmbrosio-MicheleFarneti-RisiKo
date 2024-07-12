@@ -1,11 +1,11 @@
 package it.unibo.risiko.view.gameView;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.event_register.RegisterImpl;
+import it.unibo.risiko.model.event.Event;
+import it.unibo.risiko.model.event.EventImpl;
+import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.event_register.Register;
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
@@ -630,11 +630,30 @@ public class GameViewImpl implements GameView {
     }
 
     /**
-     * @keliane2
+     * @author Keliane2
      */
     @Override
     public void createLog(Register reg, List<Player> l) {
         logPanel.add(new LoggerView(reg, l));
     }
+
+    /**
+     * @author Keliane2
+     */
+    @Override
+    public void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
+            Optional<Player> eventLeaderAdversary) {
+        switch (type) {
+            case TROOP_MOVEMENT:
+                Event e = new EventImpl(type, attacker, defender, eventLeader);
+                reg.addEvent(e);
+                break;
+            default:
+                Event e1 = new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get());
+                reg.addEvent(e1);
+                break;
+        }
+    }
+    
 
 }
