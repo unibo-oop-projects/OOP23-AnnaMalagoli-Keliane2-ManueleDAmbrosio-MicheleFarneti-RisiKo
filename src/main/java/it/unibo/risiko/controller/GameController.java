@@ -54,8 +54,8 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      */
     public GameController() {
         System.out.println("hellllaa");
-        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
         this.gameFrame = new GameFrame(this);
+        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
     }
 
     

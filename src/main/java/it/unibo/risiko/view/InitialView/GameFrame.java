@@ -3,7 +3,6 @@ package it.unibo.risiko.view.InitialView;
 import java.awt.*;
 import javax.swing.*;
 
-import it.unibo.risiko.controller.GameController;
 import it.unibo.risiko.view.InitialViewObserver;
 
 public class GameFrame{
