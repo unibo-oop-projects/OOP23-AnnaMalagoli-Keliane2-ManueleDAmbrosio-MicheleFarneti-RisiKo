@@ -53,13 +53,11 @@ public class AIBehaviourImpl implements AIBehaviour {
     @Override
     public boolean decideAttack(final List<Territory> territoryList) {
         Territory attackingTerritory;
-        int existenceCheker = 0;
         Iterator<Territory> it = player.getOwnedTerritories().iterator();
         attackingTerritory = it.next();
         while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
             attackingTerritory = it.next();
-            existenceCheker++;
-            if (existenceCheker >= player.getOwnedTerritories().size()) {
+            if (!it.hasNext()) {
                 return false;
             }
         }
@@ -75,7 +73,7 @@ public class AIBehaviourImpl implements AIBehaviour {
         List<String> adjacentNames = territory.getListOfNearTerritories();
         List<Territory> adjacentTerritories = new ArrayList<>();
         for (Territory t : territoryList) {
-            if (adjacentNames.contains(t.getTerritoryName())) {
+            if (adjacentNames.contains(t.getTerritoryName()) && !player.isOwnedTerritory(t)) {
                 adjacentTerritories.add(t);
             }
         }

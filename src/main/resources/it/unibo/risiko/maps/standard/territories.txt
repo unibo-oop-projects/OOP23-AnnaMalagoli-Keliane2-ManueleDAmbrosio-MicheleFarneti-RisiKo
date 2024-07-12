@@ -1,84 +1,84 @@
+Europe 5:
+Great-Britain 530 95 West-Europe North-Europe Scandinavia Iceland
 Europe:
-Great-Britain West-Europe North-Europe Scandinavia Iceland
+Iceland 530 45 Great-Britain Scandinavia Greenland
 Europe:
-Iceland Great-Britain Scandinavia Greenland
+Scandinavia 620 55 Ukraine North-Europe Great-Britain
 Europe:
-Scandinavia Ukraine North-Europe Great-Britain
+North-Europe 620 110 West-Europe South-Europe Ukraine Scandinavia Great-Britain
 Europe:
-North-Europe West-Europe South-Europe Ukraine Scandinavia Great-Britain
+West-Europe 550 150 Great-Britain North-Europe South-Europe North-Africa
 Europe:
-West-Europe Great-Britain North-Europe South-Europe North-Africa
+South-Europe 640 150 Egypt North-Europe Ukraine Middle-East
 Europe:
-South-Europe Egypt North-Europe Ukraine Middle-East
-Europe:
-Ukraine South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
+Ukraine 710 90 South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
+Africa 3:
+North-Africa 550 250 West-Europe Brazil Congo East-Africa Egypt
 Africa:
-North-Africa West-Europe Brazil Congo East-Africa Egypt
+Egypt 650 220 North-Africa East-Africa Middle-East South-Europe
 Africa:
-Egypt North-Africa East-Africa Middle-East South-Europe
+Congo 650 340 North-Africa Southern-Africa East-Africa
 Africa:
-Congo North-Africa Southern-Africa East-Africa
+East-Africa 730 310 Congo Egypt North-Africa Southern-Africa Madagascar Middle-East
 Africa:
-East-Africa Congo Egypt North-Africa Southern-Africa Madagascar Middle-East
+Southern-Africa 655 440 Madagascar Congo East-Africa
 Africa:
-Southern-Africa Madagascar Congo East-Africa
-Africa:
-Madagascar Southern-Africa East-Africa
+Madagascar 770 430 Southern-Africa East-Africa
+Oceania 2:
+East-Australia 1140 440 Western-Australia New-Guinea
 Oceania:
-East-Australia Western-Australia New-Guinea
+New-Guinea 1180 360 Indonesia Western-Australia East-Australia
 Oceania:
-New-Guinea Indonesia Western-Australia East-Australia
+Western-Australia 1070 460 New-Guinea East-Australia Indonesia
 Oceania:
-Western-Australia New-Guinea East-Australia Indonesia
-Oceania:
-Indonesia New-Guinea Western-Australia Siam
+Indonesia 1050 360 New-Guinea Western-Australia Siam
+South-America 2:
+Venezuela 250 310 Brazil Peru Central-America
 South-America:
-Venezuela Brazil Peru Central-America
+Peru 260 420 Argentina Venezuela Brazil
 South-America:
-Peru Argentina Venezuela Brazil
+Argentina 290 490 Peru Brazil
 South-America:
-Argentina Peru Brazil
-South-America:
-Brazil Peru Argentina Venezuela
+Brazil 340 390 Peru Argentina Venezuela
+North-America 5:
+Alaska 60 50 Kamchatka Northwest-Territories Alberta
 North-America:
-Alaska Kamchatka Northwest-Territories Alberta
+Alberta 130 95 Alaska Northwest-Territories Ontario West-United-States
 North-America:
-Alberta Alaska Northwest-Territories Ontario West-United-States
+Central-America 170 270 Venezuela West-United-States Eastern-United-States
 North-America:
-Central-America Venezuela West-United-States Eastern-U.S.
+Eastern-United-States 210 170 Central-America West-United-States Ontario Quebec
 North-America:
-Eastern-U.S. Central-America West-United-States Ontario Quebec
+Greenland 450 15 Quebec Ontario Northwest-Territories Iceland
 North-America:
-Greenland Quebec Ontario Northwest-Territories Iceland
+Northwest-Territories 160 50 Alaska Alberta Greenland Ontario
 North-America:
-Northwest-Territories Alaska Alberta Greenland Ontario
+Ontario 220 100 Northwest-Territories Greenland Alberta Eastern-United-States Quebec
 North-America:
-Ontario Northwest-Territories Greenland Alberta Eastern-U.S. Quebec
+Quebec 300 100 Greenland Eastern-United-States Ontario
 North-America:
-Quebec Greenland Eastern-U.S. Ontario
-North-America:
-West-United-States Central-America Eastern-U.S. Alberta Ontario
+West-United-States 100 160 Central-America Eastern-United-States Alberta Ontario
+Asia 7:
+Urals 810 70 Ukraine Afghanistan Siberia China
 Asia:
-Urals Ukraine Afghanistan Siberia China
+Siberia 880 50 Urals Yakutia Chita Mongolia China
 Asia:
-Siberia Urals Yakutia Chita Mongolia China
+Yakutia 990 50 Siberia Chita Kamchatka
 Asia:
-Yakutia Siberia Chita Kamchatka
+Chita 970 95 Yakutia Mongolia Kamchatka Siberia
 Asia:
-Chita Yakutia Mongolia Kamchatka Siberia
+Kamchatka 1110 60 Chita Yakutia Alaska Japan Mongolia
 Asia:
-Kamchatka Chita Yakutia Alaska Japan Mongolia
+Japan 1130 170 Kamchatka Mongolia
 Asia:
-Japan Kamchatka Mongolia
+Mongolia 980 140 Japan Siberia Chita Kamchatka China
 Asia:
-Mongolia Japan Siberia Chita Kamchatka China
+Afghanistan 810 130 Ukraine Urals China India Middle-East
 Asia:
-Afghanistan Ukraine Urals China India Middle-East
+Middle-East 750 200 Afghanistan India Ukraine Egypt East-Africa South-Europe
 Asia:
-Middle-East Afghanistan India Ukraine Egypt East-Africa South-Europe
+India 880 230 China Afghanistan Siam Middle-East
 Asia:
-India China Afghanistan Siam Middle-East
+China 995 200 India Afghanistan Urals Mongolia Siberia Siam
 Asia:
-China India Afghanistan Urals Mongolia Siberia Siam
-Asia:
-Siam China India Indonesia
+Siam 995 270 China India Indonesia

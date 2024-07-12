@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.Player;
 
 /**
  * The view interface for the game phase of the application
@@ -233,4 +235,11 @@ public interface GameView {
      * @param enabled True if the button has to be enabled
      */
     public void enableAttack(boolean enabled);
+
+    /**
+     * @keliane2
+     * @param reg
+     * @param l
+     */
+    public void createLog(Register reg, List<Player> l);
 }

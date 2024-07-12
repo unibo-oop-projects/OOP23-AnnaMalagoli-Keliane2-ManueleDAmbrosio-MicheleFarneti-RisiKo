@@ -39,23 +39,33 @@ public class Territories {
             final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String stringRow;
             String continentName = " ";
+            List<String> continentInfo;
+            int bonusArmies;
             String nameTerritory;
             List<String> listNearTerritory;
+            int x;
+            int y;
 
             stringRow = bufferedReader.readLine();
 
             do {
                 if (stringRow.contains(":")) { 
-                    continentName = stringRow.substring(0, stringRow.length() - 1);
+                    continentInfo = Arrays.asList(stringRow.substring(0, stringRow.length() - 1).split(" "));
+                    continentName = continentInfo.get(0);
                     if (!this.isInList(continentName)) {
-                        this.listContinents.add(new ContinentImpl(continentName));
+                        bonusArmies = Integer.valueOf(continentInfo.get(1));
+                        this.listContinents.add(new ContinentImpl(continentName, bonusArmies));
                     }
                 } else {
                     final List<String> nations = Arrays.asList(stringRow.split(" "));
                     nameTerritory = nations.get(0);
+                    x = Integer.valueOf(nations.get(1));
+                    y = Integer.valueOf(nations.get(2));
                     listNearTerritory = new ArrayList<>(nations);
                     listNearTerritory.remove(nameTerritory);
-                    final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory);
+                    listNearTerritory.remove(nations.get(1));
+                    listNearTerritory.remove(nations.get(2));
+                    final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory, x, y);
                     this.listTerritories.add(territory);
 
                     this.getContinentFromName(continentName).addTerritory(territory);
@@ -115,7 +125,7 @@ public class Territories {
                 return elem;
             }
         }
-        return new ContinentImpl("");
+        return new ContinentImpl("", 0);
     }
 
     /**

@@ -35,8 +35,8 @@ public class TestPlayer {
     void testComputeReinforcement() {
         PlayerFactory factory = new SimplePlayerFactory();
         Player player = factory.createStandardPlayer();
-        player.addTerritory(new TerritoryImpl("ter1", "cont1", List.of("ter2", "ter3")));
-        player.addTerritory(new TerritoryImpl("ter2", "cont2", List.of("ter3", "ter1")));
+        player.addTerritory(new TerritoryImpl("ter1", "cont1", List.of("ter2", "ter3"), 1, 1));
+        player.addTerritory(new TerritoryImpl("ter2", "cont2", List.of("ter3", "ter1"), 1, 1));
         player.computeReinforcements();
         assertEquals(player.getArmiesToPlace(), 0);
     }

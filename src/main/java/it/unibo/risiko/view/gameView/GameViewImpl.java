@@ -1,11 +1,17 @@
 package it.unibo.risiko.view.gameView;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
+import it.unibo.risiko.view.gameView.gameViewComponents.LoggerView;
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
 import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
 import it.unibo.risiko.view.gameView.gameViewComponents.TerritoryPlaceHolder;
@@ -118,7 +124,7 @@ public class GameViewImpl implements GameView {
             put("Alaska", new Position(60, 50));
             put("Alberta", new Position(130, 95));
             put("Central-America", new Position(170, 270));
-            put("Eastern-U.S.", new Position(210, 170));
+            put("Eastern-United-States", new Position(210, 170));
             put("Greenland", new Position(450, 15));
             put("Northwest-Territories", new Position(160, 50));
             put("Ontario", new Position(220, 100));
@@ -216,12 +222,13 @@ public class GameViewImpl implements GameView {
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
         logPanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
-        logPanel.setOpaque(true);
+        logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
+        //logPanel.setOpaque(true);
         baseLayoutPane.add(logPanel,MAP_LAYER,0);
-        setupAttackBar();
 
-        territoriesTablePanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
-        territoriesTablePanel.setOpaque(true);
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2, mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
+        //territoriesTablePanel.setOpaque(true);
         baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
         setupAttackBar();
     }
@@ -635,8 +642,8 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
-        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
-        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
+        GAME_FRAME_HEIGHT / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
@@ -654,6 +661,14 @@ public class GameViewImpl implements GameView {
     @Override
     public void enableAttack(boolean enabled) {
         attackButton.setEnabled(enabled);
+    }
+
+    /**
+     * @keliane2
+     */
+    @Override
+    public void createLog(Register reg, List<Player> l) {
+        logPanel.add(new LoggerView(reg, l));
     }
 
 }

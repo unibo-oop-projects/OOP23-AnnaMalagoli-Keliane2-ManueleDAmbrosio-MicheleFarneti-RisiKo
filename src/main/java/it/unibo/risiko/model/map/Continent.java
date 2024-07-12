@@ -24,4 +24,6 @@ public interface Continent {
      * @param terr is the territory that has to be added in the list
      */
     void addTerritory(Territory terr);
+
+    int getBonusArmies();
 }

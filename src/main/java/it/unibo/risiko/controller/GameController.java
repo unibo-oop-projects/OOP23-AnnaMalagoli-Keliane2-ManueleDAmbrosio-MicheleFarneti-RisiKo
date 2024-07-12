@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
@@ -36,6 +38,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
+ * @keliane2
  */
 public class GameController implements GameViewObserver , InitialViewObserver{
     private final GameManager gameManager;
@@ -50,6 +53,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
     private GameFrame gameFrame;
+    private Register register;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -58,6 +62,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      * @author Michele Farneti
      */
     public GameController() {
+        this.register = new RegisterImpl();
         this.gameFrame = new GameFrame(this);
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
     }
@@ -81,6 +86,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList().stream().map(t -> t.getTerritoryName())
                 .toList());
         showTurnIcons();
+        view.createLog(this.register, gameManager.getCurrentGame().get().getPlayersList());
         redrawView();
     }
 
@@ -335,7 +341,9 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
         Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        /*modifica del metodo playCards per cui non viene passato il player */
+        /*modifica del metodo playCards per cui non viene passato il player
+         * e rimuovere le stringhe errore effettuando semplicemente l'operazione
+         */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
     }
 
