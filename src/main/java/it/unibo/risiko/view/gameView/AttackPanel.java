@@ -167,12 +167,12 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel topPanel() {
-        final int HEIGHT_FACTOR = 6;
+        final int HEIGHT = height / 3;
         JPanel topPanel = new JPanel();
 
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(BLACK_COLOR);
-        topPanel.setPreferredSize(new Dimension(width, height / HEIGHT_FACTOR));
+        topPanel.setPreferredSize(new Dimension(width, HEIGHT));
         topPanel.add(titlePanel(), BorderLayout.NORTH);
         topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "), BorderLayout.SOUTH);
 
@@ -180,19 +180,18 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel sidePanel(String diceType) {
-        final int SIZE_FACTOR = 4;
-        final int WIDTH_FACTOR = 3;
+        final int SIZE = width / 4;
+        final int WIDTH = width / 2;
         JPanel sidePanel = new JPanel();
-        int size = height / SIZE_FACTOR;
         String path = PATH + "Standard" + diceType + "Dice.png";
 
         sidePanel.setBackground(BACKGROUND_COLOR);
         sidePanel.setLayout(new BorderLayout());
-        sidePanel.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height));
+        sidePanel.setPreferredSize(new Dimension(WIDTH, height));
 
         try {
             ImageIcon icon = new ImageIcon(ImageIO.read(new File(path)));
-            Image resizedIcon = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+            Image resizedIcon = icon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);
             sidePanel.add(new JLabel(new ImageIcon(resizedIcon)), BorderLayout.CENTER);
         } catch (IOException e) {
             System.out.println(new File(path).getAbsolutePath());
@@ -203,13 +202,13 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel resultsPanel() {
-        final int WIDTH_FACTOR = 2;
-        final int HEIGHT_FACTOR = 10;
+        final int WIDTH = width / 2;
+        final int HEIGHT = height / 10;
         JPanel resultsPanel = new JPanel();
         JTextField attackerResult = new StandardTextField("LOST: " + attackerLostArmies);
         JTextField defenderResult = new StandardTextField("LOST: " + defenderLostArmies);
-        attackerResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
-        defenderResult.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height / HEIGHT_FACTOR));
+        attackerResult.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        defenderResult.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         resultsPanel.setBackground(BACKGROUND_COLOR);
         resultsPanel.setLayout(new BorderLayout());
         resultsPanel.add(attackerResult, BorderLayout.WEST);
@@ -218,16 +217,17 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel dicePanel(String diceColor) {
-        final int WIDTH_FACTOR = 2;
+        final int WIDTH = width / 2;
+        final int HEIGHT = height / 2;
         String diceType = diceColor + "Dice" + "_";
         JPanel dicePanel = new JPanel();
         List<Integer> dices = new ArrayList<>();
-        int diceSize = height / 5;
+        final int diceSize = HEIGHT / 3;
 
         dicePanel.setLayout(new GridLayout(3, 1));
         dicePanel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         dicePanel.setBackground(BACKGROUND_COLOR);
-        dicePanel.setPreferredSize(new Dimension(width / WIDTH_FACTOR, height));
+        dicePanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         if (diceColor.equals("Blue")) {
             dices = defDice;
@@ -262,7 +262,7 @@ public class AttackPanel extends JPanel {
         this.removeAll();
         this.add(titlePanel(), BorderLayout.NORTH);
         southPanel.add(resultsPanel());
-        southPanel.add(new ContinuePanel("CONTINUE!", width, e -> observer.conquerIfPossible())); // DA MODIFICARE
+        southPanel.add(new ContinuePanel("CONTINUE!", width, e -> observer.conquerIfPossible()));
         this.add(southPanel, BorderLayout.SOUTH);
         this.add(dicePanel("Red"), BorderLayout.WEST);
         this.add(dicePanel("Blue"), BorderLayout.EAST);

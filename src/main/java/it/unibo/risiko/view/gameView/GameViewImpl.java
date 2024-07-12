@@ -219,15 +219,17 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
-        logPanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        logPanel.setBounds(gamePanel.getWidth(), 0, mainFrame.getWidth() - gamePanel.getWidth(),
+                mainFrame.getHeight() / 2);
         logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
-        //logPanel.setOpaque(true);
-        baseLayoutPane.add(logPanel,MAP_LAYER,0);
+        // logPanel.setOpaque(true);
+        baseLayoutPane.add(logPanel, MAP_LAYER, 0);
 
-        territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2, mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2,
+                mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);
         territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
-        //territoriesTablePanel.setOpaque(true);
-        baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
+        // territoriesTablePanel.setOpaque(true);
+        baseLayoutPane.add(territoriesTablePanel, MAP_LAYER, 0);
         setupAttackBar();
     }
 
@@ -307,9 +309,10 @@ public class GameViewImpl implements GameView {
 
         targetTextField.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         targetTextField.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
-        targetTextField.setBounds((int)(gamePanel.getWidth()*0.75),(int)(attackBarLayoutPane.getHeight()*0.2),(int)(gamePanel.getWidth()*0.25),50);
+        targetTextField.setBounds((int) (gamePanel.getWidth() * 0.75), (int) (attackBarLayoutPane.getHeight() * 0.2),
+                (int) (gamePanel.getWidth() * 0.25), 50);
         targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
-        attackBarLayoutPane.add(targetTextField,TURN_ICON_LAYER,0);
+        attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
     }
 
     /**
@@ -410,7 +413,8 @@ public class GameViewImpl implements GameView {
      *         relatively to the map dimension.
      * @authot Michele Farneti
      */
-    private Position getRelativePoition(Position position) {;
+    private Position getRelativePoition(Position position) {
+        ;
         return new Position(Math.round(position.x() * (mapWidth / 1280f)),
                 Math.round(position.y() * (mapHeight / 630f)));
     }
@@ -565,16 +569,18 @@ public class GameViewImpl implements GameView {
     @Override
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
         setGameViewButtonsEnabled(false);
-        final int SIZE_FACTOR = 2;
-        final int LOCATION_FACTOR = 6;
+        final int PANEL_WIDTH = GAME_FRAME_WIDTH / 2;
+        final int PANEL_HEIGHT = GAME_FRAME_HEIGHT / 2;
+        final int PANEL_LOCATION_X = GAME_FRAME_WIDTH / 6;
+        final int PANEL_LOCATION_Y = GAME_FRAME_HEIGHT / 6;
         attackPanel = new AttackPanel(
-                GAME_FRAME_HEIGHT / SIZE_FACTOR,
-                GAME_FRAME_WIDTH / SIZE_FACTOR,
+                PANEL_HEIGHT,
+                PANEL_WIDTH,
                 attacking,
                 defending,
                 attackingTerritoryArmies,
                 gameViewObserver);
-        attackPanel.setLocation(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR);
+        attackPanel.setLocation(PANEL_LOCATION_X, PANEL_LOCATION_Y);
         attackPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, attackPanel);
     }
@@ -608,8 +614,9 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
-        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
-        GAME_FRAME_HEIGHT / SIZE_FACTOR);
+        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR,
+                GAME_FRAME_WIDTH / SIZE_FACTOR,
+                GAME_FRAME_HEIGHT / SIZE_FACTOR);
         moveArmiesPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }
@@ -623,8 +630,9 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
-        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
-        GAME_FRAME_HEIGHT / SIZE_FACTOR);
+        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR,
+                GAME_FRAME_WIDTH / SIZE_FACTOR,
+                GAME_FRAME_HEIGHT / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
