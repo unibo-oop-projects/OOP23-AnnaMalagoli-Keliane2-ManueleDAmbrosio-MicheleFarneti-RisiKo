@@ -51,7 +51,7 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(List<String> territories);
+    void showTanks(final List<String> territories);
 
     /**
      * Setups one turn icon bar with the players' info

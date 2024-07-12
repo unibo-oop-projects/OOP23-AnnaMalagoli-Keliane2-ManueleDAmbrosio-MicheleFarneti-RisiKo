@@ -154,6 +154,8 @@ public class GameViewImpl implements GameView {
     private JTextArea countryBarPanel;
     private AttackPanel attackPanel;
     private JTextField targetTextField = new StandardTextField("Target");
+    private JPanel logPanel = new JPanel();
+    private JPanel territoriesTablePanel = new JPanel();
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -208,8 +210,16 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
+
+        logPanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        logPanel.setOpaque(true);
+        baseLayoutPane.add(logPanel,MAP_LAYER,0);
         setupAttackBar();
 
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setOpaque(true);
+        baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
+        setupAttackBar();
     }
 
     /**
