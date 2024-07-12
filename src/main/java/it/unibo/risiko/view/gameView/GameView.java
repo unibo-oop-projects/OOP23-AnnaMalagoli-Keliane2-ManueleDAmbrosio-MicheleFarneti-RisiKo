@@ -3,6 +3,8 @@ package it.unibo.risiko.view.gameView;
 import java.util.List;
 import java.util.Map;
 
+import it.unibo.risiko.model.map.Territory;
+
 /**
  * The view interface for the game phase of the application
  * 
@@ -48,7 +50,7 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(List<String> territories);
+    void showTanks(final List<String> territories);
 
     /**
      * Setups one turn icon bar with the players' info

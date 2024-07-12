@@ -3,6 +3,7 @@ package it.unibo.risiko.model.game;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
@@ -86,6 +87,18 @@ public interface Game {
      */
     void endAttack();
 
+    /**
+     * 
+     * @return The game's deck.
+     */
+    Deck getDeck();
+
+    /**
+     * 
+     * @param territory1
+     * @param territory2
+     * @return True if the two territories of the game's map are near, false otherwise.
+     */
     boolean areTerritoriesNear(Territory territory1, Territory territory2);
 
 }

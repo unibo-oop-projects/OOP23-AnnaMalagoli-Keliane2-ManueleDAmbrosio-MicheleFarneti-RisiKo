@@ -214,7 +214,7 @@ public class GameViewImpl implements GameView {
         baseLayoutPane.add(logPanel,MAP_LAYER,0);
         setupAttackBar();
 
-        territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight()/2,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
         territoriesTablePanel.setOpaque(true);
         baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
         setupAttackBar();
