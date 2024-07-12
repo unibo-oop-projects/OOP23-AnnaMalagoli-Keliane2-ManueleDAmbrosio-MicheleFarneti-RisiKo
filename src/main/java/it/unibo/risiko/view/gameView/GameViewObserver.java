@@ -68,7 +68,8 @@ public interface GameViewObserver {
     void setAttacking();
 
     /**
-     * Used to 
+     * Used to
+     * 
      * @param srcTerritory
      * @param dstTerritory
      * @param numArmies
@@ -86,5 +87,19 @@ public interface GameViewObserver {
      * @author Anna Malagoli
      */
     void playCards(String card1, String card2, String card3);
+
+    /**
+     * Alerts the controller that the move armies button has been clicked
+     * 
+     * @author Michele Farneti
+     */
+    void moveClicked();
+
+    /**
+     * Alerts the controller that the armies movement phase ha concluded
+     * 
+     * @author Michele Farneti
+     */
+    void closeMovementPhase();
 
 }

@@ -146,6 +146,13 @@ public interface GameView {
     void closeAttackPanel();
 
     /**
+     * Handles MoveArmiesPanel closure if it's closed without completing a move
+     *
+     * @author Michele Farneti
+     */
+    void exitMoveArmiesPanel();
+
+    /**
      * Method used to set the attacker's dice throws.
      * 
      * @param attDice - results list of the attacker dices.
@@ -201,6 +208,33 @@ public interface GameView {
      * @author Anna Malagoli
      */
     public void createChoiceCards(List<Card> playerCards);
+
+    /**
+     * 
+     * Enables or deactivates the button used for armies movement.
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableMovements(boolean enabled);
+
+    /**
+     * 
+     * Enables or deactivates the button used for skipping
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableSkip(boolean enabled);
+
+    /**
+     * 
+     * Enables or deactivates the button used for attacks.
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableAttack(boolean enabled);
 
     /**
      * @keliane2

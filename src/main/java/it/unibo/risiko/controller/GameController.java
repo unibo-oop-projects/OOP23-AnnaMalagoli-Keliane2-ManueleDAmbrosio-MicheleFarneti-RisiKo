@@ -2,6 +2,7 @@ package it.unibo.risiko.controller;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -104,8 +106,11 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
             resetAttack();
+            view.enableMovements(false);
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
             redrawView();
+            view.enableAttack(false);
+            view.enableSkip(false);
         }
     }
 
@@ -131,12 +136,14 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                 break;
             case ARMIES_PLACEMENT:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                if(gameManager.getCurrentGame().get().getGameStatus()==GameStatus.READY_TO_ATTACK){
+                    view.enableMovements(true);
+                };
                 break;
             case ATTACKING:
                 if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
                     setFighter(territoryName, true);
-                }
-                else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
+                }else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent() && !currentPlayerOwns(territory)){
                     if(gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),getTerritoryFromString(territoryName))){
                         setFighter(territoryName, false);
                         startAttack();
@@ -283,6 +290,18 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                         .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));
         view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
         view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
+
+        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+            case READY_TO_ATTACK:
+                view.enableAttack(true);
+                view.enableSkip(true);
+                break;
+            case ARMIES_PLACEMENT:
+                view.enableAttack(false);
+                view.enableSkip(false);
+            default:
+                break;
+        }
     }
 
     @Override
@@ -297,7 +316,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                 gameFactory.addNewPlayer(playerFactory.createAIPlayer());     
             }
         }
-        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
+        gameManager.setCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
     }
 
@@ -311,6 +330,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
+        view.exitMoveArmiesPanel();
         this.skipTurn();
     }
 
@@ -325,5 +345,17 @@ public class GameController implements GameViewObserver , InitialViewObserver{
          * e rimuovere le stringhe errore effettuando semplicemente l'operazione
          */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
+    }
+
+
+    @Override
+    public void moveClicked() {
+        view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
+    }
+
+
+    @Override
+    public void closeMovementPhase() {
+        this.view.exitMoveArmiesPanel();
     }
 }
