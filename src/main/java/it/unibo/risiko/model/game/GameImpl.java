@@ -138,7 +138,7 @@ public class GameImpl implements Game {
     private boolean skipTurnPossible() {
         switch (status) {
             case TERRITORY_OCCUPATION:
-                return (armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0);
+                return true;
             case ARMIES_PLACEMENT:
                 return players.get(activePlayer).getArmiesToPlace() == 0;
             case READY_TO_ATTACK:
@@ -166,6 +166,9 @@ public class GameImpl implements Game {
                         territory.addArmies(nArmies);
                         armiesPlaced++;
                         players.get(activePlayer).decrementArmiesToPlace();
+                        if(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0){
+                            nextTurn();
+                        };
                         return true;
                     }
                 }

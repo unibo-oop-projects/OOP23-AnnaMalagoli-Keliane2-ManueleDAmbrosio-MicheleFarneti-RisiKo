@@ -87,4 +87,11 @@ public interface GameViewObserver {
      */
     void playCards(String card1, String card2, String card3);
 
+    /**
+     * Alerts the controller that the move armies button has been clicked
+     * 
+     * @authot Michele Farneti
+     */
+    void moveClicked();
+
 }

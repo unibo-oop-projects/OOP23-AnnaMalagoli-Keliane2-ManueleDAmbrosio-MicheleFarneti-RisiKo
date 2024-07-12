@@ -154,6 +154,7 @@ public class GameViewImpl implements GameView {
     private JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
     private AttackPanel attackPanel;
+    private JPanel moveArmiesPanel; 
     private JTextField targetTextField = new StandardTextField("Target");
     private JPanel logPanel = new JPanel();
     private JPanel territoriesTablePanel = new JPanel();
@@ -165,6 +166,7 @@ public class GameViewImpl implements GameView {
 
     private JButton skipButton;
     private JButton attackButton;
+    private JButton moveArmiesButton;
 
     private int mapWidth;
     private int mapHeight;
@@ -238,6 +240,7 @@ public class GameViewImpl implements GameView {
         tanksMap.entrySet().forEach(e -> e.getValue().button().setEnabled(enabled));
         skipButton.setEnabled(enabled);
         attackButton.setEnabled(enabled);
+        moveArmiesButton.setEnabled(enabled);
     }
 
     /**
@@ -274,12 +277,21 @@ public class GameViewImpl implements GameView {
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(attackButton, 5, 0);
         attackButton.addActionListener(e -> gameViewObserver.setAttacking());
+        attackButton.setEnabled(false);
 
         skipButton = new CustomButton("SKIP");
-        skipButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
-                ATTACKBAR_BUTTONS_HEIGHT);
+        skipButton.setBounds((int)(gamePanel.getWidth() *0.8) , 100, ATTACKBAR_BUTTONS_WIDTH,
+            ATTACKBAR_BUTTONS_HEIGHT);
         attackBarLayoutPane.add(skipButton, 5, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
+        skipButton.setEnabled(false);
+
+        moveArmiesButton = new CustomButton("MOVE");
+        moveArmiesButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
+                ATTACKBAR_BUTTONS_HEIGHT);
+        attackBarLayoutPane.add(moveArmiesButton, 5, 0);
+        moveArmiesButton.addActionListener(e -> gameViewObserver.moveClicked());
+        moveArmiesButton.setEnabled(false);
 
         turnTank = new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
@@ -577,6 +589,12 @@ public class GameViewImpl implements GameView {
         setGameViewButtonsEnabled(true);
         attackPanel.setVisible(false);
     }
+    
+    @Override
+    public void exitMoveArmiesPanel() {
+        setGameViewButtonsEnabled(true);
+        moveArmiesButton.setVisible(false);
+    }
 
     @Override
     public void drawDicePanels() {
@@ -600,10 +618,11 @@ public class GameViewImpl implements GameView {
     public void createMoveArmies(List<Territory> listTerritories) {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
-        JPanel moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
+        moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
         moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
         GAME_FRAME_HEIGHT / SIZE_FACTOR);
         moveArmiesPanel.setVisible(true);
+        setGameViewButtonsEnabled(false);
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }
 
@@ -620,6 +639,21 @@ public class GameViewImpl implements GameView {
         GAME_FRAME_WIDTH / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
+    }
+
+    @Override
+    public void enableMovements(boolean enabled) {
+        moveArmiesButton.setEnabled(enabled);
+    }
+
+    @Override
+    public void enableSkip(boolean enabled) {
+        skipButton.setEnabled(enabled);
+    }
+
+    @Override
+    public void enableAttack(boolean enabled) {
+        attackButton.setEnabled(enabled);
     }
 
 }

@@ -100,11 +100,11 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().nextTurn()) {
             resetAttack();
+            view.enableMovements(false);
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
-            if(gameManager.getCurrentGame().get().getGameStatus() != GameStatus.TERRITORY_OCCUPATION){
-                view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
-            }
             redrawView();
+            view.enableAttack(false);
+            view.enableSkip(false);
         }
     }
 
@@ -130,6 +130,9 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                 break;
             case ARMIES_PLACEMENT:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                if(gameManager.getCurrentGame().get().getGameStatus()==GameStatus.READY_TO_ATTACK){
+                    view.enableMovements(true);
+                };
                 break;
             case ATTACKING:
                 if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
@@ -282,6 +285,18 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                         .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));
         view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
         view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
+
+        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+            case READY_TO_ATTACK:
+                view.enableAttack(true);
+                view.enableSkip(true);
+                break;
+            case ARMIES_PLACEMENT:
+                view.enableAttack(false);
+                view.enableSkip(false);
+            default:
+                break;
+        }
     }
 
     @Override
@@ -322,5 +337,11 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
         /*modifica del metodo playCards per cui non viene passato il player */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
+    }
+
+
+    @Override
+    public void moveClicked() {
+        view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
     }
 }
