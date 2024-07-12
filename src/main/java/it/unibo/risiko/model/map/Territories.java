@@ -52,8 +52,8 @@ public class Territories {
                 if (stringRow.contains(":")) { 
                     continentInfo = Arrays.asList(stringRow.substring(0, stringRow.length() - 1).split(" "));
                     continentName = continentInfo.get(0);
-                    bonusArmies = Integer.valueOf(continentInfo.get(1));
                     if (!this.isInList(continentName)) {
+                        bonusArmies = Integer.valueOf(continentInfo.get(1));
                         this.listContinents.add(new ContinentImpl(continentName, bonusArmies));
                     }
                 } else {

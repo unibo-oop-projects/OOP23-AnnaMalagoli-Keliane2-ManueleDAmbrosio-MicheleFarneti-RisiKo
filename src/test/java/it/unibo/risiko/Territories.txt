@@ -1,4 +1,4 @@
 Europa 5:
 Italia 1 1 Francia Austria Slovenia Svizzera
-Europa 5:
+Europa:
 Francia 2 2 Belgio Lussemburgo Germania Svizzera Italia Monaco Spagna Andorra

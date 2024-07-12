@@ -1,4 +1,4 @@
-Europe:
+Europe 5:
 Great-Britain West-Europe North-Europe Scandinavia Iceland
 Europe:
 Iceland Great-Britain Scandinavia Greenland
@@ -12,7 +12,7 @@ Europe:
 South-Europe Egypt North-Europe Ukraine Middle-East
 Europe:
 Ukraine South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
-Africa:
+Africa 3:
 North-Africa West-Europe Brazil Congo East-Africa Egypt
 Africa:
 Egypt North-Africa East-Africa Middle-East South-Europe
@@ -24,7 +24,7 @@ Africa:
 Southern-Africa Madagascar Congo East-Africa
 Africa:
 Madagascar Southern-Africa East-Africa
-Oceania:
+Oceania 2:
 East-Australia Western-Australia New-Guinea
 Oceania:
 New-Guinea Indonesia Western-Australia East-Australia
@@ -32,7 +32,7 @@ Oceania:
 Western-Australia New-Guinea East-Australia Indonesia
 Oceania:
 Indonesia New-Guinea Western-Australia Siam
-South-America:
+South-America 2:
 Venezuela Brazil Peru Central-America
 South-America:
 Peru Argentina Venezuela Brazil
@@ -40,7 +40,7 @@ South-America:
 Argentina Peru Brazil
 South-America:
 Brazil Peru Argentina Venezuela
-North-America:
+North-America 5:
 Alaska Kamchatka Northwest-Territories Alberta
 North-America:
 Alberta Alaska Northwest-Territories Ontario West-United-States
@@ -58,7 +58,7 @@ North-America:
 Quebec Greenland Eastern-U.S. Ontario
 North-America:
 West-United-States Central-America Eastern-U.S. Alberta Ontario
-Asia:
+Asia 7:
 Urals Ukraine Afghanistan Siberia China
 Asia:
 Siberia Urals Yakutia Chita Mongolia China

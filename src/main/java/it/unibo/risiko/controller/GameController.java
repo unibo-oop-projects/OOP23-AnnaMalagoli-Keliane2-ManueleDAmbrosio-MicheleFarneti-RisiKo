@@ -321,7 +321,9 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
         Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        /*modifica del metodo playCards per cui non viene passato il player */
+        /*modifica del metodo playCards per cui non viene passato il player
+         * e rimuovere le stringhe errore effettuando semplicemente l'operazione
+         */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
     }
 }
