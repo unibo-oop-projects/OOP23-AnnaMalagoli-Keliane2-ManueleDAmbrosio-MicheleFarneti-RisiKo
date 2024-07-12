@@ -143,8 +143,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
             case ATTACKING:
                 if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
                     setFighter(territoryName, true);
-                }
-                else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
+                }else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent() && !currentPlayerOwns(territory)){
                     if(gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),getTerritoryFromString(territoryName))){
                         setFighter(territoryName, false);
                         startAttack();
@@ -331,6 +330,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
+        view.exitMoveArmiesPanel();
         this.skipTurn();
     }
 
@@ -351,5 +351,11 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     @Override
     public void moveClicked() {
         view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
+    }
+
+
+    @Override
+    public void closeMovementPhase() {
+        this.view.exitMoveArmiesPanel();
     }
 }

@@ -236,7 +236,7 @@ public class GameViewImpl implements GameView {
     /**
      * 
      * Private function used to deactivate gameView's buttons, used whenever the
-     * attack panel pops up
+     * attack panel or movement panel pops up
      * so that the user can't mess around with the rest of the game.
      * 
      * @param enabled True if the buttons are going to get enabled, false if it's
@@ -600,7 +600,7 @@ public class GameViewImpl implements GameView {
     @Override
     public void exitMoveArmiesPanel() {
         setGameViewButtonsEnabled(true);
-        moveArmiesButton.setVisible(false);
+        moveArmiesPanel.setVisible(false);
     }
 
     @Override
