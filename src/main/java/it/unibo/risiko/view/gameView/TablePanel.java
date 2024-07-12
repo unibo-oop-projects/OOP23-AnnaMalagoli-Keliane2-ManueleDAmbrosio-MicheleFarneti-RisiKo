@@ -1,4 +1,4 @@
-package it.unibo.risiko.view;
+package it.unibo.risiko.view.gameView;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
