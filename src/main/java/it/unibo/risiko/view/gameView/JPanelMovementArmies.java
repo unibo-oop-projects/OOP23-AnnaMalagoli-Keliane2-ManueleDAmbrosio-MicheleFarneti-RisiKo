@@ -32,6 +32,7 @@ public class JPanelMovementArmies extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color BLACK = new Color(0, 0, 0);
     private static final int BOTTON_DIMENSION = 600;
+    private static final int INFO_BOTTON_DIMENSION = 80;
     private List<Territory> listTerritories;
     private int MAX_NUM_ARMIES = 100;
     /*input viene passato al costruttore la lista dei territori(jolly esclusi)*/
@@ -128,6 +129,7 @@ public class JPanelMovementArmies extends JPanel {
                 JOptionPane.showMessageDialog(infoButton, message, "How to move armies", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        infoButton.setPreferredSize(new Dimension(INFO_BOTTON_DIMENSION, infoButton.getPreferredSize().height));
         return infoButton;
     }
 

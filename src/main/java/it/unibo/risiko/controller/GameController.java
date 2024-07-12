@@ -302,5 +302,6 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
+        this.skipTurn();
     }
 }

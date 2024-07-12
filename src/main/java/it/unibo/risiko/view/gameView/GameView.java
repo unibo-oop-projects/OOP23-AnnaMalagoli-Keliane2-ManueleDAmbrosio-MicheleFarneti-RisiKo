@@ -3,6 +3,8 @@ package it.unibo.risiko.view.gameView;
 import java.util.List;
 import java.util.Map;
 
+import it.unibo.risiko.model.map.Territory;
+
 /**
  * The view interface for the game phase of the application
  * 
@@ -173,4 +175,6 @@ public interface GameView {
      * @author Manuele D'Ambrosio
      */
     public void setDefenderLostArmies(final int defenderLostArmies);
+
+    public void createMoveArmies(final List<Territory> listTerritories);
 }

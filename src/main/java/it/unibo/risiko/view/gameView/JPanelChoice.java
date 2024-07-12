@@ -3,16 +3,17 @@ package it.unibo.risiko.view.gameView;
 import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.Choice;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
-import javax.swing.Icon;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
 /**
  * Creation of the class JPanelChoice which is a panel that shows three different
  * selection cells that contain the territories of the cards owned by the player.
@@ -21,9 +22,12 @@ import it.unibo.risiko.model.cards.Card;
  */
 public class JPanelChoice extends JPanel {
 
+    private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
+    private static final Color BLACK = new Color(0, 0, 0);
     private String firstChoice = "";
     private String secondChoice = "";
     private String thirdChoice = "";
+    private final static int INFO_BOTTON_DIMENSION = 80;
 
     /**
      * Through the constructor the JPanelChoice is set.
@@ -35,6 +39,7 @@ public class JPanelChoice extends JPanel {
          *the operations that have to be done by the player to play the three cards.
          */
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(BLACK);
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(createInfoButton(), BorderLayout.WEST);
         this.add(buttonPanel, BorderLayout.NORTH);
@@ -43,6 +48,7 @@ public class JPanelChoice extends JPanel {
          *cards owned by the player.
         */
         JPanel choicePanel = new JPanel();
+        choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 3));
         Choice firstChoiceTerritories = new Choice();
         Choice secondChoiceTerritories = new Choice();
@@ -104,8 +110,7 @@ public class JPanelChoice extends JPanel {
      * @return the button created
      */
     private JButton createInfoButton() {
-        Icon infoIcon = new ImageIcon("src\\main\\java\\it\\unibo\\risiko\\resources\\images\\infoImage.png");
-        JButton infoButton = new JButton(infoIcon);
+        JButton infoButton = new DefaultButton("INFO");
         String message = "Choose three territories whose cards\n"
         + "you already own to play those cards."
         + "There are 5 possible combos:\n"
@@ -120,6 +125,7 @@ public class JPanelChoice extends JPanel {
                 JOptionPane.showMessageDialog(infoButton, message, "How to play the cards", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        infoButton.setPreferredSize(new Dimension(INFO_BOTTON_DIMENSION, infoButton.getPreferredSize().height));
         return infoButton;
     }
 
