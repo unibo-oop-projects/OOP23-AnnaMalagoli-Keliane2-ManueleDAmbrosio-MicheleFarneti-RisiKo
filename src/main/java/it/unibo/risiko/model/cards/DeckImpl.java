@@ -187,7 +187,7 @@ public class DeckImpl implements Deck {
      * @return true if a jolly is present and if the other two cards 
      * are of the same type, false otherwise
      */
-    private boolean jollyAndTwoEqualCards(List<Card> cards) {
+    public boolean jollyAndTwoEqualCards(List<Card> cards) {
         int contJolly = 0;
         int contCannon = 0;
         int contInfantry = 0;
@@ -256,7 +256,7 @@ public class DeckImpl implements Deck {
      * @return true if the player played three cards of three different types
      * or false if not
      */
-    private boolean oneCardOfAllTypes(List<Card> cards) {
+    public boolean oneCardOfAllTypes(List<Card> cards) {
         int numCannons = 0;
         int numInfantry = 0;
         int numCavalry = 0;
@@ -303,7 +303,7 @@ public class DeckImpl implements Deck {
      * @param cards is the list of cards that the player wants to play
      * @return true if the cards are all of the "cannon" type, false if not
      */
-    private boolean playedThreeCannons(List<Card> cards) {
+    public boolean playedThreeCannons(List<Card> cards) {
         int numberOfCannons = 0;
         for(var card : cards){
             if(card.getTypeName().equals("Cannon")) {
@@ -322,7 +322,7 @@ public class DeckImpl implements Deck {
      * @param cards is the list of cards that the player wants to play
      * @return true if the cards are all of the "infantry" type, false if not
      */
-    private boolean playedThreeInfantry(List<Card> cards) {
+    public boolean playedThreeInfantry(List<Card> cards) {
         int numberOfInfantry = 0;
         for(var card : cards){
             if(card.getTypeName().equals("Infantry")) {
@@ -341,7 +341,7 @@ public class DeckImpl implements Deck {
      * @param cards is the list of cards that the player wants to play
      * @return true if the cards are all of the "cavalry" type, false if not
      */
-    private boolean playedThreeCavalry(List<Card> cards) {
+    public boolean playedThreeCavalry(List<Card> cards) {
         int numberOfCavalry = 0;
         for (var card : cards) {
             if (card.getTypeName().equals("Cavalry")) {
