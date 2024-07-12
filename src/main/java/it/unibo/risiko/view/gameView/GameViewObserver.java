@@ -77,4 +77,14 @@ public interface GameViewObserver {
      */
     void moveArmies(String srcTerritory, String dstTerritory, int numArmies);
 
+    /**
+     * 
+     * @param card1
+     * @param card2
+     * @param card3
+     * 
+     * @author Anna Malagoli
+     */
+    void playCards(String card1, String card2, String card3);
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
@@ -274,6 +275,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                 .forEach(p -> p.getOwnedTerritories().stream()
                         .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));
         view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+        view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
     }
 
     @Override
@@ -302,5 +304,12 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
+        this.skipTurn();
+    }
+
+
+    @Override
+    public void playCards(String card1, String card2, String card3) {
+        
     }
 }

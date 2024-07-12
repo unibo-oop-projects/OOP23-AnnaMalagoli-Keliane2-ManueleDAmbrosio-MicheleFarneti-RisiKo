@@ -1,10 +1,13 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
+import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
 import it.unibo.risiko.view.gameView.gameViewComponents.TerritoryPlaceHolder;
 
 import java.awt.BorderLayout;
@@ -150,6 +153,9 @@ public class GameViewImpl implements GameView {
     private JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
     private AttackPanel attackPanel;
+    private JTextField targetTextField = new StandardTextField("Target");
+    private JPanel logPanel = new JPanel();
+    private JPanel territoriesTablePanel = new JPanel();
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -204,8 +210,16 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
+
+        logPanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        logPanel.setOpaque(true);
+        baseLayoutPane.add(logPanel,MAP_LAYER,0);
         setupAttackBar();
 
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setOpaque(true);
+        baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
+        setupAttackBar();
     }
 
     /**
@@ -281,6 +295,12 @@ public class GameViewImpl implements GameView {
 
         attackBarLayoutPane.add(turnTank, TURN_TANK_LAYER, 0);
         attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);
+
+        targetTextField.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
+        targetTextField.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
+        targetTextField.setBounds((int)(gamePanel.getWidth()*0.75),(int)(attackBarLayoutPane.getHeight()*0.2),(int)(gamePanel.getWidth()*0.25),50);
+        targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
+        attackBarLayoutPane.add(targetTextField,TURN_ICON_LAYER,0);
     }
 
     /**
@@ -572,6 +592,32 @@ public class GameViewImpl implements GameView {
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);
         mainFrame.validate();
+    }
+
+    @Override
+    public void createMoveArmies(List<Territory> listTerritories) {
+        final int LOCATION_FACTOR = 6;
+        final int SIZE_FACTOR = 2;
+        JPanel moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
+        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
+        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        moveArmiesPanel.setVisible(true);
+        setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
+    }
+
+    public void showTarget(String targetText) {
+        targetTextField.setText(targetText);
+    }
+
+    @Override
+    public void createChoiceCards(List<Card> playerCards) {
+        final int LOCATION_FACTOR = 6;
+        final int SIZE_FACTOR = 2;
+        JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
+        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
+        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        choiceCardsPanel.setVisible(true);
+        setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
 
 }

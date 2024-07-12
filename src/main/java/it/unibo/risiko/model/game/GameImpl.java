@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.ConquerContinentTarget;
@@ -35,10 +36,12 @@ public class GameImpl implements Game {
     private int armiesPlaced = 0;
     private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
+    private Deck deck;
 
     protected GameImpl(final GameMap map, final List<Player> players) {
         this.map = map;
         this.players.addAll(players);
+        this.deck = map.getDeck();
     }
 
     @Override
@@ -308,5 +311,10 @@ public class GameImpl implements Game {
     @Override
     public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
         return map.areTerritoriesNear(territory1, territory2);
+    }
+
+    @Override
+    public Deck getDeck() {
+        return this.deck;
     }
 }
