@@ -16,6 +16,9 @@ import it.unibo.risiko.model.cards.Card;
  */
 
 public class AIBehaviourImpl implements AIBehaviour {
+    private static final int ONE_CARD = 1;
+    private static final int TWO_CARDS = 2;
+    private static final int THREE_CARDS = 3;
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private static final int MAX_ATTACKING_ARMIES = 3;
@@ -94,38 +97,51 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public List<Card> checkCardCombo() {
-        List<Card> combo = new ArrayList<>();
-
-        return combo;
+        return findCombo(player.getOwnedCards().stream().toList());
     }
 
-    private List<Card> checkTris(List<Card> playerCardList, String typeName) {
-        final int TRIS = 3;
-        List<Card> tris = new ArrayList<>();
-        for (Card card : playerCardList) {
-            if (card.getTypeName().equals(typeName)) {
-                tris.add(card);
-                if (tris.size() == TRIS) {
-                    return tris;
-                }
-            }
-        }
-        return List.of();
-    }
-
-    private List<Card> check(List<Card> playerCardList) {
+    private List<Card> findCombo(List<Card> playerCardList) {
         List<Card> tris = new ArrayList<>();
         List<Card> jollyList = listOfType(playerCardList, "Jolly");
         List<Card> cannonList = listOfType(playerCardList, "Cannon");
         List<Card> infantryList = listOfType(playerCardList, "Infantry");
         List<Card> calvalryList = listOfType(playerCardList, "Cavalry");
-
-        return tris;
+        if (jollyList.size() >= ONE_CARD) {
+            if (cannonList.size() >= TWO_CARDS) {
+                addFromListToList(jollyList, tris, ONE_CARD);
+                addFromListToList(cannonList, tris, TWO_CARDS);
+                return tris;
+            } else if (infantryList.size() >= TWO_CARDS) {
+                addFromListToList(jollyList, tris, ONE_CARD);
+                addFromListToList(infantryList, tris, TWO_CARDS);
+                return tris;
+            } else if (calvalryList.size() >= TWO_CARDS) {
+                addFromListToList(jollyList, tris, ONE_CARD);
+                addFromListToList(calvalryList, tris, TWO_CARDS);
+                return tris;
+            }
+        } else if (calvalryList.size() >= THREE_CARDS) {
+            addFromListToList(calvalryList, tris, THREE_CARDS);
+            return tris;
+        } else if (infantryList.size() >= THREE_CARDS) {
+            addFromListToList(infantryList, tris, THREE_CARDS);
+            return tris;
+        } else if (cannonList.size() >= THREE_CARDS) {
+            addFromListToList(cannonList, tris, THREE_CARDS);
+            return tris;
+        }
+        return List.of();
     }
 
     private List<Card> listOfType(List<Card> playerCardList, String typeName) {
         return playerCardList.stream()
                 .filter(t -> t.getTypeName().equals(typeName))
                 .collect(Collectors.toList());
+    }
+
+    private void addFromListToList(List<Card> srcList, List<Card> destList, final int numberOfCards) {
+        for (int i = 0; i < numberOfCards; i++) {
+            destList.add(srcList.get(i));
+        }
     }
 }

@@ -69,7 +69,11 @@ public interface AIBehaviour {
     boolean decideAttack(final List<Territory> territoryList);
 
     /**
-     * Uses the cards to get the bonus armies if possible.
+     * Checks the cards owned by the player and finds if there
+     * is a possible combo of cards.
+     * 
+     * @return the list of combo cards found, if no combo is
+     * found the returns an empty list.
      */
     List<Card> checkCardCombo();
 
