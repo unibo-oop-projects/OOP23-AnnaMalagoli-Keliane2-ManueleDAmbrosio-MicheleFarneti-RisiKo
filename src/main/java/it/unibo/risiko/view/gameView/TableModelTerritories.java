@@ -1,4 +1,4 @@
-package it.unibo.risiko.view;
+package it.unibo.risiko.view.gameView;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;

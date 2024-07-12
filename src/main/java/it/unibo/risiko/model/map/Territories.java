@@ -147,6 +147,7 @@ public class Territories {
     }
 
     /**
+     * RIMUOVERE PERCHè controllo nella GUI
      * Method to move a certain amount of armies from a territory to a 
      * neightbor territory.
      * @param srcName is the name of the territory that initially contains the armies

@@ -6,6 +6,7 @@ package it.unibo.risiko.view.gameView;
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
+ * @author Anna Malagoli
  */
 public interface GameViewObserver {
     /**
@@ -65,5 +66,15 @@ public interface GameViewObserver {
      * @author Michele Farneti
      */
     void setAttacking();
+
+    /**
+     * Used to 
+     * @param srcTerritory
+     * @param dstTerritory
+     * @param numArmies
+     * 
+     * @author Anna Malagoli
+     */
+    void moveArmies(String srcTerritory, String dstTerritory, int numArmies);
 
 }

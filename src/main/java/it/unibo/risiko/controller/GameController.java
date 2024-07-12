@@ -31,6 +31,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
+ * @author Anna Malagoli
  */
 public class GameController implements GameViewObserver , InitialViewObserver{
     private final GameManager gameManager;
@@ -295,5 +296,12 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     @Override
     public void setAttacking() {
         gameManager.getCurrentGame().get().setAttacking();
+    }
+
+
+    @Override
+    public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
+        getTerritoryFromString(srcTerritory).removeArmies(numArmies);
+        getTerritoryFromString(dstTerritory).addArmies(numArmies);
     }
 }
