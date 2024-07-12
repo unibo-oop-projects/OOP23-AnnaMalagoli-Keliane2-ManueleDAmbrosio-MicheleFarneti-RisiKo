@@ -1,4 +1,4 @@
-package it.unibo.risiko;
+package it.unibo.risiko.view.gameView;
 
 import java.util.List;
 import java.awt.BorderLayout;

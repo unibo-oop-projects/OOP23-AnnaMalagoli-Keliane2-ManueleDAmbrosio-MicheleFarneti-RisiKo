@@ -53,7 +53,6 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      * @author Michele Farneti
      */
     public GameController() {
-        System.out.println("hellllaa");
         this.gameFrame = new GameFrame(this);
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
     }
@@ -97,7 +96,6 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         if (gameManager.getCurrentGame().get().nextTurn()) {
             resetAttack();
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
-            System.out.println(currentPlayer().get().getTarget().showTargetDescription());
             redrawView();
         }
     }

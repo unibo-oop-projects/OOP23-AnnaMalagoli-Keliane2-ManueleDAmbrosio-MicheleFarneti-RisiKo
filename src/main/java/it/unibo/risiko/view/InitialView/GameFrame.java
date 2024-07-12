@@ -19,7 +19,6 @@ public class GameFrame{
         this.frame.setLayout(new BorderLayout());
         this.updatePanel(menuPanel);
         this.frame.setSize(80,80);
-        System.out.println("hellllloo");
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.show();
     }
