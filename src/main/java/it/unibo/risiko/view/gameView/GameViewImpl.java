@@ -604,7 +604,6 @@ public class GameViewImpl implements GameView {
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }
 
-}
     public void showTarget(String targetText) {
         targetTextField.setText(targetText);
     }
