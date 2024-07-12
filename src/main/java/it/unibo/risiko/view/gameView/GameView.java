@@ -3,6 +3,7 @@ package it.unibo.risiko.view.gameView;
 import java.util.List;
 import java.util.Map;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.map.Territory;
 
 /**
@@ -176,8 +177,13 @@ public interface GameView {
      */
     public void setDefenderLostArmies(final int defenderLostArmies);
 
+    /**
+     * 
+     * @param listTerritories
+     * @author Anna Malagoli
+     */
     public void createMoveArmies(final List<Territory> listTerritories);
-    
+
     /**
      * 
      * Displays current plauer's target
@@ -186,4 +192,11 @@ public interface GameView {
      * @author Michele Farneti
      */
     public void showTarget(String targetText);
+
+    /**
+     * 
+     * @param playerCards
+     * @author Anna Malagoli
+     */
+    public void createChoiceCards(List<Card> playerCards);
 }

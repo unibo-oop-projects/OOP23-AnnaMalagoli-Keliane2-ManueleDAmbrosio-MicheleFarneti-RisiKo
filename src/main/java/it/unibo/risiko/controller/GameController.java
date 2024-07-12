@@ -305,4 +305,10 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         this.skipTurn();
     }
+
+
+    @Override
+    public void playCards(String card1, String card2, String card3) {
+        gameManager.getCurrentGame().get();
+    }
 }

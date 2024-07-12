@@ -1,5 +1,6 @@
 package it.unibo.risiko.view.gameView;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
@@ -594,9 +595,19 @@ public class GameViewImpl implements GameView {
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }
 
-}
     public void showTarget(String targetText) {
         targetTextField.setText(targetText);
+    }
+
+    @Override
+    public void createChoiceCards(List<Card> playerCards) {
+        final int LOCATION_FACTOR = 6;
+        final int SIZE_FACTOR = 2;
+        JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
+        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
+        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        choiceCardsPanel.setVisible(true);
+        setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
 
 }
