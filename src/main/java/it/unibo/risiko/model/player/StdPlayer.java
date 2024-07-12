@@ -97,7 +97,7 @@ public class StdPlayer implements Player {
 
     @Override
     public void computeReinforcements() {
-        this.armiesToPlace = this.ownedTerritories.size()/REINFORCEMENT_FACTOR;
+        this.armiesToPlace = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
@@ -315,6 +316,11 @@ public class GameController implements GameViewObserver , InitialViewObserver{
 
     @Override
     public void playCards(String card1, String card2, String card3) {
-        
+        Deck deck = gameManager.getCurrentGame().get().getDeck();
+        Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
+        Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
+        Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
+        /*modifica del metodo playCards per cui non viene passato il player */
+        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
     }
 }

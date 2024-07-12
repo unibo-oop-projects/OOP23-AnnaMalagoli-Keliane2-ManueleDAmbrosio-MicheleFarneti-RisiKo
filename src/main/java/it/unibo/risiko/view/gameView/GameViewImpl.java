@@ -38,6 +38,7 @@ import javax.swing.JTextField;
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
+ * @author Anna Malagoli
  */
 
 public class GameViewImpl implements GameView {
@@ -179,6 +180,7 @@ public class GameViewImpl implements GameView {
         GAME_FRAME_HEIGHT = frameHeight;
         this.resourcesLocator = resourcesLocator;
 
+        mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
         mainFrame.setTitle("Risiko!");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -599,8 +601,8 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
-        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
-        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
+        GAME_FRAME_HEIGHT / SIZE_FACTOR);
         moveArmiesPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,29 +21,26 @@ import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 
 import it.unibo.risiko.model.event_register.Register;
-import it.unibo.risiko.model.game.Game;
 import it.unibo.risiko.model.player.Player;
 
 public class LoggerView extends JPanel{
-    private Register register;
+    private final Register register;
     private String eventList="";
-    private List<Player> playerList;
+    private final List<Player> playerList;
     
     @SuppressWarnings("unchecked")
-    public LoggerView(Game game, Register register){
+    public LoggerView(final Register register, final List<Player> playerList){
+        this.playerList=playerList;
         this.register=register;
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setPreferredSize(new Dimension(1000, 1000));
         //creating a textArea, the event container
         JTextArea logText=new JTextArea("");
         logText.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
         //creating a scroller containing the event container
         JScrollPane logTextScroller=new JScrollPane(logText);
-        //creating a new panel 
-        JPanel options=new JPanel();
-        options.setLayout(new BoxLayout(options,BoxLayout.LINE_AXIS));
+        logTextScroller.setBorder(BorderFactory.createEmptyBorder(650,195,8,195));
         //getting the list of the players
-        List<Player> playerList=game.getPlayersList();
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
         String[] list=new String[playerList.size()];
@@ -54,13 +52,14 @@ public class LoggerView extends JPanel{
         playerOptions.setSelectedIndex(-1);
         //the button used to show all the events
         JButton allEvent=new JButton("Show all events");
-        allEvent.setBorder(BorderFactory.createEmptyBorder(8,195,8,195));
+        //allEvent.setBorder(BorderFactory.createEmptyBorder(8,295,8,295));
         allEvent.setFont(new Font("Arial", Font.BOLD, 14));
+        allEvent.setAlignmentX(Component.CENTER_ALIGNMENT);
         //adding the button and the JComboBox to the panel options
-        options.add(allEvent);
-        options.add(playerOptions);
+        this.add(allEvent);
+        this.add(Box.createRigidArea(new Dimension(5,5)));
+        this.add(playerOptions);
         //adding the options and logTextScroller to the loggerView
-        this.add(options,BorderLayout.PAGE_START);
         this.add(logTextScroller,BorderLayout.CENTER);
         //adding actionListerner to the button and the JComboBox
         allEvent.addActionListener(e->showAllEvents(logText));
@@ -90,7 +89,7 @@ public class LoggerView extends JPanel{
      * Method that shows all the events of the game
      * @param logText the textArea that will contain the events
      */
-    private void showAllEvents(JTextArea logText) {
+    public void showAllEvents(JTextArea logText) {
         this.eventList="";
         register.getAllEvents().forEach(i->eventList+=i.getDescription()+"\n");
         updateLogText(logText, eventList);
