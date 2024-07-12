@@ -12,11 +12,15 @@ public class EventImpl implements Event {
     private String description;
 
     public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader, Player eventLeaderAdversary) {
+        this(type, attacker, defender, eventLeaderAdversary);
+        this.eventLeaderAdversary=eventLeaderAdversary;
+    }
+
+    public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader) {
         this.type = type;
         this.attacker = attacker;
         this.defender = defender;
         this.eventLeader = eventLeader;
-        this.eventLeaderAdversary=eventLeaderAdversary;
         this.setDescription();
     }
 

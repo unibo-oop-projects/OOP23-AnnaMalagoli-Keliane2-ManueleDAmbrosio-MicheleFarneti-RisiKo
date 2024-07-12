@@ -180,6 +180,7 @@ public class GameViewImpl implements GameView {
         GAME_FRAME_HEIGHT = frameHeight;
         this.resourcesLocator = resourcesLocator;
 
+        mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
         mainFrame.setTitle("Risiko!");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
