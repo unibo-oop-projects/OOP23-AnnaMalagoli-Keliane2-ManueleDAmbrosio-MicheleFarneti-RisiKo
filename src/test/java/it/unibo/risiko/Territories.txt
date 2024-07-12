@@ -1,4 +1,4 @@
 Europa:
-Italia Francia Austria Slovenia Svizzera
+Italia 1 1 Francia Austria Slovenia Svizzera
 Europa:
-Francia Belgio Lussemburgo Germania Svizzera Italia Monaco Spagna Andorra
+Francia 2 2 Belgio Lussemburgo Germania Svizzera Italia Monaco Spagna Andorra

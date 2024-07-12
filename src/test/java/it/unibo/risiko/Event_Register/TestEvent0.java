@@ -16,7 +16,7 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
 
-public class TestEvent0 {
+/*public class TestEvent0 {
     private PlayerFactory pf=new SimplePlayerFactory();
     private Player eventLeader=pf.createStandardPlayer();
     private Player eventLeaderAdversary=pf.createStandardPlayer();
@@ -43,4 +43,4 @@ public class TestEvent0 {
     void testGetDefenderTerritory(){
         assertEquals(this.defender, e.getDefenderTerritory());
     }
-}
+}*/

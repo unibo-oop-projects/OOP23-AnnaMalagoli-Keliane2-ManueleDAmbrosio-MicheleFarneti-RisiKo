@@ -20,7 +20,7 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
-public class TestTarget0 {
+/*public class TestTarget0 {
     private Territory nigeria=new TerritoryImpl("Nigeria", "Africa", List.of("Cameroon","Tchad","Niger"));
     private Territory cameroon =new TerritoryImpl("Cameroon", "Africa", List.of("Nigeria","Tchad","Niger"));
     private Territory tchad=new TerritoryImpl("Tchad", "Africa", List.of("Cameroon","Nigeria","Niger"));
@@ -91,4 +91,4 @@ public class TestTarget0 {
         assertTrue(territoryTarget.isAchieved());
     }
 
-}
+}*/

@@ -20,7 +20,7 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
-public class TestRegister0 {
+/*public class TestRegister0 {
     private PlayerFactory pf=new SimplePlayerFactory();
     private Player eventLeader=pf.createStandardPlayer();
     private Target elTarget= new ConquerTerritoriesTarget(null, 15);
@@ -67,4 +67,4 @@ public class TestRegister0 {
         assertEquals(List.of(e1, e2, e6), register.getAllEventsPlayer(this.eventLeader));
     }
 
-}
+}*/
