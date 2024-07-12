@@ -173,4 +173,13 @@ public interface GameView {
      * @author Manuele D'Ambrosio
      */
     public void setDefenderLostArmies(final int defenderLostArmies);
+
+    /**
+     * 
+     * Displays current plauer's target
+     * 
+     * @param targetText A text String rappresenting the current's player target
+     * @author Michele Farneti
+     */
+    public void showTarget(String targetText);
 }

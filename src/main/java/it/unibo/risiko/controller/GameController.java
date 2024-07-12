@@ -273,6 +273,7 @@ public class GameController implements GameViewObserver {
                 .forEach(p -> p.getOwnedTerritories().stream()
                         .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));
         view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+        view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
     }
 
     @Override
