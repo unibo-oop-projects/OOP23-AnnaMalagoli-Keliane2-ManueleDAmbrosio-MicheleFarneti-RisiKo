@@ -4,6 +4,9 @@ import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
+import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
@@ -624,6 +627,14 @@ public class GameViewImpl implements GameView {
         GAME_FRAME_WIDTH / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
+    }
+
+    /**
+     * @keliane2
+     */
+    @Override
+    public void createLog(Register reg, List<Player> l) {
+        logPanel.add(new LoggerView(reg, l));
     }
 
 }
