@@ -1,15 +1,11 @@
 package it.unibo.risiko.model.game;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * This interface manages all of the basic functions that are offered by the
- * application
- * at its start. It gives the opportunity to keep progress of multiple games
- * during the use of the application
- * aswell as allowing to load informations of past games stored in a file
+ * Implementation of the gameManager, whose task is to handle games. Saving or
+ * reading them from files if needed.
  * 
  * @author Michele Farneti
  */
@@ -18,34 +14,16 @@ public interface GameManager {
 
     /**
      * 
-     * @return True if a currentGame is already set, false otherwise
+     * @return True if a currentGame is present, flase otherwise
      */
     boolean isThereCurrentGame();
 
     /**
+     * Sets a new game as the gameManager current game
      * 
-     * @param game A new game to be set as current
-     * @return True if the game was succesfuly set as a new currentGame, False if
-     *         there is no more space to save the current game.
+     * @param Game
      */
-    boolean AddNewCurrentGame(Game game);
-
-    /**
-     * @param game The game to delete
-     */
-    void deleteSavegame(Game game);
-
-    /**
-     * 
-     * @return True if the game is succesfuly saved
-     */
-    boolean saveCurrentGame();
-
-    /**
-     * 
-     * @return True if there is still space to save a game.
-     */
-    boolean isThereSpaceToSave();
+    void setCurrentGame(Game game);
 
     /**
      * 
@@ -54,7 +32,7 @@ public interface GameManager {
     Optional<Game> getCurrentGame();
 
     /**
-     * Saves all of the games saved in the gameManager as a Json file
+     * Saves the current game as a Json file, eventually overriding old savegames
      * 
      * @return True if the Games where saved correctly on file, false otherwise.
      */
@@ -62,9 +40,10 @@ public interface GameManager {
 
     /**
      * 
-     * @return The list of map names currently avilable to play
+     * @return The list of map names currently avilable to play and the maximum
+     *         number of players for each of them
      */
-    Map<String,Integer> getAvailableMaps();
+    Map<String, Integer> getAvailableMaps();
 
     /**
      * 

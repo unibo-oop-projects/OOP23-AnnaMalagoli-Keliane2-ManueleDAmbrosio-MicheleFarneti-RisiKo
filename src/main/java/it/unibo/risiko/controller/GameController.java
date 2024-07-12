@@ -311,7 +311,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
                 gameFactory.addNewPlayer(playerFactory.createAIPlayer());     
             }
         }
-        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
+        gameManager.setCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
     }
 
