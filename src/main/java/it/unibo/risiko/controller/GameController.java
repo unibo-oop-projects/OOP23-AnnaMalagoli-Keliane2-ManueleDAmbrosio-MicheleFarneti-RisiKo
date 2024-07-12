@@ -2,6 +2,7 @@ package it.unibo.risiko.controller;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -98,6 +100,9 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         if (gameManager.getCurrentGame().get().nextTurn()) {
             resetAttack();
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            if(gameManager.getCurrentGame().get().getGameStatus() != GameStatus.TERRITORY_OCCUPATION){
+                view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
+            }
             redrawView();
         }
     }
