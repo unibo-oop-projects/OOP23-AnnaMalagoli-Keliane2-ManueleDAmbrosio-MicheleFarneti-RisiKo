@@ -12,14 +12,19 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.util.Optional;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
+
 /**
- * Creation of the class JPanelChoice which is a panel that shows three different
- * selection cells that contain the territories of the cards owned by the player.
+ * Creation of the class JPanelChoice which is a panel that shows three
+ * different
+ * selection cells that contain the territories of the cards owned by the
+ * player.
  * This panel is used to play three cards to gain new armies.
- * @author Anna Malagoli 
+ * 
+ * @author Anna Malagoli
  */
 public class JPanelChoice extends JPanel {
 
@@ -30,33 +35,39 @@ public class JPanelChoice extends JPanel {
     private String firstChoice = "";
     private String secondChoice = "";
     private String thirdChoice = "";
+    private List<Card> listCards;
 
     /**
      * Through the constructor the JPanelChoice is set.
+     * 
      * @param playerCards is the list of cards owned by the player
      */
     JPanelChoice(final List<Card> playerCards, final GameViewObserver observer) {
         this.setLayout(new BorderLayout());
-        /*creation of buttonPanel that is a panel that contains the button that shows 
-         *the operations that have to be done by the player to play the three cards.
+        this.listCards = playerCards;
+        /*
+         * creation of buttonPanel that is a panel that contains the button that shows
+         * the operations that have to be done by the player to play the three cards.
          */
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(BLACK);
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(createInfoButton(), BorderLayout.WEST);
         this.add(buttonPanel, BorderLayout.NORTH);
-        /*Creation of a panel that contains a grid of three colums. In every column 
-         *there is a choice selection that shows the name of every territories of the
-         *cards owned by the player.
-        */
+        /*
+         * Creation of a panel that contains a grid of three colums. In every column
+         * there is a choice selection that shows the name of every territories of the
+         * cards owned by the player.
+         */
         JPanel choicePanel = new JPanel();
         choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 3));
         Choice firstChoiceTerritories = new Choice();
         Choice secondChoiceTerritories = new Choice();
         Choice thirdChoiceTerritories = new Choice();
-        /*setting of the item in the Choice menu with the name of the territories 
-         *of the cards owned by the player and the type of the card.
+        /*
+         * setting of the item in the Choice menu with the name of the territories
+         * of the cards owned by the player and the type of the card.
          */
         String type;
         for (var card : playerCards) {
@@ -81,9 +92,10 @@ public class JPanelChoice extends JPanel {
         choicePanel.add(thirdChoiceTerritories);
         this.add(choicePanel, BorderLayout.CENTER);
 
-        /*creation of a button that if pressed permits to play the three 
-        *cards selected by the player.
-        */
+        /*
+         * creation of a button that if pressed permits to play the three
+         * cards selected by the player.
+         */
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
         JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> this.setVisible(false));
@@ -97,65 +109,135 @@ public class JPanelChoice extends JPanel {
                     firstChoice = firstTerritoryName[0];
                     secondChoice = secondTerritoryName[0];
                     thirdChoice = thirdTerritoryName[0];
-                    if(true/*checkSelectedItem(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(), Integer.valueOf(choiceNumArmies.getSelectedItem()))*/) {
+                    List<Card> selectedCards = List.of(getSelectedItem(firstChoice).get(),
+                            getSelectedItem(secondChoice).get(), getSelectedItem(thirdChoice).get());
+                    if (checkSelectedCards(selectedCards)) {
                         observer.playCards(firstChoice, secondChoice, thirdChoice);
                         this.setVisible(false);
-                    }
-                    else{
+                    } else {
                         String message = "Error of the item selected.\n Retry!";
                         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    });
+                });
         executePanel.setPreferredSize(
                 new Dimension(this.getPreferredSize().width / 2, executePanel.getPreferredSize().height));
         southPanel.add(exitPanel);
         southPanel.add(executePanel);
         this.add(southPanel, BorderLayout.SOUTH);
-        /*JButton but = new JButton("Play selected cards");
-        this.add(but, BorderLayout.SOUTH);
-        but.addActionListener(new ActionListener() {
-
-            public void actionPerformed(final ActionEvent e) {
-                //dopo che sono stati selezionati i territori delle carte da giocare si clicca sul bottone per 
-                //chiamare la funzione nel controller che si occupa, dati i nomi dei territori, di restituire le carte
-                //e chiamare metodo deck per effettuare l'operazione se possibile verificando risultato 
-                //(se != "" -> errore stampa sul frame messaggio JDialog)
-                gestione della scelta 
-                final String[] firstTerritoryName = firstChoiceTerritories.getSelectedItem().split(" ");
-                final String[] secondTerritoryName = secondChoiceTerritories.getSelectedItem().split(" ");
-                final String[] thirdTerritoryName = thirdChoiceTerritories.getSelectedItem().split(" ");
-                firstChoice = firstTerritoryName[0];
-                secondChoice = secondTerritoryName[0];
-                thirdChoice = thirdTerritoryName[0];
-                //CHIAMATA DI METODO AL MODEL PER RESTITUIRE LE STRINGHE contenenti i nomi territori selezionati
-            }
-        });*/
+        /*
+         * JButton but = new JButton("Play selected cards");
+         * this.add(but, BorderLayout.SOUTH);
+         * but.addActionListener(new ActionListener() {
+         * 
+         * public void actionPerformed(final ActionEvent e) {
+         * //dopo che sono stati selezionati i territori delle carte da giocare si
+         * clicca sul bottone per
+         * //chiamare la funzione nel controller che si occupa, dati i nomi dei
+         * territori, di restituire le carte
+         * //e chiamare metodo deck per effettuare l'operazione se possibile verificando
+         * risultato
+         * //(se != "" -> errore stampa sul frame messaggio JDialog)
+         * gestione della scelta
+         * final String[] firstTerritoryName =
+         * firstChoiceTerritories.getSelectedItem().split(" ");
+         * final String[] secondTerritoryName =
+         * secondChoiceTerritories.getSelectedItem().split(" ");
+         * final String[] thirdTerritoryName =
+         * thirdChoiceTerritories.getSelectedItem().split(" ");
+         * firstChoice = firstTerritoryName[0];
+         * secondChoice = secondTerritoryName[0];
+         * thirdChoice = thirdTerritoryName[0];
+         * //CHIAMATA DI METODO AL MODEL PER RESTITUIRE LE STRINGHE contenenti i nomi
+         * territori selezionati
+         * }
+         * });
+         */
     }
 
     /**
      * Method to create a button that if clicked opens a JDialog
      * in which are defined the operations that the player has to
      * do to play his cards.
+     * 
      * @return the button created
      */
     private JButton createInfoButton() {
         JButton infoButton = new DefaultButton("INFO");
         String message = "Choose three territories whose cards\n"
-        + "you already own to play those cards."
-        + "There are 5 possible combos:\n"
-        + "-cannon + infantry + cavalry -> +10 armies\n"
-        + "-cannon + cannon + cannon -> +4 armies\n"
-        + "-infantry + infantry + infantry -> +6 armies\n"
-        + "-cavalry + cavalry + cavalry -> +8 armies\n"
-        + "-jolly + two cards of the same type -> +12 armies";
+                + "you already own to play those cards."
+                + "There are 5 possible combos:\n"
+                + "-cannon + infantry + cavalry -> +10 armies\n"
+                + "-cannon + cannon + cannon -> +4 armies\n"
+                + "-infantry + infantry + infantry -> +6 armies\n"
+                + "-cavalry + cavalry + cavalry -> +8 armies\n"
+                + "-jolly + two cards of the same type -> +12 armies";
         infoButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(final ActionEvent e) {
-                JOptionPane.showMessageDialog(infoButton, message, "How to play the cards", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(infoButton, message, "How to play the cards",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
         infoButton.setPreferredSize(new Dimension(INFO_BOTTON_DIMENSION, infoButton.getPreferredSize().height));
         return infoButton;
+    }
+
+    private Optional<Card> getSelectedItem(String cardName) {
+        for (var card : this.listCards) {
+            if (card.getTerritoryName().equals(cardName)) {
+                return Optional.of(card);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private boolean checkSelectedCards(List<Card> cards) {
+        if (cardsAreDifferent(cards) && checkCombo(cards)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean cardsAreDifferent(List<Card> cards) {
+        if (cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName()) ||
+                cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName()) ||
+                cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean checkCombo(List<Card> cards) {
+        int contCav = 0;
+        int contJolly = 0;
+        int contInf = 0;
+        int contCan = 0;
+
+        for (var card : cards) {
+            if (card.getTypeName().equals("Cannon")) {
+                contCan++;
+            }
+            if (card.getTypeName().equals("Cavalry")) {
+                contCav++;
+            }
+            if (card.getTypeName().equals("Infantry")) {
+                contInf++;
+            }
+            if (card.getTypeName().equals("Jolly")) {
+                contJolly++;
+            }
+        }
+
+        if (contCan == 3 || contCav == 3 || contInf == 3) {
+            return true;
+        }
+        if (contJolly == 1) {
+            if (contCan == 2 || contCav == 2 || contInf == 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
