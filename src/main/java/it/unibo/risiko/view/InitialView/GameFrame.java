@@ -3,16 +3,16 @@ package it.unibo.risiko.view.InitialView;
 import java.awt.*;
 import javax.swing.*;
 
-import it.unibo.risiko.controller.GameController;
+import it.unibo.risiko.view.InitialViewObserver;
 
 public class GameFrame{
     private JFrame frame;
     private PrincipalMenu menuPanel;
     private OptionSubMenu optionMenu;
-    private GameController controller;
+    private InitialViewObserver controller;
 
-    public GameFrame() { 
-        this.controller = new GameController(this);
+    public GameFrame(InitialViewObserver controller) { 
+        this.controller = controller;
         this.menuPanel = new PrincipalMenu(this);
         this.optionMenu = new OptionSubMenu(this.menuPanel);
         this.frame = new JFrame("***Risiko***");
@@ -67,16 +67,12 @@ public class GameFrame{
     /**
      * @return the controller associated to the game view
      */
-    public GameController getController() {
+    public InitialViewObserver getController() {
         return this.controller;
     }
 
     //method used to remove the initial frame
     public void unshow() {
         this.frame.dispose();
-    }
-
-    public static void main(String[] args) {
-        new GameFrame();
     }
 }
