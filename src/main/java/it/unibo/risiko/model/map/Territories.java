@@ -39,6 +39,8 @@ public class Territories {
             final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String stringRow;
             String continentName = " ";
+            List<String> continentInfo;
+            int bonusArmies;
             String nameTerritory;
             List<String> listNearTerritory;
             int x;
@@ -48,9 +50,11 @@ public class Territories {
 
             do {
                 if (stringRow.contains(":")) { 
-                    continentName = stringRow.substring(0, stringRow.length() - 1);
+                    continentInfo = Arrays.asList(stringRow.substring(0, stringRow.length() - 1).split(" "));
+                    continentName = continentInfo.get(0);
+                    bonusArmies = Integer.valueOf(continentInfo.get(1));
                     if (!this.isInList(continentName)) {
-                        this.listContinents.add(new ContinentImpl(continentName));
+                        this.listContinents.add(new ContinentImpl(continentName, bonusArmies));
                     }
                 } else {
                     final List<String> nations = Arrays.asList(stringRow.split(" "));
@@ -121,7 +125,7 @@ public class Territories {
                 return elem;
             }
         }
-        return new ContinentImpl("");
+        return new ContinentImpl("", 0);
     }
 
     /**

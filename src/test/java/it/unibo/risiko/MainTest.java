@@ -159,6 +159,7 @@ class MainTest {
         assertEquals(territoriesList.get(0).getPosition(), new Position(1, 1));
         //System.out.println(continentList.get(0).getName());
         assertEquals(continentList.get(0).getName(), "Europa");
+        assertEquals(continentList.get(0).getBonusArmies(), 5);
         assertEquals(continentList.size(), 1);
         continent = continentList.get(0);
         assertEquals(continent.getListTerritories().get(0).getTerritoryName(), ITALIA);

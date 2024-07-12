@@ -623,8 +623,8 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
-        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_HEIGHT / SIZE_FACTOR,
-        GAME_FRAME_WIDTH / SIZE_FACTOR);
+        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR, GAME_FRAME_WIDTH / SIZE_FACTOR,
+        GAME_FRAME_HEIGHT / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
