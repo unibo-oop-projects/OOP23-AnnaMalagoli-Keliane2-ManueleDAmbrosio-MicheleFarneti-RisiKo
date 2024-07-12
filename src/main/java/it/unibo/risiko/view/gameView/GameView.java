@@ -177,4 +177,13 @@ public interface GameView {
     public void setDefenderLostArmies(final int defenderLostArmies);
 
     public void createMoveArmies(final List<Territory> listTerritories);
+    
+    /**
+     * 
+     * Displays current plauer's target
+     * 
+     * @param targetText A text String rappresenting the current's player target
+     * @author Michele Farneti
+     */
+    public void showTarget(String targetText);
 }
