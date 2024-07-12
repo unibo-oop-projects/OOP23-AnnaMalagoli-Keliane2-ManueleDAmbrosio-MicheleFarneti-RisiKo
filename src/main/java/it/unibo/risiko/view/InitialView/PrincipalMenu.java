@@ -23,7 +23,7 @@ public class PrincipalMenu extends JPanel {
         this.gameFrame=f;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
-        this.setPreferredSize(new Dimension(700, 700));
+        this.setPreferredSize(new Dimension(1600, 900));
         //adding JButton to the PrincipalMenu
         JButton newGame=addButtonToMenu("New Game", this);
         JButton continueSavedGame=addButtonToMenu("Continue", this);
