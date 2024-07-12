@@ -1,11 +1,14 @@
 package it.unibo.risiko.view.gameView;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
+import it.unibo.risiko.view.gameView.gameViewComponents.LoggerView;
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
 import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
 import it.unibo.risiko.view.gameView.gameViewComponents.TerritoryPlaceHolder;
@@ -213,12 +216,13 @@ public class GameViewImpl implements GameView {
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
         logPanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
-        logPanel.setOpaque(true);
+        logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
+        //logPanel.setOpaque(true);
         baseLayoutPane.add(logPanel,MAP_LAYER,0);
-        setupAttackBar();
 
-        territoriesTablePanel.setBounds(gamePanel.getWidth(), 0,mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
-        territoriesTablePanel.setOpaque(true);
+        territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2, mainFrame.getWidth() - gamePanel.getWidth(),mainFrame.getHeight()/2);
+        territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
+        //territoriesTablePanel.setOpaque(true);
         baseLayoutPane.add(territoriesTablePanel,MAP_LAYER,0);
         setupAttackBar();
     }
