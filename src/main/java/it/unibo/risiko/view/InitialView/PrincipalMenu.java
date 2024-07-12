@@ -10,11 +10,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import it.unibo.risiko.controller.GameController;
 
 public class PrincipalMenu extends JPanel {
     private GameFrame gameFrame;
@@ -64,16 +62,20 @@ public class PrincipalMenu extends JPanel {
      * can continue
      */
     private void continueSavedGame() {
+        var dim=this.gameFrame.getFrameRisolution();
         this.gameFrame.unshow();
-        this.gameFrame.getController().setupGameView(this.gameFrame.getFrameRisolution());
+        this.gameFrame.getController().startGameWindow(dim.width, dim.height);
+        this.gameFrame.getController().setupGameView();
     }
 
     /**
      * This method starts a new game
      */
     private void startNewGame() {
+        var dim=this.gameFrame.getFrameRisolution();
         this.gameFrame.unshow();
-        this.gameFrame.getController().initializeNewGame(this.gameFrame.getFrameRisolution());
+        this.gameFrame.getController().startGameWindow(dim.width, dim.height);
+        this.gameFrame.getController().initializeNewGame();
     }
 
     /**
