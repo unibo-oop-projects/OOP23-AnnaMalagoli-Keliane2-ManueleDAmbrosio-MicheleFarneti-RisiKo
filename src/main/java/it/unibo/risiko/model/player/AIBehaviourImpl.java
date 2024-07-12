@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.cards.Card;
 
 /**
  * Implementation of @EasyModePlayer interface.
@@ -89,5 +90,42 @@ public class AIBehaviourImpl implements AIBehaviour {
         return nextAttackingTerritory.get().getNumberOfArmies() < MAX_ATTACKING_ARMIES
                 ? nextAttackedTerritory.get().getNumberOfArmies()
                 : MAX_ATTACKING_ARMIES;
+    }
+
+    @Override
+    public List<Card> checkCardCombo() {
+        List<Card> combo = new ArrayList<>();
+
+        return combo;
+    }
+
+    private List<Card> checkTris(List<Card> playerCardList, String typeName) {
+        final int TRIS = 3;
+        List<Card> tris = new ArrayList<>();
+        for (Card card : playerCardList) {
+            if (card.getTypeName().equals(typeName)) {
+                tris.add(card);
+                if (tris.size() == TRIS) {
+                    return tris;
+                }
+            }
+        }
+        return List.of();
+    }
+
+    private List<Card> check(List<Card> playerCardList) {
+        List<Card> tris = new ArrayList<>();
+        List<Card> jollyList = listOfType(playerCardList, "Jolly");
+        List<Card> cannonList = listOfType(playerCardList, "Cannon");
+        List<Card> infantryList = listOfType(playerCardList, "Infantry");
+        List<Card> calvalryList = listOfType(playerCardList, "Cavalry");
+
+        return tris;
+    }
+
+    private List<Card> listOfType(List<Card> playerCardList, String typeName) {
+        return playerCardList.stream()
+                .filter(t -> t.getTypeName().equals(typeName))
+                .collect(Collectors.toList());
     }
 }

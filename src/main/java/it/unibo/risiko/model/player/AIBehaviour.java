@@ -2,6 +2,7 @@ package it.unibo.risiko.model.player;
 
 import java.util.List;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.map.Territory;
 
 /**
@@ -66,5 +67,10 @@ public interface AIBehaviour {
      * otherwise.
      */
     boolean decideAttack(final List<Territory> territoryList);
+
+    /**
+     * Uses the cards to get the bonus armies if possible.
+     */
+    List<Card> checkCardCombo();
 
 }
