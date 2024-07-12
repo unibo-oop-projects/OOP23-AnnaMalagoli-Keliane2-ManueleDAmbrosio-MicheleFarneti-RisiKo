@@ -124,7 +124,7 @@ public class GameViewImpl implements GameView {
             put("Alaska", new Position(60, 50));
             put("Alberta", new Position(130, 95));
             put("Central-America", new Position(170, 270));
-            put("Eastern-U.S.", new Position(210, 170));
+            put("Eastern-United-States", new Position(210, 170));
             put("Greenland", new Position(450, 15));
             put("Northwest-Territories", new Position(160, 50));
             put("Ontario", new Position(220, 100));
