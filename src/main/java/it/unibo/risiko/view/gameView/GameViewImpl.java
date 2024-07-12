@@ -1,11 +1,8 @@
 package it.unibo.risiko.view.gameView;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.event_register.Register;
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
@@ -161,6 +158,7 @@ public class GameViewImpl implements GameView {
     private JTextArea countryBarPanel;
     private AttackPanel attackPanel;
     private JPanel moveArmiesPanel;
+    private TablePanel tablePanel;
     private JTextField targetTextField = new StandardTextField("Target");
     private JPanel logPanel = new JPanel();
     private JPanel territoriesTablePanel = new JPanel();
@@ -677,6 +675,19 @@ public class GameViewImpl implements GameView {
     @Override
     public void createLog(Register reg, List<Player> l) {
         logPanel.add(new LoggerView(reg, l));
+    }
+
+    @Override
+    public void createTablePanel(List<Territory> terr, List<Player> players) {
+        this.tablePanel = new TablePanel();
+        tablePanel.setData(terr, players);
+        tablePanel.update();
+        territoriesTablePanel.add(tablePanel);
+    }
+
+    @Override
+    public void updateTablePanel() {
+        this.tablePanel.update();
     }
 
 }

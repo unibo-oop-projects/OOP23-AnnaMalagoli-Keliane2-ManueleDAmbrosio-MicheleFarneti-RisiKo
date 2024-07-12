@@ -242,4 +242,17 @@ public interface GameView {
      * @param l
      */
     public void createLog(Register reg, List<Player> l);
+
+    /**
+     * Creates the territory table panel.
+     * 
+     * @param terr - list of territories.
+     * @param players - list of players.
+     */
+    public void createTablePanel(List<Territory> terr, List<Player> players);
+
+    /**
+     * Updates the table panel.
+     */
+    public void updateTablePanel();
 }
