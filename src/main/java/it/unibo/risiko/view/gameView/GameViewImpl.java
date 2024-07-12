@@ -5,6 +5,7 @@ import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
 import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
+import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
 import it.unibo.risiko.view.gameView.gameViewComponents.TerritoryPlaceHolder;
 
 import java.awt.BorderLayout;
@@ -150,6 +151,7 @@ public class GameViewImpl implements GameView {
     private JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
     private AttackPanel attackPanel;
+    private JTextField targetTextField = new StandardTextField("Target");
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -281,6 +283,12 @@ public class GameViewImpl implements GameView {
 
         attackBarLayoutPane.add(turnTank, TURN_TANK_LAYER, 0);
         attackBarLayoutPane.add(playerArmiesLabel, TURN_TANK_LAYER + 1, 0);
+
+        targetTextField.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
+        targetTextField.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
+        targetTextField.setBounds((int)(gamePanel.getWidth()*0.75),(int)(attackBarLayoutPane.getHeight()*0.2),(int)(gamePanel.getWidth()*0.25),50);
+        targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
+        attackBarLayoutPane.add(targetTextField,TURN_ICON_LAYER,0);
     }
 
     /**
@@ -572,6 +580,11 @@ public class GameViewImpl implements GameView {
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);
         mainFrame.validate();
+    }
+
+    @Override
+    public void showTarget(String targetText) {
+        targetTextField.setText(targetText);
     }
 
 }
