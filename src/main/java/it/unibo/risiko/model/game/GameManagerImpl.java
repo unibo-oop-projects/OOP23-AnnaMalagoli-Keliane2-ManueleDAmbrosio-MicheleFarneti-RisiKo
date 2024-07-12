@@ -21,6 +21,7 @@ import it.unibo.risiko.model.map.GameMap;
 
 /**
  * Implmentation of @GameManager interface
+ * 
  * @author Michele Farneti
  */
 public class GameManagerImpl implements GameManager {
@@ -30,7 +31,8 @@ public class GameManagerImpl implements GameManager {
 
     /**
      * Constructor for GameManagerImpl from a filepath, containing a json file with
-     * the previously saved game. If the file doesn't exist, the current game is set as empty.
+     * the previously saved game. If the file doesn't exist, the current game is set
+     * as empty.
      * 
      * @param saveGamesFilePath filePath of the savegame file.
      */
