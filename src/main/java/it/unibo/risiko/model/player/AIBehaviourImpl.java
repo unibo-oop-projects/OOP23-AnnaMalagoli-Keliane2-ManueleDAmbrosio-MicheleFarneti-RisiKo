@@ -91,7 +91,7 @@ public class AIBehaviourImpl implements AIBehaviour {
     @Override
     public int decideAttackingArmies() {
         return nextAttackingTerritory.get().getNumberOfArmies() < MAX_ATTACKING_ARMIES
-                ? nextAttackedTerritory.get().getNumberOfArmies()
+                ? nextAttackingTerritory.get().getNumberOfArmies()
                 : MAX_ATTACKING_ARMIES;
     }
 
