@@ -1,0 +1,84 @@
+Europe 5:
+Great-Britain 530 95 West-Europe North-Europe Scandinavia Iceland
+Europe:
+Iceland 530 45 Great-Britain Scandinavia Greenland
+Europe:
+Scandinavia 620 55 Ukraine North-Europe Great-Britain
+Europe:
+North-Europe 620 110 West-Europe South-Europe Ukraine Scandinavia Great-Britain
+Europe:
+West-Europe 550 150 Great-Britain North-Europe South-Europe North-Africa
+Europe:
+South-Europe 640 150 Egypt North-Europe Ukraine Middle-East
+Europe:
+Ukraine 710 90 South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
+Africa 3:
+North-Africa 550 250 West-Europe Brazil Congo East-Africa Egypt
+Africa:
+Egypt 650 220 North-Africa East-Africa Middle-East South-Europe
+Africa:
+Congo 650 340 North-Africa Southern-Africa East-Africa
+Africa:
+East-Africa 730 310 Congo Egypt North-Africa Southern-Africa Madagascar Middle-East
+Africa:
+Southern-Africa 655 440 Madagascar Congo East-Africa
+Africa:
+Madagascar 770 430 Southern-Africa East-Africa
+Oceania 2:
+East-Australia 1140 440 Western-Australia New-Guinea
+Oceania:
+New-Guinea 1180 360 Indonesia Western-Australia East-Australia
+Oceania:
+Western-Australia 1070 460 New-Guinea East-Australia Indonesia
+Oceania:
+Indonesia 1050 360 New-Guinea Western-Australia Siam
+South-America 2:
+Venezuela 250 310 Brazil Peru Central-America
+South-America:
+Peru 260 420 Argentina Venezuela Brazil
+South-America:
+Argentina 290 490 Peru Brazil
+South-America:
+Brazil 340 390 Peru Argentina Venezuela North-Africa
+North-America 5:
+Alaska 60 50 Kamchatka Northwest-Territories Alberta
+North-America:
+Alberta 130 95 Alaska Northwest-Territories Ontario West-United-States
+North-America:
+Central-America 170 270 Venezuela West-United-States Eastern-United-States
+North-America:
+Eastern-United-States 210 170 Central-America West-United-States Ontario Quebec
+North-America:
+Greenland 450 15 Quebec Ontario Northwest-Territories Iceland
+North-America:
+Northwest-Territories 160 50 Alaska Alberta Greenland Ontario
+North-America:
+Ontario 220 100 Northwest-Territories Greenland Alberta Eastern-United-States Quebec
+North-America:
+Quebec 300 100 Greenland Eastern-United-States Ontario
+North-America:
+West-United-States 100 160 Central-America Eastern-United-States Alberta Ontario
+Asia 7:
+Urals 810 70 Ukraine Afghanistan Siberia China
+Asia:
+Siberia 880 50 Urals Yakutia Chita Mongolia China
+Asia:
+Yakutia 990 50 Siberia Chita Kamchatka
+Asia:
+Chita 970 95 Yakutia Mongolia Kamchatka Siberia
+Asia:
+Kamchatka 1110 60 Chita Yakutia Alaska Japan Mongolia
+Asia:
+Japan 1130 170 Kamchatka Mongolia
+Asia:
+Mongolia 980 140 Japan Siberia Chita Kamchatka China
+Asia:
+Afghanistan 810 130 Ukraine Urals China India Middle-East
+Asia:
+Middle-East 750 200 Afghanistan India Ukraine Egypt East-Africa South-Europe
+Asia:
+India 880 230 China Afghanistan Siam Middle-East
+Asia:
+China 995 200 India Afghanistan Urals Mongolia Siberia Siam
+Asia:
+Siam 995 270 China India Indonesia
