@@ -10,7 +10,7 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.cards.Card;
 
 /**
- * Implementation of @EasyModePlayer interface.
+ * Implementation of @AIBehaviour interface.
  * 
  * @author Manuele D'Ambrosio
  */
