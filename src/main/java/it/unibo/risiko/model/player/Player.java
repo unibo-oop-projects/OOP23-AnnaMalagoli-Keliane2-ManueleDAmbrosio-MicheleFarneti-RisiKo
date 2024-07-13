@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
@@ -180,5 +181,14 @@ public interface Player {
      * a human, false otherwise.
      */
     public boolean isAI();
+
+    /**
+     * The player draws a card from deck
+     * 
+     * @param deck - the deck to draw from.
+     * @return true it a new card has been drawn,
+     * false otherwise.
+     */
+    public boolean drawNewCardIfPossible(Deck deck);
 
 }

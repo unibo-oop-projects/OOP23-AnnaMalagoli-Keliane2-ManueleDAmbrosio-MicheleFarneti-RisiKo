@@ -20,7 +20,6 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.view.InitialViewObserver;
-import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -40,13 +39,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
             + FILE_SEPARATOR + "savegames.json";
-    private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     private Optional<Territory> attackerTerritory = Optional.empty();
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
-    private GameFrame gameFrame;
     private Register register;
 
     /**
@@ -57,8 +54,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     public GameController() {
         this.register = new RegisterImpl();
-        this.gameFrame = new GameFrame(this);
-        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString + FILE_SEPARATOR);
+        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
+                resourcesPackageString + FILE_SEPARATOR);
     }
 
     @Override
@@ -195,6 +192,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
+            currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();

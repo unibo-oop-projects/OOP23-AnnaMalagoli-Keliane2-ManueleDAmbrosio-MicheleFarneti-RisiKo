@@ -18,7 +18,6 @@ public class GameFactoryImpl implements GameFactory{
 
     @Override
     public boolean addNewPlayer(Player player) {
-        System.out.println(map.getMaxPlayers());
         if(players.size()<map.getMaxPlayers()){
             players.add(player);
             return true;
