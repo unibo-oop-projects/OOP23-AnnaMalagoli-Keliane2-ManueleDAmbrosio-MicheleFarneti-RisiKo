@@ -51,22 +51,22 @@ public class GameViewImpl implements GameView {
 
     private static final String FILE_SEPARATOR = File.separator;
 
-    private final static Double GAME_PANEL_WIDTH_PERCENTAGE = 0.8;
-    private final static Double MAP_PANEL_HEIGHT_PERCENTAGE = 0.7;
+    private static final Double GAME_PANEL_WIDTH_PERCENTAGE = 0.8;
+    private static final Double MAP_PANEL_HEIGHT_PERCENTAGE = 0.7;
 
-    private final static Integer MAP_GRADIENT_LEVEL = 1;
-    private final static Integer ATTACK_BAR_GRADIENT_LEVEL = 7;
-    private final static Integer TURNS_BAR_GRADIENT_LEVEL = 1;
+    private static final Integer MAP_GRADIENT_LEVEL = 1;
+    private static final Integer ATTACK_BAR_GRADIENT_LEVEL = 7;
+    private static final Integer TURNS_BAR_GRADIENT_LEVEL = 1;
 
-    private final static int MAP_LAYER = 1;
-    private final static int TANK_LAYER = 2;
-    private final static int TURN_ICON_LAYER = 3;
-    private final static int TURNSBAR_LAYER = 2;
-    private final static int BACKGROUND_LAYER = 0;
+    private static final int MAP_LAYER = 1;
+    private static final int TANK_LAYER = 2;
+    private static final int TURN_ICON_LAYER = 3;
+    private static final int TURNSBAR_LAYER = 2;
+    private static final int BACKGROUND_LAYER = 0;
     private static final Integer TOP_LAYER = 5;
 
-    private final static Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63, 58, 20);
-    private final static Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255, 204, 0);
+    private static final Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63, 58, 20);
+    private static final Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255, 204, 0);
 
     private static final Integer TANKS_WIDTH = 45;
     private static final Integer TANKS_HEIGTH = 45;
@@ -94,8 +94,8 @@ public class GameViewImpl implements GameView {
     private static final int PLAYER_ARMIES_LABEL_WIDTH = 23;
     private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 20;
 
-    private final Integer GAME_FRAME_WIDTH;
-    private final Integer GAME_FRAME_HEIGHT;
+    private final Integer frameWidth;
+    private final Integer frameHeigth;
     private static final Map<String, Position> tanksCoordinates = new HashMap<String, Position>() {
         {
             put("Great-Britain", new Position(530, 95));
@@ -182,34 +182,38 @@ public class GameViewImpl implements GameView {
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(final Integer frameWidth,final Integer frameHeight,final String resourcesLocator) {
-        GAME_FRAME_WIDTH = frameWidth;
-        GAME_FRAME_HEIGHT = frameHeight;
+    public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator) {
+        this.frameWidth = frameWidth;
+        this.frameHeigth = frameHeight;
         this.resourcesLocator = resourcesLocator;
 
         mainFrame.setResizable(false);
-        mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
+        mainFrame.setSize(new Dimension(frameWidth, frameHeigth));
         mainFrame.setTitle("Risiko!");
-        readImage(createPath(resourcesLocator,List.of("icon.png"))).ifPresent(image -> mainFrame.setIconImage(image));
+        readImage(createPath(resourcesLocator, List.of("icon.png"))).ifPresent(image -> mainFrame.setIconImage(image));
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
-     * Function used to create paths withou having to manually specify the file separator every time
+     * Function used to create paths withou having to manually specify the file
+     * separator every time
+     * 
      * @return A path for a given resource
      * @author Michele Farneti
+     * @param resourcePackage the path leading to the resources folder
+     * @param directories The pattern leading to the desired resource 
      */
-    private String createPath(String resourcePackage, List<String> directories) {
+    private String createPath(final String resourcePackage,final List<String> directories) {
         return resourcePackage + directories.stream().map(d -> FILE_SEPARATOR + d).collect(Collectors.joining());
     }
 
     @Override
-    public void showGameWindow(String mapName) {
+    public void showGameWindow(final String mapName) {
         mainFrame.getContentPane().removeAll();
         mainFrame.add(baseLayoutPane, BorderLayout.CENTER);
 
         // GamePanel and Basic layout initialization
-        baseLayoutPane.setBounds(0, 0, GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT);
+        baseLayoutPane.setBounds(0, 0, frameWidth, frameHeigth);
         baseLayoutPane.add(gamePanel, 0, 0);
         gamePanel.setBounds(0, 0, (int) (mainFrame.getWidth() * GAME_PANEL_WIDTH_PERCENTAGE), mainFrame.getHeight());
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
@@ -220,20 +224,20 @@ public class GameViewImpl implements GameView {
         mapLayoutPane.setBounds(0, 0, (int) mapLayoutPaneSize.getWidth(), (int) mapLayoutPaneSize.getHeight());
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap( resourcesLocator + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName + ".png");
+        paintMap(resourcesLocator + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName
+                + ".png");
         mapWidth = mapLayoutPane.getSize().width;
         mapHeight = mapLayoutPane.getSize().height;
 
         // Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
-        mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight()); 
+        mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
         logPanel.setBounds(gamePanel.getWidth(), 0, mainFrame.getWidth() - gamePanel.getWidth(),
                 mainFrame.getHeight() / 2);
         logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
-        // logPanel.setOpaque(true);
         baseLayoutPane.add(logPanel, MAP_LAYER, 0);
 
         territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2,
@@ -311,7 +315,8 @@ public class GameViewImpl implements GameView {
         moveArmiesButton.addActionListener(e -> gameViewObserver.moveClicked());
         moveArmiesButton.setEnabled(false);
 
-        turnTank = new ColoredImageButton(resourcesLocator + FILE_SEPARATOR, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
+        turnTank = new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
+                FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -444,7 +449,8 @@ public class GameViewImpl implements GameView {
     public void showTanks(List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
-                new ColoredImageButton(resourcesLocator + FILE_SEPARATOR, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
+                new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
+                        FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
                 new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
@@ -481,7 +487,7 @@ public class GameViewImpl implements GameView {
                     player);
         } else {
             iconsMap.put(
-                    new ColoredImageButton(resourcesLocator  + FILE_SEPARATOR,
+                    new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
@@ -590,10 +596,10 @@ public class GameViewImpl implements GameView {
     @Override
     public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
         setGameViewButtonsEnabled(false);
-        final int PANEL_WIDTH = GAME_FRAME_WIDTH / 2;
-        final int PANEL_HEIGHT = GAME_FRAME_HEIGHT / 2;
-        final int PANEL_LOCATION_X = GAME_FRAME_WIDTH / 6;
-        final int PANEL_LOCATION_Y = GAME_FRAME_HEIGHT / 6;
+        final int PANEL_WIDTH = frameWidth / 2;
+        final int PANEL_HEIGHT = frameHeigth / 2;
+        final int PANEL_LOCATION_X = frameWidth / 6;
+        final int PANEL_LOCATION_Y = frameHeigth / 6;
         attackPanel = new AttackPanel(
                 PANEL_HEIGHT,
                 PANEL_WIDTH,
@@ -630,7 +636,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showInitializationWindow(Map<String, Integer> mapNames) {
-        var initializationPanel = new NewGameInitViewImpl(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT, mapNames,
+        var initializationPanel = new NewGameInitViewImpl(frameWidth, frameHeigth, mapNames,
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);
         mainFrame.validate();
@@ -641,9 +647,9 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
-        moveArmiesPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR,
-                GAME_FRAME_WIDTH / SIZE_FACTOR,
-                GAME_FRAME_HEIGHT / SIZE_FACTOR);
+        moveArmiesPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
+                frameWidth / SIZE_FACTOR,
+                frameHeigth / SIZE_FACTOR);
         moveArmiesPanel.setVisible(true);
         setGameViewButtonsEnabled(false);
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
@@ -658,9 +664,9 @@ public class GameViewImpl implements GameView {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
         JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
-        choiceCardsPanel.setBounds(GAME_FRAME_WIDTH / LOCATION_FACTOR, GAME_FRAME_HEIGHT / LOCATION_FACTOR,
-                GAME_FRAME_WIDTH / SIZE_FACTOR,
-                GAME_FRAME_HEIGHT / SIZE_FACTOR);
+        choiceCardsPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
+                frameWidth / SIZE_FACTOR,
+                frameHeigth / SIZE_FACTOR);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
