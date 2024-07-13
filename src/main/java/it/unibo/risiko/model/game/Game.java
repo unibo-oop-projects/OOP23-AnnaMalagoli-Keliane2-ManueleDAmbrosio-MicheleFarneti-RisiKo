@@ -17,9 +17,10 @@ import it.unibo.risiko.model.player.Player;
 public interface Game {
 
     /**
-     * @return Allows the game to go on by updating the active players, but only after checking if he made all the actions needed to skip the turn.
+     * Allows the game to go on by updating the active players, but only after checking if he made all the actions needed to skip the turn.
+     * @return True if the turn was succesfuly skipped
      */
-    boolean nextTurn();
+    boolean skipTurn();
 
     /**
      * @return the name of the Map being played.
@@ -28,7 +29,7 @@ public interface Game {
 
     /**
      * Initializises the game following the basic Risiko rules, Every player
-     * gets a randomly generated target, the set of owned territories and the right amount of armies.
+     * gets a randomly generated target, the set of owned territories and the right amount of armies, it also handles the case where.
      */
     void startGame();
 

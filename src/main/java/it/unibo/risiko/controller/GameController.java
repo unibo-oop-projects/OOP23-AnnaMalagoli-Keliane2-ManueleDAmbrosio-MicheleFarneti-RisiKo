@@ -99,14 +99,25 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void skipTurn() {
-        if (gameManager.getCurrentGame().get().nextTurn()) {
+        if (gameManager.getCurrentGame().get().skipTurn()) {
             resetAttack();
-            view.enableMovements(false);
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            showCards();
             redrawView();
+            view.enableMovements(false);
             view.enableAttack(false);
             view.enableSkip(false);
         }
+    }
+
+    /**
+     * Check if the current player has cards to be played and eventually shows  him the menu
+     * @Author Michele Farneti
+     */
+    private void showCards() {
+       if(!currentPlayer().get().isAI() && !currentPlayer().get().getOwnedCards().isEmpty()){
+            view.createChoiceCards(currentPlayer().get().getOwnedCards().stream().toList());
+       }
     }
 
     /**

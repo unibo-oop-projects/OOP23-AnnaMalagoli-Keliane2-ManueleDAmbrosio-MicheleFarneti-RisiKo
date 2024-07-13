@@ -28,12 +28,14 @@ public class GameImpl implements Game {
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
     private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
     private static final int PLACEABLE_ARMIES_PER_TURN = 3;
+    private static final int MIN_CARDS_PLAYABLE = 3;
     private static final Random randomNumberGenerator = new Random();
 
     private final GameMap map;
 
     private int activePlayer = 0;
     private int armiesPlaced = 0;
+    private long turnsCount = 0;
     private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
     private Deck deck;
@@ -48,8 +50,10 @@ public class GameImpl implements Game {
     public void startGame() {
         Collections.shuffle(players);
         players.forEach(p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
-        assignTerritories();
         assignTargets();
+        assignTerritories();
+        activePlayer = 0;
+        handleAIBehaviour();
     }
 
     /**
@@ -99,37 +103,76 @@ public class GameImpl implements Game {
             players.get(activePlayer).decrementArmiesToPlace();
             activePlayer = nextPlayer();
         }
-        activePlayer = 0;
-        handleAIBehaviour();
     }
 
     @Override
-    public boolean nextTurn() {
+    public boolean skipTurn() {
         if (skipTurnPossible()) {
             switch (status) {
+                // Current player gets updated, if no player has armies left to place, the next
+                // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
-                    armiesPlaced = 0;
                     if (getTotalArmiesLeftToPlace() == 0) {
                         players.get(nextPlayerIfNotDefeated()).computeReinforcements();
-                        status = status.next();
-                    } 
-                    updateCurrentPlayer();
-                    return true;
-                case ARMIES_PLACEMENT:
-                    status = status.next();
-                    return true;
+                        nextGamePhase();
+                    } else {
+                        armiesPlaced = 0;
+                    }
+                    break;
+                // Current player gets updated and the next player gets reinforcements
+                case CARDS_MANAGING:
                 case ATTACKING:
-                    status = GameStatus.READY_TO_ATTACK;
                 case READY_TO_ATTACK:
-                    status = status.next();
                     players.get(nextPlayerIfNotDefeated()).computeReinforcements();
-                    updateCurrentPlayer();
-                    return true;
+                    nextGamePhase();
                 default:
                     break;
             }
+            updateCurrentPlayer();
+            return true;
         }
         return false;
+    }
+
+    /**
+     * Private function used to manage the alternation of game phases in the game
+     * loop by
+     * updating the gameStatus following the gmae flow.
+     */
+    private void nextGamePhase() {
+        switch (status) {
+            // Once territory occupation phase is over begins armiesPlacement phase
+            case TERRITORY_OCCUPATION:
+                status = GameStatus.ARMIES_PLACEMENT;
+                break;
+            // If the player has armies to place status goes to armies placement, otherwise
+            // directly to Ready to attack
+            case CARDS_MANAGING:
+                if (players.get(activePlayer).getArmiesToPlace() > 0) {
+                    status = GameStatus.ARMIES_PLACEMENT;
+                } else {
+                    status = GameStatus.READY_TO_ATTACK;
+                }
+                // After armies placement the player can attack
+            case ARMIES_PLACEMENT:
+                status = GameStatus.READY_TO_ATTACK;
+                // After attacking a new turn is going to begin, if the player has enough cards
+                // to play them it will go CARDS MANAGING phase,
+                // OtherWhise if he hasn't enough cards but enough armies to place the new game
+                // status is going to armies Placement. If it can't
+                // Do any of those actions it's going directly to the attack phase.
+            case ATTACKING:
+            case READY_TO_ATTACK:
+                if (players.get(nextPlayerIfNotDefeated()).getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
+                    status = GameStatus.CARDS_MANAGING;
+                } else if (players.get(nextPlayerIfNotDefeated()).getArmiesToPlace() > 0) {
+                    status = GameStatus.ARMIES_PLACEMENT;
+                } else {
+                    status = GameStatus.READY_TO_ATTACK;
+                }
+            default:
+                break;
+        }
     }
 
     /**
@@ -138,14 +181,18 @@ public class GameImpl implements Game {
     private boolean skipTurnPossible() {
         switch (status) {
             case TERRITORY_OCCUPATION:
-                return true;
+                if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN || getCurrentPlayer().getArmiesToPlace() == 0) {
+                    return true;
+                }
+                return false;
             case ARMIES_PLACEMENT:
                 return players.get(activePlayer).getArmiesToPlace() == 0;
+            case CARDS_MANAGING:
             case READY_TO_ATTACK:
             case ATTACKING:
                 return true;
             default:
-                return players.get(activePlayer).getArmiesToPlace() == 0;
+                return false;
         }
     }
 
@@ -159,26 +206,33 @@ public class GameImpl implements Game {
 
     @Override
     public boolean placeArmies(final Territory territory, final int nArmies) {
-        if (players.get(activePlayer).getArmiesToPlace() > 0) {
-            if (status == GameStatus.TERRITORY_OCCUPATION) {
-                if (armiesPlaced < 3) {
-                    if (players.get(activePlayer).isOwnedTerritory(territory)) {
+        if ( getCurrentPlayer().getArmiesToPlace() > 0) {
+            switch (status) {
+                case TERRITORY_OCCUPATION:
+                    if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
+                            &&  getCurrentPlayer().isOwnedTerritory(territory)) {
                         territory.addArmies(nArmies);
                         armiesPlaced++;
-                        players.get(activePlayer).decrementArmiesToPlace();
-                        if(armiesPlaced == PLACEABLE_ARMIES_PER_TURN || players.get(activePlayer).getArmiesToPlace() == 0){
-                            nextTurn();
-                        };
+                        getCurrentPlayer().decrementArmiesToPlace();
+                        if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN
+                                || getCurrentPlayer().getArmiesToPlace() == 0) {
+                            skipTurn();
+                        }
                         return true;
                     }
-                }
-            } else if (status == GameStatus.ARMIES_PLACEMENT) {
-                if (players.get(activePlayer).isOwnedTerritory(territory)) {
-                    territory.addArmies(nArmies);
-                    players.get(activePlayer).decrementArmiesToPlace();
-                    nextTurn();
-                    return true;
-                }
+                    break;
+                case ARMIES_PLACEMENT:
+                    if ( getCurrentPlayer().isOwnedTerritory(territory)) {
+                        territory.addArmies(nArmies);
+                        getCurrentPlayer().decrementArmiesToPlace();
+                        if(getCurrentPlayer().getArmiesToPlace() == 0){
+                            nextGamePhase();
+                        }
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         return false;
@@ -222,6 +276,9 @@ public class GameImpl implements Game {
      */
     private void updateCurrentPlayer() {
         activePlayer = nextPlayerIfNotDefeated();
+        if(activePlayer == 0){
+            turnsCount ++;
+        }
         handleAIBehaviour();
     }
 
@@ -235,21 +292,26 @@ public class GameImpl implements Game {
             var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
             switch (status) {
                 case TERRITORY_OCCUPATION:
-                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1));
+                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
+                        ;
                     break;
+                case CARDS_MANAGING:
+                    var cardCombo = aiBehaviour.checkCardCombo();
+                    this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
                 case ARMIES_PLACEMENT:
-                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1));
+                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
+                        ;
                     if (aiBehaviour.decideAttack(getTerritoriesList())) {
                         AttackPhase attackPhase = new AttackPhaseImpl(
-                            getCurrentPlayer(), 
-                            aiBehaviour.getNextAttackingTerritory(),
-                            aiBehaviour.decideAttackingArmies(),
-                            getOwner(aiBehaviour.getNextAttackedTerritory()),
-                            aiBehaviour.getNextAttackedTerritory());
+                                getCurrentPlayer(),
+                                aiBehaviour.getNextAttackingTerritory(),
+                                aiBehaviour.decideAttackingArmies(),
+                                getOwner(aiBehaviour.getNextAttackedTerritory()),
+                                aiBehaviour.getNextAttackedTerritory());
                         attackPhase.destroyArmies();
                         attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
                     }
-                    this.nextTurn();
+                    this.skipTurn();
                     break;
                 default:
                     break;
