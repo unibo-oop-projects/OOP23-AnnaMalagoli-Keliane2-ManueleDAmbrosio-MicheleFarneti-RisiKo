@@ -32,7 +32,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
- * @keliane2
+ * @author Keliane2
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;

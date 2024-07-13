@@ -56,7 +56,12 @@ public class AttackPhaseImpl implements AttackPhase {
             this.defenderLostArmies = computeDefenderLostArmies();
         } else {
             throw new IllegalArgumentException(
-                    "Number of attacking armies not allowed or players are not the owners of the territories" + attackingPlayer.getColor_id() +defendingPlayer.getColor_id() +attackingArmies + attackerTerritory.getTerritoryName()+ defenderTerritory.getTerritoryName());
+                    "Number of attacking armies not allowed or players are not the owners of the territories: " +
+                        "attacking player: " + attackingPlayer.getColor_id() + 
+                        "; defending player: " + defendingPlayer.getColor_id() + 
+                        "; attacking armies: " + attackingArmies + 
+                        "; attacking territory: " + attackerTerritory.getTerritoryName() + 
+                        "; defending territory: " + defenderTerritory.getTerritoryName());
         }
     }
 
