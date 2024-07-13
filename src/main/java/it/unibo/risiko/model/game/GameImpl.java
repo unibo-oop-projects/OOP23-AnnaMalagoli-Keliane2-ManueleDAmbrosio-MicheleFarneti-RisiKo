@@ -236,7 +236,6 @@ public class GameImpl implements Game {
             switch (status) {
                 case TERRITORY_OCCUPATION:
                     while (this.placeArmies(aiBehaviour.decidePositioning(), 1));
-                    this.nextTurn();
                     break;
                 case ARMIES_PLACEMENT:
                     while (this.placeArmies(aiBehaviour.decidePositioning(), 1));
