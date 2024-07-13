@@ -57,11 +57,11 @@ public class AttackPhaseImpl implements AttackPhase {
         } else {
             throw new IllegalArgumentException(
                     "Number of attacking armies not allowed or players are not the owners of the territories: " +
-                        "attacking player: " + attackingPlayer.getColor_id() + 
-                        "; defending player: " + defendingPlayer.getColor_id() + 
-                        "; attacking armies: " + attackingArmies + 
-                        "; attacking territory: " + attackerTerritory.getTerritoryName() + 
-                        "; defending territory: " + defenderTerritory.getTerritoryName());
+                            "attacking player: " + attackingPlayer.getColor_id() +
+                            "; defending player: " + defendingPlayer.getColor_id() +
+                            "; attacking armies: " + attackingArmies +
+                            "; attacking territory: " + attackerTerritory.getTerritoryName() +
+                            "; defending territory: " + defenderTerritory.getTerritoryName());
         }
     }
 
@@ -125,7 +125,7 @@ public class AttackPhaseImpl implements AttackPhase {
     }
 
     private boolean isLegitAttackingArmies(final Territory territory, final int attackingArmies) {
-        return (territory.getNumberOfArmies() > attackingArmies);
+        return (territory.getNumberOfArmies() > attackingArmies) && (attackingArmies <= MAX_DEFENDING_ARMIES);
     }
 
     private int assignDefendingArmies() {
