@@ -39,7 +39,7 @@ Peru 260 420 Argentina Venezuela Brazil
 South-America:
 Argentina 290 490 Peru Brazil
 South-America:
-Brazil 340 390 Peru Argentina Venezuela
+Brazil 340 390 Peru Argentina Venezuela North-Africa
 North-America 5:
 Alaska 60 50 Kamchatka Northwest-Territories Alberta
 North-America:
