@@ -38,12 +38,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
     private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
-    private static final String saveGamesFilePath = "resources" + FILE_SEPARATOR + "savegames"
+    private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
             + FILE_SEPARATOR + "savegames.json";
     private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
-            + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko"
-            + FILE_SEPARATOR;
+            + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     private Optional<Territory> attackerTerritory = Optional.empty();
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
@@ -59,7 +58,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public GameController() {
         this.register = new RegisterImpl();
         this.gameFrame = new GameFrame(this);
-        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
+        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString + FILE_SEPARATOR);
     }
 
     @Override

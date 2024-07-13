@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -176,12 +177,12 @@ public class GameViewImpl implements GameView {
     private int mapHeight;
 
     /**
-     * Initialzizes the GUI for the game creating all of its main components.
+     * Initializes the GUI for the game by creating the frame.
      * 
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(Integer frameWidth, Integer frameHeight, String resourcesLocator) {
+    public GameViewImpl(final Integer frameWidth,final Integer frameHeight,final String resourcesLocator) {
         GAME_FRAME_WIDTH = frameWidth;
         GAME_FRAME_HEIGHT = frameHeight;
         this.resourcesLocator = resourcesLocator;
@@ -189,7 +190,17 @@ public class GameViewImpl implements GameView {
         mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(GAME_FRAME_WIDTH, GAME_FRAME_HEIGHT));
         mainFrame.setTitle("Risiko!");
+        readImage(createPath(resourcesLocator,List.of("icon.png"))).ifPresent(image -> mainFrame.setIconImage(image));
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    /**
+     * Function used to create paths withou having to manually specify the file separator every time
+     * @return A path for a given resource
+     * @author Michele Farneti
+     */
+    private String createPath(String resourcePackage, List<String> directories) {
+        return resourcePackage + directories.stream().map(d -> FILE_SEPARATOR + d).collect(Collectors.joining());
     }
 
     @Override
@@ -209,13 +220,13 @@ public class GameViewImpl implements GameView {
         mapLayoutPane.setBounds(0, 0, (int) mapLayoutPaneSize.getWidth(), (int) mapLayoutPaneSize.getHeight());
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap(resourcesLocator + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName + ".png");
+        paintMap( resourcesLocator + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName + ".png");
         mapWidth = mapLayoutPane.getSize().width;
         mapHeight = mapLayoutPane.getSize().height;
 
         // Map background setting
         GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
-        mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
+        mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight()); 
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
@@ -300,7 +311,7 @@ public class GameViewImpl implements GameView {
         moveArmiesButton.addActionListener(e -> gameViewObserver.moveClicked());
         moveArmiesButton.setEnabled(false);
 
-        turnTank = new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
+        turnTank = new ColoredImageButton(resourcesLocator + FILE_SEPARATOR, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_",
                 gamePanel.getWidth() / 2 - (TURN_TANK_WIDTH) / 2, 0, TURN_TANK_WIDTH, TURN_TANK_HEIGHT);
         turnTank.setBorderPainted(false);
         turnTank.setEnabled(false);
@@ -433,7 +444,7 @@ public class GameViewImpl implements GameView {
     public void showTanks(List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
-                new ColoredImageButton(resourcesLocator, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
+                new ColoredImageButton(resourcesLocator + FILE_SEPARATOR, FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
                 new JLabel("0"))));
 
         for (var tank : tanksMap.entrySet()) {
@@ -464,13 +475,13 @@ public class GameViewImpl implements GameView {
     public void showTurnIcon(String player, int playerIndex, boolean isAI) {
         if (isAI) {
             iconsMap.put(
-                    new ColoredImageButton(resourcesLocator,
+                    new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
         } else {
             iconsMap.put(
-                    new ColoredImageButton(resourcesLocator,
+                    new ColoredImageButton(resourcesLocator  + FILE_SEPARATOR,
                             FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
                     player);
