@@ -269,4 +269,9 @@ public interface GameView {
      * @author Keliane2
      */
     public  void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader, Optional<Player> eventLeaderAdversary);
+
+    /**
+     * Handles Cards panel closure
+     */
+    void exitCardsPanel();
 }

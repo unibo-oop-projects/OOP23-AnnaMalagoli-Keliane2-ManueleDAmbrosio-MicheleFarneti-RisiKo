@@ -166,6 +166,7 @@ public class GameViewImpl implements GameView {
     private JTextField targetTextField = new StandardTextField("Target");
     private JPanel logPanel = new JPanel();
     private JPanel territoriesTablePanel = new JPanel();
+    private JPanel choiceCardsPanel;
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -666,7 +667,7 @@ public class GameViewImpl implements GameView {
     public void createChoiceCards(List<Card> playerCards) {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
-        JPanel choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
+        choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
         choiceCardsPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
                 frameWidth / SIZE_FACTOR,
                 frameHeigth / SIZE_FACTOR);
@@ -726,6 +727,12 @@ public class GameViewImpl implements GameView {
                 reg.addEvent(e1);
                 break;
         }
+    }
+
+    @Override
+    public void exitCardsPanel() {
+        setGameViewButtonsEnabled(true);
+        choiceCardsPanel.setVisible(false);
     }
     
 

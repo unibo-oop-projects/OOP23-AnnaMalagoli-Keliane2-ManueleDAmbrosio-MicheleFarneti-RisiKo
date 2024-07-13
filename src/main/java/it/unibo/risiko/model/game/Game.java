@@ -102,4 +102,9 @@ public interface Game {
      */
     boolean areTerritoriesNear(Territory territory1, Territory territory2);
 
+    /**
+     * If the game is in CARD_MANAGING phase, makes it go to the next phase.
+     */
+    void endCardsPhase();
+
 }

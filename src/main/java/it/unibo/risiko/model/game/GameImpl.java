@@ -381,4 +381,11 @@ public class GameImpl implements Game {
     public Deck getDeck() {
         return this.deck;
     }
+
+    @Override
+    public void endCardsPhase() {
+        if(status == GameStatus.CARDS_MANAGING){
+            nextGamePhase();
+        }
+    }
 }

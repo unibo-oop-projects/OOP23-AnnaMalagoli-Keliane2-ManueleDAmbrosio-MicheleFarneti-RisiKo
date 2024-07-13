@@ -96,10 +96,17 @@ public interface GameViewObserver {
     void moveClicked();
 
     /**
-     * Alerts the controller that the armies movement phase ha concluded
+     * Alerts the controller that the armies movement phase has concluded
      * 
      * @author Michele Farneti
      */
     void closeMovementPhase();
+
+    /**
+     * Alerts the controller that the cards managing phase has concluded
+     * 
+     * @author Michele Farneti
+     */
+    public void exitCardsManagingPhase();
 
 }

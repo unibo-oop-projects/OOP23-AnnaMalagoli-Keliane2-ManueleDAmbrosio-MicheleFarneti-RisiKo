@@ -98,6 +98,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public void skipTurn() {
         if (gameManager.getCurrentGame().get().skipTurn()) {
             resetAttack();
+            redrawView();
             view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
             showCards();
             redrawView();
@@ -363,5 +364,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void closeMovementPhase() {
         this.view.exitMoveArmiesPanel();
+    }
+
+    @Override
+    public void exitCardsManagingPhase() {
+        gameManager.getCurrentGame().get().endCardsPhase();
+        this.view.exitCardsPanel();
     }
 }
