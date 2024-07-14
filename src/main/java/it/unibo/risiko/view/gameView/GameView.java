@@ -2,9 +2,13 @@ package it.unibo.risiko.view.gameView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.game.GameStatus;
+import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
@@ -34,17 +38,19 @@ public interface GameView {
     /**
      * 
      * @author Michele Farneti
-     * @param mapNames A map with the name of the GameMap names and associated maxPlayers
+     * @param mapNames A map with the name of the GameMap names and associated
+     *                 maxPlayers
      */
-    void showInitializationWindow(Map<String,Integer> mapNames);
+    void showInitializationWindow(Map<String, Integer> mapNames);
 
     /**
      * Shows the game window used for displaying the events happening in the
      * 
-     * @param mapImagePath The name of the map
+     * @param mapName       The name of the map Used for the game
+     * @param playersNumber The number of players playing the game
      * @author Michele Farneti
      */
-    void showGameWindow(String mapName);
+    void showGameWindow(final String mapName,final Integer playersNumber);
 
     /**
      * Activates the placing and the viewing of the tanks buttons over their
@@ -53,17 +59,16 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(final List<String> territories);
+    void showTanks(final List<Territory> territories);
 
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param playersColor
+     * @param Player
      * @param playersIndex
-     * @param isAI
      * @author Michele Farneti
      */
-    void showTurnIcon(String playerColor, int playerIndex, boolean isAI);
+    void showTurnIcon(final Player player,final int playerIndex);
 
     /**
      * Edits the view in order to show wich player is the current player.
@@ -71,7 +76,7 @@ public interface GameView {
      * @param player
      * @author Michele Farneti
      */
-    void setCurrentPlayer(String playerColor, Integer nArmies);
+    void setCurrentPlayer(final Player player);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
@@ -81,7 +86,7 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(String territory, boolean isAttacker);
+    void showFightingTerritory(final Territory territory,final boolean isAttacker);
 
     /**
      * Deletes higlightings for a fighting territory
@@ -89,18 +94,17 @@ public interface GameView {
      * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritory(String fightingTerritory);
+    void resetFightingTerritory(final Territory fightingTerritory);
 
     /**
      * Updates the game view, changing a tank based on territory
      * occuaption and updating the armies count label
      * 
-     * @param territoryName
+     * @param territory
      * @param playerColor
-     * @param armiesCount
      * @author Michele Farneti
      */
-    void redrawTank(String territroyName, String playerColor, Integer armiesCount);
+    void redrawTank(final Territory territory, final String playerColor);
 
     /**
      * Updates the gameView making it show who is the winner of the game
@@ -108,7 +112,7 @@ public interface GameView {
      * @param winnerColor
      * @author Michele Farneti
      */
-    void gameOver(String winnerColor);
+    void gameOver(final String winnerColor);
 
     /**
      * Updates the @GameView making it show the attack panel.
@@ -144,6 +148,13 @@ public interface GameView {
      * @author Manuele D'Ambrosio
      */
     void closeAttackPanel();
+
+    /**
+     * Handles MoveArmiesPanel closure if it's closed without completing a move
+     *
+     * @author Michele Farneti
+     */
+    void exitMoveArmiesPanel();
 
     /**
      * Method used to set the attacker's dice throws.
@@ -188,24 +199,82 @@ public interface GameView {
 
     /**
      * 
-     * Displays current plauer's target
-     * 
-     * @param targetText A text String rappresenting the current's player target
-     * @author Michele Farneti
-     */
-    public void showTarget(String targetText);
-
-    /**
-     * 
      * @param playerCards
      * @author Anna Malagoli
      */
     public void createChoiceCards(List<Card> playerCards);
 
     /**
+     * 
+     * Enables or deactivates the button used for armies movement.
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableMovements(final boolean enabled);
+
+    /**
+     * 
+     * Enables or deactivates the button used for skipping
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableSkip(final boolean enabled);
+
+    /**
+     * 
+     * Enables or deactivates the button used for attacks.
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the button has to be enabled
+     */
+    public void enableAttack(final boolean enabled);
+
+    /**
      * @keliane2
      * @param reg
      * @param l
+     * @author Keliane2
      */
     public void createLog(Register reg, List<Player> l);
+
+    /**
+     * Creates the territory table panel.
+     * 
+     * @param terr    - list of territories.
+     * @param players - list of players.
+     */
+    public void createTablePanel(List<Territory> terr, List<Player> players);
+
+    /**
+     * Updates the table panel.
+     */
+    public void updateTablePanel();
+
+    /**
+     * @param reg
+     * @param type
+     * @param attacker
+     * @param defender
+     * @param eventLeader
+     * @param eventLeaderAdversary
+     * @author Keliane2
+     */
+    public void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
+            Optional<Player> eventLeaderAdversary);
+
+    /**
+     * Handles Cards panel closure
+     * 
+     * @author Michele Farneti
+     */
+    void exitCardsPanel();
+
+    /**
+     * Updates the view with infos about the gamestatus and current turn.
+     * @param gameStatus
+     * @param turnsCount
+     */
+    void showStatus(GameStatus gameStatus, Long turnsCount);
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
@@ -23,6 +24,7 @@ public class StdPlayer implements Player {
     private int armiesToPlace;
     private Optional<Target> target;
     private boolean isAI;
+    private boolean hasDrawnNewCard;
 
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.color_id = color;
@@ -98,6 +100,7 @@ public class StdPlayer implements Player {
     @Override
     public void computeReinforcements() {
         this.armiesToPlace = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
+        resetDraw();
     }
 
     @Override
@@ -153,5 +156,19 @@ public class StdPlayer implements Player {
     @Override
     public boolean isAI() {
         return this.isAI;
+    }
+
+    @Override
+    public boolean drawNewCardIfPossible(Deck deck) {
+        if (!hasDrawnNewCard) {
+            this.addCard(deck.pullCard());
+            this.hasDrawnNewCard = true;
+            return true;
+        }
+        return false;
+    }
+
+    private void resetDraw() {
+        this.hasDrawnNewCard = false;
     }
 }

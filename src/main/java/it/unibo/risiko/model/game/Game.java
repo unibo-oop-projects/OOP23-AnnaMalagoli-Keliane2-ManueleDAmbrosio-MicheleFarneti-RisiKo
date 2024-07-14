@@ -8,7 +8,8 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**
- * This interface manages all of the basic functions that are offered during the actual risiko games!
+ * This interface manages all of the basic functions that are offered during the
+ * actual risiko games!
  * It is going to manage all of the players actions and the game loop itself.
  * 
  * @author Michele Farneti
@@ -17,9 +18,12 @@ import it.unibo.risiko.model.player.Player;
 public interface Game {
 
     /**
-     * @return Allows the game to go on by updating the active players, but only after checking if he made all the actions needed to skip the turn.
+     * Allows the game to go on by updating the active players, but only after
+     * checking if he made all the actions needed to skip the turn.
+     * 
+     * @return True if the turn was succesfuly skipped
      */
-    boolean nextTurn();
+    boolean skipTurn();
 
     /**
      * @return the name of the Map being played.
@@ -28,7 +32,8 @@ public interface Game {
 
     /**
      * Initializises the game following the basic Risiko rules, Every player
-     * gets a randomly generated target, the set of owned territories and the right amount of armies.
+     * gets a randomly generated target, the set of owned territories and the right
+     * amount of armies, it also handles the case where.
      */
     void startGame();
 
@@ -60,8 +65,10 @@ public interface Game {
     Player getCurrentPlayer();
 
     /**
-     * The amount of armies selected is added to the player's territory if the current player 
+     * The amount of armies selected is added to the player's territory if the
+     * current player
      * owns it
+     * 
      * @param territory
      * @param nArmies
      * @return True if it was possbile to place the armies, false otherwise.
@@ -77,13 +84,15 @@ public interface Game {
 
     /**
      * 
-     * If possible, sets the Game status to ATTACKING, allowing the player to attack next
+     * If possible, sets the Game status to ATTACKING, allowing the player to attack
+     * next
      */
     void setAttacking();
 
     /**
      * 
-     * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK allowing the gameLoop to restart
+     * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK
+     * allowing the gameLoop to restart
      */
     void endAttack();
 
@@ -97,8 +106,21 @@ public interface Game {
      * 
      * @param territory1
      * @param territory2
-     * @return True if the two territories of the game's map are near, false otherwise.
+     * @return True if the two territories of the game's map are near, false
+     *         otherwise.
      */
     boolean areTerritoriesNear(Territory territory1, Territory territory2);
+
+    /**
+     * If the game is in CARD_MANAGING phase, makes it go to the next phase.
+     */
+    void endCardsPhase();
+
+    /**
+     * 
+     * @return a number indicating how many times the game loop has reached the
+     *         first player
+     */
+    Long getTurnsCount();
 
 }

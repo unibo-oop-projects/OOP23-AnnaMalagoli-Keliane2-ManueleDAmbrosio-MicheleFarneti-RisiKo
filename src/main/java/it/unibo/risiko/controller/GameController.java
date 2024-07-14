@@ -1,11 +1,6 @@
 package it.unibo.risiko.controller;
 
-import java.awt.Dimension;
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
@@ -16,6 +11,7 @@ import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -36,21 +32,19 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
- * @keliane2
+ * @author Keliane2
  */
-public class GameController implements GameViewObserver , InitialViewObserver{
+public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
     private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
-    private static final String saveGamesFilePath = "resources" + FILE_SEPARATOR + "savegames"
+    private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
             + FILE_SEPARATOR + "savegames.json";
-    private static final String mapImagePath = FILE_SEPARATOR + "maps" + FILE_SEPARATOR + "standardMap.png";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
-            + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko" + FILE_SEPARATOR;
+            + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     private Optional<Territory> attackerTerritory = Optional.empty();
     private Optional<Territory> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
-    private GameFrame gameFrame;
     private Register register;
 
     /**
@@ -61,16 +55,16 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      */
     public GameController() {
         this.register = new RegisterImpl();
-        this.gameFrame = new GameFrame(this);
-        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath, resourcesPackageString);
+        gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
+                resourcesPackageString + FILE_SEPARATOR);
+        new GameFrame(this);
     }
 
-    
     @Override
     public void startGameWindow(Integer width, Integer height) {
-        this.view = new GameViewImpl(width,height,resourcesPackageString);
+        this.view = new GameViewImpl(width, height, resourcesPackageString);
         this.view.start();
-        this.view.setObserver(this); 
+        this.view.setObserver(this);
     }
 
     @Override
@@ -78,13 +72,15 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
-   @Override
+    @Override
     public void setupGameView() {
-        view.showGameWindow(gameManager.getCurrentGame().get().getMapName());
-        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList().stream().map(t -> t.getTerritoryName())
-                .toList());
+        view.showGameWindow(gameManager.getCurrentGame().get().getMapName(),
+                gameManager.getCurrentGame().get().getPlayersList().size());
+        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList());
         showTurnIcons();
         view.createLog(this.register, gameManager.getCurrentGame().get().getPlayersList());
+        view.createTablePanel(gameManager.getCurrentGame().get().getTerritoriesList(),
+                gameManager.getCurrentGame().get().getPlayersList());
         redrawView();
     }
 
@@ -94,18 +90,35 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      * @author Michele Farneti
      */
     private void showTurnIcons() {
-        for (int i = 0; i < gameManager.getCurrentGame().get().getPlayersList().size(); i++) {
-            var player = gameManager.getCurrentGame().get().getPlayersList().get(i);
-            this.view.showTurnIcon(player.getColor_id(), i, player.isAI());
+        for (int index = 0; index < gameManager.getCurrentGame().get().getPlayersList().size(); index++) {
+            var player = gameManager.getCurrentGame().get().getPlayersList().get(index);
+            this.view.showTurnIcon(player, index);
         }
     }
 
     @Override
     public void skipTurn() {
-        if (gameManager.getCurrentGame().get().nextTurn()) {
+        if (gameManager.getCurrentGame().get().skipTurn()) {
             resetAttack();
-            view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
             redrawView();
+            view.setCurrentPlayer(currentPlayer().get());
+            showCards();
+            redrawView();
+            view.enableMovements(false);
+            view.enableAttack(false);
+            view.enableSkip(false);
+        }
+    }
+
+    /**
+     * Check if the current player has cards to be played and eventually shows him
+     * the menu
+     * 
+     * @Author Michele Farneti
+     */
+    private void showCards() {
+        if (!currentPlayer().get().isAI() && !currentPlayer().get().getOwnedCards().isEmpty()) {
+            view.createChoiceCards(currentPlayer().get().getOwnedCards().stream().toList());
         }
     }
 
@@ -115,30 +128,34 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      * @author Michele Farneti
      */
     private void resetAttack() {
-        attackerTerritory.ifPresent( t -> view.resetFightingTerritory(t.getTerritoryName()));
-        defenderTerritory.ifPresent( t -> view.resetFightingTerritory(t.getTerritoryName()));
+        attackerTerritory.ifPresent(t -> view.resetFightingTerritory(t));
+        defenderTerritory.ifPresent(t -> view.resetFightingTerritory(t));
         attackerTerritory = Optional.empty();
         defenderTerritory = Optional.empty();
         redrawView();
     }
 
     @Override
-    public void territorySelected(String territoryName) {
-        var territory = getTerritoryFromString(territoryName);
+    public void territorySelected(Territory territory) {
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                gameManager.getCurrentGame().get().placeArmies(territory, 1);       
+                gameManager.getCurrentGame().get().placeArmies(territory, 1);
                 break;
             case ARMIES_PLACEMENT:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                if (gameManager.getCurrentGame().get().getGameStatus() == GameStatus.READY_TO_ATTACK) {
+                    view.enableMovements(true);
+                }
+                ;
                 break;
             case ATTACKING:
-                if(currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1){
-                    setFighter(territoryName, true);
-                }
-                else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()){
-                    if(gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),getTerritoryFromString(territoryName))){
-                        setFighter(territoryName, false);
+                if (currentPlayerOwns(territory) && territory.getNumberOfArmies() > 1) {
+                    setFighter(territory, true);
+                } else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()
+                        && !currentPlayerOwns(territory)) {
+                    if (gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),
+                            territory)) {
+                        setFighter(territory, false);
                         startAttack();
                     }
                 }
@@ -149,13 +166,14 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         redrawView();
     }
 
-    /** 
+    /**
      * 
      * Checks if the current player won the game, eventually displaying
      * a gameover window
+     * 
      * @author Michele Farneti
-     *  */
-    private void checkWinner(){
+     */
+    private void checkWinner() {
         if (gameManager.getCurrentGame().get().gameOver()) {
             this.view.gameOver(currentPlayer().get().getColor_id());
         }
@@ -189,6 +207,7 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
+            currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
@@ -235,17 +254,17 @@ public class GameController implements GameViewObserver , InitialViewObserver{
      * The territory passed as argument is set as AttackerTerritory and is Higligted
      * by the GUI
      * 
-     * @param territoryName
+     * @param territory
      * @author Michele Farneti
      */
-    private void setFighter(String territoryName, boolean isAttacker) {
+    private void setFighter(Territory territory, boolean isAttacker) {
         if (isAttacker) {
             resetAttack();
-            attackerTerritory = Optional.of(getTerritoryFromString(territoryName));
-            view.showFightingTerritory(territoryName, true);
+            attackerTerritory = Optional.of(territory);
+            view.showFightingTerritory(territory, true);
         } else {
-            defenderTerritory = Optional.of(getTerritoryFromString(territoryName));
-            view.showFightingTerritory(territoryName, false);
+            defenderTerritory = Optional.of(territory);
+            view.showFightingTerritory(territory, false);
         }
     }
 
@@ -280,24 +299,38 @@ public class GameController implements GameViewObserver , InitialViewObserver{
     private void redrawView() {
         gameManager.getCurrentGame().get().getPlayersList().stream()
                 .forEach(p -> p.getOwnedTerritories().stream()
-                        .forEach(t -> view.redrawTank(t.getTerritoryName(),p.getColor_id(), t.getNumberOfArmies())));
-        view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
-        view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
+                        .forEach(t -> view.redrawTank(t, p.getColor_id())));
+        view.setCurrentPlayer(currentPlayer().get());
+        view.updateTablePanel();
+        view.showStatus(gameManager.getCurrentGame().get().getGameStatus(),gameManager.getCurrentGame().get().getTurnsCount());
+
+        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+            case READY_TO_ATTACK:
+                view.enableAttack(true);
+                view.enableSkip(true);
+                break;
+            case ARMIES_PLACEMENT:
+                view.enableAttack(false);
+                view.enableSkip(false);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
-        final GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName,resourcesPackageString));
+        final GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName, resourcesPackageString));
         PlayerFactory playerFactory = new SimplePlayerFactory();
 
         for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
             if (index < numberOfStandardPlayers) {
                 gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
             } else {
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());     
+                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
             }
         }
-        gameManager.AddNewCurrentGame(gameFactory.initializeGame());
+        gameManager.setCurrentGame(gameFactory.initializeGame());
         this.setupGameView();
     }
 
@@ -306,14 +339,13 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         gameManager.getCurrentGame().get().setAttacking();
     }
 
-
     @Override
     public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
+        view.exitMoveArmiesPanel();
         this.skipTurn();
     }
-
 
     @Override
     public void playCards(String card1, String card2, String card3) {
@@ -321,9 +353,32 @@ public class GameController implements GameViewObserver , InitialViewObserver{
         Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
         Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        /*modifica del metodo playCards per cui non viene passato il player
+        /*
+         * modifica del metodo playCards per cui non viene passato il player
          * e rimuovere le stringhe errore effettuando semplicemente l'operazione
          */
-        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
+        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());    
+        exitCardsManagingPhase();
+        
+    }
+
+    @Override
+    public void moveClicked() {
+        view.createMoveArmies(currentPlayer().get().getOwnedTerritories().stream().toList());
+    }
+
+    @Override
+    public void closeMovementPhase() {
+        this.view.exitMoveArmiesPanel();
+    }
+
+    /**
+     * Ends the card managing phase by alerting both mdoel and view.
+     * @author Michele Farneti.
+     */
+    private void exitCardsManagingPhase() {
+        gameManager.getCurrentGame().get().endCardsPhase();
+        this.view.exitCardsPanel();
+        redrawView();
     }
 }

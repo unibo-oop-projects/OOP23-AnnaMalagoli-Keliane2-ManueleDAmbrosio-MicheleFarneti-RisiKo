@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Optional;
 
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**

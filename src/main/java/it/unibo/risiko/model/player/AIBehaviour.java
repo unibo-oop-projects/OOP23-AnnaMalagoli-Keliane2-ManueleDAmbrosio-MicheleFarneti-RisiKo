@@ -2,6 +2,7 @@ package it.unibo.risiko.model.player;
 
 import java.util.List;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.map.Territory;
 
 /**
@@ -66,5 +67,14 @@ public interface AIBehaviour {
      * otherwise.
      */
     boolean decideAttack(final List<Territory> territoryList);
+
+    /**
+     * Checks the cards owned by the player and finds if there
+     * is a possible combo of cards.
+     * 
+     * @return the list of combo cards found, if no combo is
+     * found the returns an empty list.
+     */
+    List<Card> checkCardCombo();
 
 }

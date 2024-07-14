@@ -15,7 +15,6 @@ public class GameMapImpl implements GameMap {
     private static final String FILE_SEPARATOR = File.separator;
     private final String resourcesPackageString;
     
-    private static final Integer minPlayers = 2;
 
     private static final int MINIMUM_ARMIES = 20;
     private static final int ARMIES_STEP = 5;
@@ -29,14 +28,14 @@ public class GameMapImpl implements GameMap {
     public GameMapImpl(String mapName, String resourcesPackageString){
         this.name = mapName;
         this.resourcesPackageString = resourcesPackageString;
-        this.territories = new Territories(buildResourceLocator("territories.txt")); 
+        this.territories = new Territories(buildResourceLocator(FILE_SEPARATOR +"territories.txt")); 
         this.deck = new DeckImpl(buildResourceLocator("cards.txt")); 
 
         maxPlayers = GameMap.getMaxPlayers(buildResourceLocator());
     }
 
     private String buildResourceLocator(String resourceName){
-        return resourcesPackageString + "maps"+ FILE_SEPARATOR + name + FILE_SEPARATOR + resourceName;
+        return resourcesPackageString + FILE_SEPARATOR + "maps"+ FILE_SEPARATOR + name + FILE_SEPARATOR + resourceName;
     }
 
     private String buildResourceLocator(){
