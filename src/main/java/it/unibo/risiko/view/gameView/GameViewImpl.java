@@ -6,6 +6,7 @@ import it.unibo.risiko.model.event.EventImpl;
 import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
@@ -117,6 +118,7 @@ public class GameViewImpl implements GameView {
     private JPanel turnsBarPanel;
     private JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
+    private JTextArea gameStatusPanel;
     private AttackPanel attackPanel;
     private JPanel moveArmiesPanel;
     private TablePanel tablePanel;
@@ -255,6 +257,7 @@ public class GameViewImpl implements GameView {
         attackBarLayoutPane.add(countryBarPanel, TURNSBAR_LAYER, 0);
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         countryBarPanel.setEditable(false);
+        countryBarPanel.setLineWrap(true);
 
         attackButton = new CustomButton("ATTACK");
         attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
@@ -301,6 +304,15 @@ public class GameViewImpl implements GameView {
                 (int) (gamePanel.getWidth() * 0.25), 50);
         targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
         attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
+
+        //Game Status Bar
+        gameStatusPanel = new JTextArea();
+        gameStatusPanel.setBounds((int) (gamePanel.getWidth() * 0.75),(int) targetTextField.getLocation().getY()+targetTextField.getHeight(),targetTextField.getWidth(),
+                TURN_ICON_HEIGHT / 2);
+        attackBarLayoutPane.add(gameStatusPanel, TURNSBAR_LAYER, 0);
+        gameStatusPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
+        gameStatusPanel.setEditable(false);
+        gameStatusPanel.setLineWrap(true);
     }
 
     /**
@@ -344,7 +356,6 @@ public class GameViewImpl implements GameView {
     private void tankClicked(final Territory territory) {
         countryBarPanel.setText(territory.getTerritoryName().toUpperCase());
         countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
-        countryBarPanel.setFont(new Font("Arial", Font.BOLD, 15));
         gameViewObserver.territorySelected(territory);
     }
 
@@ -716,5 +727,25 @@ public class GameViewImpl implements GameView {
     public void exitCardsPanel() {
         setGameViewButtonsEnabled(true);
         choiceCardsPanel.setVisible(false);
+    }
+
+    @Override
+    public void showStatus(GameStatus gameStatus, Long turnsCount) {
+        String statusString = "[" + turnsCount+"]";
+        switch (gameStatus) {
+            case ARMIES_PLACEMENT:
+            case TERRITORY_OCCUPATION:
+                statusString += "Click the map territory where you want to add armies";
+                break;
+            case READY_TO_ATTACK:
+            case ATTACKING:
+                statusString += "Feel free to attack!";
+                break;
+            case CARDS_MANAGING:
+                statusString += "Cards Managing!";
+            default:
+                break;
+        }
+       gameStatusPanel.setText(statusString);
     }
 }

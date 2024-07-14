@@ -7,6 +7,7 @@ import java.util.Optional;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -265,6 +266,15 @@ public interface GameView {
 
     /**
      * Handles Cards panel closure
+     * 
+     * @author Michele Farneti
      */
     void exitCardsPanel();
+
+    /**
+     * Updates the view with infos about the gamestatus and current turn.
+     * @param gameStatus
+     * @param turnsCount
+     */
+    void showStatus(GameStatus gameStatus, Long turnsCount);
 }
