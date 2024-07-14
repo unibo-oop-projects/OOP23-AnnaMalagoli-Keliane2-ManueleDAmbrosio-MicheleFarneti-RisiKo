@@ -2,24 +2,21 @@ package it.unibo.risiko.Game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
@@ -65,7 +62,66 @@ public class TestGame {
     }
     
     @Test
-    void TestGameTurns(){
+    void TestGameTurnsStandrdPlayers(){
+        initializeGame();
+        Player player1 = playerFactory.createStandardPlayer();
+        Player player2 = playerFactory.createStandardPlayer();
 
+        factory.addNewPlayer(player1);
+        factory.addNewPlayer(player2);
+        var game = factory.initializeGame();
+
+        assertEquals(GameStatus.TERRITORY_OCCUPATION,game.getGameStatus());
+        assertEquals(game.getTurnsCount(),0);
+        var firstPlayer = game.getCurrentPlayer();
+        var territory1 =  firstPlayer.getOwnedTerritories().iterator().next();
+        assertEquals(3, firstPlayer.getOwnedTerritories().size());
+        assertFalse(game.skipTurn());
+        while(game.placeArmies(territory1, 1));
+        assertEquals(firstPlayer.getNumberOfTerritores() + 3,firstPlayer.getOwnedTerritories().stream().mapToInt(t -> t.getNumberOfArmies()).sum());
+
+        var secondPlayer = game.getCurrentPlayer();
+        var territory2 =  secondPlayer.getOwnedTerritories().iterator().next();
+        while(game.placeArmies(territory2, 1));
+        assertEquals(secondPlayer.getNumberOfTerritores() + 3,secondPlayer.getOwnedTerritories().stream().mapToInt(t -> t.getNumberOfArmies()).sum());
+
+        while(game.placeArmies(game.getCurrentPlayer() == firstPlayer ? territory1 : territory2, 1) && game.getGameStatus() == GameStatus.TERRITORY_OCCUPATION);
+        assertEquals(GameStatus.ARMIES_PLACEMENT,game.getGameStatus());
+
+        while(game.placeArmies(territory1, firstPlayer.getArmiesToPlace()));
+        assertEquals(GameStatus.READY_TO_ATTACK,game.getGameStatus());
+
+        game.setAttacking();
+        assertEquals(GameStatus.ATTACKING,game.getGameStatus());
+
+        game.skipTurn();
+        assertEquals(secondPlayer,game.getCurrentPlayer());
+        assertTrue(game.getGameStatus() == GameStatus.ARMIES_PLACEMENT || game.getGameStatus() == GameStatus.READY_TO_ATTACK|| game.getGameStatus()==GameStatus.CARDS_MANAGING);
+        assertFalse(game.getTurnsCount() == 0);
+    }
+
+    @Test
+    void TestGameTurnsWithAi(){
+        initializeGame();
+        Player player1 = playerFactory.createStandardPlayer();
+        Player player2 = playerFactory.createAIPlayer();
+        factory.addNewPlayer(player1);
+        factory.addNewPlayer(player2);
+        var game = factory.initializeGame();
+
+        assertEquals(GameStatus.TERRITORY_OCCUPATION,game.getGameStatus());
+        var standardPlayer = game.getCurrentPlayer();
+        var AIPlayer = game.getPlayersList().stream().filter(p -> p.isAI()).findAny().get();
+        assertEquals(standardPlayer.getNumberOfTerritores(),3);
+        assertEquals(AIPlayer.getNumberOfTerritores(),3);
+        var territory1 =  standardPlayer.getOwnedTerritories().iterator().next();
+        assertFalse(game.skipTurn());
+        while(game.placeArmies(territory1, 1));
+        if(AIPlayer != game.getPlayersList().get(0)){
+            assertEquals(20,AIPlayer.getOwnedTerritories().stream().mapToInt(t -> t.getNumberOfArmies()).sum());
+            assertEquals(21,standardPlayer.getOwnedTerritories().stream().mapToInt(t -> t.getNumberOfArmies()).sum());
+        }
+        assertTrue(game.getGameStatus() == GameStatus.ARMIES_PLACEMENT || game.getGameStatus() == GameStatus.READY_TO_ATTACK|| game.getGameStatus()==GameStatus.CARDS_MANAGING);
+        assertFalse(game.getTurnsCount() == 0);
     }
 }
