@@ -56,9 +56,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     public GameController() {
-        this.register = new RegisterImpl();
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
+        this.register = new RegisterImpl();
         new GameFrame(this);
     }
 
@@ -203,14 +203,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
         attackPhase.destroyArmies();
 
-        createEvent(register, EventType.ATTACK, attackPhase.getAttackingTerritory(),
-                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
-
         view.drawDicePanels();
     }
 
     @Override
     public void conquerIfPossible() {
+        createEvent(register, EventType.ATTACK, attackPhase.getAttackingTerritory(),
+                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
+
         if (attackPhase.isTerritoryConquered()) {
             currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
 
@@ -247,7 +247,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary) {
-        if (eventLeaderAdversary.isPresent()) {
+        if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
             register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
         } else {
             register.addEvent(new EventImpl(type, attacker, defender, eventLeader));
@@ -372,8 +372,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         view.exitMoveArmiesPanel();
 
-        createEvent(register, EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+        /*createEvent(register, EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
                 getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty());
+                */
 
         this.skipTurn();
     }

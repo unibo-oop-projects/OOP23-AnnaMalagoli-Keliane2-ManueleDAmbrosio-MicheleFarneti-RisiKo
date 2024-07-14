@@ -33,7 +33,7 @@ public class LoggerView extends JPanel{
         this.playerList=playerList;
         this.register=register;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-        this.setPreferredSize(new Dimension(1000, 1000));
+        //this.setPreferredSize(new Dimension(1000, 1000)); => Inserire le dimensioni giuste che dipendono dalle dimensioni della GameView per ottenere una corretta visualizzazione.
         //creating a textArea, the event container
         JTextArea logText=new JTextArea("");
         logText.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));

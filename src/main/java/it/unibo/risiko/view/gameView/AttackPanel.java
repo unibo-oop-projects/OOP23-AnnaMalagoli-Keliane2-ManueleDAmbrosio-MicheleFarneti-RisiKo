@@ -167,7 +167,7 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel topPanel() {
-        final int HEIGHT = height / 3;
+        final int HEIGHT = height / 4;
         JPanel topPanel = new JPanel();
 
         topPanel.setLayout(new BorderLayout());
