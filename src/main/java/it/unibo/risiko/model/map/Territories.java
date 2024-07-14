@@ -10,12 +10,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 /**
  * The Territories class is used by the controller at the start of the game to generate 
  * the list of territories that are in the map. The informations about the territories are 
- * memorized in a file text that contains the name of a territory and the list of the 
- * neighboring territories after the name of the continent. 
+ * memorized in a file text that contains the name of a territory, its coordinates and
+ * the list of the neighboring territories after the name of the continent. 
  * 
  * @author Anna Malagoli 
  */
@@ -155,58 +155,6 @@ public class Territories {
             }
         }
     }
-
-    /**
-     * RIMUOVERE PERCHè controllo nella GUI
-     * Method to move a certain amount of armies from a territory to a 
-     * neightbor territory.
-     * @param srcName is the name of the territory that initially contains the armies
-     * the player wants to move
-     * @param dstName is the name of the destination territory of the armies
-     * @param numArmies is the number of armies that the player wants to move
-     * @return a string that explain the error that occured if the name of a territory 
-     * is invalid, if the number of armies the player wants to move
-     * is greater or equal of the number of armies in the source territory (srcName) 
-     * and if the two territories are not adjacent. If the operation succedes the method
-     * return an empty string.
-     */
-    public String moveArmiesFromPlaceToPlace(final String srcName, final String dstName, final int numArmies) {
-        String outputMessage = "";
-        Optional<Territory> opt;
-        Territory srcTerritory;
-        Territory dstTerritory;
-
-        /*Is necessary to have the two territories object by calling a private method 
-        contained in the class and verify that the optional returned by the method is
-        not empty.*/
-        opt = getTerritoryFromName(srcName);
-        if (opt.isPresent()) {
-            srcTerritory = opt.get();
-            opt = getTerritoryFromName(dstName);
-            if (opt.isPresent()) {
-                dstTerritory = opt.get();
-                /*Before moving the armies between the two territories
-                 * we have to make sure that the operation is possible.
-                 */
-                if (territoriesAreNear(srcTerritory, dstTerritory)) {
-                    if (numArmies > 0 && numArmies < srcTerritory.getNumberOfArmies()) {
-                        this.removeArmiesInTerritory(srcName, numArmies);
-                        this.addArmiesInTerritory(dstName, numArmies);
-                    } else {
-                        outputMessage = "The number of armies selected for the operation is not valid.";
-                    }
-                } else {
-                    outputMessage = "The two territories inserted are not near.";
-                }
-            } else {
-                outputMessage = "Errore, il territorio destinazione cercato non è presente.";
-            }
-        } else {
-            outputMessage = "Errore, il territorio sorgente cercato non è presente.";
-        }
-        return outputMessage;
-    }
-
     /**
      * Method to verify if the two territories passed in input are adjacent.
      * @param terr1 is the first territory
@@ -220,20 +168,5 @@ public class Territories {
             }
         }
         return false;
-    }
-
-    /**
-     * Method to get a territory by his name.
-     * @param name is the name of the territory
-     * @return an optional that is empty if the territory is not present or
-     * that contains the territory searched if present
-     */
-    private Optional<Territory> getTerritoryFromName(final String name) {
-        for (var terr : this.listTerritories) {
-            if (terr.getTerritoryName().equals(name)) {
-                return Optional.of(terr);
-            }
-        }
-        return Optional.empty();
     }
 }

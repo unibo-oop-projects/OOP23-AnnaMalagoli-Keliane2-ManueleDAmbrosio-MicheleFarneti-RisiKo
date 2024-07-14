@@ -174,13 +174,13 @@ class MainTest {
         }
     }
 
-    @Test
+    /*@Test
     public void testMovementOfArmiesBetweenTwoTerritory() {
         final String path = "src/test/java/it/unibo/risiko/Territories.txt";
         final Territories territories = new Territories(path);
-        /*Verify if the movement of 3 armies between ITALY and SPAIN is permetted
+        Verify if the movement of 3 armies between ITALY and SPAIN is permetted
          * and does as expected.
-        */
+        
         territories.addArmiesInTerritory(ITALIA, 4);
         Territory France = territories.getListTerritories().get(1);
         Territory Italy = territories.getListTerritories().get(0);
@@ -188,6 +188,6 @@ class MainTest {
         territories.moveArmiesFromPlaceToPlace(ITALIA, FRANCIA, movedArmies);
         assertEquals(1, Italy.getNumberOfArmies());
         assertEquals(movedArmies, France.getNumberOfArmies());
-    }
+    }*/
 
 }
