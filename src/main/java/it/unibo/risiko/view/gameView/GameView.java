@@ -2,10 +2,8 @@ package it.unibo.risiko.view.gameView;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -258,17 +256,6 @@ public interface GameView {
      * Updates the table panel.
      */
     public void updateTablePanel();
-
-    /**
-     * @param reg
-     * @param type
-     * @param attacker
-     * @param defender
-     * @param eventLeader
-     * @param eventLeaderAdversary
-     * @author Keliane2
-     */
-    public  void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader, Optional<Player> eventLeaderAdversary);
 
     /**
      * Handles Cards panel closure
