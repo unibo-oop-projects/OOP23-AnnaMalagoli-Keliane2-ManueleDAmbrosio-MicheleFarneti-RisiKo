@@ -25,5 +25,10 @@ public interface Continent {
      */
     void addTerritory(Territory terr);
 
+    /**
+     * Method to get the number of bonus armies that the player
+     * gaines if he has all the territory of the continent.
+     * @return the number of bonus armies
+     */
     int getBonusArmies();
 }
