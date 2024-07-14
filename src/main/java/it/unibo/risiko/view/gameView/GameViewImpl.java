@@ -205,7 +205,7 @@ public class GameViewImpl implements GameView {
         baseLayoutPane.add(logPanel, MAP_LAYER, 0);
 
         territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2,
-                mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);
+                mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);   
         territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
         baseLayoutPane.add(territoriesTablePanel, MAP_LAYER, 0);
         setupAttackBar(nPlayers);
@@ -635,7 +635,11 @@ public class GameViewImpl implements GameView {
         mainFrame.validate();
     }
 
-    @Override
+    /**
+     * Method used to create a panel to move armies between two adjacent territories.
+     * After the panel creation it is set visible and added to the game frame.
+     * @param listTerritories is the list of territories owned by the player
+     */
     public void createMoveArmies(List<Territory> listTerritories) {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;
@@ -657,7 +661,11 @@ public class GameViewImpl implements GameView {
         targetTextField.setText(targetText);
     }
 
-    @Override
+    /**
+     * Method used to create the panel to play the three cards.
+     * After the panel creation it is set visible and added to the game frame.
+     * @param playerCards is the list of cards of the player
+     */
     public void createChoiceCards(List<Card> playerCards) {
         final int LOCATION_FACTOR = 6;
         final int SIZE_FACTOR = 2;

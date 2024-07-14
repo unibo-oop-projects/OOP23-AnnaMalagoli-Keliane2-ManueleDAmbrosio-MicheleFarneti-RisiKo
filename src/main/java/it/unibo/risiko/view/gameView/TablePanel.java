@@ -5,6 +5,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.List;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.map.Territory;
@@ -16,6 +17,10 @@ import it.unibo.risiko.model.map.Territory;
  */
 public class TablePanel extends JPanel {
 
+    private static final int HEIGHT = 383;
+    private static final int WIDTH = 270;
+    private static final int COLUMN_INDEX_PLAYER_ID = 3;
+    private static final int COLUMN_INDEX_NUM_ARMIES = 2;
     private JTable table;
     private TableModelTerritories tableModelTerritories;
     /**
@@ -35,6 +40,10 @@ public class TablePanel extends JPanel {
         In this way if there are more rows in the table than can 
         be displayed you can scroll with the sidebar to view them all*/
         add(new JScrollPane(table), BorderLayout.CENTER);
+        /*setting the dimension of the panel and of the columns*/
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        table.getColumnModel().getColumn(COLUMN_INDEX_NUM_ARMIES).setPreferredWidth(1);
+        table.getColumnModel().getColumn(COLUMN_INDEX_PLAYER_ID).setPreferredWidth(1);
     }
 
     /**

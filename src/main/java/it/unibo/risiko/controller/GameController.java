@@ -340,24 +340,37 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         gameManager.getCurrentGame().get().setAttacking();
     }
 
-    @Override
-    public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
+    /**
+     * Method used to move a certain amount of armies between two 
+     * adjacent territories.
+     * 
+     * @param srcTerritory is the source territory
+     * @param dstTerritory is the destination territory
+     * @param numArmies is the number of armies that the player
+     * wants to move
+     * 
+     * @author Anna Malagoli
+     */
+    public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         view.exitMoveArmiesPanel();
         this.skipTurn();
     }
 
-    @Override
-    public void playCards(String card1, String card2, String card3) {
+    /**
+     * Method used to play the three cards selected by a player.
+     * @param card1 is the first card selected
+     * @param card2 is the second card selected
+     * @param card3 is the third card selected
+     * 
+     * @author Anna Malagoli
+     */
+    public void playCards(final String card1, final String card2, final String card3) {
         Deck deck = gameManager.getCurrentGame().get().getDeck();
         Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
         Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        /*
-         * modifica del metodo playCards per cui non viene passato il player
-         * e rimuovere le stringhe errore effettuando semplicemente l'operazione
-         */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
         exitCardsManagingPhase();
 

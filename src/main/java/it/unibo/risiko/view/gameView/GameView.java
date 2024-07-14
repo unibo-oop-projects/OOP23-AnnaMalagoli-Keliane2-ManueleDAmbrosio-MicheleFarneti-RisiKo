@@ -191,15 +191,16 @@ public interface GameView {
     public void setDefenderLostArmies(final int defenderLostArmies);
 
     /**
-     * 
-     * @param listTerritories
+     * Method used to create a panel that allows to move armies between two
+     * adjacent territories.
+     * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
     public void createMoveArmies(final List<Territory> listTerritories);
 
     /**
-     * 
-     * @param playerCards
+     * Method used to create a panel that allows the player to play three cards.
+     * @param playerCards is the list of cards of the player
      * @author Anna Malagoli
      */
     public void createChoiceCards(List<Card> playerCards);
