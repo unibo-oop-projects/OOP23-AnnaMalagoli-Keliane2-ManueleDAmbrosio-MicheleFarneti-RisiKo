@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.event.EventImpl;
+import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
@@ -54,9 +56,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     public GameController() {
-        this.register = new RegisterImpl();
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
+        this.register = new RegisterImpl();
         new GameFrame(this);
     }
 
@@ -206,8 +208,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void conquerIfPossible() {
+        createEvent(register, EventType.ATTACK, attackPhase.getAttackingTerritory(),
+                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
+
         if (attackPhase.isTerritoryConquered()) {
             currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
+
+            createEvent(register, EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
+                    attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
+                    Optional.of(attackPhase.getDefender()));
+
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
@@ -224,6 +234,24 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.closeAttackPanel();
         redrawView();
         checkWinner();
+    }
+
+    /**
+     * @param reg
+     * @param type
+     * @param attacker
+     * @param defender
+     * @param eventLeader
+     * @param eventLeaderAdversary
+     * @author Keliane2
+     */
+    private void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
+            Optional<Player> eventLeaderAdversary) {
+        if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
+            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
+        } else {
+            register.addEvent(new EventImpl(type, attacker, defender, eventLeader));
+        }
     }
 
     /**
@@ -340,24 +368,42 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         gameManager.getCurrentGame().get().setAttacking();
     }
 
-    @Override
-    public void moveArmies(String srcTerritory, String dstTerritory, int numArmies) {
+    /**
+     * Method used to move a certain amount of armies between two 
+     * adjacent territories.
+     * 
+     * @param srcTerritory is the source territory
+     * @param dstTerritory is the destination territory
+     * @param numArmies is the number of armies that the player
+     * wants to move
+     * 
+     * @author Anna Malagoli
+     */
+    public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         view.exitMoveArmiesPanel();
+
+        /*createEvent(register, EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+                getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty());
+                */
+
         this.skipTurn();
     }
 
-    @Override
-    public void playCards(String card1, String card2, String card3) {
+    /**
+     * Method used to play the three cards selected by a player.
+     * @param card1 is the first card selected
+     * @param card2 is the second card selected
+     * @param card3 is the third card selected
+     * 
+     * @author Anna Malagoli
+     */
+    public void playCards(final String card1, final String card2, final String card3) {
         Deck deck = gameManager.getCurrentGame().get().getDeck();
         Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
         Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
         Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        /*
-         * modifica del metodo playCards per cui non viene passato il player
-         * e rimuovere le stringhe errore effettuando semplicemente l'operazione
-         */
         deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
         exitCardsManagingPhase();
 

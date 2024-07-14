@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -19,9 +20,8 @@ import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
 
 /**
  * Creation of the class JPanelChoice which is a panel that shows three
- * different
- * selection cells that contain the territories of the cards owned by the
- * player.
+ * different selection cells that contain the territories of the cards 
+ * owned by the player.
  * This panel is used to play three cards to gain new armies.
  * 
  * @author Anna Malagoli
@@ -30,8 +30,9 @@ public class JPanelChoice extends JPanel {
 
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color BLACK = new Color(0, 0, 0);
-    private final static int INFO_BOTTON_DIMENSION = 80;
-    private final static int BOTTON_DIMENSION = 600;
+    private static final int INFO_BOTTON_DIMENSION = 80;
+    private static final int BOTTON_DIMENSION = 600;
+    private static final int CHOICE_SIZE = 30;
     private String firstChoice = "";
     private String secondChoice = "";
     private String thirdChoice = "";
@@ -65,6 +66,10 @@ public class JPanelChoice extends JPanel {
         Choice firstChoiceTerritories = new Choice();
         Choice secondChoiceTerritories = new Choice();
         Choice thirdChoiceTerritories = new Choice();
+        /*setting the size and font of the three Choice */
+        firstChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
+        secondChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
+        thirdChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         /*
          * setting of the item in the Choice menu with the name of the territories
          * of the cards owned by the player and the type of the card.
@@ -93,12 +98,13 @@ public class JPanelChoice extends JPanel {
         this.add(choicePanel, BorderLayout.CENTER);
 
         /*
-         * creation of a button that if pressed permits to play the three
-         * cards selected by the player.
+         * creation of one button that if pressed permits to play the three
+         * cards selected by the player, and of another button used to exit from the
+         * current panel displayed.
          */
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
-        JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> this.setVisible(false));
+        JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.exitCardsManagingPhase());
         exitPanel.setPreferredSize(
                 new Dimension(this.getPreferredSize().width / 2, exitPanel.getPreferredSize().height));
         JPanel executePanel = new ContinuePanel("Play selected cards", BOTTON_DIMENSION,
@@ -116,7 +122,7 @@ public class JPanelChoice extends JPanel {
                         this.setVisible(false);
                     } else {
                         String message = "Error of the item selected.\n Retry!";
-                        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, message, "", JOptionPane.ERROR_MESSAGE);
                     }
                 });
         executePanel.setPreferredSize(
@@ -124,34 +130,6 @@ public class JPanelChoice extends JPanel {
         southPanel.add(exitPanel);
         southPanel.add(executePanel);
         this.add(southPanel, BorderLayout.SOUTH);
-        /*
-         * JButton but = new JButton("Play selected cards");
-         * this.add(but, BorderLayout.SOUTH);
-         * but.addActionListener(new ActionListener() {
-         * 
-         * public void actionPerformed(final ActionEvent e) {
-         * //dopo che sono stati selezionati i territori delle carte da giocare si
-         * clicca sul bottone per
-         * //chiamare la funzione nel controller che si occupa, dati i nomi dei
-         * territori, di restituire le carte
-         * //e chiamare metodo deck per effettuare l'operazione se possibile verificando
-         * risultato
-         * //(se != "" -> errore stampa sul frame messaggio JDialog)
-         * gestione della scelta
-         * final String[] firstTerritoryName =
-         * firstChoiceTerritories.getSelectedItem().split(" ");
-         * final String[] secondTerritoryName =
-         * secondChoiceTerritories.getSelectedItem().split(" ");
-         * final String[] thirdTerritoryName =
-         * thirdChoiceTerritories.getSelectedItem().split(" ");
-         * firstChoice = firstTerritoryName[0];
-         * secondChoice = secondTerritoryName[0];
-         * thirdChoice = thirdTerritoryName[0];
-         * //CHIAMATA DI METODO AL MODEL PER RESTITUIRE LE STRINGHE contenenti i nomi
-         * territori selezionati
-         * }
-         * });
-         */
     }
 
     /**
@@ -182,7 +160,16 @@ public class JPanelChoice extends JPanel {
         return infoButton;
     }
 
-    private Optional<Card> getSelectedItem(String cardName) {
+    /**
+     * Method used to get a card from the name of the 
+     * territory in the list of cards of the player.
+     * @param cardName is the name of the territory
+     * @return an empty optional if case the player does not
+     * have the card or an optional that contains the required card.
+     * In this case the card is always found because in the choice cells
+     * are only present the cards of the player. 
+     */
+    private Optional<Card> getSelectedItem(final String cardName) {
         for (var card : this.listCards) {
             if (card.getTerritoryName().equals(cardName)) {
                 return Optional.of(card);
@@ -191,24 +178,39 @@ public class JPanelChoice extends JPanel {
         return Optional.empty();
     }
 
-    private boolean checkSelectedCards(List<Card> cards) {
+    /**
+     * Method used to verify if the three cards selected are playable.
+     * @param cards is the list of cards selected by the player
+     * @return true if the cards can be played, false otherwise
+     */
+    private boolean checkSelectedCards(final List<Card> cards) {
         if (cardsAreDifferent(cards) && checkCombo(cards)) {
             return true;
         }
         return false;
     }
 
-    private boolean cardsAreDifferent(List<Card> cards) {
-        if (cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName()) ||
-                cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName()) ||
-                cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName())) {
+    /**
+     * Method to verify if the three cards are different.
+     * @param cards is the list of cards that the player wants to play
+     * @return true if the cards are different or false if at least two cards
+     * are equal
+     */
+    private boolean cardsAreDifferent(final List<Card> cards) {
+        if (cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName())
+                || cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName())
+                || cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName())) {
             return false;
-        } else {
-            return true;
         }
+            return true;
     }
 
-    private boolean checkCombo(List<Card> cards) {
+    /**
+     * Method used to verify if the three cards selected by the player are a combo.
+     * @param cards is the list of cards
+     * @return true if the cards are a combo, false if not
+     */
+    private boolean checkCombo(final List<Card> cards) {
         int contCav = 0;
         int contJolly = 0;
         int contInf = 0;

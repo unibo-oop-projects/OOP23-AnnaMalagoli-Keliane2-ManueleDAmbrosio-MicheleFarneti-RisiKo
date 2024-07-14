@@ -116,8 +116,7 @@ public class DeckImpl implements Deck {
      * Method to play three cards during a player turn.
      * If the three cards generate a combo then the method computes
      * the number of armies that has to be added in the armies that
-     * the player can place. Otherwise no armies are added for the player
-     * and an error message is returned.
+     * the player can place.
      * @param card1 is the first card to be played
      * @param card2 is the second card to be played
      * @param card3 is the third card to be played

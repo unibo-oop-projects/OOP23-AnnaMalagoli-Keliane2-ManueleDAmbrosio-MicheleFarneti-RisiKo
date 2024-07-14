@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Territories class is used by the controller at the start of the game to generate 
@@ -68,7 +69,7 @@ public class Territories {
                     final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory, x, y);
                     this.listTerritories.add(territory);
 
-                    this.getContinentFromName(continentName).addTerritory(territory);
+                    this.getContinentFromName(continentName).get().addTerritory(territory);
                 }
                 stringRow = bufferedReader.readLine();
             } while (stringRow != null);
@@ -117,15 +118,16 @@ public class Territories {
      * Method to extract from the list of continents the continent with
      * a specified name.
      * @param name is the name of a continent
-     * @return a continent object
+     * @return an optional that containes the continent searched or an empty
+     * optional. The optional should always contain the continent.
      */
-    private Continent getContinentFromName(final String name) {
+    private Optional<Continent> getContinentFromName(final String name) {
         for (var elem : this.listContinents) {
             if (elem.getName().equals(name)) {
-                return elem;
+                return Optional.of(elem);
             }
         }
-        return new ContinentImpl("", 0);
+        return Optional.empty();
     }
 
     /**
@@ -160,7 +162,7 @@ public class Territories {
      * @param terr1 is the first territory
      * @param terr2 is the second territory
      * @return true if they are adjacent, or false if they are not adjacent
-     */
+    */
     public boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
         for (var elem : terr1.getListOfNearTerritories()) {
             if (elem.equals(terr2.getTerritoryName())) {
