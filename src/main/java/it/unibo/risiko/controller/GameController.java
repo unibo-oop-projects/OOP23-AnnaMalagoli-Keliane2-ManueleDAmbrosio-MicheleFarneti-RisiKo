@@ -20,6 +20,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.view.InitialViewObserver;
+import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -56,6 +57,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.register = new RegisterImpl();
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
+        new GameFrame(this);
     }
 
     @Override
@@ -72,9 +74,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void setupGameView() {
-        view.showGameWindow(gameManager.getCurrentGame().get().getMapName());
-        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList().stream().map(t -> t.getTerritoryName())
-                .toList());
+        view.showGameWindow(gameManager.getCurrentGame().get().getMapName(),
+                gameManager.getCurrentGame().get().getPlayersList().size());
+        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList());
         showTurnIcons();
         view.createLog(this.register, gameManager.getCurrentGame().get().getPlayersList());
         view.createTablePanel(gameManager.getCurrentGame().get().getTerritoriesList(),
@@ -88,9 +90,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void showTurnIcons() {
-        for (int i = 0; i < gameManager.getCurrentGame().get().getPlayersList().size(); i++) {
-            var player = gameManager.getCurrentGame().get().getPlayersList().get(i);
-            this.view.showTurnIcon(player.getColor_id(), i, player.isAI());
+        for (int index = 0; index < gameManager.getCurrentGame().get().getPlayersList().size(); index++) {
+            var player = gameManager.getCurrentGame().get().getPlayersList().get(index);
+            this.view.showTurnIcon(player, index);
         }
     }
 
@@ -99,7 +101,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (gameManager.getCurrentGame().get().skipTurn()) {
             resetAttack();
             redrawView();
-            view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
+            view.setCurrentPlayer(currentPlayer().get());
             showCards();
             redrawView();
             view.enableMovements(false);
@@ -109,13 +111,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * Check if the current player has cards to be played and eventually shows  him the menu
+     * Check if the current player has cards to be played and eventually shows him
+     * the menu
+     * 
      * @Author Michele Farneti
      */
     private void showCards() {
-       if(!currentPlayer().get().isAI() && !currentPlayer().get().getOwnedCards().isEmpty()){
+        if (!currentPlayer().get().isAI() && !currentPlayer().get().getOwnedCards().isEmpty()) {
             view.createChoiceCards(currentPlayer().get().getOwnedCards().stream().toList());
-       }
+        }
     }
 
     /**
@@ -124,16 +128,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void resetAttack() {
-        attackerTerritory.ifPresent(t -> view.resetFightingTerritory(t.getTerritoryName()));
-        defenderTerritory.ifPresent(t -> view.resetFightingTerritory(t.getTerritoryName()));
+        attackerTerritory.ifPresent(t -> view.resetFightingTerritory(t));
+        defenderTerritory.ifPresent(t -> view.resetFightingTerritory(t));
         attackerTerritory = Optional.empty();
         defenderTerritory = Optional.empty();
         redrawView();
     }
 
     @Override
-    public void territorySelected(String territoryName) {
-        var territory = getTerritoryFromString(territoryName);
+    public void territorySelected(Territory territory) {
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
             case TERRITORY_OCCUPATION:
                 gameManager.getCurrentGame().get().placeArmies(territory, 1);
@@ -146,13 +149,13 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 ;
                 break;
             case ATTACKING:
-                if (currentPlayerOwns(territory) && getTerritoryFromString(territoryName).getNumberOfArmies() > 1) {
-                    setFighter(territoryName, true);
+                if (currentPlayerOwns(territory) && territory.getNumberOfArmies() > 1) {
+                    setFighter(territory, true);
                 } else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()
                         && !currentPlayerOwns(territory)) {
                     if (gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),
-                            getTerritoryFromString(territoryName))) {
-                        setFighter(territoryName, false);
+                            territory)) {
+                        setFighter(territory, false);
                         startAttack();
                     }
                 }
@@ -251,17 +254,17 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * The territory passed as argument is set as AttackerTerritory and is Higligted
      * by the GUI
      * 
-     * @param territoryName
+     * @param territory
      * @author Michele Farneti
      */
-    private void setFighter(String territoryName, boolean isAttacker) {
+    private void setFighter(Territory territory, boolean isAttacker) {
         if (isAttacker) {
             resetAttack();
-            attackerTerritory = Optional.of(getTerritoryFromString(territoryName));
-            view.showFightingTerritory(territoryName, true);
+            attackerTerritory = Optional.of(territory);
+            view.showFightingTerritory(territory, true);
         } else {
-            defenderTerritory = Optional.of(getTerritoryFromString(territoryName));
-            view.showFightingTerritory(territoryName, false);
+            defenderTerritory = Optional.of(territory);
+            view.showFightingTerritory(territory, false);
         }
     }
 
@@ -296,9 +299,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private void redrawView() {
         gameManager.getCurrentGame().get().getPlayersList().stream()
                 .forEach(p -> p.getOwnedTerritories().stream()
-                        .forEach(t -> view.redrawTank(t.getTerritoryName(), p.getColor_id(), t.getNumberOfArmies())));
-        view.setCurrentPlayer(currentPlayer().get().getColor_id(), currentPlayer().get().getArmiesToPlace());
-        view.showTarget(currentPlayer().get().getTarget().showTargetDescription());
+                        .forEach(t -> view.redrawTank(t, p.getColor_id())));
+        view.setCurrentPlayer(currentPlayer().get());
         view.updateTablePanel();
 
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
@@ -309,6 +311,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             case ARMIES_PLACEMENT:
                 view.enableAttack(false);
                 view.enableSkip(false);
+            break;               
             default:
                 break;
         }
