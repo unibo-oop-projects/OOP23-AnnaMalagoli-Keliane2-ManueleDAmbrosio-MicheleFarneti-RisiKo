@@ -8,13 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.GameMapImpl;
-import it.unibo.risiko.model.map.Territories;
-import it.unibo.risiko.model.map.TerritoryImpl;
 
 public class TestGameMap {
     private static final String SMALL_MAP_NAME = "smallMap";

@@ -18,8 +18,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -71,8 +74,8 @@ public class GameViewImpl implements GameView {
     private static final Integer TANKS_WIDTH = 45;
     private static final Integer TANKS_HEIGTH = 45;
 
-    private static final Integer TURN_ICON_WIDTH = 60;
-    private static final Integer TURN_ICON_HEIGHT = 60;
+    private final Integer TURN_ICON_WIDTH;
+    private final Integer TURN_ICON_HEIGHT;
     private static final Integer TURNBAR_START_X = 10;
     private static final Integer TURNBAR_START_Y = 10;
 
@@ -96,57 +99,11 @@ public class GameViewImpl implements GameView {
 
     private final Integer frameWidth;
     private final Integer frameHeigth;
-    private static final Map<String, Position> tanksCoordinates = new HashMap<String, Position>() {
-        {
-            put("Great-Britain", new Position(530, 95));
-            put("Iceland", new Position(530, 45));
-            put("Scandinavia", new Position(620, 55));
-            put("North-Europe", new Position(620, 110));
-            put("West-Europe", new Position(550, 150));
-            put("South-Europe", new Position(640, 150));
-            put("Ukraine", new Position(710, 90));
-            put("North-Africa", new Position(550, 250));
-            put("Egypt", new Position(650, 220));
-            put("Congo", new Position(650, 340));
-            put("East-Africa", new Position(730, 310));
-            put("Southern-Africa", new Position(655, 440));
-            put("Madagascar", new Position(770, 430));
-            put("East-Australia", new Position(1140, 440));
-            put("New-Guinea", new Position(1180, 360));
-            put("Western-Australia", new Position(1070, 460));
-            put("Indonesia", new Position(1050, 360));
-            put("Venezuela", new Position(250, 310));
-            put("Peru", new Position(260, 420));
-            put("Argentina", new Position(290, 490));
-            put("Brazil", new Position(340, 390));
-            put("Alaska", new Position(60, 50));
-            put("Alberta", new Position(130, 95));
-            put("Central-America", new Position(170, 270));
-            put("Eastern-United-States", new Position(210, 170));
-            put("Greenland", new Position(450, 15));
-            put("Northwest-Territories", new Position(160, 50));
-            put("Ontario", new Position(220, 100));
-            put("Quebec", new Position(300, 100));
-            put("West-United-States", new Position(100, 160));
-            put("Urals", new Position(810, 70));
-            put("Siberia", new Position(880, 50));
-            put("Yakutia", new Position(990, 50));
-            put("Chita", new Position(970, 95));
-            put("Kamchatka", new Position(1110, 60));
-            put("Japan", new Position(1130, 170));
-            put("Mongolia", new Position(980, 140));
-            put("Afghanistan", new Position(810, 130));
-            put("Middle-East", new Position(750, 200));
-            put("India", new Position(880, 230));
-            put("China", new Position(995, 200));
-            put("Siam", new Position(995, 270));
-        }
-    };
+    private String mapName;
 
-    // private HashMap<Territory,ColoredImageButton> tanksMap = new
-    // HashMap<Territory,ColoredImageButton>();
-    private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
-    private HashMap<ColoredImageButton, String> iconsMap = new HashMap<>();
+    private HashMap<String, Position> tanksCoordinates = new HashMap<>();;
+    private HashMap<Territory, TerritoryPlaceHolder> tanksMap = new HashMap<>();
+    private HashMap<Player, ColoredImageButton> iconsMap = new HashMap<>();
     private GameViewObserver gameViewObserver;
     private JFrame mainFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
@@ -187,6 +144,8 @@ public class GameViewImpl implements GameView {
         this.frameWidth = frameWidth;
         this.frameHeigth = frameHeight;
         this.resourcesLocator = resourcesLocator;
+        TURN_ICON_WIDTH = frameWidth / 20;
+        TURN_ICON_HEIGHT = frameWidth / 20;
 
         mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(frameWidth, frameHeigth));
@@ -202,14 +161,15 @@ public class GameViewImpl implements GameView {
      * @return A path for a given resource
      * @author Michele Farneti
      * @param resourcePackage the path leading to the resources folder
-     * @param directories The pattern leading to the desired resource 
+     * @param directories     The pattern leading to the desired resource
      */
-    private String createPath(final String resourcePackage,final List<String> directories) {
+    private String createPath(final String resourcePackage, final List<String> directories) {
         return resourcePackage + directories.stream().map(d -> FILE_SEPARATOR + d).collect(Collectors.joining());
     }
 
     @Override
-    public void showGameWindow(final String mapName) {
+    public void showGameWindow(final String mapName, final Integer nPlayers) {
+        this.mapName = mapName;
         mainFrame.getContentPane().removeAll();
         mainFrame.add(baseLayoutPane, BorderLayout.CENTER);
 
@@ -220,13 +180,11 @@ public class GameViewImpl implements GameView {
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 
         // Painting of the map
-        Dimension mapLayoutPaneSize = new Dimension((int) gamePanel.getWidth(),
+        mapLayoutPane.setBounds(0, 0, (int) gamePanel.getWidth(),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE));
-        mapLayoutPane.setBounds(0, 0, (int) mapLayoutPaneSize.getWidth(), (int) mapLayoutPaneSize.getHeight());
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap(resourcesLocator + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName
-                + ".png");
+        paintMap(createPath(resourcesLocator, List.of("maps", mapName, mapName + ".png")));
         mapWidth = mapLayoutPane.getSize().width;
         mapHeight = mapLayoutPane.getSize().height;
 
@@ -244,9 +202,8 @@ public class GameViewImpl implements GameView {
         territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2,
                 mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);
         territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
-        // territoriesTablePanel.setOpaque(true);
         baseLayoutPane.add(territoriesTablePanel, MAP_LAYER, 0);
-        setupAttackBar();
+        setupAttackBar(nPlayers);
     }
 
     /**
@@ -269,7 +226,7 @@ public class GameViewImpl implements GameView {
     /**
      * Sets up the attackbar part of the view
      */
-    private void setupAttackBar() {
+    private void setupAttackBar(int nPlayers) {
         // AttackBar initiialization
         attackBarLayoutPane
                 .setPreferredSize(new Dimension((int) (gamePanel.getWidth()), (int) (gamePanel.getHeight() * 0.3)));
@@ -283,13 +240,14 @@ public class GameViewImpl implements GameView {
                 (int) attackBarLayoutPane.getPreferredSize().getHeight());
         attackBarBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(attackBarLayoutPane, attackBarBackgroundPanel);
+
         // Turns bar
         turnsBarPanel = new GradientPanel(Color.WHITE, ATTACK_BAR_FOREGROUND_COLOR, TURNS_BAR_GRADIENT_LEVEL);
-        turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH * 6, TURN_ICON_HEIGHT);
+        turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH * nPlayers, TURN_ICON_HEIGHT);
         attackBarLayoutPane.add(turnsBarPanel, TURNSBAR_LAYER, 0);
         // Country bar
         countryBarPanel = new JTextArea();
-        countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y, TURN_ICON_WIDTH * 6,
+        countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y, gamePanel.getWidth() / 6,
                 TURN_ICON_HEIGHT / 2);
         attackBarLayoutPane.add(countryBarPanel, TURNSBAR_LAYER, 0);
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
@@ -380,10 +338,10 @@ public class GameViewImpl implements GameView {
      * 
      * @param territory The territory that got clicked
      */
-    private void tankClicked(String territory) {
-        countryBarPanel.setText(territory.toUpperCase());
+    private void tankClicked(final Territory territory) {
+        countryBarPanel.setText(territory.getTerritoryName().toUpperCase());
         countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
-        countryBarPanel.setFont(new Font("Arial", Font.BOLD, 25));
+        countryBarPanel.setFont(new Font("Arial", Font.BOLD, 15));
         gameViewObserver.territorySelected(territory);
     }
 
@@ -409,7 +367,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void setObserver(GameViewObserver gameController) {
+    public void setObserver(final GameViewObserver gameController) {
         this.gameViewObserver = gameController;
     }
 
@@ -447,15 +405,16 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showTanks(List<String> territories) {
+    public void showTanks(final List<Territory> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
                 new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                         FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
                 new JLabel("0"))));
 
+        getTanksCoordinates();
         for (var tank : tanksMap.entrySet()) {
-            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
+            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey().getTerritoryName()));
             tank.getValue().button().setBounds(relativePosition.x(),
                     relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
@@ -478,27 +437,44 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /**
+     * Reads from file the coordinates needed for displaying tanks in the right
+     * position.
+     * 
+     * @param territoryName
+     */
+    private void getTanksCoordinates() {
+        var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
+        try (BufferedReader coordinateReader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath)));) {
+            coordinateReader.lines().map(s -> s.split(" ")).forEach(
+                    t -> tanksCoordinates.put(t[0], new Position(Integer.parseInt(t[1]), Integer.parseInt(t[2]))));
+        } catch (IOException e) {
+        }
+        ;
+    }
+
     @Override
-    public void showTurnIcon(String player, int playerIndex, boolean isAI) {
-        if (isAI) {
+    public void showTurnIcon(final Player player, final int playerIndex) {
+        if (player.isAI()) {
             iconsMap.put(
+                    player,
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
-                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
-                    player);
+                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
         } else {
-            iconsMap.put(
+            iconsMap.put(player,
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
-                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT),
-                    player);
+                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
         }
 
         for (var icon : iconsMap.entrySet()) {
-            icon.getKey().setColor(icon.getValue());
-            icon.getKey().setEnabled(false);
-            icon.getKey().setBorder(BorderFactory.createLineBorder(stringToColor(icon.getValue().toLowerCase()), 3));
-            attackBarLayoutPane.add(icon.getKey(), TURN_ICON_LAYER, 0);
+            icon.getValue().setColor(icon.getKey().getColor_id());
+            icon.getValue().setEnabled(false);
+            icon.getValue().setBorder(
+                    BorderFactory.createLineBorder(stringToColor(icon.getKey().getColor_id().toLowerCase()), 3));
+            attackBarLayoutPane.add(icon.getValue(), TURN_ICON_LAYER, 0);
         }
     }
 
@@ -512,12 +488,14 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void setCurrentPlayer(String playerColor, Integer nArmies) {
-        turnTank.setColor(playerColor);
+    public void setCurrentPlayer(final Player player) {
+        turnTank.setColor(player.getColor_id());
         iconsMap.entrySet().stream()
-                .forEach(e -> e.getKey().setBorderPainted((e.getValue().equals(playerColor)) ? true : false));
-        attackBarBackgroundPanel.setTopColor(stringToColor(playerColor));
-        playerArmiesLabel.setText(nArmies.toString());
+                .forEach(e -> e.getValue()
+                        .setBorderPainted((e.getKey().getColor_id().equals(player.getColor_id())) ? true : false));
+        attackBarBackgroundPanel.setTopColor(stringToColor(player.getColor_id()));
+        playerArmiesLabel.setText(String.valueOf(player.getArmiesToPlace()));
+        showTarget(player.getTarget().showTargetDescription());
         mainFrame.validate();
         mainFrame.repaint();
     }
@@ -542,24 +520,24 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showFightingTerritory(String territory, boolean isAttacker) {
+    public void showFightingTerritory(final Territory territory, final boolean isAttacker) {
         tanksMap.get(territory).button().setCustomBorder(isAttacker ? Color.RED : Color.BLUE);
         tanksMap.get(territory).button().setBorderPainted(true);
     }
 
     @Override
-    public void redrawTank(String countryName, String playerColor, Integer armiesCount) {
-        tanksMap.get(countryName).button().setColor(playerColor);
-        tanksMap.get(countryName).armiesCount().setText(armiesCount.toString());
+    public void redrawTank(final Territory territory,final String playerColor) {
+        tanksMap.get(territory).button().setColor(playerColor);
+        tanksMap.get(territory).armiesCount().setText(String.valueOf(territory.getNumberOfArmies()));
     }
 
     @Override
-    public void resetFightingTerritory(String fightingTerritory) {
+    public void resetFightingTerritory(final Territory fightingTerritory) {
         tanksMap.get(fightingTerritory).button().setBorderPainted(false);
     }
 
     @Override
-    public void gameOver(String winnerColor) {
+    public void gameOver(final String winnerColor) {
         var winnerPanel = new GradientPanel(Color.BLACK, stringToColor(winnerColor), MAP_GRADIENT_LEVEL);
         winnerPanel.setBackground(Color.RED);
         winnerPanel.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
@@ -656,7 +634,12 @@ public class GameViewImpl implements GameView {
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
     }
 
-    public void showTarget(String targetText) {
+    /**
+     * Updates the target text area
+     * 
+     * @param targetText
+     */
+    private void showTarget(String targetText) {
         targetTextField.setText(targetText);
     }
 
@@ -713,6 +696,4 @@ public class GameViewImpl implements GameView {
         setGameViewButtonsEnabled(true);
         choiceCardsPanel.setVisible(false);
     }
-    
-
 }
