@@ -35,7 +35,7 @@ public class GameImpl implements Game {
 
     private int activePlayer = 0;
     private int armiesPlaced = 0;
-    private long turnsCount = 0;
+    private long turnsCount = 1;
     private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
     private Deck deck;
@@ -387,5 +387,10 @@ public class GameImpl implements Game {
         if(status == GameStatus.CARDS_MANAGING){
             nextGamePhase();
         }
+    }
+
+    @Override
+    public Long getTurnsCount() {
+        return turnsCount;
     }
 }

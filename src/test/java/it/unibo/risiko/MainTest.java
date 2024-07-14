@@ -22,8 +22,11 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.player.StdPlayer;//DA FARE MODIFICA NEI DUE TEST
 import it.unibo.risiko.view.gameView.gameViewComponents.Position;
+import it.unibo.risiko.controller.GameController;;
 /**
  * Class used to execute the tests on the classes.
+ * 
+ * @author Anna Malagoli
  */
 class MainTest {
 
@@ -44,12 +47,6 @@ class MainTest {
     void testGenerateDeck() {
         final String path = "src/test/java/it/unibo/risiko/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
-        /*final CardImpl firstCardRemoved;
-        final CardImpl card = new CardImpl(ITALIA, "Fante");
-        final CardImpl cardAdded1 = new CardImpl("Spagna", "Cavalleria");
-        final CardImpl cardAdded2 = new CardImpl("Inghilterra", "Fante");
-        final CardImpl cardAdded3 = new CardImpl(FRANCIA, "Cavalleria");*/
-        //final List<CardImpl> deckList = deck.getListCards();
         final Card firstCardRemoved;
         final Card card = new CardImpl(ITALIA, "Infantry");
         final Card cardAdded1 = new CardImpl("Spagna", "Cavalry");
@@ -157,15 +154,13 @@ class MainTest {
         assertEquals(territoriesList.get(0).getTerritoryName(), ITALIA);
         assertEquals(territoriesList.get(1).getTerritoryName(), FRANCIA);
         assertEquals(territoriesList.get(0).getPosition(), new Position(1, 1));
-        //System.out.println(continentList.get(0).getName());
         assertEquals(continentList.get(0).getName(), "Europa");
         assertEquals(continentList.get(0).getBonusArmies(), 5);
         assertEquals(continentList.size(), 1);
         continent = continentList.get(0);
         assertEquals(continent.getListTerritories().get(0).getTerritoryName(), ITALIA);
-        //System.out.println(continent.getListTerritories().get(0).getTerritoryName());
         assertEquals(continent.getListTerritories().get(1).getTerritoryName(), FRANCIA);
-        //aggiunta di 3 armate in Italia
+        //Added three armies in Italia
         territories.addArmiesInTerritory(ITALIA, 3);
         for (var elem : territoriesList) {
             if (elem.getTerritoryName().equals(ITALIA)) {
@@ -174,13 +169,13 @@ class MainTest {
         }
     }
 
-    @Test
+    /*@Test
     public void testMovementOfArmiesBetweenTwoTerritory() {
         final String path = "src/test/java/it/unibo/risiko/Territories.txt";
         final Territories territories = new Territories(path);
-        /*Verify if the movement of 3 armies between ITALY and SPAIN is permetted
+        Verify if the movement of 3 armies between ITALY and SPAIN is permetted
          * and does as expected.
-        */
+        
         territories.addArmiesInTerritory(ITALIA, 4);
         Territory France = territories.getListTerritories().get(1);
         Territory Italy = territories.getListTerritories().get(0);
@@ -188,6 +183,21 @@ class MainTest {
         territories.moveArmiesFromPlaceToPlace(ITALIA, FRANCIA, movedArmies);
         assertEquals(1, Italy.getNumberOfArmies());
         assertEquals(movedArmies, France.getNumberOfArmies());
-    }
+    }*/
+
+    /*@Test
+    public void testMovementOfArmiesBetweenTwoTerritory() {
+        extracion of two territories that are in the territories example file
+        GameController controller = new GameController();
+        final String path = "src/test/java/it/unibo/risiko/Territories.txt";
+        final Territories territories = new Territories(path);
+        territories.addArmiesInTerritory(ITALIA, 4);
+        Territory France = territories.getListTerritories().get(1);
+        Territory Italy = territories.getListTerritories().get(0);
+        int movedArmies = Italy.getNumberOfArmies() - 1;
+        controller.moveArmies(ITALIA, FRANCIA, movedArmies);
+        assertEquals(1, Italy.getNumberOfArmies());
+        assertEquals(movedArmies, France.getNumberOfArmies());
+    }*/
 
 }

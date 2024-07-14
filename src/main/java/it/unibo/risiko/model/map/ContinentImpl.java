@@ -13,8 +13,10 @@ public class ContinentImpl implements Continent {
     private final int bonusArmies; 
 
     /**
-     * Constructor that is used to set the name of the continent created.
+     * Constructor that is used to set the name of the continent created
+     * and the number of bonus armies associated with a continent.
      * @param name is the name of the continent
+     * @param bonusArmies the number of bonus armies of the continent
      */
     public ContinentImpl(final String name, final int bonusArmies) {
         this.name = name;
@@ -25,7 +27,6 @@ public class ContinentImpl implements Continent {
      * Method that returns the continent's name.
      * @return the name of the continent
      */
-    @Override
     public String getName() {
         return this.name;
     }
@@ -34,7 +35,6 @@ public class ContinentImpl implements Continent {
      * Method to get the list of territories of a continent.
      * @return the list of territories
      */
-    @Override
     public List<Territory> getListTerritories() {
         return List.copyOf(this.listTerritories);
     }
@@ -43,12 +43,15 @@ public class ContinentImpl implements Continent {
      * Method used to add a territory in the list of territories of the continent.
      * @param terr is a territory
      */
-    @Override
     public void addTerritory(final Territory terr) {
         listTerritories.add(terr);
     }
 
-    @Override
+    /**
+     * Method to get the number of bonus armies that the player
+     * gaines if he has all the territory of the continent.
+     * @return the number of bonus armies
+     */
     public int getBonusArmies() {
         return this.bonusArmies;
     } 

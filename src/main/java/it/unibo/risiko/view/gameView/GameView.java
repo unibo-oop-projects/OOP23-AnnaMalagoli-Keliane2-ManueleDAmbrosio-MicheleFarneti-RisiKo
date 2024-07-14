@@ -5,6 +5,7 @@ import java.util.Map;
 
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event_register.Register;
+import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -188,15 +189,16 @@ public interface GameView {
     public void setDefenderLostArmies(final int defenderLostArmies);
 
     /**
-     * 
-     * @param listTerritories
+     * Method used to create a panel that allows to move armies between two
+     * adjacent territories.
+     * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
     public void createMoveArmies(final List<Territory> listTerritories);
 
     /**
-     * 
-     * @param playerCards
+     * Method used to create a panel that allows the player to play three cards.
+     * @param playerCards is the list of cards of the player
      * @author Anna Malagoli
      */
     public void createChoiceCards(List<Card> playerCards);
@@ -251,6 +253,15 @@ public interface GameView {
 
     /**
      * Handles Cards panel closure
+     * 
+     * @author Michele Farneti
      */
     void exitCardsPanel();
+
+    /**
+     * Updates the view with infos about the gamestatus and current turn.
+     * @param gameStatus
+     * @param turnsCount
+     */
+    void showStatus(GameStatus gameStatus, Long turnsCount);
 }

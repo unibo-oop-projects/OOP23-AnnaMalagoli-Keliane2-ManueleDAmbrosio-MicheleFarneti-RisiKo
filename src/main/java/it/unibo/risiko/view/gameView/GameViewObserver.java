@@ -71,21 +71,23 @@ public interface GameViewObserver {
     void setAttacking();
 
     /**
-     * Used to
+     * Method used to move a certain amount of armies between two 
+     * adjacent territories.
      * 
-     * @param srcTerritory
-     * @param dstTerritory
-     * @param numArmies
+     * @param srcTerritory is the source territory
+     * @param dstTerritory is the destination territory
+     * @param numArmies is the number of armies that the player
+     * wants to move
      * 
      * @author Anna Malagoli
      */
     void moveArmies(String srcTerritory, String dstTerritory, int numArmies);
 
     /**
-     * 
-     * @param card1
-     * @param card2
-     * @param card3
+     * Method used to play the three cards selected by a player.
+     * @param card1 is the first card selected
+     * @param card2 is the second card selected
+     * @param card3 is the third card selected
      * 
      * @author Anna Malagoli
      */
@@ -106,10 +108,9 @@ public interface GameViewObserver {
     void closeMovementPhase();
 
     /**
-     * Alerts the controller that the cards managing phase has concluded
+     * Alert the controller that the card managing phase has concluded
      * 
      * @author Michele Farneti
      */
-    public void exitCardsManagingPhase();
-
+    void exitCardsManagingPhase();
 }

@@ -27,6 +27,11 @@ public interface Territory {
      */
     String getContinentName();
 
+    /**
+     * Method used to get the position of the territory in the map.
+     * 
+     * @return the position of the territory
+     */
     Position getPosition();
 
     /**

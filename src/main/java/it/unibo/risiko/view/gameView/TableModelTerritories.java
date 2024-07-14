@@ -21,7 +21,7 @@ public class TableModelTerritories extends AbstractTableModel{
     private List<Player> listPlayers;
     private int NUM_COLUMN = 4;
     /*the following list is used to contain the name of every column in the table*/
-    private String[] columnsName = {"Territory", "Continet", "NumArmies", "Player"};
+    private String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
     /**
      * Method to return the number of rows displayed in the table that corresponds
      * to the number of territories of the map.
