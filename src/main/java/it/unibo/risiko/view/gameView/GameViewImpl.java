@@ -731,7 +731,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatus(GameStatus gameStatus, Long turnsCount) {
-        String statusString = "[" + turnsCount+"]";
+        String statusString = "[" + turnsCount+"] -";
         switch (gameStatus) {
             case ARMIES_PLACEMENT:
             case TERRITORY_OCCUPATION:

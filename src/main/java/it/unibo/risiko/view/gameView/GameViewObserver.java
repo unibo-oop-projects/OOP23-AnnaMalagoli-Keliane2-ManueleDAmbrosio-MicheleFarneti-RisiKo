@@ -104,4 +104,11 @@ public interface GameViewObserver {
      * @author Michele Farneti
      */
     void closeMovementPhase();
+
+    /**
+     * Alert the controller that the card managing phase has concluded
+     * 
+     * @author Michele Farneti
+     */
+    void exitCardsManagingPhase();
 }

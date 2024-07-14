@@ -302,7 +302,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         .forEach(t -> view.redrawTank(t, p.getColor_id())));
         view.setCurrentPlayer(currentPlayer().get());
         view.updateTablePanel();
-        view.showStatus(gameManager.getCurrentGame().get().getGameStatus(),gameManager.getCurrentGame().get().getTurnsCount());
+        view.showStatus(gameManager.getCurrentGame().get().getGameStatus(),
+                gameManager.getCurrentGame().get().getTurnsCount());
 
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
             case READY_TO_ATTACK:
@@ -357,9 +358,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
          * modifica del metodo playCards per cui non viene passato il player
          * e rimuovere le stringhe errore effettuando semplicemente l'operazione
          */
-        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());    
+        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
         exitCardsManagingPhase();
-        
+
     }
 
     @Override
@@ -372,11 +373,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.view.exitMoveArmiesPanel();
     }
 
-    /**
-     * Ends the card managing phase by alerting both mdoel and view.
-     * @author Michele Farneti.
-     */
-    private void exitCardsManagingPhase() {
+    @Override
+    public void exitCardsManagingPhase() {
         gameManager.getCurrentGame().get().endCardsPhase();
         this.view.exitCardsPanel();
         redrawView();
