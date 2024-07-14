@@ -206,11 +206,11 @@ public class GameImpl implements Game {
 
     @Override
     public boolean placeArmies(final Territory territory, final int nArmies) {
-        if ( getCurrentPlayer().getArmiesToPlace() > 0) {
+        if (getCurrentPlayer().getArmiesToPlace() > 0) {
             switch (status) {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
-                            &&  getCurrentPlayer().isOwnedTerritory(territory)) {
+                            && getCurrentPlayer().isOwnedTerritory(territory)) {
                         territory.addArmies(nArmies);
                         armiesPlaced++;
                         getCurrentPlayer().decrementArmiesToPlace();
@@ -222,10 +222,10 @@ public class GameImpl implements Game {
                     }
                     break;
                 case ARMIES_PLACEMENT:
-                    if ( getCurrentPlayer().isOwnedTerritory(territory)) {
+                    if (getCurrentPlayer().isOwnedTerritory(territory)) {
                         territory.addArmies(nArmies);
                         getCurrentPlayer().decrementArmiesToPlace();
-                        if(getCurrentPlayer().getArmiesToPlace() == 0){
+                        if (getCurrentPlayer().getArmiesToPlace() == 0) {
                             nextGamePhase();
                         }
                         return true;
@@ -276,8 +276,8 @@ public class GameImpl implements Game {
      */
     private void updateCurrentPlayer() {
         activePlayer = nextPlayerIfNotDefeated();
-        if(activePlayer == 0){
-            turnsCount ++;
+        if (activePlayer == 0) {
+            turnsCount++;
         }
         handleAIBehaviour();
     }
@@ -292,8 +292,9 @@ public class GameImpl implements Game {
             var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
             switch (status) {
                 case TERRITORY_OCCUPATION:
-                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
-                        ;
+                    while(getCurrentPlayer().isAI()){
+                        this.placeArmies(aiBehaviour.decidePositioning(), 1);
+                    }
                     break;
                 case CARDS_MANAGING:
                     var cardCombo = aiBehaviour.checkCardCombo();
@@ -384,7 +385,7 @@ public class GameImpl implements Game {
 
     @Override
     public void endCardsPhase() {
-        if(status == GameStatus.CARDS_MANAGING){
+        if (status == GameStatus.CARDS_MANAGING) {
             nextGamePhase();
         }
     }

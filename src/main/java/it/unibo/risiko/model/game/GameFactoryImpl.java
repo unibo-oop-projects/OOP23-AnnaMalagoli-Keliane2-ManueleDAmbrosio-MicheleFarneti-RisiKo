@@ -25,10 +25,6 @@ public class GameFactoryImpl implements GameFactory{
         return false;
     }
 
-    public boolean removePlayer(Player player) {
-        return players.remove(player);
-    }
-
     @Override
     public Game initializeGame() {
         Game newGame = new GameImpl(map, players);
