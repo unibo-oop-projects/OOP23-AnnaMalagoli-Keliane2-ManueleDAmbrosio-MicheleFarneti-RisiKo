@@ -44,8 +44,6 @@ public class Territories {
             int bonusArmies;
             String nameTerritory;
             List<String> listNearTerritory;
-            int x;
-            int y;
 
             stringRow = bufferedReader.readLine();
 
@@ -60,13 +58,9 @@ public class Territories {
                 } else {
                     final List<String> nations = Arrays.asList(stringRow.split(" "));
                     nameTerritory = nations.get(0);
-                    x = Integer.valueOf(nations.get(1));
-                    y = Integer.valueOf(nations.get(2));
                     listNearTerritory = new ArrayList<>(nations);
                     listNearTerritory.remove(nameTerritory);
-                    listNearTerritory.remove(nations.get(1));
-                    listNearTerritory.remove(nations.get(2));
-                    final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory, x, y);
+                    final Territory territory = new TerritoryImpl(nameTerritory, continentName, listNearTerritory);
                     this.listTerritories.add(territory);
 
                     this.getContinentFromName(continentName).get().addTerritory(territory);

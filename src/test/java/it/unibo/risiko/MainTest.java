@@ -91,7 +91,7 @@ class MainTest {
         deck.addCard(card4);
 
         Set<Territory> playerTerritories = new HashSet<Territory>();
-        playerTerritories.add(new TerritoryImpl("Spagna", "Europa", List.of(ITALIA, FRANCIA), 1, 1));
+        playerTerritories.add(new TerritoryImpl("Spagna", "Europa", List.of(ITALIA, FRANCIA)));
         //Player player = new SimplePlayerFactory().createStandardPlayer("Blu", 0);
         Player player = new SimplePlayerFactory().createStandardPlayer();
         player.setOwnedTerritories(playerTerritories);
@@ -129,7 +129,7 @@ class MainTest {
     @Test
     void testTerritoryImpl() {
         final int numberArmies = 25;
-        final Territory territory = new TerritoryImpl(ITALIA, "Europa", List.of("Francia", "Austria", "Slovenia", "Svizzera"), 2, 2);
+        final Territory territory = new TerritoryImpl(ITALIA, "Europa", List.of("Francia", "Austria", "Slovenia", "Svizzera"));
         assertEquals(territory.getNumberOfArmies(), 0);
         territory.addArmies(numberArmies);
         assertEquals(territory.getNumberOfArmies(), numberArmies);
@@ -152,8 +152,8 @@ class MainTest {
         final List<Territory> territoriesList = territories.getListTerritories();
         final List<Continent> continentList = territories.getListContinents();
         assertEquals(territoriesList.get(0).getTerritoryName(), ITALIA);
+        assertEquals(territoriesList.get(0).getListOfNearTerritories().get(0), FRANCIA);
         assertEquals(territoriesList.get(1).getTerritoryName(), FRANCIA);
-        assertEquals(territoriesList.get(0).getPosition(), new Position(1, 1));
         assertEquals(continentList.get(0).getName(), "Europa");
         assertEquals(continentList.get(0).getBonusArmies(), 5);
         assertEquals(continentList.size(), 1);

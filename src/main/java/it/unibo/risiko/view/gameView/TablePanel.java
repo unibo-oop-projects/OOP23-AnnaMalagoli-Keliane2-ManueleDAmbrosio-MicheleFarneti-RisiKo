@@ -51,10 +51,10 @@ public class TablePanel extends JPanel {
      * @param terr is the list of territories owned by the player
      * @param players is the list of players
      */
-    public void setData(List<Territory> terr, List<Player> players) {
+    public void setData(final List<Territory> terr, final List<Player> players) {
         tableModelTerritories.setData(terr, players);
     }
-    
+
     /**
      * Method to update the model of the table.
      */
