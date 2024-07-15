@@ -9,7 +9,7 @@ North-Europe West-Europe South-Europe Ukraine Scandinavia Great-Britain
 Europe:
 West-Europe Great-Britain North-Europe South-Europe North-Africa
 Europe:
-South-Europe Egypt North-Europe Ukraine Middle-East
+South-Europe Egypt North-Europe Ukraine Middle-East West-Europe
 Europe:
 Ukraine South-Europe North-Europe Scandinavia Middle-East Afghanistan Urals
 Africa 3:
