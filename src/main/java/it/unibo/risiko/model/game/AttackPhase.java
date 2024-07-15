@@ -2,6 +2,9 @@ package it.unibo.risiko.model.game;
 
 import java.util.List;
 
+import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.Player;
+
 /**
  * This class contains all the functions of the attack phase.
  * 
@@ -63,5 +66,25 @@ public interface AttackPhase {
      * attacker territory, false otherwise.
      */
     public boolean conquerTerritory(final int armiesToMove);
+
+    /**
+     * @return the attacking player.
+     */
+    public Player getAttacker();
+
+    /**
+     * @return the attacked player.
+     */
+    public Player getDefender();
+
+    /**
+     * @return the territory the attacking player is attacking from.
+     */
+    public Territory getAttackingTerritory();
+
+    /**
+     * @return the territory that is attacked.
+     */
+    public Territory getDefendingTerritory();
 }
 

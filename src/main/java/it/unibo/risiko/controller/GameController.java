@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.event.EventImpl;
+import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
@@ -54,9 +56,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     public GameController() {
-        this.register = new RegisterImpl();
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
+        this.register = new RegisterImpl();
         new GameFrame(this);
     }
 
@@ -206,8 +208,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void conquerIfPossible() {
+        createEvent(register, EventType.ATTACK, attackPhase.getAttackingTerritory(),
+                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
+
         if (attackPhase.isTerritoryConquered()) {
             currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
+
+            createEvent(register, EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
+                    attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
+                    Optional.of(attackPhase.getDefender()));
+
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
@@ -224,6 +234,24 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.closeAttackPanel();
         redrawView();
         checkWinner();
+    }
+
+    /**
+     * @param reg
+     * @param type
+     * @param attacker
+     * @param defender
+     * @param eventLeader
+     * @param eventLeaderAdversary
+     * @author Keliane2
+     */
+    private void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
+            Optional<Player> eventLeaderAdversary) {
+        if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
+            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
+        } else {
+            register.addEvent(new EventImpl(type, attacker, defender, eventLeader));
+        }
     }
 
     /**
@@ -355,6 +383,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         view.exitMoveArmiesPanel();
+
+        /*createEvent(register, EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+                getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty());
+                */
+
         this.skipTurn();
     }
 

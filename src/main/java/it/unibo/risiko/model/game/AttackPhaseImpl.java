@@ -65,22 +65,27 @@ public class AttackPhaseImpl implements AttackPhase {
         }
     }
 
+    @Override
     public List<Integer> getAttackerDiceThrows() {
         return this.attackerDiceThrows.getResults();
     }
 
+    @Override
     public List<Integer> getDefenderDiceThrows() {
         return this.defenderDiceThrows.getResults();
     }
 
+    @Override
     public int getAttackerLostArmies() {
         return attackerLostArmies;
     }
 
+    @Override
     public int getDefenderLostArmies() {
         return defenderLostArmies;
     }
 
+    @Override
     public boolean isTerritoryConquered() {
         if (defenderLostArmies >= defenderTerritory.getNumberOfArmies()) {
             return true;
@@ -89,11 +94,13 @@ public class AttackPhaseImpl implements AttackPhase {
         }
     }
 
+    @Override
     public void destroyArmies() {
         defenderTerritory.removeArmies(defenderLostArmies);
         attackerTerritory.removeArmies(attackerLostArmies);
     }
 
+    @Override
     public boolean conquerTerritory(final int armiesToMove) {
         if (isTerritoryConquered() && isLegitArmiesToMove(armiesToMove)) {
             defendingPlayer.removeTerritory(defenderTerritory);
@@ -104,6 +111,26 @@ public class AttackPhaseImpl implements AttackPhase {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Player getAttacker() {
+        return this.attackingPlayer;
+    }
+
+    @Override
+    public Player getDefender() {
+        return this.defendingPlayer;
+    }
+
+    @Override
+    public Territory getAttackingTerritory() {
+        return this.attackerTerritory;
+    }
+
+    @Override
+    public Territory getDefendingTerritory() {
+        return this.defenderTerritory;
     }
 
     public String toString() {
