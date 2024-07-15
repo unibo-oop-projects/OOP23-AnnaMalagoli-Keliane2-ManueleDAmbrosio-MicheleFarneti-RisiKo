@@ -113,7 +113,7 @@ public class GameImpl implements Game {
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
                     if (getTotalArmiesLeftToPlace() == 0) {
-                        players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                        players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
                         nextGamePhase();
                     } else {
                         armiesPlaced = 0;
@@ -123,7 +123,7 @@ public class GameImpl implements Game {
                 case CARDS_MANAGING:
                 case ATTACKING:
                 case READY_TO_ATTACK:
-                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                    players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
                     nextGamePhase();
                 default:
                     break;

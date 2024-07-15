@@ -13,6 +13,9 @@ import it.unibo.risiko.model.cards.CardImpl;
 import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.map.Continent;
+import it.unibo.risiko.model.map.ContinentImpl;
+import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
@@ -22,7 +25,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
  * @author Manuele D'Ambrosio
  */
 
-/*public class TestPlayer {
+public class TestPlayer {
 
     @Test
     void testRemoveCard() {
@@ -39,13 +42,20 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
     void testComputeReinforcement() {
         PlayerFactory factory = new SimplePlayerFactory();
         Player player = factory.createStandardPlayer();
-        player.addTerritory(new TerritoryImpl("ter1", "cont1", List.of("ter2", "ter3"), 1, 1));
-        player.addTerritory(new TerritoryImpl("ter2", "cont2", List.of("ter3", "ter1"), 1, 1));
-        player.computeReinforcements();
-        assertEquals(player.getArmiesToPlace(), 0);
-        player.addTerritory(new TerritoryImpl("ter5", "cont3", List.of("ter4"), 2, 2));
-        player.computeReinforcements();
-        assertEquals(player.getArmiesToPlace(), 1);
+        Continent cont = new ContinentImpl("cont", 3);
+        Territory t1 = new TerritoryImpl("ter1", cont.getName(), List.of("ter2", "ter3"));
+        Territory t2 = new TerritoryImpl("ter2", cont.getName(), List.of("ter3", "ter1"));
+        Territory t3 = new TerritoryImpl("ter5", cont.getName(), List.of("ter4"));
+        cont.addTerritory(t3);
+        cont.addTerritory(t2);
+        cont.addTerritory(t1);
+        player.addTerritory(t1);
+        player.addTerritory(t2);
+        player.computeReinforcements(List.of(cont));
+        assertEquals(0, player.getArmiesToPlace());
+        player.addTerritory(t3);
+        player.computeReinforcements(List.of(cont));
+        assertEquals(1+3, player.getArmiesToPlace());
     }
 
     @Test
@@ -59,9 +69,8 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
         assertTrue(player.drawNewCardIfPossible(deck));
         assertEquals(player.getNumberOfCards(), 1);
         assertFalse(player.drawNewCardIfPossible(deck));
-        player.computeReinforcements();
+        player.computeReinforcements(List.of(new ContinentImpl("no", 0)));
         assertTrue(player.drawNewCardIfPossible(deck));
     }
 
-
-}*/
+}
