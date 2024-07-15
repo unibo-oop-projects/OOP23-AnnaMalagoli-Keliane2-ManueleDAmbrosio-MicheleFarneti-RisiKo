@@ -20,9 +20,7 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
-import it.unibo.risiko.model.player.StdPlayer;//DA FARE MODIFICA NEI DUE TEST
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-import it.unibo.risiko.controller.GameController;;
+
 /**
  * Class used to execute the tests on the classes.
  * 

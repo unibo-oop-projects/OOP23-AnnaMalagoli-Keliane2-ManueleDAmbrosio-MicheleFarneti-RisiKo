@@ -59,8 +59,8 @@ public class TestGameMap {
         assertEquals(15, testMap.getStratingArmies(3));
         assertEquals(20, testMap.getStratingArmies(2));
 
-        var territory1 = new TerritoryImpl("Italia", "Europa", List.of("Francia", "Austria", "Slovenia", "Svizzera"), 2, 2);
-        var territory2 = new TerritoryImpl("Francia", "Europa" ,List.of("Belgio", "Lussemburgo", "Germania" ,"Svizzera" ,"Italia" ,"Monaco" ,"Spagna" ,"Andorra"), 2, 2);
+        var territory1 = new TerritoryImpl("Italia", "Europa", List.of("Francia", "Austria", "Slovenia", "Svizzera"));
+        var territory2 = new TerritoryImpl("Francia", "Europa" ,List.of("Belgio", "Lussemburgo", "Germania" ,"Svizzera" ,"Italia" ,"Monaco" ,"Spagna" ,"Andorra"));
 
         assertTrue(testMap.areTerritoriesNear(territory1,territory2));
     }
