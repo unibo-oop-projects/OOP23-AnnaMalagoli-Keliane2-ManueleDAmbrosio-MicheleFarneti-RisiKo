@@ -48,24 +48,27 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(final List<Territory> territories);
+    void showTanks(final List<String> territories);
 
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param Player
-     * @param playersIndex
+     * @param Player       the player color
+     * @param playersIndex The player's index in the games turns
+     * @param isAI         True if the player is AI
      * @author Michele Farneti
      */
-    void showTurnIcon(final Player player, final int playerIndex);
+    void showTurnIcon(final String player, final int playerIndex, boolean isAI);
 
     /**
      * Edits the view in order to show wich player is the current player.
      * 
-     * @param player
+     * @param playerColor   The color of the player
+     * @param armiesToPlace The number of armies the plyaer has to place
+     * @param taget         The current player's target description
      * @author Michele Farneti
      */
-    void setCurrentPlayer(final Player player);
+    void setCurrentPlayer(final String playerColor, Integer armiesToPlace, String target);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
@@ -75,7 +78,7 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(final Territory territory, final boolean isAttacker);
+    void showFightingTerritory(final String territory, final boolean isAttacker);
 
     /**
      * Deletes higlightings for a fighting territory
@@ -83,7 +86,7 @@ public interface GameView {
      * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritory(final Territory fightingTerritory);
+    void resetFightingTerritory(final String fightingTerritory);
 
     /**
      * Updates the game view, changing a tank based on territory
@@ -91,9 +94,10 @@ public interface GameView {
      * 
      * @param territory
      * @param playerColor
+     * @param numberOfArmies The count of the armies placed over the territory.
      * @author Michele Farneti
      */
-    void redrawTank(final Territory territory, final String playerColor);
+    void redrawTank(final String territory, final String playerColor, Integer numberOfArmies);
 
     /**
      * Updates the gameView making it show who is the winner of the game

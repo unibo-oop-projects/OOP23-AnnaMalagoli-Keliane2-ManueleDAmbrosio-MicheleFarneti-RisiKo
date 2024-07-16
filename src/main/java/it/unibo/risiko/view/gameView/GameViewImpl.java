@@ -54,6 +54,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class GameViewImpl implements GameView {
 
+    private static final int ARMIES_COUNT_THICKNESS = 3;
+
     private static final Integer WINNER_FONT_SIZE = 30;
 
     private static final String FILE_SEPARATOR = File.separator;
@@ -106,8 +108,8 @@ public class GameViewImpl implements GameView {
     private String mapName;
 
     private HashMap<String, Position> tanksCoordinates = new HashMap<>();;
-    private HashMap<Territory, TerritoryPlaceHolder> tanksMap = new HashMap<>();
-    private HashMap<Player, ColoredImageButton> iconsMap = new HashMap<>();
+    private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
+    private HashMap<String, ColoredImageButton> iconsMap = new HashMap<>();
     @SuppressFBWarnings(value = "EI2", justification = "GameViewObserver is an inteface intentionally mutable and safe to store.")
     private final GameViewObserver gameViewObserver;
     private JFrame mainFrame = new JFrame();
@@ -358,8 +360,8 @@ public class GameViewImpl implements GameView {
      * 
      * @param territory The territory that got clicked
      */
-    private void tankClicked(final Territory territory) {
-        countryBarPanel.setText(territory.getTerritoryName().toUpperCase(Locale.ROOT));
+    private void tankClicked(final String territory) {
+        countryBarPanel.setText(territory.toUpperCase(Locale.ROOT));
         countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
         gameViewObserver.territorySelected(territory);
     }
@@ -419,7 +421,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showTanks(final List<Territory> territories) {
+    public void showTanks(final List<String> territories) {
 
         territories.stream().forEach(territory -> tanksMap.put(territory, new TerritoryPlaceHolder(
                 new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
@@ -428,7 +430,7 @@ public class GameViewImpl implements GameView {
 
         getTanksCoordinates();
         for (var tank : tanksMap.entrySet()) {
-            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey().getTerritoryName()));
+            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
             tank.getValue().button().setBounds(relativePosition.x(),
                     relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
@@ -469,8 +471,8 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showTurnIcon(final Player player, final int playerIndex) {
-        if (player.isAI()) {
+    public void showTurnIcon(final String player, final int playerIndex, boolean isAI){
+        if (isAI) {
             iconsMap.put(
                     player,
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
@@ -484,10 +486,10 @@ public class GameViewImpl implements GameView {
         }
 
         for (var icon : iconsMap.entrySet()) {
-            icon.getValue().setColor(icon.getKey().getColor_id());
+            icon.getValue().setColor(icon.getKey());
             icon.getValue().setEnabled(false);
             icon.getValue().setBorder(
-                    BorderFactory.createLineBorder(stringToColor(icon.getKey().getColor_id().toLowerCase(Locale.ROOT)), 3));
+                    BorderFactory.createLineBorder(stringToColor(icon.getKey().toLowerCase(Locale.ROOT)), ARMIES_COUNT_THICKNESS));
             attackBarLayoutPane.add(icon.getValue(), TURN_ICON_LAYER, 0);
         }
     }
@@ -502,14 +504,14 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void setCurrentPlayer(final Player player) {
-        turnTank.setColor(player.getColor_id());
+    public void setCurrentPlayer(final String playerColor, Integer armiesToPlace, String target) {
+        turnTank.setColor(playerColor);
         iconsMap.entrySet().stream()
                 .forEach(e -> e.getValue()
-                        .setBorderPainted((e.getKey().getColor_id().equals(player.getColor_id())) ? true : false));
-        attackBarBackgroundPanel.setTopColor(stringToColor(player.getColor_id()));
-        playerArmiesLabel.setText(String.valueOf(player.getArmiesToPlace()));
-        showTarget(player.getTarget().showTargetDescription());
+                        .setBorderPainted((e.getKey().equals(playerColor)) ? true : false));
+        attackBarBackgroundPanel.setTopColor(stringToColor(playerColor));
+        playerArmiesLabel.setText(String.valueOf(armiesToPlace));
+        showTarget(target);
         mainFrame.validate();
         mainFrame.repaint();
     }
@@ -534,19 +536,19 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showFightingTerritory(final Territory territory, final boolean isAttacker) {
+    public void showFightingTerritory(final String territory, final boolean isAttacker) {
         tanksMap.get(territory).button().setCustomBorder(isAttacker ? Color.RED : Color.BLUE);
         tanksMap.get(territory).button().setBorderPainted(true);
     }
 
     @Override
-    public void redrawTank(final Territory territory, final String playerColor) {
+    public void redrawTank(final String territory, final String playerColor, Integer numberOfArmies) {
         tanksMap.get(territory).button().setColor(playerColor);
-        tanksMap.get(territory).armiesCount().setText(String.valueOf(territory.getNumberOfArmies()));
+        tanksMap.get(territory).armiesCount().setText(String.valueOf(numberOfArmies));
     }
 
     @Override
-    public void resetFightingTerritory(final Territory fightingTerritory) {
+    public void resetFightingTerritory(final String fightingTerritory) {
         tanksMap.get(fightingTerritory).button().setBorderPainted(false);
     }
 

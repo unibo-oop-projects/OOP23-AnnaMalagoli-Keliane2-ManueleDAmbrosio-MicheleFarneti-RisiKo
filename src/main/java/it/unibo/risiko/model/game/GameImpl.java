@@ -210,13 +210,13 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public boolean placeArmies(final Territory territory, final int nArmies) {
+    public boolean placeArmies(final String territory, final int nArmies) {
         if (getCurrentPlayer().getArmiesToPlace() > 0) {
             switch (status) {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
-                            && getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
-                        territory.addArmies(nArmies);
+                            && getCurrentPlayer().isOwnedTerritory(territory)) {
+                        map.addArmies(territory,nArmies);
                         armiesPlaced++;
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN
@@ -227,8 +227,8 @@ public class GameImpl implements Game {
                     }
                     break;
                 case ARMIES_PLACEMENT:
-                    if (getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
-                        territory.addArmies(nArmies);
+                    if (getCurrentPlayer().isOwnedTerritory(territory)) {
+                        map.addArmies(territory,nArmies);
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (getCurrentPlayer().getArmiesToPlace() == 0) {
                             nextGamePhase();
@@ -379,7 +379,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
+    public boolean areTerritoriesNear(String territory1, String territory2) {
         return map.areTerritoriesNear(territory1, territory2);
     }
 
@@ -403,5 +403,20 @@ public class GameImpl implements Game {
     @Override
     public Long getTurnsCount() {
         return turnsCount;
+    }
+
+    @Override
+    public int getNumberOfArmies(String territory) {
+        return map.getTerritories().stream().filter(t -> t.getTerritoryName() == territory).mapToInt(t -> t.getNumberOfArmies()).sum();
+    }
+
+    @Override
+    public void removeArmies(String territory, int numberOfMovingArmies) {
+        map.removeArmies(territory, numberOfMovingArmies);
+    }
+
+    @Override
+    public void setOwner(String territory, String color_id) {
+        map.setOwner(territory,color_id);
     }
 }

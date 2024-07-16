@@ -66,12 +66,29 @@ public class GameMapImpl implements GameMap {
     }
 
     @Override
-    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
-        return territories.territoriesAreNear(territory1,territory2);
+    public String getDeckPath() {
+        return buildResourceLocator("cards.txt");
     }
 
     @Override
-    public String getDeckPath() {
-        return buildResourceLocator("cards.txt");
+    public boolean areTerritoriesNear(String territory1, String territory2) {
+        ///DA SISTEMARE
+        throw new UnsupportedOperationException("Unimplemented method 'areTerritoriesNear'");
+    }
+
+    @Override
+    public void addArmies(String territory, int nArmies) {
+        territories.addArmiesInTerritory(territory, nArmies);
+    }
+
+    @Override
+    public void removeArmies(String territory, int numberOfMovingArmies) {
+        territories.removeArmiesInTerritory(territory, numberOfMovingArmies);
+    }
+
+    @Override
+    public void setOwner(String territory, String color_id) {
+        ///DA SISTEMARE
+        throw new UnsupportedOperationException("Unimplemented method 'setOwner'");
     }
 }

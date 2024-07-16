@@ -3,6 +3,8 @@ package it.unibo.risiko.controller;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.event.EventImpl;
@@ -47,8 +49,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             + FILE_SEPARATOR + "savegames.json";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
-    private Optional<Territory> attackerTerritory = Optional.empty();
-    private Optional<Territory> defenderTerritory = Optional.empty();
+    private Optional<String> attackerTerritory = Optional.empty();
+    private Optional<String> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
     private Register register;
 
@@ -67,7 +69,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void startGameWindow(Integer width, Integer height) {
-        this.view = new GameViewImpl(width, height, resourcesPackageString,this);
+        this.view = new GameViewImpl(width, height, resourcesPackageString, this);
         this.view.start();
     }
 
@@ -78,10 +80,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void setupGameView() {
-        if(gameManager.getCurrentGame().isPresent()){
+        if (gameManager.getCurrentGame().isPresent()) {
             this.game = gameManager.getCurrentGame().get();
             view.showGameWindow(game.getMapName(), game.getPlayersList().size());
-            view.showTanks(List.copyOf(game.getTerritoriesList()));
+            view.showTanks(
+                    game.getTerritoriesList().stream().map(t -> t.getTerritoryName()).collect(Collectors.toList()));
             showTurnIcons();
             view.createLog(this.register, game.getPlayersList());
             view.createTablePanel(game.getTerritoriesList(),
@@ -98,7 +101,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private void showTurnIcons() {
         for (int index = 0; index < game.getPlayersList().size(); index++) {
             var player = game.getPlayersList().get(index);
-            this.view.showTurnIcon(player, index);
+            this.view.showTurnIcon(player.getColor_id(), index, player.isAI());
         }
     }
 
@@ -107,7 +110,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (game.skipTurn()) {
             resetAttack();
             redrawView();
-            view.setCurrentPlayer(currentPlayer().get());
+            view.setCurrentPlayer(game.getCurrentPlayer().getColor_id(), game.getCurrentPlayer().getArmiesToPlace(),
+                    game.getCurrentPlayer().getTarget().showTargetDescription());
             showCards();
             redrawView();
             view.enableMovements(false);
@@ -141,24 +145,24 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         redrawView();
     }
 
-    //@Override
-    public void territorySelected(Territory territory) {
-        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+    // @Override
+    public void territorySelected(String territory) {
+        switch (game.getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                gameManager.getCurrentGame().get().placeArmies(territory, 1);
+                game.placeArmies(territory, 1);
                 break;
             case ARMIES_PLACEMENT:
-                gameManager.getCurrentGame().get().placeArmies(territory, 1);
-                if (gameManager.getCurrentGame().get().getGameStatus() == GameStatus.READY_TO_ATTACK) {
+                game.placeArmies(territory, 1);
+                if (game.getGameStatus() == GameStatus.READY_TO_ATTACK) {
                     view.enableMovements(true);
                 }
                 ;
                 break;
             case ATTACKING:
-                if (currentPlayerOwns(territory) && territory.getNumberOfArmies() > 1) {
+                if (game.getCurrentPlayer().isOwnedTerritory(territory) && game.getNumberOfArmies(territory) > 1) {
                     setFighter(territory, true);
                 } else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()
-                        && !currentPlayerOwns(territory)) {
+                        && !game.getCurrentPlayer().isOwnedTerritory(territory)) {
                     if (gameManager.getCurrentGame().get().areTerritoriesNear(attackerTerritory.get(),
                             territory)) {
                         setFighter(territory, false);
@@ -193,8 +197,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Manuele D'Ambrosio
      */
     private void startAttack() {
-        view.createAttack(attackerTerritory.get().getTerritoryName(), defenderTerritory.get().getTerritoryName(),
-                attackerTerritory.get().getNumberOfArmies());
+        view.createAttack(attackerTerritory.get(), defenderTerritory.get(),
+                game.getNumberOfArmies(attackerTerritory.get()));
     }
 
     /**
@@ -203,20 +207,21 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     @Override
     public void setAttackingArmies(int numberOfAttackingAmies) {
-        attackPhase = new AttackPhaseImpl(numberOfAttackingAmies, defenderTerritory.get().getNumberOfArmies());
+        attackPhase = new AttackPhaseImpl(numberOfAttackingAmies, game.getNumberOfArmies(defenderTerritory.get()));
         view.setAtt(attackPhase.getAttackerDiceThrows());
         view.setDef(attackPhase.getDefenderDiceThrows());
         view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
 
         // // Creation of attack event.
-        // createEvent(EventType.ATTACK, attackerTerritory.get(), defenderTerritory.get(), currentPlayer().get(),
-        //         Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
+        // createEvent(EventType.ATTACK, attackerTerritory.get(),
+        // defenderTerritory.get(), currentPlayer().get(),
+        // Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
         view.updateLog();
 
         // Destroying armies.
-        attackerTerritory.get().removeArmies(attackPhase.getAttackerLostArmies());
-        defenderTerritory.get().removeArmies(attackPhase.getDefenderLostArmies());
+        game.removeArmies(attackerTerritory.get(),attackPhase.getAttackerLostArmies());
+        game.removeArmies(defenderTerritory.get(),attackPhase.getDefenderLostArmies());
 
         view.drawDicePanels();
     }
@@ -228,11 +233,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
-            //currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
+            // currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
 
             // createEvent(EventType.TERRITORY_CONQUEST, attackerTerritory.get(),
-            //         defenderTerritory.get(), currentPlayer().get(),
-            //         Optional.of(game.getOwner(defenderTerritory.get().getTerritoryName())), Optional.empty());
+            // defenderTerritory.get(), currentPlayer().get(),
+            // Optional.of(game.getOwner(defenderTerritory.get().getTerritoryName())),
+            // Optional.empty());
 
             view.updateLog();
             view.drawConquerPanel();
@@ -253,15 +259,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
-        defenderTerritory.get().setPlayer(currentPlayer().get().getColor_id());
-        attackerTerritory.get().removeArmies(numberOfMovingArmies);
-        defenderTerritory.get().addArmies(numberOfMovingArmies);
+        game.setOwner(defenderTerritory.get(),currentPlayer().get().getColor_id());
+        game.removeArmies(attackerTerritory.get(),numberOfMovingArmies);
+        game.placeArmies(defenderTerritory.get(), numberOfMovingArmies);
 
         view.closeAttackPanel();
         // Creating moovement event.
         // createEvent(EventType.TROOP_MOVEMENT, attackerTerritory.get(),
-        //         defenderTerritory.get(), game.getOwner(attackerTerritory.get().getTerritoryName()),
-        //         Optional.empty(), Optional.of(numberOfMovingArmies));
+        // defenderTerritory.get(),
+        // game.getOwner(attackerTerritory.get().getTerritoryName()),
+        // Optional.empty(), Optional.of(numberOfMovingArmies));
 
         view.updateLog();
         redrawView();
@@ -307,7 +314,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param territory
      * @author Michele Farneti
      */
-    private void setFighter(Territory territory, boolean isAttacker) {
+    private void setFighter(String territory, boolean isAttacker) {
         if (isAttacker) {
             resetAttack();
             attackerTerritory = Optional.of(territory);
@@ -331,31 +338,20 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * Checks if the current player of the current game owns a territory
-     * 
-     * @param territory
-     * @return true if the player owns the territory
-     * @author Michele Farneti
-     */
-    private boolean currentPlayerOwns(Territory territory) {
-        return currentPlayer().get().isOwnedTerritory(territory.getTerritoryName());
-    }
-
-    /**
      * Updates the game view by changhing the map and the turns
      * 
      * @author Michele Farneti
      */
     private void redrawView() {
-        gameManager.getCurrentGame().get().getPlayersList().stream()
-                .forEach(p -> p.getOwnedTerritories().stream()
-                        .forEach(t -> view.redrawTank(getTerritoryFromString(t), p.getColor_id())));
-        view.setCurrentPlayer(currentPlayer().get());
+        game.getTerritoriesList().stream()
+                .forEach(t -> view.redrawTank(t.getTerritoryName(), t.getPlayer(), t.getNumberOfArmies()));
+        view.setCurrentPlayer(game.getCurrentPlayer().getColor_id(), game.getCurrentPlayer().getArmiesToPlace(),
+                game.getCurrentPlayer().getTarget().showTargetDescription());
         view.updateTablePanel();
-        view.showStatus(gameManager.getCurrentGame().get().getGameStatus(),
-                gameManager.getCurrentGame().get().getTurnsCount());
+        view.showStatus(game.getGameStatus(),
+                game.getTurnsCount());
 
-        switch (gameManager.getCurrentGame().get().getGameStatus()) {
+        switch (game.getGameStatus()) {
             case READY_TO_ATTACK:
                 view.enableAttack(true);
                 view.enableSkip(true);
@@ -406,8 +402,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
         // createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
-        //         getTerritoryFromString(dstTerritory),game.getOwner(srcTerritory), Optional.empty(),
-        //         Optional.of(numArmies));
+        // getTerritoryFromString(dstTerritory),game.getOwner(srcTerritory),
+        // Optional.empty(),
+        // Optional.of(numArmies));
         view.updateLog();
         view.exitMoveArmiesPanel();
         this.skipTurn();

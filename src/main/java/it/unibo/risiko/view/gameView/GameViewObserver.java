@@ -59,9 +59,9 @@ public interface GameViewObserver {
      * Tells the controller that the user clicked on a territory
      * 
      * @author Michele Farneti
-     * @param territory The selected territory
+     * @param territory The selected territory'sname
      */
-    void territorySelected(Territory territory);
+    void territorySelected(String territory);
 
     /**
      * Tells the controller that the player wants to enter the attack phase.
