@@ -1,7 +1,6 @@
 package it.unibo.risiko.Game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -29,13 +28,14 @@ public class TestAttackPhase {
         Territory defTerritory = new TerritoryImpl("defTerritory", "cont1", List.of("attTerritory"));
         attTerritory.addArmies(10);
         defTerritory.addArmies(3);
-        attPlayer.addTerritory(attTerritory);
-        defPlayer.addTerritory(defTerritory);
+        attPlayer.addTerritory(attTerritory.getTerritoryName());
+        defPlayer.addTerritory(defTerritory.getTerritoryName());
 
-        AttackPhase attackPhase = new AttackPhaseImpl(attPlayer, attTerritory, 3, defPlayer, defTerritory);
+        AttackPhase attackPhase = new AttackPhaseImpl(3, defTerritory.getNumberOfArmies());
         int initAttTerritoryArmies = attTerritory.getNumberOfArmies();
         int initDefTerritoryArmies = defTerritory.getNumberOfArmies();
-        attackPhase.destroyArmies();
+        attTerritory.removeArmies(attackPhase.getAttackerLostArmies());
+        defTerritory.removeArmies(attackPhase.getDefenderLostArmies());
         assertEquals(attackPhase.getAttackerLostArmies(),
                 initAttTerritoryArmies - attTerritory.getNumberOfArmies());
         assertEquals(attackPhase.getDefenderLostArmies(),
@@ -43,10 +43,7 @@ public class TestAttackPhase {
 
         attTerritory.addArmies(100);
         while (!attackPhase.isTerritoryConquered()) {
-            attackPhase = new AttackPhaseImpl(attPlayer, attTerritory, 3, defPlayer, defTerritory);
+            attackPhase = new AttackPhaseImpl(3, defTerritory.getNumberOfArmies());
         }
-        attackPhase.conquerTerritory(attTerritory.getNumberOfArmies() - 1);
-        assertEquals(attPlayer.getNumberOfTerritores(), 2);
-        assertTrue(defPlayer.isDefeated());
     }
 }

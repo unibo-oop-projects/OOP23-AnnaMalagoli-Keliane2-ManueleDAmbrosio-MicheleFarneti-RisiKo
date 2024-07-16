@@ -49,11 +49,11 @@ public class TestPlayer {
         cont.addTerritory(t3);
         cont.addTerritory(t2);
         cont.addTerritory(t1);
-        player.addTerritory(t1);
-        player.addTerritory(t2);
+        player.addTerritory(t1.getTerritoryName());
+        player.addTerritory(t2.getTerritoryName());
         player.computeReinforcements(List.of(cont));
         assertEquals(0, player.getArmiesToPlace());
-        player.addTerritory(t3);
+        player.addTerritory(t3.getTerritoryName());
         player.computeReinforcements(List.of(cont));
         assertEquals(1+3, player.getArmiesToPlace());
     }
@@ -66,11 +66,11 @@ public class TestPlayer {
         Deck deck = new DeckImpl(PATH);
         PlayerFactory factory = new SimplePlayerFactory();
         Player player = factory.createStandardPlayer();
-        assertTrue(player.drawNewCardIfPossible(deck));
+        assertTrue(player.drawNewCardIfPossible(deck.pullCard()));
         assertEquals(player.getNumberOfCards(), 1);
-        assertFalse(player.drawNewCardIfPossible(deck));
+        assertFalse(player.drawNewCardIfPossible(deck.pullCard()));
         player.computeReinforcements(List.of(new ContinentImpl("no", 0)));
-        assertTrue(player.drawNewCardIfPossible(deck));
+        assertTrue(player.drawNewCardIfPossible(deck.pullCard()));
     }
 
 }

@@ -49,10 +49,10 @@ public class TestAIBehaviour {
         t2.addArmies(2);
         t3.addArmies(10);
 
-        player.addTerritory(t2);
-        player.addTerritory(t1);
+        player.addTerritory(t2.getTerritoryName());
+        player.addTerritory(t1.getTerritoryName());
 
-        ai = new AIBehaviourImpl(player);
+        ai = new AIBehaviourImpl(List.of(t1, t2), player.getOwnedCards().stream().toList());
     }
 
     @Test
@@ -65,24 +65,27 @@ public class TestAIBehaviour {
     @Test
     void testDecideAttack() {
         assertTrue(ai.decideAttack(List.of(t1, t2, t3)));
-        assertTrue(ai.getNextAttackedTerritory().equals(t3));
-        assertTrue(ai.getNextAttackingTerritory().equals(t1));
+        assertTrue(ai.getNextAttackedTerritory().equals(t3.getTerritoryName()));
+        assertTrue(ai.getNextAttackingTerritory().equals(t1.getTerritoryName()));
         assertEquals(3, ai.decideAttackingArmies());
         assertEquals(9, ai.getArmiesToMove());
     }
 
     @Test
     void TestCheckCardCombo() {
+        assertTrue(!deck.getListCards().isEmpty());
         List<Card> cardList = new ArrayList<>();
         int numberOfCards = 0;
         for (int i = 0; i < 10; i++) {
             do {
+                System.out.println(deck.getListCards().size());
                 player.addCard(deck.pullCard());
                 numberOfCards++;
             } while (ai.checkCardCombo().isEmpty());
             assertEquals(3, ai.checkCardCombo().size());
             cardList = ai.checkCardCombo();
-            deck.playCards(cardList.get(0), cardList.get(1), cardList.get(2), player);
+            deck.playCards(cardList.get(0).getTerritoryName(), cardList.get(1).getTerritoryName(),
+                    cardList.get(2).getTerritoryName(), player);
             assertEquals(numberOfCards - 3, player.getNumberOfCards());
             numberOfCards = numberOfCards - 3;
         }

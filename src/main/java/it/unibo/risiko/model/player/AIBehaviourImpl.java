@@ -102,10 +102,10 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public List<Card> checkCardCombo() {
-        return findCombo(playerCardList.stream().toList());
+        return findCombo();
     }
 
-    private List<Card> findCombo(List<Card> playerCardList) {
+    private List<Card> findCombo() {
         List<Card> tris = new ArrayList<>();
         List<Card> jollyList = listOfType(playerCardList, "Jolly");
         List<Card> cannonList = listOfType(playerCardList, "Cannon");
