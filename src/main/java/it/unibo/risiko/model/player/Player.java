@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Continent;
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
 /**
