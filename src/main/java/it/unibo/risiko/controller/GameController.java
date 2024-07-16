@@ -16,6 +16,7 @@ import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapImpl;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.TerritoryImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
@@ -202,23 +203,25 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
         attackPhase.destroyArmies();
-
         view.drawDicePanels();
+        createEvent(EventType.ATTACK, attackPhase.getAttackingTerritory(),
+                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
+        view.updateLog();
     }
 
     @Override
     public void conquerIfPossible() {
-        createEvent(register, EventType.ATTACK, attackPhase.getAttackingTerritory(),
-                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
-
         if (attackPhase.isTerritoryConquered()) {
             currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
 
-            createEvent(register, EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
+            createEvent( EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
                     attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
                     Optional.of(attackPhase.getDefender()));
-
+            createEvent( EventType.TROOP_MOVEMENT, attackPhase.getAttackingTerritory(),
+                    attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
+                    Optional.of(attackPhase.getDefender()));
             view.drawConquerPanel();
+            view.updateLog();
         } else {
             view.closeAttackPanel();
             redrawView();
@@ -245,7 +248,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param eventLeaderAdversary
      * @author Keliane2
      */
-    private void createEvent(Register reg, EventType type, Territory attacker, Territory defender, Player eventLeader,
+    private void createEvent( EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary) {
         if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
             register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
@@ -376,18 +379,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param dstTerritory is the destination territory
      * @param numArmies is the number of armies that the player
      * wants to move
-     * 
+     * @author Keliane2
      * @author Anna Malagoli
      */
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
-        view.exitMoveArmiesPanel();
-
-        /*createEvent(register, EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+        createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
                 getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty());
-                */
-
+        view.updateLog();       
+        view.exitMoveArmiesPanel();
         this.skipTurn();
     }
 
