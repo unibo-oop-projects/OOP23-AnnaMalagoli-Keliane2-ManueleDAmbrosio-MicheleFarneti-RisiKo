@@ -82,7 +82,7 @@ public class Territories {
      * @return the list of territories
      */
     public List<Territory> getListTerritories() {
-        return List.copyOf(listTerritories); 
+        return listTerritories; 
     }
 
     /**
