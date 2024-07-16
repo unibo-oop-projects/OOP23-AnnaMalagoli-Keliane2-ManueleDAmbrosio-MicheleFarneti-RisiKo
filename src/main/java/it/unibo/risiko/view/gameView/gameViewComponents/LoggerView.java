@@ -29,11 +29,11 @@ public class LoggerView extends JPanel{
     private final List<Player> playerList;
     
     @SuppressWarnings("unchecked")
-    public LoggerView(final Register register, final List<Player> playerList){
+    public LoggerView(final int width, final int height, final Register register, final List<Player> playerList){
         this.playerList=playerList;
         this.register=register;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-        //this.setPreferredSize(new Dimension(1000, 1000)); => Inserire le dimensioni giuste che dipendono dalle dimensioni della GameView per ottenere una corretta visualizzazione.
+        this.setPreferredSize(new Dimension(width, height));
         //creating a textArea, the event container
         JTextArea logText=new JTextArea("");
         logText.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
@@ -48,7 +48,7 @@ public class LoggerView extends JPanel{
                            .forEach(j->playerNameList.add(j));
         //creating a JComboBox for the selection of the player we want to visualize the events
         JComboBox<String> playerOptions = new JComboBox<>(list);
-        playerOptions.setRenderer(new MyComboBoxRenderer("Select the player you want the events to be displayed"));
+        playerOptions.setRenderer(new MyComboBoxRenderer("Select player"));
         playerOptions.setSelectedIndex(-1);
         //the button used to show all the events
         JButton allEvent=new JButton("Show all events");

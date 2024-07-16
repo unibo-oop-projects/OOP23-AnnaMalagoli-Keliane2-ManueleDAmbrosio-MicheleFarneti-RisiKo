@@ -196,13 +196,14 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
+        
         logPanel.setBounds(gamePanel.getWidth(), 0, mainFrame.getWidth() - gamePanel.getWidth(),
                 mainFrame.getHeight() / 2);
         logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
         baseLayoutPane.add(logPanel, MAP_LAYER, 0);
 
         territoriesTablePanel.setBounds(gamePanel.getWidth(), mainFrame.getHeight() / 2,
-                mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);   
+                mainFrame.getWidth() - gamePanel.getWidth(), mainFrame.getHeight() / 2);
         territoriesTablePanel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
         baseLayoutPane.add(territoriesTablePanel, MAP_LAYER, 0);
         setupAttackBar(nPlayers);
@@ -302,9 +303,10 @@ public class GameViewImpl implements GameView {
         targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
         attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
 
-        //Game Status Bar
+        // Game Status Bar
         gameStatusPanel = new JTextArea();
-        gameStatusPanel.setBounds((int) (gamePanel.getWidth() * 0.75),(int) targetTextField.getLocation().getY()+targetTextField.getHeight(),targetTextField.getWidth(),
+        gameStatusPanel.setBounds((int) (gamePanel.getWidth() * 0.75),
+                (int) targetTextField.getLocation().getY() + targetTextField.getHeight(), targetTextField.getWidth(),
                 TURN_ICON_HEIGHT / 2);
         attackBarLayoutPane.add(gameStatusPanel, TURNSBAR_LAYER, 0);
         gameStatusPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
@@ -537,7 +539,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void redrawTank(final Territory territory,final String playerColor) {
+    public void redrawTank(final Territory territory, final String playerColor) {
         tanksMap.get(territory).button().setColor(playerColor);
         tanksMap.get(territory).armiesCount().setText(String.valueOf(territory.getNumberOfArmies()));
     }
@@ -633,8 +635,10 @@ public class GameViewImpl implements GameView {
     }
 
     /**
-     * Method used to create a panel to move armies between two adjacent territories.
+     * Method used to create a panel to move armies between two adjacent
+     * territories.
      * After the panel creation it is set visible and added to the game frame.
+     * 
      * @param listTerritories is the list of territories owned by the player
      */
     public void createMoveArmies(List<Territory> listTerritories) {
@@ -661,6 +665,7 @@ public class GameViewImpl implements GameView {
     /**
      * Method used to create the panel to play the three cards.
      * After the panel creation it is set visible and added to the game frame.
+     * 
      * @param playerCards is the list of cards of the player
      */
     public void createChoiceCards(List<Card> playerCards) {
@@ -694,7 +699,8 @@ public class GameViewImpl implements GameView {
      */
     @Override
     public void createLog(Register reg, List<Player> l) {
-        logPanel.add(new LoggerView(reg, l));
+        logPanel.add(new LoggerView(mainFrame.getWidth() - gamePanel.getWidth(),
+                mainFrame.getHeight() / 2, reg, l));
     }
 
     /**
@@ -720,7 +726,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatus(GameStatus gameStatus, Long turnsCount) {
-        String statusString = "[" + turnsCount+"] -";
+        String statusString = "[" + turnsCount + "] -";
         switch (gameStatus) {
             case ARMIES_PLACEMENT:
             case TERRITORY_OCCUPATION:
@@ -735,6 +741,6 @@ public class GameViewImpl implements GameView {
             default:
                 break;
         }
-       gameStatusPanel.setText(statusString);
+        gameStatusPanel.setText(statusString);
     }
 }
