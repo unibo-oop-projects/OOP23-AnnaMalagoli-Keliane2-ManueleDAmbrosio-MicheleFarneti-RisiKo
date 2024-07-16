@@ -1,6 +1,5 @@
 package it.unibo.risiko.model.player;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -102,7 +101,7 @@ public class StdPlayer implements Player {
     @Override
     public void computeReinforcements(Collection<Continent> continentsList) {
         int bonusArmies = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
-        List<String> territoriesNames = new ArrayList<>();
+        List<String> territoriesNames;
         for (Continent continent : continentsList) {
             territoriesNames = continent.getListTerritories().stream().map(t -> t.getTerritoryName())
                     .collect(Collectors.toList());
