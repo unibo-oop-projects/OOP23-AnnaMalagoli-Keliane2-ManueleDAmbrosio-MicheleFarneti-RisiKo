@@ -11,6 +11,7 @@ import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
+import it.unibo.risiko.model.game.Game;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.game.GameStatus;
@@ -38,6 +39,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
+    private Game game;
     private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
@@ -71,6 +73,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void initializeNewGame() {
+        gameManager.getCurrentGame().ifPresent( g -> this.game = g);
         view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
@@ -199,17 +202,17 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     @Override
     public void setAttackingArmies(int numberOfAttackingAmies) {
-        attackPhase = new AttackPhaseImpl(getOwner(attackerTerritory.get()), attackerTerritory.get(),
-                numberOfAttackingAmies, getOwner(defenderTerritory.get()), defenderTerritory.get());
-        view.setAtt(attackPhase.getAttackerDiceThrows());
-        view.setDef(attackPhase.getDefenderDiceThrows());
-        view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
-        view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
-        createEvent(EventType.ATTACK, attackPhase.getAttackingTerritory(),
-                attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()), Optional.empty());
-        view.updateLog();
-        attackPhase.destroyArmies();
-        view.drawDicePanels();
+        // attackPhase = new AttackPhaseImpl(game.getOwner(attackerTerritory.get().getTerritoryName()), attackerTerritory.get(),
+        //         numberOfAttackingAmies, game.getOwner(defenderTerritory.get().getTerritoryName()), defenderTerritory.get());
+        // view.setAtt(attackPhase.getAttackerDiceThrows());
+        // view.setDef(attackPhase.getDefenderDiceThrows());
+        // view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
+        // view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
+        // createEvent(EventType.ATTACK, attackPhase.getAttackingTerritory(),
+        //         attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()), Optional.empty());
+        // view.updateLog();
+        // attackPhase.destroyArmies();
+        // view.drawDicePanels();
     }
 
     /**
@@ -219,7 +222,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
-            currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
+            //currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
 
             createEvent( EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
                     attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
@@ -281,16 +284,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         } else {
             return Optional.empty();
         }
-    }
-
-    /**
-     * 
-     * @param territory
-     * @return The owner of the territory in the current game
-     * @author Michele Farneti
-     */
-    private Player getOwner(Territory territory) {
-        return gameManager.getCurrentGame().get().getOwner(territory);
     }
 
     /**
@@ -398,8 +391,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
-        createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
-                getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty(), Optional.of(numArmies));
+        // createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+        //         getTerritoryFromString(dstTerritory), game.getOwner(srcTerritory), Optional.empty(), Optional.of(numArmies));
         view.updateLog();       
         view.exitMoveArmiesPanel();
         this.skipTurn();

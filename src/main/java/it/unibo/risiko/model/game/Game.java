@@ -80,7 +80,7 @@ public interface Game {
      * @param territory
      * @return The owner of the given territory
      */
-    public Player getOwner(final Territory territory);
+    public String getOwner(final String territory);
 
     /**
      * 
