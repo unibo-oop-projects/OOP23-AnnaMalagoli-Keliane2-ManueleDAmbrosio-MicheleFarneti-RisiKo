@@ -18,14 +18,6 @@ import it.unibo.risiko.model.player.Player;
 public interface GameView {
 
     /**
-     * Sets the observer for the view
-     * 
-     * @param gameController Observer
-     * @author Michele Farneti
-     */
-    void setObserver(GameViewObserver gameController);
-
-    /**
      * Starts the view by setting up all of the main components
      * 
      * @author Michele Farneti
@@ -47,7 +39,7 @@ public interface GameView {
      * @param playersNumber The number of players playing the game
      * @author Michele Farneti
      */
-    void showGameWindow(final String mapName,final Integer playersNumber);
+    void showGameWindow(final String mapName, final Integer playersNumber);
 
     /**
      * Activates the placing and the viewing of the tanks buttons over their
@@ -65,7 +57,7 @@ public interface GameView {
      * @param playersIndex
      * @author Michele Farneti
      */
-    void showTurnIcon(final Player player,final int playerIndex);
+    void showTurnIcon(final Player player, final int playerIndex);
 
     /**
      * Edits the view in order to show wich player is the current player.
@@ -83,7 +75,7 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(final Territory territory,final boolean isAttacker);
+    void showFightingTerritory(final Territory territory, final boolean isAttacker);
 
     /**
      * Deletes higlightings for a fighting territory
@@ -190,6 +182,7 @@ public interface GameView {
     /**
      * Method used to create a panel that allows to move armies between two
      * adjacent territories.
+     * 
      * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
@@ -197,6 +190,7 @@ public interface GameView {
 
     /**
      * Method used to create a panel that allows the player to play three cards.
+     * 
      * @param playerCards is the list of cards of the player
      * @author Anna Malagoli
      */
@@ -241,6 +235,7 @@ public interface GameView {
      * @author Keliane2
      */
     public void updateLog();
+
     /**
      * Creates the territory table panel.
      * 
@@ -263,6 +258,7 @@ public interface GameView {
 
     /**
      * Updates the view with infos about the gamestatus and current turn.
+     * 
      * @param gameStatus
      * @param turnsCount
      */

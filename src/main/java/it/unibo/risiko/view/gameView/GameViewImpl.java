@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -40,6 +41,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Implementattion of GameView interface.
@@ -105,7 +108,8 @@ public class GameViewImpl implements GameView {
     private HashMap<String, Position> tanksCoordinates = new HashMap<>();;
     private HashMap<Territory, TerritoryPlaceHolder> tanksMap = new HashMap<>();
     private HashMap<Player, ColoredImageButton> iconsMap = new HashMap<>();
-    private GameViewObserver gameViewObserver;
+    @SuppressFBWarnings(value = "EI2", justification = "GameViewObserver is an inteface intentionally mutable and safe to store.")
+    private final GameViewObserver gameViewObserver;
     private JFrame mainFrame = new JFrame();
     private JLayeredPane baseLayoutPane = new JLayeredPane();
     private JLayeredPane mapLayoutPane = new JLayeredPane();
@@ -143,7 +147,8 @@ public class GameViewImpl implements GameView {
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator) {
+    public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator, final GameViewObserver observer) {
+        this.gameViewObserver = observer;
         this.frameWidth = frameWidth;
         this.frameHeigth = frameHeight;
         this.resourcesLocator = resourcesLocator;
@@ -354,7 +359,7 @@ public class GameViewImpl implements GameView {
      * @param territory The territory that got clicked
      */
     private void tankClicked(final Territory territory) {
-        countryBarPanel.setText(territory.getTerritoryName().toUpperCase());
+        countryBarPanel.setText(territory.getTerritoryName().toUpperCase(Locale.ROOT));
         countryBarPanel.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
         gameViewObserver.territorySelected(territory);
     }
@@ -378,11 +383,6 @@ public class GameViewImpl implements GameView {
         mapPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapLayoutPane.add(mapPanel, MAP_LAYER, 0);
         gamePanel.add(mapLayoutPane);
-    }
-
-    @Override
-    public void setObserver(final GameViewObserver gameController) {
-        this.gameViewObserver = gameController;
     }
 
     @Override
@@ -487,7 +487,7 @@ public class GameViewImpl implements GameView {
             icon.getValue().setColor(icon.getKey().getColor_id());
             icon.getValue().setEnabled(false);
             icon.getValue().setBorder(
-                    BorderFactory.createLineBorder(stringToColor(icon.getKey().getColor_id().toLowerCase()), 3));
+                    BorderFactory.createLineBorder(stringToColor(icon.getKey().getColor_id().toLowerCase(Locale.ROOT)), 3));
             attackBarLayoutPane.add(icon.getValue(), TURN_ICON_LAYER, 0);
         }
     }
@@ -557,7 +557,7 @@ public class GameViewImpl implements GameView {
         winnerPanel.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
         winnerPanel.setOpaque(true);
 
-        var winnerWriting = new JTextField(winnerColor.toUpperCase() + " player has won the Game!");
+        var winnerWriting = new JTextField(winnerColor.toUpperCase(Locale.ROOT) + " player has won the Game!");
         winnerWriting.setFont(new Font("Arial", Font.BOLD, WINNER_FONT_SIZE));
         winnerWriting.setForeground(stringToColor(winnerColor));
         winnerWriting.setOpaque(false);
@@ -746,6 +746,7 @@ public class GameViewImpl implements GameView {
                 break;
             case CARDS_MANAGING:
                 statusString += "Cards Managing!";
+                break;
             default:
                 break;
         }

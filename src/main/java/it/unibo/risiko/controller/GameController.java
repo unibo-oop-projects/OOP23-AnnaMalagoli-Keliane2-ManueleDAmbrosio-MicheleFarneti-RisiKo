@@ -1,6 +1,7 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Deck;
@@ -66,27 +67,27 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void startGameWindow(Integer width, Integer height) {
-        this.view = new GameViewImpl(width, height, resourcesPackageString);
+        this.view = new GameViewImpl(width, height, resourcesPackageString,this);
         this.view.start();
-        this.view.setObserver(this);
     }
 
     @Override
     public void initializeNewGame() {
-        gameManager.getCurrentGame().ifPresent( g -> this.game = g);
         view.showInitializationWindow(gameManager.getAvailableMaps());
     }
 
     @Override
     public void setupGameView() {
-        view.showGameWindow(gameManager.getCurrentGame().get().getMapName(),
-                gameManager.getCurrentGame().get().getPlayersList().size());
-        view.showTanks(gameManager.getCurrentGame().get().getTerritoriesList());
-        showTurnIcons();
-        view.createLog(this.register, gameManager.getCurrentGame().get().getPlayersList());
-        view.createTablePanel(gameManager.getCurrentGame().get().getTerritoriesList(),
-                gameManager.getCurrentGame().get().getPlayersList());
-        redrawView();
+        if(gameManager.getCurrentGame().isPresent()){
+            this.game = gameManager.getCurrentGame().get();
+            view.showGameWindow(game.getMapName(), game.getPlayersList().size());
+            view.showTanks(List.copyOf(game.getTerritoriesList()));
+            showTurnIcons();
+            view.createLog(this.register, game.getPlayersList());
+            view.createTablePanel(game.getTerritoriesList(),
+                    game.getPlayersList());
+            redrawView();
+        }
     }
 
     /**
@@ -95,15 +96,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void showTurnIcons() {
-        for (int index = 0; index < gameManager.getCurrentGame().get().getPlayersList().size(); index++) {
-            var player = gameManager.getCurrentGame().get().getPlayersList().get(index);
+        for (int index = 0; index < game.getPlayersList().size(); index++) {
+            var player = game.getPlayersList().get(index);
             this.view.showTurnIcon(player, index);
         }
     }
 
     @Override
     public void skipTurn() {
-        if (gameManager.getCurrentGame().get().skipTurn()) {
+        if (game.skipTurn()) {
             resetAttack();
             redrawView();
             view.setCurrentPlayer(currentPlayer().get());
@@ -122,8 +123,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @Author Michele Farneti
      */
     private void showCards() {
-        if (!currentPlayer().get().isAI() && !currentPlayer().get().getOwnedCards().isEmpty()) {
-            view.createChoiceCards(currentPlayer().get().getOwnedCards().stream().toList());
+        if (game.getCurrentPlayer().isAI() && game.getCurrentPlayer().getOwnedCards().isEmpty()) {
+            view.createChoiceCards(game.getCurrentPlayer().getOwnedCards().stream().toList());
         }
     }
 
@@ -140,7 +141,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         redrawView();
     }
 
-    @Override
+    //@Override
     public void territorySelected(Territory territory) {
         switch (gameManager.getCurrentGame().get().getGameStatus()) {
             case TERRITORY_OCCUPATION:

@@ -97,7 +97,6 @@ public class GameImpl implements Game {
      */
     private void assignTerritories() {
         var territoriesToAssign = map.getTerritories();
-        Collections.shuffle(territoriesToAssign);
 
         for (Territory territory : territoriesToAssign) {
             players.get(activePlayer).addTerritory(territory.getTerritoryName());
@@ -127,6 +126,7 @@ public class GameImpl implements Game {
                 case READY_TO_ATTACK:
                     players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
                     nextGamePhase();
+                break;
                 default:
                     break;
             }

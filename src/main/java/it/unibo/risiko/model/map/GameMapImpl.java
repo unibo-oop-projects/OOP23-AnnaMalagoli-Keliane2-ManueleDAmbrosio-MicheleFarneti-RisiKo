@@ -28,6 +28,7 @@ public class GameMapImpl implements GameMap {
         this.name = mapName;
         this.resourcesPackageString = resourcesPackageString;
         this.territories = new Territories(buildResourceLocator(FILE_SEPARATOR +"territories.txt")); 
+        territories.shuffle();
         maxPlayers = GameMap.getMaxPlayers(buildResourceLocator());
     }
 
