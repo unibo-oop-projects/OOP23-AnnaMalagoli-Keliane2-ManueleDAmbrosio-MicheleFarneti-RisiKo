@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Collections;
 
 /**
  * The Territories class is used by the controller at the start of the game to generate 
@@ -91,6 +93,13 @@ public class Territories {
      */
     public List<Continent> getListContinents() {
         return List.copyOf(listContinents); 
+    }
+
+    /**
+     * Method to shuffle the list of territories.
+     */
+    public void shuffle() {
+        Collections.shuffle(listTerritories, new Random());
     }
 
     /**
