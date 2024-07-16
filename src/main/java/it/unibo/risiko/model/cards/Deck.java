@@ -23,11 +23,6 @@ public interface Deck {
     Card pullCard();
 
     /**
-     * Method used to shuffle the deck.
-     */
-    void shuffle();
-
-    /**
      * Method used to get the list of the cards that are actually in the deck.
      * @return the list of the cards in the deck
      */

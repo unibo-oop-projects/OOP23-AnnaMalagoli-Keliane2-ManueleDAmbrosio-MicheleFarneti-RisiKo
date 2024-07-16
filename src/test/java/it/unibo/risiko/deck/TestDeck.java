@@ -60,8 +60,8 @@ public class TestDeck {
         deck.addCard(cardAdded1);
         deck.addCard(cardAdded2);
         deck.addCard(cardAdded3);
-        deck.shuffle();
-        /*Verify that the shuffle method is all right by showing the content of the list
+        /*DA RIMUOVERE deck.shuffle();
+        Verify that the shuffle method is all right by showing the content of the list
          * deck which card's order it's not predictable
          */
         /*deck.getListCards().stream().forEach(x -> System.out.println(x.getTerritoryName() + " " + x.getTypeName()));*/

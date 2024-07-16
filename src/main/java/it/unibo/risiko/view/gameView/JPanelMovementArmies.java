@@ -37,16 +37,17 @@ public class JPanelMovementArmies extends JPanel {
     private static final int INFO_BOTTON_DIMENSION = 80;
     private static final int MAX_NUM_ARMIES = 100;
     private static final int CHOICE_SIZE = 30;
-    private List<Territory> listTerritories;
+    private final List<Territory> listTerritories;
 
     /**
      * Through the constructor the JPanelMovementArmies is set.
      * 
      * @param territories is the list of territories of a player
+     * @param observer is the game observer
      */
     public JPanelMovementArmies(final List<Territory> territories, final GameViewObserver observer) {
         this.setLayout(new BorderLayout());
-        this.listTerritories = territories;
+        this.listTerritories = List.copyOf(territories);
         /*
          * creation of buttonPanel that is a panel that contains the button that shows
          * the operations that have to be done by the player to move armies
@@ -101,22 +102,18 @@ public class JPanelMovementArmies extends JPanel {
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
         JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.closeMovementPhase());
-        exitPanel.setPreferredSize(
-                new Dimension(this.getPreferredSize().width / 2, exitPanel.getPreferredSize().height));
         JPanel executePanel = new ContinuePanel("Move armies", BOTTON_DIMENSION,
                 e -> {
                     if (checkSelectedItem(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(),
-                            Integer.valueOf(choiceNumArmies.getSelectedItem()))) {
+                            Integer.parseInt(choiceNumArmies.getSelectedItem()))) {
                         observer.moveArmies(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(),
-                                Integer.valueOf(choiceNumArmies.getSelectedItem()));
+                                Integer.parseInt(choiceNumArmies.getSelectedItem()));
                         this.setVisible(false);
                     } else {
                         String message = "Error of the item selected.\n Retry!";
                         JOptionPane.showMessageDialog(this, message, "", JOptionPane.ERROR_MESSAGE);
                     }
                 });
-        executePanel.setPreferredSize(
-                new Dimension(this.getPreferredSize().width / 2, executePanel.getPreferredSize().height));
         southPanel.add(exitPanel);
         southPanel.add(executePanel);
         this.add(southPanel, BorderLayout.SOUTH);
