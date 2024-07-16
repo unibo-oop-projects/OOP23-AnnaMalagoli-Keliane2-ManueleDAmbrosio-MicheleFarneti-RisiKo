@@ -2,9 +2,6 @@ package it.unibo.risiko.model.game;
 
 import java.util.List;
 
-import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.player.Player;
-
 /**
  * This class contains all the functions of the attack phase.
  * 
@@ -46,45 +43,5 @@ public interface AttackPhase {
      * false otherwise.
      */
     public boolean isTerritoryConquered();
-
-    /**
-     * This method is used to remove the lost armies in the
-     * attacker territory and in the defender territory.
-     */
-    public void destroyArmies();
-
-    /**
-     * This method is used to move armies from the attacker
-     * territory in the defender territory and change the 
-     * owner of the territory if the territory is 
-     * conquered.
-     * @param armiesToMove - Number of armies to move in the
-     * conquered territory.
-     * @return True if the territory can be conquered and the
-     * number of armies to move is greater or equal the number 
-     * of attacking armies and lower than the amies in the 
-     * attacker territory, false otherwise.
-     */
-    public boolean conquerTerritory(final int armiesToMove);
-
-    /**
-     * @return the attacking player.
-     */
-    public Player getAttacker();
-
-    /**
-     * @return the attacked player.
-     */
-    public Player getDefender();
-
-    /**
-     * @return the territory the attacking player is attacking from.
-     */
-    public Territory getAttackingTerritory();
-
-    /**
-     * @return the territory that is attacked.
-     */
-    public Territory getDefendingTerritory();
 }
 
