@@ -35,13 +35,6 @@ public interface Deck {
      * @param card3 is the third card to be played
      * @param player is the one who plays the three cards during his turn
      */
-    void playCards(Card card1, Card card2, Card card3, Player player);
+    void playCards(String card1, String card2, String card3, Player player);
 
-    /**
-     * Method to extract the card with a certain territory name from the list of cards of the player.
-     * @param territoryName is the name of the territory whose we want to extract the card
-     * @param player that owns the card
-     * @return the card if present into an optional
-     */
-    Optional<Card> getCardByTerritoryName(String territoryName, Player player);
 }
