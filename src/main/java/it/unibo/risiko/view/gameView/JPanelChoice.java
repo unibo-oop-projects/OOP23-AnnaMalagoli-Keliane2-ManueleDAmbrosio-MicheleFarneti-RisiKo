@@ -239,6 +239,10 @@ public class JPanelChoice extends JPanel {
                 return true;
             }
         }
+        if (contCan == 1 && contInf == 1 && contCav == 1) {
+            return true;
+        }
+        
         return false;
     }
 

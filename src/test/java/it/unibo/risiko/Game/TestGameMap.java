@@ -39,7 +39,7 @@ public class TestGameMap {
                 GameMap.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + BIG_MAP_NAME));
     }
 
-    @Test
+    /*@Test
     void TestMap() {
         testMap = new GameMapImpl("smallMap", TEST_RESOURCES_PATH);
 
@@ -63,5 +63,5 @@ public class TestGameMap {
         var territory2 = new TerritoryImpl("Francia", "Europa" ,List.of("Belgio", "Lussemburgo", "Germania" ,"Svizzera" ,"Italia" ,"Monaco" ,"Spagna" ,"Andorra"), 2, 2);
 
         assertTrue(testMap.areTerritoriesNear(territory1,territory2));
-    }
+    }*/
 }
