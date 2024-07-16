@@ -2,6 +2,7 @@ package it.unibo.risiko.model.player;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -75,12 +76,12 @@ public class StdPlayer implements Player {
 
     @Override
     public Collection<Territory> getOwnedTerritories() {
-        return this.ownedTerritories;
+        return List.copyOf(this.ownedTerritories);
     }
 
     @Override
     public Collection<Card> getOwnedCards() {
-        return this.ownedCards;
+        return List.copyOf(this.ownedCards);
     }
 
     @Override
@@ -166,9 +167,9 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public boolean drawNewCardIfPossible(Deck deck) {
+    public boolean drawNewCardIfPossible(Card card) {
         if (!hasDrawnNewCard) {
-            this.addCard(deck.pullCard());
+            this.addCard(card);
             this.hasDrawnNewCard = true;
             return true;
         }

@@ -79,15 +79,15 @@ public class Territories {
 
     /**
      * Method used to get the list of all the territories extracted from the text file.
-     * @return the list of territories
+     * @return a copy of the list of territories
      */
     public List<Territory> getListTerritories() {
-        return listTerritories; 
+        return List.copyOf(listTerritories); 
     }
 
     /**
      * Method used to get the list of continents extracted from the text file.
-     * @return the list of territories
+     * @return a copy of the list of territories
      */
     public List<Continent> getListContinents() {
         return List.copyOf(listContinents); 
