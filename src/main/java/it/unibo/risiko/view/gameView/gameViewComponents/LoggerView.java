@@ -29,7 +29,7 @@ public class LoggerView extends JPanel{
     private String[] list;
     private JTextArea logText;
     
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public LoggerView(final Register register, final List<Player> playerList){
         this.playerList=playerList;
         this.register=register;
@@ -120,7 +120,7 @@ public class LoggerView extends JPanel{
      * Inner Class which help to set a title in the JComboBox 
      * used to select the player whose events we want to see
      */
-    //@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     class MyComboBoxRenderer extends JLabel implements ListCellRenderer {
         private String _title;
 
