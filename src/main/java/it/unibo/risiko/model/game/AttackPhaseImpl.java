@@ -40,7 +40,7 @@ public class AttackPhaseImpl implements AttackPhase {
      * @param defenderTerritory - The territory the defending player is defending.
      */
     public AttackPhaseImpl(Player attackingPlayer, Territory attackerTerritory, final int attackingArmies,
-            Player defendingPlayer, final Territory defenderTerritory) {
+            Player defendingPlayer, Territory defenderTerritory) {
 
         if (isLegitAttackingArmies(attackerTerritory, attackingArmies)
                 && isLegitOwner(defendingPlayer, defenderTerritory)
