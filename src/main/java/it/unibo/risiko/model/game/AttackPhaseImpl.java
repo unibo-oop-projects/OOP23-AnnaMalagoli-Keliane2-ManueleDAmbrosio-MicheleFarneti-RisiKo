@@ -15,6 +15,7 @@ import it.unibo.risiko.model.player.Player;
 
 public class AttackPhaseImpl implements AttackPhase {
     private static final int MAX_DEFENDING_ARMIES = 3;
+    private static final int NO_ARMIES = 0;
 
     private Player attackingPlayer;
     private Player defendingPlayer;
@@ -38,8 +39,8 @@ public class AttackPhaseImpl implements AttackPhase {
      * @param defendingPlayer   - The defending player.
      * @param defenderTerritory - The territory the defending player is defending.
      */
-    public AttackPhaseImpl(final Player attackingPlayer, final Territory attackerTerritory, final int attackingArmies,
-            final Player defendingPlayer, final Territory defenderTerritory) {
+    public AttackPhaseImpl(Player attackingPlayer, Territory attackerTerritory, final int attackingArmies,
+            Player defendingPlayer, Territory defenderTerritory) {
 
         if (isLegitAttackingArmies(attackerTerritory, attackingArmies)
                 && isLegitOwner(defendingPlayer, defenderTerritory)
@@ -87,7 +88,7 @@ public class AttackPhaseImpl implements AttackPhase {
 
     @Override
     public boolean isTerritoryConquered() {
-        if (defenderLostArmies >= defenderTerritory.getNumberOfArmies()) {
+        if (defenderTerritory.getNumberOfArmies() <= NO_ARMIES) {
             return true;
         } else {
             return false;

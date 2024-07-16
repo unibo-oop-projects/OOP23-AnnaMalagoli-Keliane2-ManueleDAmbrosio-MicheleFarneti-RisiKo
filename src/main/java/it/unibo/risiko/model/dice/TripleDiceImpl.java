@@ -36,7 +36,7 @@ public class TripleDiceImpl extends Dice implements TripleDice {
     }
 
     public List<Integer> getResults() {
-        return this.results;
+        return List.copyOf(this.results);
     }
 
     public String toString() {

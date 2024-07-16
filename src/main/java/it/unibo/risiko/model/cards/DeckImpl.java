@@ -48,9 +48,8 @@ public class DeckImpl implements Deck {
         final String absoluteFilePath = file.getAbsolutePath();
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
-            try {
-                final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
                 String stringRow = bufferedReader.readLine();
                 while (stringRow != null) {
                     Card card;
@@ -68,6 +67,7 @@ public class DeckImpl implements Deck {
         } catch (FileNotFoundException e) {
             this.listCards.clear();
         }
+        this.shuffle();
     }
 
     /**
@@ -94,7 +94,7 @@ public class DeckImpl implements Deck {
     /**
      * Method to shuffle the card in the deck.
      */
-    public void shuffle() {
+    private void shuffle() {
         Collections.shuffle(listCards, new Random());
     }
 
