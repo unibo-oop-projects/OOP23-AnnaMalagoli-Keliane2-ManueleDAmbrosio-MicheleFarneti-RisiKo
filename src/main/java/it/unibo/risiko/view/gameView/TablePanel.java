@@ -23,12 +23,13 @@ public class TablePanel extends JPanel {
     private static final int COLUMN_INDEX_NUM_ARMIES = 2;
     private JTable table;
     private TableModelTerritories tableModelTerritories;
+
     /**
      * Into the constructor is created the table. 
      */
-    public TablePanel() {
+    public TablePanel(final List<Territory> terr, final List<Player> players) {
 
-        tableModelTerritories = new TableModelTerritories();
+        tableModelTerritories = new TableModelTerritories(terr, players);
         /*the constructor of the JTable takes as input the table model 
          * previously created.
         */
@@ -44,15 +45,6 @@ public class TablePanel extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         table.getColumnModel().getColumn(COLUMN_INDEX_NUM_ARMIES).setPreferredWidth(1);
         table.getColumnModel().getColumn(COLUMN_INDEX_PLAYER_ID).setPreferredWidth(1);
-    }
-
-    /**
-     * Method used to set the data in the model of the table.
-     * @param terr is the list of territories owned by the player
-     * @param players is the list of players
-     */
-    public void setData(final List<Territory> terr, final List<Player> players) {
-        tableModelTerritories.setData(terr, players);
     }
 
     /**

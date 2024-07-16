@@ -35,9 +35,8 @@ public class Territories {
         final String absoluteFilePath = file.getAbsolutePath();
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
-            try {
-            final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);){
             String stringRow;
             String continentName = " ";
             List<String> continentInfo;
@@ -47,12 +46,12 @@ public class Territories {
 
             stringRow = bufferedReader.readLine();
 
-            do {
+            while (stringRow != null) {
                 if (stringRow.contains(":")) { 
                     continentInfo = Arrays.asList(stringRow.substring(0, stringRow.length() - 1).split(" "));
                     continentName = continentInfo.get(0);
                     if (!this.isInList(continentName)) {
-                        bonusArmies = Integer.valueOf(continentInfo.get(1));
+                        bonusArmies = Integer.parseInt(continentInfo.get(1));
                         this.listContinents.add(new ContinentImpl(continentName, bonusArmies));
                     }
                 } else {
@@ -66,13 +65,14 @@ public class Territories {
                     this.getContinentFromName(continentName).get().addTerritory(territory);
                 }
                 stringRow = bufferedReader.readLine();
-            } while (stringRow != null);
+            }
             bufferedReader.close();
 
-        } catch (IOException e) {
-            listTerritories.clear();
-        }
-    } catch (FileNotFoundException e) {
+            } catch (IOException e) {
+                listTerritories.clear();
+            }
+
+        } catch (FileNotFoundException e) {
             listTerritories.clear();
         }
     }

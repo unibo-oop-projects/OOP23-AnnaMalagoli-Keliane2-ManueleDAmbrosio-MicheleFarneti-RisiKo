@@ -105,8 +105,8 @@ public class JPanelChoice extends JPanel {
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
         JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.exitCardsManagingPhase());
-        exitPanel.setPreferredSize(
-                new Dimension(this.getPreferredSize().width / 2, exitPanel.getPreferredSize().height));
+        /*exitPanel.setPreferredSize(
+                new Dimension(this.getPreferredSize().width / 2, exitPanel.getPreferredSize().height));*/
         JPanel executePanel = new ContinuePanel("Play selected cards", BOTTON_DIMENSION,
                 e -> {
                     final String[] firstTerritoryName = firstChoiceTerritories.getSelectedItem().split(" ");
@@ -125,8 +125,6 @@ public class JPanelChoice extends JPanel {
                         JOptionPane.showMessageDialog(this, message, "", JOptionPane.ERROR_MESSAGE);
                     }
                 });
-        executePanel.setPreferredSize(
-                new Dimension(this.getPreferredSize().width / 2, executePanel.getPreferredSize().height));
         southPanel.add(exitPanel);
         southPanel.add(executePanel);
         this.add(southPanel, BorderLayout.SOUTH);
@@ -242,7 +240,7 @@ public class JPanelChoice extends JPanel {
         if (contCan == 1 && contInf == 1 && contCav == 1) {
             return true;
         }
-        
+
         return false;
     }
 

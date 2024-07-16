@@ -23,6 +23,17 @@ public class TableModelTerritories extends AbstractTableModel{
     private int NUM_COLUMN = 4;
     /*the following list is used to contain the name of every column in the table*/
     private String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
+    
+    /**
+     * Method to set datas in the table model.
+     * @param terr is the list of territories
+     * @param players is the list of players
+     */
+    TableModelTerritories(final List<Territory> terr, final List<Player> players) {
+        this.listPlayers = players;
+        this.listTerritories = terr;
+    }
+    
     /**
      * Method to return the number of rows displayed in the table that corresponds
      * to the number of territories of the map.
@@ -66,16 +77,6 @@ public class TableModelTerritories extends AbstractTableModel{
             default:
                 return "Error";
         }
-    }
-
-    /**
-     * Method to set datas in the table model.
-     * @param terr is the list of territories
-     * @param players is the list of players
-     */
-    public void setData(final List<Territory> terr, final List<Player> players) {
-        this.listPlayers = players;
-        this.listTerritories = terr;
     }
 
     /**

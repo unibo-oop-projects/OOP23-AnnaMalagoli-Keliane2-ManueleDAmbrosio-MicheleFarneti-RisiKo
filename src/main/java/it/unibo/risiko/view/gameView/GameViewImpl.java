@@ -697,10 +697,12 @@ public class GameViewImpl implements GameView {
         logPanel.add(new LoggerView(reg, l));
     }
 
-    @Override
+    /**
+     * 
+     * @author Anna Malagoli
+     */
     public void createTablePanel(List<Territory> terr, List<Player> players) {
-        this.tablePanel = new TablePanel();
-        tablePanel.setData(terr, players);
+        this.tablePanel = new TablePanel(terr, players);
         tablePanel.update();
         territoriesTablePanel.add(tablePanel);
     }
