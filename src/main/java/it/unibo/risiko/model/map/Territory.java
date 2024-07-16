@@ -57,4 +57,8 @@ public interface Territory {
      * @return the list of the neighboring territories of the territory
      */
     List<String> getListOfNearTerritories();
+
+    String getPlayer();
+
+    void setPlayer(final String player);
 }

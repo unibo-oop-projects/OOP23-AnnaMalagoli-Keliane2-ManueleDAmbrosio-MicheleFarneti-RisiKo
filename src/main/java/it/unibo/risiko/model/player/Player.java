@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Continent;
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
 /**
@@ -30,10 +28,10 @@ public interface Player {
      * This method is used to set the territories owned
      * by the player.
      * 
-     * @param ownedTerritories - Set containing the territories
-     * owned by the player.
+     * @param ownedTerritories - Set containing the name of 
+     * the territories owned by the player.
      */
-    public void setOwnedTerritories(final Set<Territory> ownedTerritories);
+    public void setOwnedTerritories(final Set<String> ownedTerritories);
 
     /**
      * This method is used to set the target of the player.
@@ -46,9 +44,9 @@ public interface Player {
      * This method is used to add a territory to the set of
      * territories owned by the player.
      * 
-     * @param newTerritory - territory to add.
+     * @param newTerritory - name of the territory to add.
      */
-    public void addTerritory(final Territory newTerritory);
+    public void addTerritory(final String newTerritory);
 
     /**
      * This method is used to add a card to the set of cards
@@ -85,9 +83,9 @@ public interface Player {
      * This method is used to get a collection containing 
      * the territories owned by the player.
      * 
-     * @return the territories owned by the player.
+     * @return the names of the territories owned by the player.
      */
-    public Collection<Territory> getOwnedTerritories();
+    public Collection<String> getOwnedTerritories();
 
     /**
      * This method is used to get a collection containing 
@@ -140,11 +138,11 @@ public interface Player {
      * This metod is used to remove a territory from the 
      * set of territories owned by the player.
      * 
-     * @param territory - territory to be removed.
+     * @param territory - name of the territory to be removed.
      * @return true if the territory was possesed by the
      * player, false otherwise.
      */
-    public boolean removeTerritory(final Territory territory);
+    public boolean removeTerritory(final String territory);
 
     /**
      * This method is used to know if the player has lost
@@ -170,11 +168,11 @@ public interface Player {
      * This method is used to know if a player owns a 
      * certain territory.
      * 
-     * @param territory - territory to check.
+     * @param territory - name of the territory to check.
      * @return True if the player owns the territory, false 
      * otherwise.
      */
-    public boolean isOwnedTerritory(final Territory territory);
+    public boolean isOwnedTerritory(final String territory);
 
     /**
      * This method is used to know if a player is controlled by

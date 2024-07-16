@@ -1,15 +1,15 @@
 package it.unibo.risiko.model.player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Continent;
-import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
 /**
@@ -21,7 +21,7 @@ public class StdPlayer implements Player {
     private static final int REINFORCEMENT_FACTOR = 3;
     private static final int INITIAL_ARMIES = 0;
     private final String color_id;
-    private Set<Territory> ownedTerritories = new HashSet<>();
+    private Set<String> ownedTerritories = new HashSet<>();
     private Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
     private Optional<Target> target;
@@ -45,7 +45,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public void setOwnedTerritories(final Set<Territory> newTerritories) {
+    public void setOwnedTerritories(final Set<String> newTerritories) {
         this.ownedTerritories.addAll(newTerritories);
     }
 
@@ -55,7 +55,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public void addTerritory(final Territory newTerritory) {
+    public void addTerritory(final String newTerritory) {
         this.ownedTerritories.add(newTerritory);
     }
 
@@ -75,7 +75,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public Collection<Territory> getOwnedTerritories() {
+    public Collection<String> getOwnedTerritories() {
         return List.copyOf(this.ownedTerritories);
     }
 
@@ -102,8 +102,11 @@ public class StdPlayer implements Player {
     @Override
     public void computeReinforcements(Collection<Continent> continentsList) {
         int bonusArmies = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
+        List<String> territoriesNames = new ArrayList<>();
         for (Continent continent : continentsList) {
-            if (this.ownedTerritories.containsAll(continent.getListTerritories())) {
+            territoriesNames = continent.getListTerritories().stream().map(t -> t.getTerritoryName())
+                    .collect(Collectors.toList());
+            if (this.ownedTerritories.containsAll(territoriesNames)) {
                 bonusArmies += continent.getBonusArmies();
             }
         }
@@ -127,7 +130,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public boolean removeTerritory(final Territory territory) {
+    public boolean removeTerritory(final String territory) {
         if (isOwnedTerritory(territory)) {
             this.ownedTerritories.remove(territory);
             return true;
@@ -157,7 +160,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public boolean isOwnedTerritory(final Territory territory) {
+    public boolean isOwnedTerritory(final String territory) {
         return this.ownedTerritories.contains(territory);
     }
 
