@@ -148,11 +148,11 @@ public class AttackPhaseImpl implements AttackPhase {
         return (armiesToMove >= attackingArmies && armiesToMove < attackerTerritory.getNumberOfArmies());
     }
 
-    private boolean isLegitOwner(final Player player, final Territory territory) {
+    public static boolean isLegitOwner(final Player player, final Territory territory) {
         return player.isOwnedTerritory(territory);
     }
 
-    private boolean isLegitAttackingArmies(final Territory territory, final int attackingArmies) {
+    public static boolean isLegitAttackingArmies(final Territory territory, final int attackingArmies) {
         return (territory.getNumberOfArmies() > attackingArmies) && (attackingArmies <= MAX_DEFENDING_ARMIES);
     }
 

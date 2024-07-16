@@ -123,6 +123,7 @@ public class GameViewImpl implements GameView {
     private JPanel logPanel = new JPanel();
     private JPanel territoriesTablePanel = new JPanel();
     private JPanel choiceCardsPanel;
+    private LoggerView log;
 
     private ColoredImageButton turnTank;
     private GradientPanel attackBarBackgroundPanel;
@@ -699,8 +700,15 @@ public class GameViewImpl implements GameView {
      */
     @Override
     public void createLog(Register reg, List<Player> l) {
-        logPanel.add(new LoggerView(mainFrame.getWidth() - gamePanel.getWidth(),
-                mainFrame.getHeight() / 2, reg, l));
+        log = new LoggerView(reg, l);
+        log.setPreferredSize(new Dimension(mainFrame.getWidth() - gamePanel.getWidth(),
+        mainFrame.getHeight() / 2));
+        logPanel.add(log);
+    }
+
+    @Override
+    public void updateLog(){
+        log.showAllEvents(log.getTextArea());
     }
 
     @Override

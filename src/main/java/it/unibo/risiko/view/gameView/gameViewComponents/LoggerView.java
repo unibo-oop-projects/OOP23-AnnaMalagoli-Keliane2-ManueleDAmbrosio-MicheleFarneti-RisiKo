@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,43 +26,52 @@ public class LoggerView extends JPanel{
     private final Register register;
     private String eventList="";
     private final List<Player> playerList;
+    private String[] list;
+    private JTextArea logText;
     
     @SuppressWarnings("unchecked")
-    public LoggerView(final int width, final int height, final Register register, final List<Player> playerList){
+    public LoggerView(final Register register, final List<Player> playerList){
         this.playerList=playerList;
         this.register=register;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-        this.setPreferredSize(new Dimension(width, height));
         //creating a textArea, the event container
-        JTextArea logText=new JTextArea("");
+        logText=new JTextArea(20,20);
+        logText.setEditable(false);
         logText.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
         //creating a scroller containing the event container
         JScrollPane logTextScroller=new JScrollPane(logText);
-        logTextScroller.setBorder(BorderFactory.createEmptyBorder(650,195,8,195));
-        //getting the list of the players
+        logTextScroller.setSize(new Dimension(this.getWidth(),this.getHeight()));
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
-        String[] list=new String[playerList.size()];
+        list=new String[playerList.size()];
         playerList.stream().map(i->i.getColor_id())
                            .forEach(j->playerNameList.add(j));
+        this.setList(playerNameList);
         //creating a JComboBox for the selection of the player we want to visualize the events
         JComboBox<String> playerOptions = new JComboBox<>(list);
-        playerOptions.setRenderer(new MyComboBoxRenderer("Select player"));
+
+        playerOptions.setRenderer(new MyComboBoxRenderer("Show events of:"));
         playerOptions.setSelectedIndex(-1);
         //the button used to show all the events
         JButton allEvent=new JButton("Show all events");
-        //allEvent.setBorder(BorderFactory.createEmptyBorder(8,295,8,295));
         allEvent.setFont(new Font("Arial", Font.BOLD, 14));
         allEvent.setAlignmentX(Component.CENTER_ALIGNMENT);
         //adding the button and the JComboBox to the panel options
         this.add(allEvent);
-        this.add(Box.createRigidArea(new Dimension(5,5)));
+        this.add(Box.createRigidArea(new Dimension(0,2)));
         this.add(playerOptions);
+        this.add(Box.createRigidArea(new Dimension(0,2)));
         //adding the options and logTextScroller to the loggerView
         this.add(logTextScroller,BorderLayout.CENTER);
         //adding actionListerner to the button and the JComboBox
         allEvent.addActionListener(e->showAllEvents(logText));
         playerOptions.addActionListener(e->showEventByPlayerName(logText,playerOptions));
+    }
+
+    private void setList(List<String> playerNameList) {
+        for (int i = 0; i < list.length; i++) {
+            list[i]=playerNameList.get(i);
+        }
     }
 
     /**
@@ -91,8 +99,12 @@ public class LoggerView extends JPanel{
      */
     public void showAllEvents(JTextArea logText) {
         this.eventList="";
-        register.getAllEvents().forEach(i->eventList+=i.getDescription()+"\n");
+        register.getAllEvents().forEach(i->{eventList+=i.getDescription()+"\n"; System.out.println(i.getDescription());});
         updateLogText(logText, eventList);
+    }
+
+    public JTextArea getTextArea(){
+        return this.logText;
     }
 
     /**
