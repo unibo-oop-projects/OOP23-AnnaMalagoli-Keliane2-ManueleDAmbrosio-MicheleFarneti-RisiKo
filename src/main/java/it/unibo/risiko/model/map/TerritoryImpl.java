@@ -2,6 +2,7 @@ package it.unibo.risiko.model.map;
 
 import java.util.List;
 
+
 /**
  * Implementation of the interface Territory.
  * 
@@ -12,6 +13,7 @@ public class TerritoryImpl implements Territory {
     private int numberOfArmies;
     private final List<String> listNearTerritories;
     private final String continent;
+    private String player_id;
 
     /**
      * Constructor to set the parameters of the territory with the input parameters
@@ -46,6 +48,14 @@ public class TerritoryImpl implements Territory {
     @Override
     public int getNumberOfArmies() {
         return this.numberOfArmies;
+    }
+
+    public String getPlayer() {
+        return this.player_id;
+    }
+
+    public void setPlayer(final String player) {
+        this.player_id = player;
     }
 
     /**
