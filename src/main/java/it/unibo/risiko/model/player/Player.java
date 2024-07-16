@@ -188,10 +188,10 @@ public interface Player {
     /**
      * The player draws a card from deck
      * 
-     * @param deck - the deck to draw from.
+     * @param card - the card to draw.
      * @return true it a new card has been drawn,
      * false otherwise.
      */
-    public boolean drawNewCardIfPossible(Deck deck);
+    public boolean drawNewCardIfPossible(Card card);
 
 }

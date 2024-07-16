@@ -20,17 +20,17 @@ public interface AIBehaviour {
      * to attack from. 
      * 
      * @param territoryList - List of the territories in the current map.
-     * @return the next territory the AI wants to attack from.
+     * @return the name of the next territory the AI wants to attack from.
      */
-    Territory getNextAttackingTerritory();
+    String getNextAttackingTerritory();
 
     /**
      * This method is used to get a territory the AI player
      * can attack from the adjacent attacking territory.
      * 
-     * @return the next territory the AI wants to attack.
+     * @return the name of the next territory the AI wants to attack.
      */
-    Territory getNextAttackedTerritory();
+    String getNextAttackedTerritory();
 
     /**
      * This methos is used to get the number of armies
