@@ -22,7 +22,7 @@ public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private static final int MAX_ATTACKING_ARMIES = 3;
-    private Player player;
+    private final Player player;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
     private int territoryIndex;
