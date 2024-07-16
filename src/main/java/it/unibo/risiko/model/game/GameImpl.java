@@ -100,7 +100,7 @@ public class GameImpl implements Game {
         Collections.shuffle(territoriesToAssign);
 
         for (Territory territory : territoriesToAssign) {
-            players.get(activePlayer).addTerritory(territory);
+            players.get(activePlayer).addTerritory(territory.getTerritoryName());
             territory.addArmies(1);
             players.get(activePlayer).decrementArmiesToPlace();
             activePlayer = nextPlayer();
@@ -215,7 +215,7 @@ public class GameImpl implements Game {
             switch (status) {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
-                            && getCurrentPlayer().isOwnedTerritory(territory)) {
+                            && getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
                         territory.addArmies(nArmies);
                         armiesPlaced++;
                         getCurrentPlayer().decrementArmiesToPlace();
@@ -227,7 +227,7 @@ public class GameImpl implements Game {
                     }
                     break;
                 case ARMIES_PLACEMENT:
-                    if (getCurrentPlayer().isOwnedTerritory(territory)) {
+                    if (getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
                         territory.addArmies(nArmies);
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (getCurrentPlayer().getArmiesToPlace() == 0) {
@@ -293,36 +293,36 @@ public class GameImpl implements Game {
      * 
      */
     private void handleAIBehaviour() {
-        if (getCurrentPlayer().isAI()) {
-            var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
-            switch (status) {
-                case TERRITORY_OCCUPATION:
-                    while(getCurrentPlayer().isAI()){
-                        this.placeArmies(aiBehaviour.decidePositioning(), 1);
-                    }
-                    break;
-                case CARDS_MANAGING:
-                    var cardCombo = aiBehaviour.checkCardCombo();
-                    //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
-                case ARMIES_PLACEMENT:
-                    while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
-                        ;
-                    if (aiBehaviour.decideAttack(getTerritoriesList())) {
-                        AttackPhase attackPhase = new AttackPhaseImpl(
-                                getCurrentPlayer(),
-                                aiBehaviour.getNextAttackingTerritory(),
-                                aiBehaviour.decideAttackingArmies(),
-                                getOwner(aiBehaviour.getNextAttackedTerritory()),
-                                aiBehaviour.getNextAttackedTerritory());
-                        attackPhase.destroyArmies();
-                        attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
-                    }
-                    this.skipTurn();
-                    break;
-                default:
-                    break;
-            }
-        }
+        // if (getCurrentPlayer().isAI()) {
+        //     var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
+        //     switch (status) {
+        //         case TERRITORY_OCCUPATION:
+        //             while(getCurrentPlayer().isAI()){
+        //                 this.placeArmies(aiBehaviour.decidePositioning(), 1);
+        //             }
+        //             break;
+        //         case CARDS_MANAGING:
+        //             var cardCombo = aiBehaviour.checkCardCombo();
+        //             //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
+        //         case ARMIES_PLACEMENT:
+        //             while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
+        //                 ;
+        //             if (aiBehaviour.decideAttack(getTerritoriesList())) {
+        //                 AttackPhase attackPhase = new AttackPhaseImpl(
+        //                         getCurrentPlayer(),
+        //                         aiBehaviour.getNextAttackingTerritory(),
+        //                         aiBehaviour.decideAttackingArmies(),
+        //                         getOwner(aiBehaviour.getNextAttackedTerritory()),
+        //                         aiBehaviour.getNextAttackedTerritory());
+        //                 attackPhase.destroyArmies();
+        //                 attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
+        //             }
+        //             this.skipTurn();
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // }
     }
 
     @Override
@@ -354,9 +354,9 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Player getOwner(Territory territory) {
+    public String getOwner(String territory) {
         return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch(t -> t.equals(territory)))
-                .findFirst().get();
+                .findFirst().get().getColor_id();
     }
 
     @Override
@@ -389,8 +389,8 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void playCards(final String card1, final String card2,final String card3){
-        //deck.playCards(card1, card2, card3, getCurrentPlayer());
+    public void playCards(final String card1, final String card2,final String card3, final Player player){
+        deck.playCards(card1, card2, card3, player);
     }
 
     @Override

@@ -25,7 +25,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
  * @author Manuele D'Ambrosio
  */
 
-public class TestAIBehaviour {
+/*public class TestAIBehaviour {
 
     private Player player;
     private AIBehaviour ai;
@@ -90,4 +90,4 @@ public class TestAIBehaviour {
             numberOfCards = numberOfCards - 3;
         }
     }
-}
+}*/

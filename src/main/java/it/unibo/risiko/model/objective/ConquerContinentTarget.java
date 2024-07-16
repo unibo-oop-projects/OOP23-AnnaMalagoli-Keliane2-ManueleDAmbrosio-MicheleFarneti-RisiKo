@@ -16,7 +16,7 @@ public class ConquerContinentTarget extends BaseTarget {
     public int remainingActions() {
         int i=0;
         for (Territory t : this.continent.getListTerritories()) {
-            if (!this.getPlayer().isOwnedTerritory(t)) {
+            if (!this.getPlayer().isOwnedTerritory(t.getTerritoryName())) {
                 i++;
             }
         }

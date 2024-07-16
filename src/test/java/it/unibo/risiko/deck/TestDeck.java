@@ -68,16 +68,6 @@ public class TestDeck {
         deck.addCard(cardAdded1);
         deck.addCard(cardAdded2);
         deck.addCard(cardAdded3);
-        /*
-         * DA RIMUOVERE deck.shuffle();
-         * Verify that the shuffle method is all right by showing the content of the
-         * list
-         * deck which card's order it's not predictable
-         */
-        /*
-         * deck.getListCards().stream().forEach(x ->
-         * System.out.println(x.getTerritoryName() + " " + x.getTypeName()));
-         */
     }
 
     @Test
@@ -95,8 +85,8 @@ public class TestDeck {
         deck.addCard(card4);
 
         /* creation of the set of territories owned by the player */
-        Set<Territory> playerTerritories = new HashSet<Territory>();
-        playerTerritories.add(new TerritoryImpl("Spain", "Europe", List.of("Italy", "France")));
+        Set<String> playerTerritories = new HashSet<String>();
+        playerTerritories.add("Spain");
         Player player = new SimplePlayerFactory().createStandardPlayer();
         player.setOwnedTerritories(playerTerritories);
         /* added cards to the list of cards of the player */

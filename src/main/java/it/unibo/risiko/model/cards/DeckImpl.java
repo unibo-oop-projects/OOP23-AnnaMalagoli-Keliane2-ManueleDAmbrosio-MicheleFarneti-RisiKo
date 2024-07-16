@@ -227,7 +227,7 @@ public class DeckImpl implements Deck {
         int numExtraArmies = 0;
         for (var card : cards) {
             for (var elem : player.getOwnedTerritories()) {
-                if (elem.getTerritoryName().equals(card.getTerritoryName())) {
+                if (elem.equals(card.getTerritoryName())) {
                     numExtraArmies = numExtraArmies + BONUS_ARMIES;
                 }
             }

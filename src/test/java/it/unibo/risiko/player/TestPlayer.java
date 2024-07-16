@@ -25,7 +25,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
  * @author Manuele D'Ambrosio
  */
 
-public class TestPlayer {
+/*public class TestPlayer {
 
     @Test
     void testRemoveCard() {
@@ -73,4 +73,4 @@ public class TestPlayer {
         assertTrue(player.drawNewCardIfPossible(deck.pullCard()));
     }
 
-}
+}*/

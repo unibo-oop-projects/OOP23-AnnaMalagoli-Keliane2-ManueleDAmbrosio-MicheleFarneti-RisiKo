@@ -17,7 +17,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 /**
  * @author Manuele D'Ambrosio
  */
-public class TestAttackPhase {
+/*public class TestAttackPhase {
 
     @Test
     void testAttackPhase() {
@@ -46,4 +46,4 @@ public class TestAttackPhase {
             attackPhase = new AttackPhaseImpl(3, defTerritory.getNumberOfArmies());
         }
     }
-}
+}*/

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,6 +18,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.risiko.model.map.GameMap;
 
 /**
@@ -73,15 +75,17 @@ public class GameManagerImpl implements GameManager {
     }
 
     @Override
+    @SuppressFBWarnings
     public Map<String, Integer> getAvailableMaps() {
         Map<String, Integer> availableMaps = new HashMap<>();
         var mapsFoldersLocations = resourcesPath + "maps";
         try {
-            Files.list(Path.of(mapsFoldersLocations)).forEach(
-                    p -> availableMaps.put(p.getFileName().toString(), GameMap
-                            .getMaxPlayers(resourcesPath + "maps" + File.separator + p.getFileName().toString())));
-        } catch (IOException e) {
-        }
+            for (Path p : Files.list(Path.of(mapsFoldersLocations)).collect(Collectors.toList())) {
+                var key = Optional.ofNullable(p.getFileName().toString());
+                var value = Optional.ofNullable(GameMap.getMaxPlayers(resourcesPath + "maps" + File.separator + p.getFileName().toString()));
+                key.ifPresent(k -> value.ifPresent( v-> availableMaps.put(k,v)));
+            }
+        } catch (IOException e) {}
         return availableMaps;
     }
 
