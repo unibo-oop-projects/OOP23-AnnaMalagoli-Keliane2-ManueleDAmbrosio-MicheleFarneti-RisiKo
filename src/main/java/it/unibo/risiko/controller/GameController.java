@@ -202,11 +202,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.setDef(attackPhase.getDefenderDiceThrows());
         view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
-        attackPhase.destroyArmies();
-        view.drawDicePanels();
         createEvent(EventType.ATTACK, attackPhase.getAttackingTerritory(),
                 attackPhase.getDefendingTerritory(), attackPhase.getAttacker(), Optional.of(attackPhase.getDefender()));
         view.updateLog();
+        attackPhase.destroyArmies();
+        view.drawDicePanels();
     }
 
     @Override
