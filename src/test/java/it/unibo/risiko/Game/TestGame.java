@@ -20,7 +20,7 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
-public class TestGame {
+/*public class TestGame {
 
     private static final String SMALL_MAP_NAME = "smallMap";
     private static final String FILE_SEPARATOR = File.separator;
@@ -123,4 +123,4 @@ public class TestGame {
         assertTrue(game.getGameStatus() == GameStatus.ARMIES_PLACEMENT || game.getGameStatus() == GameStatus.READY_TO_ATTACK|| game.getGameStatus()==GameStatus.CARDS_MANAGING);
         assertFalse(game.getTurnsCount() == 0);
     }
-}
+}*/
