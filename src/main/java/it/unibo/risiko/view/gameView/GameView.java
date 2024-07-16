@@ -6,7 +6,6 @@ import java.util.Map;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.game.GameStatus;
-import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 

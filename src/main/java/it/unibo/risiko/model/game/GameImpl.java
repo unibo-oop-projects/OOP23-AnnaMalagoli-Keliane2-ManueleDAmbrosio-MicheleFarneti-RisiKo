@@ -113,7 +113,7 @@ public class GameImpl implements Game {
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
                     if (getTotalArmiesLeftToPlace() == 0) {
-                        players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                        players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
                         nextGamePhase();
                     } else {
                         armiesPlaced = 0;
@@ -123,7 +123,7 @@ public class GameImpl implements Game {
                 case CARDS_MANAGING:
                 case ATTACKING:
                 case READY_TO_ATTACK:
-                    players.get(nextPlayerIfNotDefeated()).computeReinforcements();
+                    players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
                     nextGamePhase();
                 default:
                     break;
@@ -153,9 +153,11 @@ public class GameImpl implements Game {
                 } else {
                     status = GameStatus.READY_TO_ATTACK;
                 }
+                break;
                 // After armies placement the player can attack
             case ARMIES_PLACEMENT:
                 status = GameStatus.READY_TO_ATTACK;
+                break;
                 // After attacking a new turn is going to begin, if the player has enough cards
                 // to play them it will go CARDS MANAGING phase,
                 // OtherWhise if he hasn't enough cards but enough armies to place the new game
@@ -170,6 +172,7 @@ public class GameImpl implements Game {
                 } else {
                     status = GameStatus.READY_TO_ATTACK;
                 }
+                break;
             default:
                 break;
         }

@@ -18,15 +18,15 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 /**
  * @author Manuele D'Ambrosio
  */
-/*public class TestAttackPhase {
+public class TestAttackPhase {
 
     @Test
     void testAttackPhase() {
         PlayerFactory factory = new SimplePlayerFactory();
         Player attPlayer = factory.createStandardPlayer();
         Player defPlayer = factory.createStandardPlayer();
-        Territory attTerritory = new TerritoryImpl("attTerritory", "cont1", List.of("defTerritory"), 1, 1);
-        Territory defTerritory = new TerritoryImpl("defTerritory", "cont1", List.of("attTerritory"), 2, 2);
+        Territory attTerritory = new TerritoryImpl("attTerritory", "cont1", List.of("defTerritory"));
+        Territory defTerritory = new TerritoryImpl("defTerritory", "cont1", List.of("attTerritory"));
         attTerritory.addArmies(10);
         defTerritory.addArmies(3);
         attPlayer.addTerritory(attTerritory);
@@ -49,4 +49,4 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
         assertEquals(attPlayer.getNumberOfTerritores(), 2);
         assertTrue(defPlayer.isDefeated());
     }
-}*/
+}

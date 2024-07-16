@@ -2,8 +2,6 @@ package it.unibo.risiko.model.map;
 
 import java.util.List;
 
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-
 /**
  * The interface Territory contains all the methods
  * that have to be callable in a territory.

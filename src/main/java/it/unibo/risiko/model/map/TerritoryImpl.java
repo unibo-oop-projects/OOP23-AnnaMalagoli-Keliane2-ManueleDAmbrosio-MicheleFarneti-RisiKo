@@ -2,8 +2,6 @@ package it.unibo.risiko.model.map;
 
 import java.util.List;
 
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-
 /**
  * Implementation of the interface Territory.
  * 
