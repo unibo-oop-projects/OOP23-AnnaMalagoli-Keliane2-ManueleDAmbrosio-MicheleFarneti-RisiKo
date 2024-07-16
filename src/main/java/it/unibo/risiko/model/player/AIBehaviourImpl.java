@@ -22,24 +22,28 @@ public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private static final int MAX_ATTACKING_ARMIES = 3;
-    private final Player player;
+    private List<Territory> playerTerritoryList;
+    private List<Card> playerCardList;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
     private int territoryIndex;
 
     public AIBehaviourImpl(final Player player) {
-        this.player = player;
+        this.playerTerritoryList = new ArrayList<Territory>(player.getOwnedTerritories());
+        this.playerCardList = new ArrayList<Card>(player.getOwnedCards());
+        this.nextAttackedTerritory = Optional.empty();
+        this.nextAttackingTerritory = Optional.empty();
         this.territoryIndex = INITIAL_INDEX;
     }
 
     @Override
-    public Territory getNextAttackingTerritory() {
-        return this.nextAttackingTerritory.get();
+    public String getNextAttackingTerritory() {
+        return this.nextAttackingTerritory.get().getTerritoryName();
     }
 
     @Override
-    public Territory getNextAttackedTerritory() {
-        return this.nextAttackedTerritory.get();
+    public String getNextAttackedTerritory() {
+        return this.nextAttackedTerritory.get().getTerritoryName();
     }
 
     @Override
@@ -50,16 +54,16 @@ public class AIBehaviourImpl implements AIBehaviour {
     @Override
     public Territory decidePositioning() {
         territoryIndex++;
-        if (territoryIndex >= player.getNumberOfTerritores()) {
+        if (territoryIndex >= playerTerritoryList.size()) {
             territoryIndex = INITIAL_INDEX;
         } 
-        return player.getOwnedTerritories().stream().collect(Collectors.toList()).get(territoryIndex);
+        return playerTerritoryList.stream().collect(Collectors.toList()).get(territoryIndex);
     }
 
     @Override
     public boolean decideAttack(final List<Territory> territoryList) {
         Territory attackingTerritory;
-        Iterator<Territory> it = player.getOwnedTerritories().iterator();
+        Iterator<Territory> it = playerTerritoryList.iterator();
         attackingTerritory = it.next();
         while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
             attackingTerritory = it.next();
@@ -78,7 +82,7 @@ public class AIBehaviourImpl implements AIBehaviour {
         List<String> adjacentNames = territory.getListOfNearTerritories();
         List<Territory> adjacentTerritories = new ArrayList<>();
         for (Territory t : territoryList) {
-            if (adjacentNames.contains(t.getTerritoryName()) && !player.isOwnedTerritory(t)) {
+            if (adjacentNames.contains(t.getTerritoryName()) && !playerTerritoryList.contains(t)) {
                 adjacentTerritories.add(t);
             }
         }
@@ -98,7 +102,7 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public List<Card> checkCardCombo() {
-        return findCombo(player.getOwnedCards().stream().toList());
+        return findCombo(playerCardList.stream().toList());
     }
 
     private List<Card> findCombo(List<Card> playerCardList) {
