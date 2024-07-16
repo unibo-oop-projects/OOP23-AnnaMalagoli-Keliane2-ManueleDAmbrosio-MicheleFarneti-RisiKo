@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -462,7 +463,7 @@ public class GameViewImpl implements GameView {
     private void getTanksCoordinates() {
         var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
         try (BufferedReader coordinateReader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filePath)));) {
+                new InputStreamReader(new FileInputStream(filePath),StandardCharsets.UTF_8));) {
             coordinateReader.lines().map(s -> s.split(" ")).forEach(
                     t -> tanksCoordinates.put(t[0], new Position(Integer.parseInt(t[1]), Integer.parseInt(t[2]))));
         } catch (IOException e) {

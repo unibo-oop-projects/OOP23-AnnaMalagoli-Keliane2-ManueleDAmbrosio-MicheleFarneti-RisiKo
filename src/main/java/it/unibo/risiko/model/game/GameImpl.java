@@ -407,7 +407,7 @@ public class GameImpl implements Game {
 
     @Override
     public int getNumberOfArmies(String territory) {
-        return map.getTerritories().stream().filter(t -> t.getTerritoryName() == territory).mapToInt(t -> t.getNumberOfArmies()).sum();
+        return map.getTerritories().stream().filter(t -> t.getTerritoryName().equals(territory)).mapToInt(t -> t.getNumberOfArmies()).sum();
     }
 
     @Override
