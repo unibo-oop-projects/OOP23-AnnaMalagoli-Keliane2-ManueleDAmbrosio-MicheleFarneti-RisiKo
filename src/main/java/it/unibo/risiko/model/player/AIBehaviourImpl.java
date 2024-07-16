@@ -28,9 +28,9 @@ public class AIBehaviourImpl implements AIBehaviour {
     private Optional<Territory> nextAttackedTerritory;
     private int territoryIndex;
 
-    public AIBehaviourImpl(final Player player) {
-        this.playerTerritoryList = new ArrayList<Territory>(player.getOwnedTerritories());
-        this.playerCardList = new ArrayList<Card>(player.getOwnedCards());
+    public AIBehaviourImpl(final List<Territory> playerOwnedTerritories, final List<Card> playerOwnedCards) {
+        this.playerTerritoryList = new ArrayList<Territory>(playerOwnedTerritories);
+        this.playerCardList = new ArrayList<Card>(playerOwnedCards);
         this.nextAttackedTerritory = Optional.empty();
         this.nextAttackingTerritory = Optional.empty();
         this.territoryIndex = INITIAL_INDEX;
