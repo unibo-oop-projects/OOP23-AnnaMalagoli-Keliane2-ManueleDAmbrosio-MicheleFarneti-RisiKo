@@ -20,7 +20,6 @@ public class GameMapImpl implements GameMap {
     private static final int ARMIES_STEP = 5;
 
     private Territories territories;
-    private Deck deck;
     private final String name;
     private final int maxPlayers;
     
@@ -29,8 +28,6 @@ public class GameMapImpl implements GameMap {
         this.name = mapName;
         this.resourcesPackageString = resourcesPackageString;
         this.territories = new Territories(buildResourceLocator(FILE_SEPARATOR +"territories.txt")); 
-        this.deck = new DeckImpl(buildResourceLocator("cards.txt")); 
-
         maxPlayers = GameMap.getMaxPlayers(buildResourceLocator());
     }
 
@@ -68,12 +65,12 @@ public class GameMapImpl implements GameMap {
     }
 
     @Override
-    public Deck getDeck() {
-        return deck;
+    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
+        return territories.territoriesAreNear(territory1,territory2);
     }
 
     @Override
-    public boolean areTerritoriesNear(Territory territory1, Territory territory2) {
-        return territories.territoriesAreNear(territory1,territory2);
+    public String getDeckPath() {
+        return buildResourceLocator("cards.txt");
     }
 }

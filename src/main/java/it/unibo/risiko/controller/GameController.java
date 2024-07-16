@@ -219,7 +219,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
-            currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().getDeck());
+            currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
 
             createEvent( EventType.TERRITORY_CONQUEST, attackPhase.getAttackingTerritory(),
                     attackPhase.getDefendingTerritory(), attackPhase.getAttacker(),
@@ -414,13 +414,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Anna Malagoli
      */
     public void playCards(final String card1, final String card2, final String card3) {
-        Deck deck = gameManager.getCurrentGame().get().getDeck();
-        Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
-        Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
-        Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
-        exitCardsManagingPhase();
 
+        gameManager.getCurrentGame().get().playCards(card1, card2, card2, currentPlayer().get());
+        exitCardsManagingPhase();
     }
 
     @Override

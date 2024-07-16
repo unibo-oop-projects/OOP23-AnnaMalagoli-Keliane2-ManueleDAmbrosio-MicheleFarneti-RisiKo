@@ -2,6 +2,7 @@ package it.unibo.risiko.model.game;
 
 import java.util.List;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
@@ -97,9 +98,15 @@ public interface Game {
 
     /**
      * 
-     * @return The game's deck.
+     * @return A card from the game's deck
      */
-    Deck getDeck();
+    Card pullCard();
+
+    /**
+     * 
+     * @return A card from the game's deck
+     */
+    void playCards(String card1, String card2, String card3, final Player currentPlayer);
 
     /**
      * 

@@ -46,11 +46,6 @@ public interface GameMap {
     public String getName();
 
     /**
-     * @return The starting deck
-     */
-    public Deck getDeck();
-
-    /**
      * 
      * @param mapPath The path for the map's folder in the file system.
      * @return The maxNUmberOfPLayers for the map
@@ -70,5 +65,18 @@ public interface GameMap {
         return MAX_PLAYERS_SMALL_MAPS;  
     }
 
+    /**
+     * Checks if two territories are near in the gameMap
+     * @param territory1
+     * @param territory2
+     * @return True if they are near, false otherwise.
+     */
     public boolean areTerritoriesNear(Territory territory1, Territory territory2);
+
+    /**
+     * Returns the path to create the Game deck
+     * @param resource
+     * @return
+     */
+    public String getDeckPath();
 }

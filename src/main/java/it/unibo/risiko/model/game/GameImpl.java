@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.map.GameMap;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.ConquerContinentTarget;
@@ -43,7 +45,7 @@ public class GameImpl implements Game {
     protected GameImpl(final GameMap map, final List<Player> players) {
         this.map = map;
         this.players.addAll(players);
-        this.deck = map.getDeck();
+        this.deck = new DeckImpl(map.getDeckPath());
     }
 
     @Override
@@ -301,7 +303,7 @@ public class GameImpl implements Game {
                     break;
                 case CARDS_MANAGING:
                     var cardCombo = aiBehaviour.checkCardCombo();
-                    this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
+                    //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
                 case ARMIES_PLACEMENT:
                     while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
                         ;
@@ -382,8 +384,13 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Deck getDeck() {
-        return this.deck;
+    public Card pullCard() {
+        return deck.pullCard();
+    }
+
+    @Override
+    public void playCards(final String card1, final String card2,final String card3){
+        //deck.playCards(card1, card2, card3, getCurrentPlayer());
     }
 
     @Override
