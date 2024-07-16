@@ -13,14 +13,16 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
+/**
+ *A panel which represents the principal menu
+ @author Keliane Nana
+ */
 public class PrincipalMenu extends JPanel {
-    private GameFrame gameFrame;
-    //private JLabel picture;
-    private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
+    private final GameFrame gameFrame;
+    private final ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
-    public PrincipalMenu(GameFrame f){
-        this.gameFrame=f;
+    public PrincipalMenu(final GameFrame f){
+        this.gameFrame = f;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(1600, 900));
@@ -40,7 +42,7 @@ public class PrincipalMenu extends JPanel {
         option.addActionListener(a->showOptionPanel());
         quit.addActionListener(e->{int answer=JOptionPane.showConfirmDialog(this,
         "Are you sure you want to quit?", "Impostazioni Risoluzione",
-        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE); if(answer==0){ System.exit(0);}});
+        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE); if(answer==0){ this.gameFrame.unshow();}});
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PrincipalMenu extends JPanel {
      * the OptionSubMenu panel
      */
     private void showOptionPanel() {
-        this.gameFrame.updatePanel(this.gameFrame.getOptionSubMenu());
+        this.gameFrame.updatePanel((this.gameFrame).getOptionSubMenu());
     }
 
     /**

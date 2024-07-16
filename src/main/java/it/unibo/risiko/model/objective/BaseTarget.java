@@ -3,9 +3,9 @@ package it.unibo.risiko.model.objective;
 import it.unibo.risiko.model.player.Player;
 
 public abstract class BaseTarget implements Target{
-    private Player player;
+    private final Player player;
 
-    public BaseTarget(Player player) {
+    public BaseTarget(final Player player) {
         this.player = player;
     }
     

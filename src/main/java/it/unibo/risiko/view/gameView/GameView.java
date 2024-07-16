@@ -14,6 +14,7 @@ import it.unibo.risiko.model.player.Player;
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
+ * @author Keliane Nana
  */
 public interface GameView {
 
@@ -230,15 +231,16 @@ public interface GameView {
     public void enableAttack(final boolean enabled);
 
     /**
-     * @keliane2
-     * @param reg
-     * @param l
-     * @author Keliane2
+     * Creates the logPanel used to display the events of the register
+     * @param reg the register
+     * @param l the list of the players 
+     * @author Keliane Nana
      */
     public void createLog(Register reg, List<Player> l);
 
     /**
-     * @author Keliane2
+     * Updates the log with the events that should be visualized
+     * @author Keliane Nana
      */
     public void updateLog();
     /**

@@ -23,6 +23,7 @@ import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.view.InitialViewObserver;
 import it.unibo.risiko.view.InitialView.GameFrame;
+import it.unibo.risiko.view.InitialView.GameFrameImpl;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -34,7 +35,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
- * @author Keliane2
+ * @author Keliane Nana
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
@@ -59,7 +60,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
         this.register = new RegisterImpl();
-        new GameFrame(this);
+        new GameFrameImpl(this);
     }
 
     @Override
@@ -195,7 +196,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void setAttackingArmies(int numberOfAttackingAmies) {
@@ -214,7 +215,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void conquerIfPossible() {
@@ -237,7 +238,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
@@ -258,7 +259,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param defender
      * @param eventLeader
      * @param eventLeaderAdversary
-     * @author Keliane2
+     * @author Keliane Nana
      */
     private void createEvent( EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary, Optional<Integer> numArmies) {
@@ -392,7 +393,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param dstTerritory is the destination territory
      * @param numArmies is the number of armies that the player
      * wants to move
-     * @author Keliane2
+     * @author Keliane Nana
      * @author Anna Malagoli
      */
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
