@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -35,7 +34,6 @@ public class LoggerView extends JPanel{
         this.playerList=playerList;
         this.register=register;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-        //this.setPreferredSize(new Dimension(1000, 1000)); => Inserire le dimensioni giuste che dipendono dalle dimensioni della GameView per ottenere una corretta visualizzazione.
         //creating a textArea, the event container
         logText=new JTextArea(20,20);
         logText.setEditable(false);
@@ -43,7 +41,6 @@ public class LoggerView extends JPanel{
         //creating a scroller containing the event container
         JScrollPane logTextScroller=new JScrollPane(logText);
         logTextScroller.setSize(new Dimension(this.getWidth(),this.getHeight()));
-        //getting the list of the players
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
         list=new String[playerList.size()];

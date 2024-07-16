@@ -10,13 +10,15 @@ public class EventImpl implements Event {
     private Player eventLeader;
     private Player eventLeaderAdversary;
     private String description;
+    private int numArmies;
 
 
-    public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader) {
+    public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader, int numArmies) {
         this.type = type;
         this.attacker = attacker;
         this.defender = defender;
         this.eventLeader = eventLeader;
+        this.numArmies = numArmies;
         this.setDescription();
     }
 
@@ -63,7 +65,7 @@ public class EventImpl implements Event {
                         " has conquered "+defender.getTerritoryName()+
                         " which was the territory of "+eventLeaderAdversary.getColor_id();
         }else if (this.type.equals(EventType.TROOP_MOVEMENT)) {
-            this.description= "--> Deployment of "+(attacker.getNumberOfArmies()-1)+
+            this.description= "--> Deployment of "+numArmies+
                         " armies of "+eventLeader.getColor_id()+
                         " from "+attacker.getTerritoryName()+
                         " to "+defender.getTerritoryName();
