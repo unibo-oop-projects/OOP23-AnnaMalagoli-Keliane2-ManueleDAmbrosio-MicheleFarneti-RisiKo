@@ -208,9 +208,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
 
-        // Creation of attack event.
-        createEvent(EventType.ATTACK, attackerTerritory.get(), defenderTerritory.get(), currentPlayer().get(),
-                Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
+        // // Creation of attack event.
+        // createEvent(EventType.ATTACK, attackerTerritory.get(), defenderTerritory.get(), currentPlayer().get(),
+        //         Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
         view.updateLog();
 
         // Destroying armies.
@@ -229,9 +229,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (attackPhase.isTerritoryConquered()) {
             //currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
 
-            createEvent(EventType.TERRITORY_CONQUEST, attackerTerritory.get(),
-                    defenderTerritory.get(), currentPlayer().get(),
-                    Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
+            // createEvent(EventType.TERRITORY_CONQUEST, attackerTerritory.get(),
+            //         defenderTerritory.get(), currentPlayer().get(),
+            //         Optional.of(game.getOwner(defenderTerritory.get().getTerritoryName())), Optional.empty());
 
             view.updateLog();
             view.drawConquerPanel();
@@ -258,9 +258,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
         view.closeAttackPanel();
         // Creating moovement event.
-        createEvent(EventType.TROOP_MOVEMENT, attackerTerritory.get(),
-                defenderTerritory.get(), getOwner(attackerTerritory.get()),
-                Optional.empty(), Optional.of(numberOfMovingArmies));
+        // createEvent(EventType.TROOP_MOVEMENT, attackerTerritory.get(),
+        //         defenderTerritory.get(), game.getOwner(attackerTerritory.get().getTerritoryName()),
+        //         Optional.empty(), Optional.of(numberOfMovingArmies));
 
         view.updateLog();
         redrawView();
@@ -404,9 +404,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);
         getTerritoryFromString(dstTerritory).addArmies(numArmies);
-        createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
-                getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(srcTerritory)), Optional.empty(),
-                Optional.of(numArmies));
+        // createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+        //         getTerritoryFromString(dstTerritory),game.getOwner(srcTerritory), Optional.empty(),
+        //         Optional.of(numArmies));
         view.updateLog();
         view.exitMoveArmiesPanel();
         this.skipTurn();

@@ -70,7 +70,7 @@ public class TableModelTerritories extends AbstractTableModel{
                 return territory.getNumberOfArmies();
             case 3:
                 for(var player : this.listPlayers) {
-                    if(player.isOwnedTerritory(territory)) {
+                    if(player.isOwnedTerritory(territory.getTerritoryName())) {
                         return player.getColor_id();
                     }
                 }

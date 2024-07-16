@@ -100,7 +100,7 @@ public class GameImpl implements Game {
         Collections.shuffle(territoriesToAssign);
 
         for (Territory territory : territoriesToAssign) {
-            players.get(activePlayer).addTerritory(territory);
+            players.get(activePlayer).addTerritory(territory.getTerritoryName());
             territory.addArmies(1);
             players.get(activePlayer).decrementArmiesToPlace();
             activePlayer = nextPlayer();
@@ -215,7 +215,7 @@ public class GameImpl implements Game {
             switch (status) {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
-                            && getCurrentPlayer().isOwnedTerritory(territory)) {
+                            && getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
                         territory.addArmies(nArmies);
                         armiesPlaced++;
                         getCurrentPlayer().decrementArmiesToPlace();
@@ -227,7 +227,7 @@ public class GameImpl implements Game {
                     }
                     break;
                 case ARMIES_PLACEMENT:
-                    if (getCurrentPlayer().isOwnedTerritory(territory)) {
+                    if (getCurrentPlayer().isOwnedTerritory(territory.getTerritoryName())) {
                         territory.addArmies(nArmies);
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (getCurrentPlayer().getArmiesToPlace() == 0) {
@@ -355,7 +355,7 @@ public class GameImpl implements Game {
 
     @Override
     public String getOwner(String territory) {
-        return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch(t -> t.getTerritoryName().equals(territory)))
+        return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch(t -> t.equals(territory)))
                 .findFirst().get().getColor_id();
     }
 
