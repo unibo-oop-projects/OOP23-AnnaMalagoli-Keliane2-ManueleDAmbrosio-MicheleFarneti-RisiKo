@@ -32,7 +32,7 @@ public class JPanelChoice extends JPanel {
     private static final Color BLACK = new Color(0, 0, 0);
     private static final int INFO_BOTTON_DIMENSION = 80;
     private static final int BOTTON_DIMENSION = 600;
-    private static final int CHOICE_SIZE = 30;
+    private static final int CHOICE_SIZE = 20;
     private String firstChoice = "";
     private String secondChoice = "";
     private String thirdChoice = "";
@@ -239,6 +239,10 @@ public class JPanelChoice extends JPanel {
                 return true;
             }
         }
+        if (contCan == 1 && contInf == 1 && contCav == 1) {
+            return true;
+        }
+        
         return false;
     }
 

@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.border.Border;
 
 /**
  * ColoredImageButton enables to create a button with a given image as

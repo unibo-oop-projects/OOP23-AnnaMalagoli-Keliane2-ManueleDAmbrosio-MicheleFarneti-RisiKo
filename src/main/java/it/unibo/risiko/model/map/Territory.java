@@ -2,8 +2,6 @@ package it.unibo.risiko.model.map;
 
 import java.util.List;
 
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-
 /**
  * The interface Territory contains all the methods
  * that have to be callable in a territory.
@@ -26,13 +24,6 @@ public interface Territory {
      * @return the name of the continent
      */
     String getContinentName();
-
-    /**
-     * Method used to get the position of the territory in the map.
-     * 
-     * @return the position of the territory
-     */
-    Position getPosition();
 
     /**
      * This method is used to get the actual number of 

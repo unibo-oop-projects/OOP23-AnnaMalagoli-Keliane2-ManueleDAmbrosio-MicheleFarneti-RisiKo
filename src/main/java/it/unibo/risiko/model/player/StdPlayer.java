@@ -7,6 +7,7 @@ import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
@@ -98,8 +99,14 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public void computeReinforcements() {
-        this.armiesToPlace = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
+    public void computeReinforcements(Collection<Continent> continentsList) {
+        int bonusArmies = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
+        for (Continent continent : continentsList) {
+            if (this.ownedTerritories.containsAll(continent.getListTerritories())) {
+                bonusArmies += continent.getBonusArmies();
+            }
+        }
+        this.armiesToPlace = bonusArmies;
         resetDraw();
     }
 

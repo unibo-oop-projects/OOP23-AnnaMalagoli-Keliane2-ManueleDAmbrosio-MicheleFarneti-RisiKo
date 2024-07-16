@@ -344,6 +344,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             case ARMIES_PLACEMENT:
                 view.enableAttack(false);
                 view.enableSkip(false);
+                view.enableMovements(false);
                 break;
             default:
                 break;

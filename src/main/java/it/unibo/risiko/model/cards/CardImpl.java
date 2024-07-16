@@ -5,8 +5,8 @@ package it.unibo.risiko.model.cards;
  * 
  * @author Anna Malagoli 
  */
-public class CardImpl implements Card{
-    
+public class CardImpl implements Card {
+
     private final String typeName;
     private final String territoryName;
 

@@ -49,9 +49,11 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public Territory decidePositioning() {
-        int index = territoryIndex;
         territoryIndex++;
-        return player.getOwnedTerritories().stream().collect(Collectors.toList()).get(index);
+        if (territoryIndex >= player.getNumberOfTerritores()) {
+            territoryIndex = INITIAL_INDEX;
+        } 
+        return player.getOwnedTerritories().stream().collect(Collectors.toList()).get(territoryIndex);
     }
 
     @Override
@@ -73,7 +75,6 @@ public class AIBehaviourImpl implements AIBehaviour {
     }
 
     private boolean findAdjacentEnemy(final Territory territory, final List<Territory> territoryList) {
-        final int FIRST_INDEX = 0;
         List<String> adjacentNames = territory.getListOfNearTerritories();
         List<Territory> adjacentTerritories = new ArrayList<>();
         for (Territory t : territoryList) {
@@ -84,7 +85,7 @@ public class AIBehaviourImpl implements AIBehaviour {
         if (adjacentTerritories.isEmpty()) {
             return false;
         }
-        nextAttackedTerritory = Optional.of(adjacentTerritories.get(FIRST_INDEX));
+        nextAttackedTerritory = Optional.of(adjacentTerritories.get(INITIAL_INDEX));
         return true;
     }
 

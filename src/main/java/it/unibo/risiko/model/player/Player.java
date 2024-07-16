@@ -5,6 +5,7 @@ import java.util.Set;
 
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.Target;
 
@@ -115,8 +116,10 @@ public interface Player {
     /**
      * This method calculates the number of armies the
      * player has to place at the start of its turn.
+     * 
+     * @param continentsList - list of the continents in the actual game.
      */
-    public void computeReinforcements();
+    public void computeReinforcements(Collection<Continent> continentsList);
 
     /**
      * This method reduces by one the armies to place.

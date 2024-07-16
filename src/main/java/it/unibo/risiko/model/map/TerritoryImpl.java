@@ -2,8 +2,6 @@ package it.unibo.risiko.model.map;
 
 import java.util.List;
 
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-
 /**
  * Implementation of the interface Territory.
  * 
@@ -14,7 +12,6 @@ public class TerritoryImpl implements Territory {
     private int numberOfArmies;
     private final List<String> listNearTerritories;
     private final String continent;
-    private Position position;
 
     /**
      * Constructor to set the parameters of the territory with the input parameters
@@ -23,16 +20,12 @@ public class TerritoryImpl implements Territory {
      * @param name is the name of the territory
      * @param continent is the name of the continent
      * @param listNearTerritories is the list of the neighboring territories
-     * @param x is the latitude of the territory in the map
-     * @param y is the longitude of the territory in the map
      */
-    public TerritoryImpl(final String name, final String continent, final List<String> listNearTerritories, final int x,
-            final int y) {
+    public TerritoryImpl(final String name, final String continent, final List<String> listNearTerritories) {
         this.name = name;
         this.continent = continent;
         this.listNearTerritories = List.copyOf(listNearTerritories);
         this.numberOfArmies = 0;
-        this.position = new Position(x, y);
     }
 
     /**
@@ -95,12 +88,4 @@ public class TerritoryImpl implements Territory {
         return this.continent;
     }
 
-    /**
-     * Method to get the position of the territory in the map.
-     * 
-     * @return the position of the territory
-     */
-    public Position getPosition() {
-        return this.position;
-    }
 }
