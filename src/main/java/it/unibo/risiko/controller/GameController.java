@@ -415,10 +415,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     public void playCards(final String card1, final String card2, final String card3) {
         Deck deck = gameManager.getCurrentGame().get().getDeck();
-        Card firstCard = deck.getCardByTerritoryName(card1, currentPlayer().get()).get();
-        Card secondCard = deck.getCardByTerritoryName(card2, currentPlayer().get()).get();
-        Card thirdCard = deck.getCardByTerritoryName(card3, currentPlayer().get()).get();
-        deck.playCards(firstCard, secondCard, thirdCard, currentPlayer().get());
+        deck.playCards(card1, card2, card3, currentPlayer().get());
         exitCardsManagingPhase();
 
     }

@@ -116,7 +116,7 @@ public class DeckImpl implements Deck {
      * @return an empty optional if case the player does not
      *         have the card or an optional that contains the required card
      */
-    public Optional<Card> getCardByTerritoryName(final String territoryName, final Player player) {
+    private Optional<Card> getCardByTerritoryName(final String territoryName, final Player player) {
         for (var card : player.getOwnedCards()) {
             if (card.getTerritoryName().equals(territoryName)) {
                 return Optional.of(card);
@@ -131,13 +131,16 @@ public class DeckImpl implements Deck {
      * the number of armies that has to be added in the armies that
      * the player can place.
      * 
-     * @param card1 is the first card to be played
-     * @param card2 is the second card to be played
-     * @param card3 is the third card to be played
+     * @param name1 is the name of the territory in the first card to be played
+     * @param name2 is the name of the territory in the second card to be played
+     * @param name3 is the name of the territory in the third card to be played
      * @param player is the one who plays the three cards during his turn
      */
-    public void playCards(final Card card1, final Card card2, final Card card3, final  Player player) {
+    public void playCards(final String name1, final String name2, final String name3, final  Player player) {
         int numberOfArmies = 0;
+        Card card1 = getCardByTerritoryName(name1, player).get();
+        Card card2 = getCardByTerritoryName(name2, player).get();
+        Card card3 = getCardByTerritoryName(name3, player).get();
         List<Card> cards = List.of(card1, card2, card3);
         if (playedThreeCannons(cards)) {
             numberOfArmies = COMBO_THREE_CANNON;
