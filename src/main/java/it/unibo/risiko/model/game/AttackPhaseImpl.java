@@ -6,7 +6,7 @@ import it.unibo.risiko.model.dice.TripleDice;
 import it.unibo.risiko.model.dice.TripleDiceImpl;
 
 /**
- * Implementation of AttackPhase interface.
+ * Implementation of @AttackPhase interface.
  * 
  * @author Manuele D'Ambrosio
  */
