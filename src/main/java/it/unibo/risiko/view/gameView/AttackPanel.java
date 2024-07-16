@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
 
@@ -43,6 +44,7 @@ public class AttackPanel extends JPanel {
     final int height;
     final int width;
 
+    @SuppressFBWarnings(value = "EI2", justification = "observer is intentionally mutable")
     private final GameViewObserver observer;
     private List<Integer> attDice;
     private List<Integer> defDice;
