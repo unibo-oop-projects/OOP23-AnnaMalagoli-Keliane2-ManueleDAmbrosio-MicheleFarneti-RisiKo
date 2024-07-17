@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.model.map.GameMap;
-import it.unibo.risiko.model.map.GameMapImpl;
+import it.unibo.risiko.model.map.GameMapInitializer;
+import it.unibo.risiko.model.map.GameMapInitializerImpl;
 import it.unibo.risiko.model.map.TerritoryImpl;
 
 public class TestGameMap {
@@ -22,7 +22,7 @@ public class TestGameMap {
     private static String TEST_RESOURCES_PATH;
     private static final String FILE_SEPARATOR = File.separator;
 
-    private GameMap testMap;
+    private GameMapInitializer testMap;
 
     @BeforeAll
     static void setResoucesString() {
@@ -34,9 +34,9 @@ public class TestGameMap {
     @Test
     void testGetMaxPlayers() {
         assertEquals(SMAL_MAP_MAX_PLAYERS,
-                GameMap.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + SMALL_MAP_NAME));
+                GameMapInitializer.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + SMALL_MAP_NAME));
         assertEquals(BIG_MAP_MAX_PLAYERS,
-                GameMap.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + BIG_MAP_NAME));
+                GameMapInitializer.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + BIG_MAP_NAME));
     }
 
     /*@Test

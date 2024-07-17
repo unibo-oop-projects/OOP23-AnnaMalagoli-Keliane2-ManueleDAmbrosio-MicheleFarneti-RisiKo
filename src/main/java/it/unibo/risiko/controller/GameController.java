@@ -7,6 +7,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.cards.Deck;
+import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.event.EventImpl;
 import it.unibo.risiko.model.event.EventType;
 import it.unibo.risiko.model.cards.Card;
@@ -18,7 +19,9 @@ import it.unibo.risiko.model.game.Game;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.game.GameStatus;
-import it.unibo.risiko.model.map.GameMapImpl;
+import it.unibo.risiko.model.map.GameMapInitializer;
+import it.unibo.risiko.model.map.GameMapInitializerImpl;
+import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
@@ -42,7 +45,6 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
-    private Game game;
     private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
@@ -53,6 +55,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Optional<String> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
     private Register register;
+
+    private Territories territories;
+    private List<Player> players;
+    private Deck deck;
+    private GameStatus gameStatus;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -249,7 +256,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         }
 
         resetAttack();
-        gameManager.getCurrentGame().get().endAttack();
+        game.endAttack();
     }
 
     /**
@@ -333,7 +340,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private Territory getTerritoryFromString(String territoryName) {
-        return gameManager.getCurrentGame().get().getTerritoriesList().stream()
+        return game.getTerritoriesList().stream()
                 .filter(t -> t.getTerritoryName().equals(territoryName)).findFirst().get();
     }
 
@@ -368,18 +375,36 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
-        final GameFactory gameFactory = new GameFactoryImpl(new GameMapImpl(mapName, resourcesPackageString));
+        final GameMapInitializer gameInitializer= new GameMapInitializerImpl(mapName, resourcesPackageString);
         PlayerFactory playerFactory = new SimplePlayerFactory();
 
         for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
             if (index < numberOfStandardPlayers) {
-                gameFactory.addNewPlayer(playerFactory.createStandardPlayer());
+                players.add(playerFactory.createStandardPlayer());
             } else {
-                gameFactory.addNewPlayer(playerFactory.createAIPlayer());
+                players.add(playerFactory.createStandardPlayer());
             }
         }
-        gameManager.setCurrentGame(gameFactory.initializeGame());
+        
+        this.deck = new DeckImpl(gameInitializer.getDeckPath());
+        this.territories = new Territories(gameInitializer.getTerritoriesPath());
+        this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
+        assignTerritories();
         this.setupGameView();
+    }
+
+    /**
+     * @author Michele Farneti
+     */
+    private void assignTerritories() {
+        var territoriesToAssign = map.getTerritories();
+
+        for (Territory territory : territoriesToAssign) {
+            players.get(activePlayer).addTerritory(territory.getTerritoryName());
+            territory.addArmies(1);
+            players.get(activePlayer).decrementArmiesToPlace();
+            activePlayer = nextPlayer();
+        }
     }
 
     @Override
@@ -428,7 +453,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void moveClicked() {
         view.createMoveArmies(
-                currentPlayer().get().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList());
+                game.getCurrentPlayer().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList());
     }
 
     @Override

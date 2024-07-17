@@ -20,7 +20,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.risiko.model.map.GameMap;
+import it.unibo.risiko.model.map.GameMapInitializer;
 
 /**
  * Implmentation of @GameManager interface
@@ -83,7 +83,7 @@ public class GameManagerImpl implements GameManager {
         try {
             for (Path p : Files.list(Path.of(mapsFoldersLocations)).collect(Collectors.toList())) {
                 var key = Optional.ofNullable(p.getFileName().toString());
-                var value = Optional.ofNullable(GameMap.getMaxPlayers(resourcesPath + "maps" + File.separator + p.getFileName().toString()));
+                var value = Optional.ofNullable(GameMapInitializer.getMaxPlayers(resourcesPath + "maps" + File.separator + p.getFileName().toString()));
                 key.ifPresent(k -> value.ifPresent( v-> availableMaps.put(k,v)));
             }
         } catch (IOException e) {}

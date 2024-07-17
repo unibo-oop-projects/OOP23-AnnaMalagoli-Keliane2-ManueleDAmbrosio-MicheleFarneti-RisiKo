@@ -9,7 +9,7 @@ import java.util.Optional;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
-import it.unibo.risiko.model.map.GameMap;
+import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.ConquerContinentTarget;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
@@ -33,7 +33,7 @@ public class GameImpl implements Game {
     private static final int MIN_CARDS_PLAYABLE = 3;
     private static final Random randomNumberGenerator = new Random();
 
-    private final GameMap map;
+    private final GameMapInitializer map;
 
     private int activePlayer = 0;
     private int armiesPlaced = 0;
@@ -42,7 +42,7 @@ public class GameImpl implements Game {
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
     private Deck deck;
 
-    protected GameImpl(final GameMap map, final List<Player> players) {
+    protected GameImpl(final GameMapInitializer map, final List<Player> players) {
         this.map = map;
         this.players.addAll(players);
         this.deck = new DeckImpl(map.getDeckPath());
