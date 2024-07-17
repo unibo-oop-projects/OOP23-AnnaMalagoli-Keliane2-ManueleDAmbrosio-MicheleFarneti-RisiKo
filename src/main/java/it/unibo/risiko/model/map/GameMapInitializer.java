@@ -34,7 +34,7 @@ public interface GameMapInitializer {
      * 
      * @return The name of the map set fore the initializer.
      */
-    String getName();
+    String getMapName();
 
     /**
      * @param nplayers Number of players playing in the map

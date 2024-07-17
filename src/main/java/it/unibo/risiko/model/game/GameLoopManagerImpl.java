@@ -10,6 +10,7 @@ import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.map.GameMapInitializer;
+import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.objective.ConquerContinentTarget;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
@@ -27,38 +28,31 @@ import it.unibo.risiko.model.player.Player;
 
 public class GameLoopManagerImpl implements GameLoopManager {
 
+    private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
     private static final int MIN_CARDS_PLAYABLE = 3;
 
+    private static final Random randomNumberGenerator = new Random();
+
     private int armiesPlaced = 0;
-    private long turnsCount = 1;
-    private List<Player> players = new LinkedList<Player>();
-    private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
-    private Deck deck;
+    private long turnsCount = 0;
+    private GameStatus status;
+    private Integer activePlayer = 1;
 
     public GameLoopManagerImpl() {
+        status = GameStatus.TERRITORY_OCCUPATION;
     }
 
     @Override
-    public void startGame() {
-        Collections.shuffle(players);
-        players.forEach(p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
-        assignTargets();
-        assignTerritories();
-        activePlayer = 0;
-        handleAIBehaviour();
-    }
-
-    @Override
-    public boolean skipTurn() {
-        if (skipTurnPossible()) {
+    public boolean skipTurn(Integer player, final List<Player> players, final Territories territories,
+            final GameStatus gameStatus) {
+        if (skipTurnPossible(players, territories, player, gameStatus)) {
             switch (status) {
                 // Current player gets updated, if no player has armies left to place, the next
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
-                    if (getTotalArmiesLeftToPlace() == 0) {
-                        players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
-                        nextGamePhase();
+                    if (getTotalArmiesLeftToPlace(players) == 0) {
+                        nextGamePhase(player, players);
                     } else {
                         armiesPlaced = 0;
                     }
@@ -67,13 +61,12 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case CARDS_MANAGING:
                 case ATTACKING:
                 case READY_TO_ATTACK:
-                    players.get(nextPlayerIfNotDefeated()).computeReinforcements(map.getContinents());
-                    nextGamePhase();
-                break;
+                    nextGamePhase(player, players);
+                    break;
                 default:
                     break;
             }
-            updateCurrentPlayer();
+            activePlayer = nextPlayer(player, players.size());
             return true;
         }
         return false;
@@ -84,7 +77,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
      * loop by
      * updating the gameStatus following the gmae flow.
      */
-    private void nextGamePhase() {
+    private void nextGamePhase(final Integer player, final List<Player> players) {
         switch (status) {
             // Once territory occupation phase is over begins armiesPlacement phase
             case TERRITORY_OCCUPATION:
@@ -93,26 +86,26 @@ public class GameLoopManagerImpl implements GameLoopManager {
             // If the player has armies to place status goes to armies placement, otherwise
             // directly to Ready to attack
             case CARDS_MANAGING:
-                if (players.get(activePlayer).getArmiesToPlace() > 0) {
+                if (players.get(player).getArmiesToPlace() > 0) {
                     status = GameStatus.ARMIES_PLACEMENT;
                 } else {
                     status = GameStatus.READY_TO_ATTACK;
                 }
                 break;
-                // After armies placement the player can attack
+            // After armies placement the player can attack
             case ARMIES_PLACEMENT:
                 status = GameStatus.READY_TO_ATTACK;
                 break;
-                // After attacking a new turn is going to begin, if the player has enough cards
-                // to play them it will go CARDS MANAGING phase,
-                // OtherWhise if he hasn't enough cards but enough armies to place the new game
-                // status is going to armies Placement. If it can't
-                // Do any of those actions it's going directly to the attack phase.
+            // After attacking a new turn is going to begin, if the player has enough cards
+            // to play them it will go CARDS MANAGING phase,
+            // OtherWhise if he hasn't enough cards but enough armies to place the new game
+            // status is going to armies Placement. If it can't
+            // Do any of those actions it's going directly to the attack phase.
             case ATTACKING:
             case READY_TO_ATTACK:
-                if (players.get(nextPlayerIfNotDefeated()).getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
+                if (players.get(nextPlayer(player, players.size())).getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
                     status = GameStatus.CARDS_MANAGING;
-                } else if (players.get(nextPlayerIfNotDefeated()).getArmiesToPlace() > 0) {
+                } else if (players.get(nextPlayer(player, players.size())).getArmiesToPlace() > 0) {
                     status = GameStatus.ARMIES_PLACEMENT;
                 } else {
                     status = GameStatus.READY_TO_ATTACK;
@@ -126,15 +119,17 @@ public class GameLoopManagerImpl implements GameLoopManager {
     /**
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
-    private boolean skipTurnPossible() {
+    private boolean skipTurnPossible(final List<Player> players, final Territories territories, final Integer player,
+            final GameStatus gameStatus) {
         switch (status) {
             case TERRITORY_OCCUPATION:
-                if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN || getCurrentPlayer().getArmiesToPlace() == 0) {
+                if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
+                        || players.get(player).getArmiesToPlace() == 0) {
                     return true;
                 }
                 return false;
             case ARMIES_PLACEMENT:
-                return players.get(activePlayer).getArmiesToPlace() == 0;
+                return players.get(player).getArmiesToPlace() == 0;
             case CARDS_MANAGING:
             case READY_TO_ATTACK:
             case ATTACKING:
@@ -145,10 +140,11 @@ public class GameLoopManagerImpl implements GameLoopManager {
     }
 
     /**
+     * @param players The list of players in the game
      * @return The totale amount of armies that are still left to be placed among
      *         all the players.
      */
-    private int getTotalArmiesLeftToPlace() {
+    private int getTotalArmiesLeftToPlace(List<Player> players) {
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
     }
 
@@ -159,7 +155,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
                             && getCurrentPlayer().isOwnedTerritory(territory)) {
-                        map.addArmies(territory,nArmies);
+                        map.addArmies(territory, nArmies);
                         armiesPlaced++;
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN
@@ -171,7 +167,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                     break;
                 case ARMIES_PLACEMENT:
                     if (getCurrentPlayer().isOwnedTerritory(territory)) {
-                        map.addArmies(territory,nArmies);
+                        map.addArmies(territory, nArmies);
                         getCurrentPlayer().decrementArmiesToPlace();
                         if (getCurrentPlayer().getArmiesToPlace() == 0) {
                             nextGamePhase();
@@ -187,31 +183,18 @@ public class GameLoopManagerImpl implements GameLoopManager {
     }
 
     @Override
-    public List<Player> getPlayersList() {
-        return List.copyOf(players);
-    }
-
-    @Override
     public GameStatus getGameStatus() {
         return this.status;
     }
 
-
     @Override
-    public Integer nextPlayer(Integer activePlayer,Integer playersCount) {
-        return (activePlayer + 1) %playersCount;
+    public Integer getActivePlayer() {
+        return this.activePlayer;
     }
 
-    /**
-     * Sets as new activePlayer the next player in line, eventually handles the AI
-     * moves if the next player is AI
-     */
-    private void updateCurrentPlayer() {
-        activePlayer = nextPlayerIfNotDefeated();
-        if (activePlayer == 0) {
-            turnsCount++;
-        }
-        handleAIBehaviour();
+    @Override
+    public Integer nextPlayer(Integer activePlayer, Integer playersCount) {
+        return (activePlayer + 1) % playersCount;
     }
 
     /**
@@ -221,129 +204,55 @@ public class GameLoopManagerImpl implements GameLoopManager {
      */
     private void handleAIBehaviour() {
         // if (getCurrentPlayer().isAI()) {
-        //     var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
-        //     switch (status) {
-        //         case TERRITORY_OCCUPATION:
-        //             while(getCurrentPlayer().isAI()){
-        //                 this.placeArmies(aiBehaviour.decidePositioning(), 1);
-        //             }
-        //             break;
-        //         case CARDS_MANAGING:
-        //             var cardCombo = aiBehaviour.checkCardCombo();
-        //             //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1), cardCombo.get(2), getCurrentPlayer());
-        //         case ARMIES_PLACEMENT:
-        //             while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
-        //                 ;
-        //             if (aiBehaviour.decideAttack(getTerritoriesList())) {
-        //                 AttackPhase attackPhase = new AttackPhaseImpl(
-        //                         getCurrentPlayer(),
-        //                         aiBehaviour.getNextAttackingTerritory(),
-        //                         aiBehaviour.decideAttackingArmies(),
-        //                         getOwner(aiBehaviour.getNextAttackedTerritory()),
-        //                         aiBehaviour.getNextAttackedTerritory());
-        //                 attackPhase.destroyArmies();
-        //                 attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
-        //             }
-        //             this.skipTurn();
-        //             break;
-        //         default:
-        //             break;
-        //     }
+        // var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
+        // switch (status) {
+        // case TERRITORY_OCCUPATION:
+        // while(getCurrentPlayer().isAI()){
+        // this.placeArmies(aiBehaviour.decidePositioning(), 1);
+        // }
+        // break;
+        // case CARDS_MANAGING:
+        // var cardCombo = aiBehaviour.checkCardCombo();
+        // //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1),
+        // cardCombo.get(2), getCurrentPlayer());
+        // case ARMIES_PLACEMENT:
+        // while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
+        // ;
+        // if (aiBehaviour.decideAttack(getTerritoriesList())) {
+        // AttackPhase attackPhase = new AttackPhaseImpl(
+        // getCurrentPlayer(),
+        // aiBehaviour.getNextAttackingTerritory(),
+        // aiBehaviour.decideAttackingArmies(),
+        // getOwner(aiBehaviour.getNextAttackedTerritory()),
+        // aiBehaviour.getNextAttackedTerritory());
+        // attackPhase.destroyArmies();
+        // attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
+        // }
+        // this.skipTurn();
+        // break;
+        // default:
+        // break;
+        // }
         // }
     }
 
     @Override
-    public boolean gameOver() {
+    public boolean isGameOver(Integer playerIndex, final List<Player> players, final Territories territories) {
         Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved() == true).findAny();
         if (winner.isPresent()) {
             if (winner.get().equals(players.get(activePlayer))) {
                 return true;
             } else {
-                players.get(activePlayer).setTarget(new ConquerTerritoriesTarget(players.get(activePlayer),
-                        randomNumberGenerator.nextInt(
-                                Math.toIntExact(Math
-                                        .round(map.getTerritories().size() * MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),
-                                Math.toIntExact(Math
-                                        .round(map.getTerritories().size() * MAX_TERRITORIES_TO_CONQUER_PERCENTAGE)))));
+                players.get(activePlayer)
+                        .setTarget(new ConquerTerritoriesTarget(players.get(playerIndex), randomNumberGenerator
+                                .nextInt(Math.toIntExact(Math.round(territories.getListTerritories().size() * NEW_TARGET_PERCENTAGE)))));
             }
         }
         return false;
     }
 
     @Override
-    public Player getCurrentPlayer() {
-        return players.get(activePlayer);
-    }
-
-    @Override
-    public List<Territory> getTerritoriesList() {
-        return map.getTerritories();
-    }
-
-    @Override
-    public String getOwner(String territory) {
-        return players.stream().filter(p -> p.getOwnedTerritories().stream().anyMatch(t -> t.equals(territory)))
-                .findFirst().get().getColor_id();
-    }
-
-    @Override
-    public String getMapName() {
-        return this.map.getName();
-    }
-
-    @Override
-    public void setAttacking() {
-        if (status == GameStatus.READY_TO_ATTACK) {
-            status = GameStatus.ATTACKING;
-        }
-    }
-
-    @Override
-    public void endAttack() {
-        if (status == GameStatus.ATTACKING) {
-            status = GameStatus.READY_TO_ATTACK;
-        }
-    }
-
-    @Override
-    public boolean areTerritoriesNear(String territory1, String territory2) {
-        return map.areTerritoriesNear(territory1, territory2);
-    }
-
-    @Override
-    public Card pullCard() {
-        return deck.pullCard();
-    }
-
-    @Override
-    public void playCards(final String card1, final String card2,final String card3, final Player player){
-        deck.playCards(card1, card2, card3, player);
-    }
-
-    @Override
-    public void endCardsPhase() {
-        if (status == GameStatus.CARDS_MANAGING) {
-            nextGamePhase();
-        }
-    }
-
-    @Override
     public Long getTurnsCount() {
         return turnsCount;
-    }
-
-    @Override
-    public int getNumberOfArmies(String territory) {
-        return map.getTerritories().stream().filter(t -> t.getTerritoryName().equals(territory)).mapToInt(t -> t.getNumberOfArmies()).sum();
-    }
-
-    @Override
-    public void removeArmies(String territory, int numberOfMovingArmies) {
-        map.removeArmies(territory, numberOfMovingArmies);
-    }
-
-    @Override
-    public void setOwner(String territory, String color_id) {
-        map.setOwner(territory,color_id);
     }
 }

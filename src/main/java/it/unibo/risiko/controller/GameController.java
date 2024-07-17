@@ -15,7 +15,6 @@ import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
-import it.unibo.risiko.model.game.Game;
 import it.unibo.risiko.model.game.GameManager;
 import it.unibo.risiko.model.game.GameManagerImpl;
 import it.unibo.risiko.model.game.GameStatus;
@@ -47,6 +46,8 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private final GameManager gameManager;
+    private GameMapInitializer gameInitializer; 
+    private GameLoopManager gameLoopManager;   
     private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
@@ -63,7 +64,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Deck deck;
     private GameStatus gameStatus;
     private int activePlayerIndex;
-    private GameLoopManager gameLoopManager;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -74,7 +74,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public GameController() {
         gameManager = new GameManagerImpl(resourcesPackageString + saveGamesFilePath,
                 resourcesPackageString + FILE_SEPARATOR);
-        this.register = new RegisterImpl();
         new GameFrame(this);
     }
 
@@ -91,17 +90,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void setupGameView() {
-        if (gameManager.getCurrentGame().isPresent()) {
-            this.game = gameManager.getCurrentGame().get();
-            view.showGameWindow(game.getMapName(), game.getPlayersList().size());
-            view.showTanks(
-                    game.getTerritoriesList().stream().map(t -> t.getTerritoryName()).collect(Collectors.toList()));
-            showTurnIcons();
-            view.createLog(this.register, game.getPlayersList());
-            view.createTablePanel(game.getTerritoriesList(),
-                    game.getPlayersList());
-            redrawView();
-        }
+        view.showGameWindow(gameInitializer.getName(), game.getPlayersList().size());
+        view.showTanks(
+                game.getTerritoriesList().stream().map(t -> t.getTerritoryName()).collect(Collectors.toList()));
+        showTurnIcons();
+        view.createLog(this.register, game.getPlayersList());
+        view.createTablePanel(game.getTerritoriesList(),
+                game.getPlayersList());
+        redrawView();
     }
 
     /**
@@ -379,7 +375,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers) {
-        final GameMapInitializer gameInitializer = new GameMapInitializerImpl(mapName, resourcesPackageString);
+        gameInitializer = new GameMapInitializerImpl(mapName, resourcesPackageString);
         PlayerFactory playerFactory = new SimplePlayerFactory();
 
         for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
@@ -397,6 +393,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStratingArmies(players.size())));
         players.forEach(p-> p.setTarget(gameInitializer.generateTarget(players.indexOf(p),players,territories)));
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
+        this.register = new RegisterImpl();
         this.setupGameView();
     }
 

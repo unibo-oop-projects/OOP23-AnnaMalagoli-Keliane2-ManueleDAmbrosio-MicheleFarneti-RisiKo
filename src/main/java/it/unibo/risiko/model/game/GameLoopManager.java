@@ -2,8 +2,7 @@ package it.unibo.risiko.model.game;
 
 import java.util.List;
 
-import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -29,29 +28,8 @@ public interface GameLoopManager {
      * 
      * @return True if the turn was succesfuly skipped
      */
-    boolean skipTurn();
-
-    /**
-     * @return the name of the Map being played.
-     */
-    String getMapName();
-
-    /**
-     * Initializises the game following the basic Risiko rules, Every player
-     * gets a randomly generated target, the set of owned territories and the right
-     * amount of armies, it also handles the case where.
-     */
-    void startGame();
-
-    /**
-     * @return The List of the players currently playing the game.
-     */
-    List<Player> getPlayersList();
-
-    /**
-     * @return The List of the territories in the map
-     */
-    List<Territory> getTerritoriesList();
+    boolean skipTurn(final Integer player, final List<Player> players, final Territories territories,
+            final GameStatus gameStatus);
 
     /**
      * @return The current Stage of the game
@@ -59,74 +37,16 @@ public interface GameLoopManager {
     GameStatus getGameStatus();
 
     /**
-     * 
+     * @param
      * @return True if one of the players has reached is target
      */
-    boolean gameOver();
+    boolean isGameOver(Integer playerIndex, final List<Player> players, final Territories territories);
 
     /**
      * 
-     * @return The player whose turn it is
+     * @return The index of the active player
      */
-    Player getCurrentPlayer();
-
-    /**
-     * The amount of armies selected is added to the player's territory if the
-     * current player
-     * owns it
-     * 
-     * @param territory
-     * @param nArmies
-     * @return True if it was possbile to place the armies, false otherwise.
-     */
-    public boolean placeArmies(final String territory, final int nArmies);
-
-    /**
-     * 
-     * @param territory
-     * @return The owner of the given territory
-     */
-    public String getOwner(final String territory);
-
-    /**
-     * 
-     * If possible, sets the Game status to ATTACKING, allowing the player to attack
-     * next
-     */
-    void setAttacking();
-
-    /**
-     * 
-     * Ends the attacking phase by setting the gameStatus back to READY_TO_ATTACK
-     * allowing the gameLoop to restart
-     */
-    void endAttack();
-
-    /**
-     * 
-     * @return A card from the game's deck
-     */
-    Card pullCard();
-
-    /**
-     * 
-     * @return A card from the game's deck
-     */
-    void playCards(String card1, String card2, String card3, final Player currentPlayer);
-
-    /**
-     * 
-     * @param territory1
-     * @param territory2
-     * @return True if the two territories of the game's map are near, false
-     *         otherwise.
-     */
-    boolean areTerritoriesNear(String territory1, String territory2);
-
-    /**
-     * If the game is in CARD_MANAGING phase, makes it go to the next phase.
-     */
-    void endCardsPhase();
+    Integer getActivePlayer();
 
     /**
      * 
@@ -134,6 +54,5 @@ public interface GameLoopManager {
      *         first player
      */
     Long getTurnsCount();
-
 
 }

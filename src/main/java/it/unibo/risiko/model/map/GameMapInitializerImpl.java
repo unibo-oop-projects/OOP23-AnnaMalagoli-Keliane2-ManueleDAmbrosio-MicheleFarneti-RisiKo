@@ -24,20 +24,17 @@ public class GameMapInitializerImpl implements GameMapInitializer {
 
     private static final Random randomNumberGenerator = new Random();
 
-    private Territories territories;
-    private final String name;
+    private final String mapName;
     private final int maxPlayers;
 
     public GameMapInitializerImpl(String mapName, String resourcesPackageString) {
-        this.name = mapName;
+        this.mapName = mapName;
         this.resourcesPackageString = resourcesPackageString;
-        this.territories = new Territories(buildResourceLocator(FILE_SEPARATOR + "territories.txt"));
-        territories.shuffle();
         maxPlayers = GameMapInitializer.getMaxPlayers(buildResourceLocator());
     }
 
     private String buildResourceLocator(String resourceName) {
-        return resourcesPackageString + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + name + FILE_SEPARATOR + resourceName;
+        return resourcesPackageString + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + resourceName;
     }
 
     private String buildResourceLocator() {
@@ -55,8 +52,8 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getMapName() {
+        return mapName;
     }
 
     @Override
