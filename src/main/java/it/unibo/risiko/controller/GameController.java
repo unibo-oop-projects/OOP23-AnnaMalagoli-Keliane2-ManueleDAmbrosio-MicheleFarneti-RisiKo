@@ -169,6 +169,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     currentPlayer().getOwnedCards().stream().toList());
             switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
+                    System.out.println("p: " + currentPlayer().getColor_id() + " armies: " + currentPlayer().getArmiesToPlace());
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     handleAIBehaviour();
                     break;
@@ -178,11 +179,13 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     territorySelected(aiBehaviour.getNextAttackedTerritory());
                     break;
                 case CARDS_MANAGING:
-                    List<Card> combo = new ArrayList<>();
-                    if (!aiBehaviour.checkCardCombo().isEmpty()) {
+                    List<Card> combo = aiBehaviour.checkCardCombo();
+                    if (!combo.isEmpty()) {
                         playCards(combo.get(FIRST_CARD).getTerritoryName(),
                                 combo.get(SECOND_CARD).getTerritoryName(),
                                 combo.get(THIRD_CARD).getTerritoryName());
+                    } else {
+                        exitCardsManagingPhase();
                     }
                     exitCardsManagingPhase();
                     handleAIBehaviour();
