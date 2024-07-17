@@ -715,6 +715,9 @@ public class GameViewImpl implements GameView {
     }
 
     /**
+     * Method used to create a panel that contains the table of the territories.
+     * @param terr is the list of territories
+     * @param players is the list of players
      * 
      * @author Anna Malagoli
      */
