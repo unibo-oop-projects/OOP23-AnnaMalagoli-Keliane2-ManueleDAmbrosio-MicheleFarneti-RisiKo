@@ -3,7 +3,6 @@ package it.unibo.risiko.model.game;
 import java.util.List;
 
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
@@ -15,7 +14,14 @@ import it.unibo.risiko.model.player.Player;
  * @author Michele Farneti
  */
 
-public interface Game {
+public interface GameLoopManager {
+
+    /**
+     * @param activePlayer The index of the current player
+     * @param playersCount The amount of player currentlyt in the game
+     * @return The index of the next player
+     */
+    Integer nextPlayer(Integer activePlayer, Integer playersCount);
 
     /**
      * Allows the game to go on by updating the active players, but only after
@@ -129,10 +135,5 @@ public interface Game {
      */
     Long getTurnsCount();
 
-    int getNumberOfArmies(String territory);
-
-    void removeArmies(String Territory, int numberOfMovingArmies);
-
-    void setOwner(String Territory, String color_id);
 
 }

@@ -25,27 +25,18 @@ import it.unibo.risiko.model.player.Player;
  * @author Michele Farneti
  */
 
-public class GameImpl implements Game {
+public class GameLoopManagerImpl implements GameLoopManager {
 
-    private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
-    private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
-    private static final int PLACEABLE_ARMIES_PER_TURN = 3;
+    private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
     private static final int MIN_CARDS_PLAYABLE = 3;
-    private static final Random randomNumberGenerator = new Random();
 
-    private final GameMapInitializer map;
-
-    private int activePlayer = 0;
     private int armiesPlaced = 0;
     private long turnsCount = 1;
     private List<Player> players = new LinkedList<Player>();
     private GameStatus status = GameStatus.TERRITORY_OCCUPATION;
     private Deck deck;
 
-    protected GameImpl(final GameMapInitializer map, final List<Player> players) {
-        this.map = map;
-        this.players.addAll(players);
-        this.deck = new DeckImpl(map.getDeckPath());
+    public GameLoopManagerImpl() {
     }
 
     @Override
@@ -56,54 +47,6 @@ public class GameImpl implements Game {
         assignTerritories();
         activePlayer = 0;
         handleAIBehaviour();
-    }
-
-    /**
-     * Assigns a target to every player
-     */
-    private void assignTargets() {
-        players.stream().forEach(p -> p.setTarget(generateRandomTarget(p)));
-    }
-
-    /**
-     * Gennerates a random target for a given player
-     * 
-     * @param player The player who is getting the target
-     * @return The random target
-     */
-    private Target generateRandomTarget(Player player) {
-        switch (TargetType.randomTargetType()) {
-            case PLAYER:
-                return new DestroyPlayerTarget(player, players.get(
-                        (players.indexOf(player) + randomNumberGenerator.nextInt(1, players.size())) % players.size()));
-            case TERRITORY:
-                return new ConquerTerritoriesTarget(player, randomNumberGenerator.nextInt(
-                        Math.toIntExact(
-                                Math.round(map.getTerritories().size() * MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),
-                        Math.toIntExact(
-                                Math.round(map.getTerritories().size() * MAX_TERRITORIES_TO_CONQUER_PERCENTAGE))));
-            case CONTINENT:
-                return new ConquerContinentTarget(player,
-                        map.getContinents().get(randomNumberGenerator.nextInt(map.getContinents().size())));
-            default:
-                return new ConquerTerritoriesTarget(player, map.getTerritories().size());
-        }
-    }
-
-    /**
-     * Private function used to split the map territories between the players in the
-     * game, it also
-     * places one army per territory for each player
-     */
-    private void assignTerritories() {
-        var territoriesToAssign = map.getTerritories();
-
-        for (Territory territory : territoriesToAssign) {
-            players.get(activePlayer).addTerritory(territory.getTerritoryName());
-            territory.addArmies(1);
-            players.get(activePlayer).decrementArmiesToPlace();
-            activePlayer = nextPlayer();
-        }
     }
 
     @Override
@@ -253,26 +196,10 @@ public class GameImpl implements Game {
         return this.status;
     }
 
-    /**
-     * @return The index of the next active player, avoiding all of the elliminated
-     *         players.
-     */
-    private int nextPlayerIfNotDefeated() {
-        if (!(players.get((activePlayer + 1) % players.size()).isDefeated())) {
-            return nextPlayer();
-        } else {
-            activePlayer = nextPlayer();
-            return nextPlayer();
-        }
 
-    }
-
-    /**
-     * 
-     * @return The index of the next player, independently if it is Defeated or not
-     */
-    private int nextPlayer() {
-        return (activePlayer + 1) % players.size();
+    @Override
+    public Integer nextPlayer(Integer activePlayer,Integer playersCount) {
+        return (activePlayer + 1) %playersCount;
     }
 
     /**

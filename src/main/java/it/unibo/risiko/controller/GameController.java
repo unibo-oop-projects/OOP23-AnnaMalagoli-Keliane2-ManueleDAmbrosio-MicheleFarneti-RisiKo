@@ -28,6 +28,8 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
+import it.unibo.risiko.model.game.GameLoopManager;
+import it.unibo.risiko.model.game.GameLoopManagerImpl;
 import it.unibo.risiko.view.InitialViewObserver;
 import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.gameView.GameView;
@@ -60,6 +62,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private List<Player> players;
     private Deck deck;
     private GameStatus gameStatus;
+    private int activePlayerIndex;
+    private GameLoopManager gameLoopManager;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -227,8 +231,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.updateLog();
 
         // Destroying armies.
-        game.removeArmies(attackerTerritory.get(),attackPhase.getAttackerLostArmies());
-        game.removeArmies(defenderTerritory.get(),attackPhase.getDefenderLostArmies());
+        game.removeArmies(attackerTerritory.get(), attackPhase.getAttackerLostArmies());
+        game.removeArmies(defenderTerritory.get(), attackPhase.getDefenderLostArmies());
 
         view.drawDicePanels();
     }
@@ -266,8 +270,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
-        game.setOwner(defenderTerritory.get(),currentPlayer().get().getColor_id());
-        game.removeArmies(attackerTerritory.get(),numberOfMovingArmies);
+        game.setOwner(defenderTerritory.get(), currentPlayer().get().getColor_id());
+        game.removeArmies(attackerTerritory.get(), numberOfMovingArmies);
         game.placeArmies(defenderTerritory.get(), numberOfMovingArmies);
 
         view.closeAttackPanel();
@@ -374,8 +378,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     @Override
-    public void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers) {
-        final GameMapInitializer gameInitializer= new GameMapInitializerImpl(mapName, resourcesPackageString);
+    public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers) {
+        final GameMapInitializer gameInitializer = new GameMapInitializerImpl(mapName, resourcesPackageString);
         PlayerFactory playerFactory = new SimplePlayerFactory();
 
         for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
@@ -385,25 +389,29 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 players.add(playerFactory.createStandardPlayer());
             }
         }
-        
+
+        gameLoopManager = new GameLoopManagerImpl();
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
         this.territories = new Territories(gameInitializer.getTerritoriesPath());
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
-        assignTerritories();
+        players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStratingArmies(players.size())));
+        players.forEach(p-> p.setTarget(gameInitializer.generateTarget(players.indexOf(p),players,territories)));
+        assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.setupGameView();
     }
 
     /**
+     * @param minimuArmiesPerTerritory The minimum number of armies every territory
+     *                                 has to have when it's owned by someone
      * @author Michele Farneti
      */
-    private void assignTerritories() {
-        var territoriesToAssign = map.getTerritories();
-
-        for (Territory territory : territoriesToAssign) {
-            players.get(activePlayer).addTerritory(territory.getTerritoryName());
-            territory.addArmies(1);
-            players.get(activePlayer).decrementArmiesToPlace();
-            activePlayer = nextPlayer();
+    private void assignTerritories(Integer minimumArmiesPerTerritory) {
+        for (Territory territory : this.territories.getListTerritories()) {
+            players.get(activePlayerIndex).addTerritory(territory.getTerritoryName());
+            territories.setOwner(territory.getTerritoryName(), players.get(activePlayerIndex).getColor_id());
+            territories.addArmiesInTerritory(territory.getTerritoryName(), minimumArmiesPerTerritory);
+            players.get(activePlayerIndex).decrementArmiesToPlace();
+            activePlayerIndex = gameLoopManager.nextPlayer(activePlayerIndex, players.size());
         }
     }
 

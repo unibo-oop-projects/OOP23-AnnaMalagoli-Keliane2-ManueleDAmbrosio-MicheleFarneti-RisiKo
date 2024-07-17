@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import it.unibo.risiko.model.objective.Target;
+import it.unibo.risiko.model.player.Player;
+
 /**
  * The gameMap class manages all of the enviroment features of the game map,
  * such us
@@ -21,6 +24,11 @@ public interface GameMapInitializer {
      *         same time.
      */
     int getMaxPlayers();
+
+    /**
+     * @return The minimum number of armies every territory has to be occupied by
+     */
+    int minimumArmiesPerTerritory();
 
     /**
      * 
@@ -64,4 +72,13 @@ public interface GameMapInitializer {
      * @return Returns the path where to get the territories for the given map from
      */
     public String getTerritoriesPath();
+
+    /**
+     * Generates a random target for the given activePlayer based on the context of the game
+     * @param activePLayer
+     * @param players
+     * @param territories
+     * @return
+     */
+    Target generateTarget(final Integer activePLayer,final List<Player> players, final Territories territories);
 }
