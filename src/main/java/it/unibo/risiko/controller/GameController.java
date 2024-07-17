@@ -187,7 +187,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     }
                     break;
                 case READY_TO_ATTACK:
-                    //setAttacking();
+                    setAttacking();
                     break;
                 case TERRITORY_OCCUPATION:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
@@ -332,6 +332,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
                 territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
             }
+            this.gameStatus = GameStatus.READY_TO_ATTACK; //prova
             skipTurn();
         }
     }
