@@ -136,7 +136,7 @@ public class DeckImpl implements Deck {
      * @param name3 is the name of the territory in the third card to be played
      * @param player is the one who plays the three cards during his turn
      */
-    public void playCards(final String name1, final String name2, final String name3, final  Player player) {
+    public void playCards(final String name1, final String name2, final String name3, final Player player) {
         int numberOfArmies = 0;
         Card card1 = getCardByTerritoryName(name1, player).get();
         Card card2 = getCardByTerritoryName(name2, player).get();

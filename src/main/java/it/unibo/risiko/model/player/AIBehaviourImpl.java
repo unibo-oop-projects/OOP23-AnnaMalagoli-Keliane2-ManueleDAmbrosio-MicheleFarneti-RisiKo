@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.map.Territory;
@@ -26,14 +27,12 @@ public class AIBehaviourImpl implements AIBehaviour {
     private List<Card> playerCardList;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
-    private int territoryIndex;
 
     public AIBehaviourImpl(final List<Territory> playerOwnedTerritories, final List<Card> playerOwnedCards) {
         this.playerTerritoryList = new ArrayList<Territory>(playerOwnedTerritories);
         this.playerCardList = new ArrayList<Card>(playerOwnedCards);
         this.nextAttackedTerritory = Optional.empty();
         this.nextAttackingTerritory = Optional.empty();
-        this.territoryIndex = INITIAL_INDEX;
     }
 
     @Override
@@ -53,11 +52,8 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public Territory decidePositioning() {
-        territoryIndex++;
-        if (territoryIndex >= playerTerritoryList.size()) {
-            territoryIndex = INITIAL_INDEX;
-        } 
-        return playerTerritoryList.stream().collect(Collectors.toList()).get(territoryIndex);
+        Random rnd = new Random();
+        return playerTerritoryList.get(rnd.nextInt(playerTerritoryList.size()));
     }
 
     @Override

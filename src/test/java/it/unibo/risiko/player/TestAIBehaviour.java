@@ -78,8 +78,8 @@ public class TestAIBehaviour {
         int numberOfCards = 0;
         for (int i = 0; i < 10; i++) {
             do {
-                System.out.println(deck.getListCards().size());
                 player.addCard(deck.pullCard());
+                ai = new AIBehaviourImpl(List.of(t1, t2), player.getOwnedCards().stream().toList());
                 numberOfCards++;
             } while (ai.checkCardCombo().isEmpty());
             assertEquals(3, ai.checkCardCombo().size());

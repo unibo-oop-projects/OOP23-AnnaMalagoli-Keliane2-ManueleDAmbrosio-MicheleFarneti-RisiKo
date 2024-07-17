@@ -1,10 +1,12 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.event.EventImpl;
@@ -42,14 +44,19 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Keliane2
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
-    private GameMapInitializer gameInitializer;
-    private GameLoopManager gameLoopManager;
-    private GameView view;
     private static final String FILE_SEPARATOR = File.separator;
     private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
             + FILE_SEPARATOR + "savegames.json";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
+    private static final int MAX_ATTACKING_ARMIES = 3;
+    private static final int MIN_ARMIES = 1;
+    private static final int FIRST_CARD = 0;
+    private static final int SECOND_CARD = 1;
+    private static final int THIRD_CARD = 2;
+    private GameMapInitializer gameInitializer;
+    private GameLoopManager gameLoopManager;
+    private GameView view;
     private Optional<String> attackerTerritory = Optional.empty();
     private Optional<String> defenderTerritory = Optional.empty();
     private AttackPhase attackPhase;
@@ -148,24 +155,38 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * AIBehaviour handler
+     * 
      * @author Michele Farneti
      * @autho Manuele D'Ambrosio
      */
     private void handleAIBehaviour() {
         if (currentPlayer().isAI()) {
-            AIBehaviour aiBehaviour = new AIBehaviourImpl(currentPlayer().getOwnedTerritories().stream().map(t-> getTerritoryFromString(t)).toList(),currentPlayer().getOwnedCards().stream().toList());
-            switch(this.gameStatus){
+            AIBehaviour aiBehaviour = new AIBehaviourImpl(
+                    currentPlayer().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList(),
+                    currentPlayer().getOwnedCards().stream().toList());
+            switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
+                    territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     break;
                 case ATTACKING:
+                    aiBehaviour.decideAttack(territories.getListTerritories());
+                    territorySelected(aiBehaviour.getNextAttackingTerritory());
+                    territorySelected(aiBehaviour.getNextAttackedTerritory());
                     break;
                 case CARDS_MANAGING:
-                    break;
-                case GAME_OVER:
+                    List<Card> combo = new ArrayList<>();
+                    if (!aiBehaviour.checkCardCombo().isEmpty()) {
+                        playCards(combo.get(FIRST_CARD).getTerritoryName(),
+                                combo.get(SECOND_CARD).getTerritoryName(),
+                                combo.get(THIRD_CARD).getTerritoryName());
+                    }
+                    exitCardsManagingPhase();
                     break;
                 case READY_TO_ATTACK:
+                    setAttacking();
                     break;
                 case TERRITORY_OCCUPATION:
+                    territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     break;
                 default:
                     break;
@@ -283,8 +304,28 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Manuele D'Ambrosio
      */
     private void startAttack() {
-        view.createAttack(attackerTerritory.get(), defenderTerritory.get(),
-                getArmiesInTerritory(attackerTerritory.get()));
+        if (!currentPlayer().isAI()) {
+            view.createAttack(attackerTerritory.get(), defenderTerritory.get(),
+                    getArmiesInTerritory(attackerTerritory.get()));
+        } else {
+            attackPhase = new AttackPhaseImpl(
+                    getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() >= MAX_ATTACKING_ARMIES
+                            ? MAX_ATTACKING_ARMIES
+                            : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies(),
+                    getArmiesInTerritory(defenderTerritory.get()));
+
+            territories.removeArmiesInTerritory(attackerTerritory.get(), attackPhase.getAttackerLostArmies());
+            territories.removeArmiesInTerritory(defenderTerritory.get(), attackPhase.getDefenderLostArmies());
+
+            // Conquer of the territory.
+            if (attackPhase.isTerritoryConquered()) {
+                int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
+                territories.setOwner(defenderTerritory.get(), currentPlayer().getColor_id());
+                territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
+                territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
+            }
+            skipTurn();
+        }
     }
 
     /**
@@ -444,7 +485,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             if (index < numberOfStandardPlayers) {
                 players.add(playerFactory.createStandardPlayer());
             } else {
-                players.add(playerFactory.createStandardPlayer());
+                players.add(playerFactory.createAIPlayer());
             }
         }
 

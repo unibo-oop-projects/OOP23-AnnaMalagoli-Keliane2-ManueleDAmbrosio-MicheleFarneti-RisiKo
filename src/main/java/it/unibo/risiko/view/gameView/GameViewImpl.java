@@ -150,7 +150,8 @@ public class GameViewImpl implements GameView {
      * @param frameWidth
      * @param frameHeight
      */
-    public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator, final GameViewObserver observer) {
+    public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator,
+            final GameViewObserver observer) {
         this.gameViewObserver = observer;
         this.frameWidth = frameWidth;
         this.frameHeigth = frameHeight;
@@ -205,7 +206,6 @@ public class GameViewImpl implements GameView {
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
 
-        
         logPanel.setBounds(gamePanel.getWidth(), 0, mainFrame.getWidth() - gamePanel.getWidth(),
                 mainFrame.getHeight() / 2);
         logPanel.setBackground(ATTACK_BAR_BACKGROUND_COLOR);
@@ -463,7 +463,7 @@ public class GameViewImpl implements GameView {
     private void getTanksCoordinates() {
         var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
         try (BufferedReader coordinateReader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filePath),StandardCharsets.UTF_8));) {
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));) {
             coordinateReader.lines().map(s -> s.split(" ")).forEach(
                     t -> tanksCoordinates.put(t[0], new Position(Integer.parseInt(t[1]), Integer.parseInt(t[2]))));
         } catch (IOException e) {
@@ -472,7 +472,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showTurnIcon(final Player player, final int playerIndex){
+    public void showTurnIcon(final Player player, final int playerIndex) {
         if (player.isAI()) {
             iconsMap.put(
                     player.getColor_id(),
@@ -490,7 +490,8 @@ public class GameViewImpl implements GameView {
             icon.getValue().setColor(icon.getKey());
             icon.getValue().setEnabled(false);
             icon.getValue().setBorder(
-                    BorderFactory.createLineBorder(stringToColor(icon.getKey().toLowerCase(Locale.ROOT)), ARMIES_COUNT_THICKNESS));
+                    BorderFactory.createLineBorder(stringToColor(icon.getKey().toLowerCase(Locale.ROOT)),
+                            ARMIES_COUNT_THICKNESS));
             attackBarLayoutPane.add(icon.getValue(), TURN_ICON_LAYER, 0);
         }
     }
@@ -705,18 +706,19 @@ public class GameViewImpl implements GameView {
     public void createLog(Register reg, List<Player> l) {
         log = new LoggerView(reg, l);
         log.setPreferredSize(new Dimension(mainFrame.getWidth() - gamePanel.getWidth(),
-        mainFrame.getHeight() / 2));
+                mainFrame.getHeight() / 2));
         logPanel.add(log);
     }
 
     @Override
-    public void updateLog(){
+    public void updateLog() {
         log.showAllEvents(log.getTextArea());
     }
 
     /**
      * Method used to create a panel that contains the table of the territories.
-     * @param terr is the list of territories
+     * 
+     * @param terr    is the list of territories
      * @param players is the list of players
      * 
      * @author Anna Malagoli
