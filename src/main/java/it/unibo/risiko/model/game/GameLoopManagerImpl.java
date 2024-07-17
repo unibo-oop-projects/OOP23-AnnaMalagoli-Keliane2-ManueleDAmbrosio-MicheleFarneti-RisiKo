@@ -199,6 +199,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case ARMIES_PLACEMENT:
                     if (player.getArmiesToPlace() == LAST_ARMY) {
                         this.status = GameStatus.READY_TO_ATTACK;
+                        this.skippedToAI = false;
                     }
                     return true;
                 default:
@@ -210,7 +211,11 @@ public class GameLoopManagerImpl implements GameLoopManager {
 
     @Override
     public boolean skippedToAI() {
-        return skippedToAI;
+        if(skippedToAI){
+            skippedToAI = false;
+            return true;
+        }
+        return false;
     }
 
 }

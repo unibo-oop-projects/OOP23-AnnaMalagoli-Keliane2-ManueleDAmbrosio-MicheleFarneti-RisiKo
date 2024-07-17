@@ -137,7 +137,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             redrawView();
             view.setCurrentPlayer(currentPlayer());
             currentPlayer().computeReinforcements(territories.getListContinents());
-            if (gameStatus == GameStatus.CARDS_MANAGING && currentPlayer().getOwnedCards().size() > 0) {
+            if (gameStatus == GameStatus.CARDS_MANAGING && currentPlayer().getOwnedCards().size() > 0 && !currentPlayer().isAI()) {
                 showCards();
             }
             redrawView();
@@ -146,6 +146,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             view.enableSkip(false);
             if(gameLoopManager.skippedToAI()){
                 handleAIBehaviour();
+                redrawView();
             }
         }
     }
@@ -169,6 +170,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
+                    handleAIBehaviour();
                     break;
                 case ATTACKING:
                     aiBehaviour.decideAttack(territories.getListTerritories());
@@ -183,17 +185,19 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                                 combo.get(THIRD_CARD).getTerritoryName());
                     }
                     exitCardsManagingPhase();
+                    handleAIBehaviour();
                     break;
                 case READY_TO_ATTACK:
                     setAttacking();
+                    handleAIBehaviour();
                     break;
                 case TERRITORY_OCCUPATION:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
+                    handleAIBehaviour();
                     break;
                 default:
                     break;
             }
-            handleAIBehaviour();
         }
     }
 
@@ -228,6 +232,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             case TERRITORY_OCCUPATION:
                 if (placeArmies(territory, 1)) {
                     redrawView();
+                    if(gameLoopManager.skippedToAI()){
+                        handleAIBehaviour();
+                        redrawView();
+                    }
                 }
                 break;
             case ARMIES_PLACEMENT:
@@ -254,9 +262,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 break;
         }
         redrawView();
-        if(gameLoopManager.skippedToAI()){
-            handleAIBehaviour();
-        }
     }
 
     private boolean placeArmies(String territory, Integer nArmies) {
@@ -505,6 +510,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.register = new RegisterImpl();
         this.setupGameView();
         handleAIBehaviour();
+        redrawView();
     }
 
     /**
