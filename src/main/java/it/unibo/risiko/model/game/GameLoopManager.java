@@ -64,4 +64,6 @@ public interface GameLoopManager {
     boolean placeArmiesIfPossibile(Player player, List<Player> players, String territory, GameStatus gameStatus,
             Integer nArmies, Territories territories);
 
+    boolean skippedToAI();
+
 }
