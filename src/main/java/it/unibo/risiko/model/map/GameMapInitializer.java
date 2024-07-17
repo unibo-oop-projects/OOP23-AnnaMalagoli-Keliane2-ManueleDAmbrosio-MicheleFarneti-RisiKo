@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.risiko.model.objective.Target;
 import it.unibo.risiko.model.player.Player;
 
@@ -61,6 +66,20 @@ public interface GameMapInitializer {
         } catch (IOException e) {
         }
         return MAX_PLAYERS_SMALL_MAPS;
+    }
+
+    @SuppressFBWarnings
+    public static Map<String, Integer> getAvailableMaps(String resourcesPath) {
+        Map<String, Integer> availableMaps = new HashMap<>();
+        var mapsFoldersLocations = resourcesPath + "maps";
+        try {
+            for (Path p : Files.list(Path.of(mapsFoldersLocations)).collect(Collectors.toList())) {
+                var key = Optional.ofNullable(p.getFileName().toString());
+                var value = Optional.ofNullable(GameMapInitializer.getMaxPlayers(resourcesPath + "maps" + File.separator + p.getFileName().toString()));
+                key.ifPresent(k -> value.ifPresent( v-> availableMaps.put(k,v)));
+            }
+        } catch (IOException e) {}
+        return availableMaps;
     }
 
     /**

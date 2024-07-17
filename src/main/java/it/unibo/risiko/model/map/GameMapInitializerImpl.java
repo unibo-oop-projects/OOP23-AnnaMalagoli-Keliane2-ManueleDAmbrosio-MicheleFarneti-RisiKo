@@ -18,7 +18,7 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     private static final String FILE_SEPARATOR = File.separator;
     private final String resourcesPackageString;
 
-    private static final int MINIMUM_ARMIES = 20;
+    private static final int MINIMUM_ARMIES = 10;
     private static final int MINIMUM_ARMIES_PER_TERRITORY = 1;
     private static final int ARMIES_STEP = 5;
 

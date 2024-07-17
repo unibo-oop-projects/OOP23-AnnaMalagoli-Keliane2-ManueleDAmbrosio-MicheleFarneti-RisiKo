@@ -28,6 +28,7 @@ import it.unibo.risiko.model.player.Player;
 
 public class GameLoopManagerImpl implements GameLoopManager {
 
+    private static final Integer LAST_ARMY = 1;
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
     private static final int MIN_CARDS_PLAYABLE = 3;
@@ -37,7 +38,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
     private int armiesPlaced = 0;
     private long turnsCount = 0;
     private GameStatus status;
-    private Integer activePlayer = 1;
+    private Integer activePlayer = 0;
 
     public GameLoopManagerImpl() {
         status = GameStatus.TERRITORY_OCCUPATION;
@@ -51,7 +52,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 // Current player gets updated, if no player has armies left to place, the next
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
-                    if (getTotalArmiesLeftToPlace(players) == 0) {
+                    if (getTotalArmiesLeftToPlace(players) == LAST_ARMY) {
                         nextGamePhase(player, players);
                     } else {
                         armiesPlaced = 0;
@@ -124,12 +125,12 @@ public class GameLoopManagerImpl implements GameLoopManager {
         switch (status) {
             case TERRITORY_OCCUPATION:
                 if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
-                        || players.get(player).getArmiesToPlace() == 0) {
+                        || players.get(player).getArmiesToPlace() == LAST_ARMY) {
                     return true;
                 }
                 return false;
             case ARMIES_PLACEMENT:
-                return players.get(player).getArmiesToPlace() == 0;
+                return players.get(player).getArmiesToPlace() == LAST_ARMY;
             case CARDS_MANAGING:
             case READY_TO_ATTACK:
             case ATTACKING:
@@ -146,40 +147,6 @@ public class GameLoopManagerImpl implements GameLoopManager {
      */
     private int getTotalArmiesLeftToPlace(List<Player> players) {
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
-    }
-
-    @Override
-    public boolean placeArmies(final String territory, final int nArmies) {
-        if (getCurrentPlayer().getArmiesToPlace() > 0) {
-            switch (status) {
-                case TERRITORY_OCCUPATION:
-                    if (armiesPlaced < PLACEABLE_ARMIES_PER_TURN
-                            && getCurrentPlayer().isOwnedTerritory(territory)) {
-                        map.addArmies(territory, nArmies);
-                        armiesPlaced++;
-                        getCurrentPlayer().decrementArmiesToPlace();
-                        if (armiesPlaced == PLACEABLE_ARMIES_PER_TURN
-                                || getCurrentPlayer().getArmiesToPlace() == 0) {
-                            skipTurn();
-                        }
-                        return true;
-                    }
-                    break;
-                case ARMIES_PLACEMENT:
-                    if (getCurrentPlayer().isOwnedTerritory(territory)) {
-                        map.addArmies(territory, nArmies);
-                        getCurrentPlayer().decrementArmiesToPlace();
-                        if (getCurrentPlayer().getArmiesToPlace() == 0) {
-                            nextGamePhase();
-                        }
-                        return true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -245,7 +212,8 @@ public class GameLoopManagerImpl implements GameLoopManager {
             } else {
                 players.get(activePlayer)
                         .setTarget(new ConquerTerritoriesTarget(players.get(playerIndex), randomNumberGenerator
-                                .nextInt(Math.toIntExact(Math.round(territories.getListTerritories().size() * NEW_TARGET_PERCENTAGE)))));
+                                .nextInt(Math.toIntExact(
+                                        Math.round(territories.getListTerritories().size() * NEW_TARGET_PERCENTAGE)))));
             }
         }
         return false;
@@ -255,4 +223,32 @@ public class GameLoopManagerImpl implements GameLoopManager {
     public Long getTurnsCount() {
         return turnsCount;
     }
+
+    @Override
+    public boolean placeArmiesIfPossibile(final Player player, final List<Player> players, final String territory,
+            final GameStatus gameStatus, final Integer nArmies, final Territories territories) {
+        if (player.getArmiesToPlace() > 0 && player.isOwnedTerritory(territory)) {
+            switch (gameStatus) {
+                case TERRITORY_OCCUPATION:
+                    if (armiesPlaced < PLACEABLE_ARMIES_PER_OCCUPATION_TURN) {
+                        armiesPlaced++;
+                        if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
+                                || player.getArmiesToPlace() == LAST_ARMY) {
+                            skipTurn(players.indexOf(player), players, territories, gameStatus);
+                        }
+                        return true;
+                    }
+                    break;
+                case ARMIES_PLACEMENT:
+                    if (player.getArmiesToPlace() == LAST_ARMY) {
+                        this.status = GameStatus.READY_TO_ATTACK;
+                    }
+                    return true;
+                default:
+                    break;
+            }
+        }
+        return false;
+    }
+
 }

@@ -21,4 +21,6 @@ public interface InitialViewObserver {
      * @param height Window's height
      */
     void startGameWindow(Integer width, Integer height);
+
+    void continueSavedGame();
 }

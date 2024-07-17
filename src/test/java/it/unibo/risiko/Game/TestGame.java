@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.risiko.model.game.GameFactory;
-import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;

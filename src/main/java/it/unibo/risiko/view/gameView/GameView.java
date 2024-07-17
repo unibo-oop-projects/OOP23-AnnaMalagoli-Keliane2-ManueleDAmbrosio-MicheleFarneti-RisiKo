@@ -48,27 +48,24 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(final List<String> territories);
+    void showTanks(final List<Territory> territories);
 
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param Player       the player color
+     * @param Player       the player 
      * @param playersIndex The player's index in the games turns
-     * @param isAI         True if the player is AI
      * @author Michele Farneti
      */
-    void showTurnIcon(final String player, final int playerIndex, boolean isAI);
+    void showTurnIcon(final Player player, final int playerIndex);
 
     /**
      * Edits the view in order to show wich player is the current player.
      * 
-     * @param playerColor   The color of the player
-     * @param armiesToPlace The number of armies the plyaer has to place
-     * @param taget         The current player's target description
+     * @param player 
      * @author Michele Farneti
      */
-    void setCurrentPlayer(final String playerColor, Integer armiesToPlace, String target);
+    void setCurrentPlayer(final Player player);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
@@ -97,7 +94,7 @@ public interface GameView {
      * @param numberOfArmies The count of the armies placed over the territory.
      * @author Michele Farneti
      */
-    void redrawTank(final String territory, final String playerColor, Integer numberOfArmies);
+    void redrawTank(Territory t);
 
     /**
      * Updates the gameView making it show who is the winner of the game

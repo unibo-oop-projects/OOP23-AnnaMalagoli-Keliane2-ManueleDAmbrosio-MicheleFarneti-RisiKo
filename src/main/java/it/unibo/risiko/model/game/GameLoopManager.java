@@ -55,4 +55,13 @@ public interface GameLoopManager {
      */
     Long getTurnsCount();
 
+    /**
+     * Alerts the gameLoopManager that the player is going to place armies. IF the action is possible
+     * updates the amries placed count.
+     * 
+     * @return True if the player can place the armies, false otherwise.
+     */
+    boolean placeArmiesIfPossibile(Player player, List<Player> players, String territory, GameStatus gameStatus,
+            Integer nArmies, Territories territories);
+
 }
