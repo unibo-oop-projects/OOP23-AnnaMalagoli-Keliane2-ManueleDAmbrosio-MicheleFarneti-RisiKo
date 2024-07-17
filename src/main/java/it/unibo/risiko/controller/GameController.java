@@ -137,14 +137,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             redrawView();
             view.setCurrentPlayer(currentPlayer());
             currentPlayer().computeReinforcements(territories.getListContinents());
-            if (gameStatus == GameStatus.CARDS_MANAGING && currentPlayer().getOwnedCards().size() > 0 && !currentPlayer().isAI()) {
+            if (gameStatus == GameStatus.CARDS_MANAGING && currentPlayer().getOwnedCards().size() > 0
+                    && !currentPlayer().isAI()) {
                 showCards();
             }
             redrawView();
             view.enableMovements(false);
             view.enableAttack(false);
             view.enableSkip(false);
-            if(gameLoopManager.skippedToAI()){
+            if (gameLoopManager.skippedToAI()) {
                 handleAIBehaviour();
                 redrawView();
             }
@@ -169,14 +170,19 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     currentPlayer().getOwnedCards().stream().toList());
             switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
-                    System.out.println("p: " + currentPlayer().getColor_id() + " armies: " + currentPlayer().getArmiesToPlace());
+                    System.out.println(
+                            "p: " + currentPlayer().getColor_id() + " armies: " + currentPlayer().getArmiesToPlace());
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     handleAIBehaviour();
                     break;
                 case ATTACKING:
-                    aiBehaviour.decideAttack(territories.getListTerritories());
-                    territorySelected(aiBehaviour.getNextAttackingTerritory());
-                    territorySelected(aiBehaviour.getNextAttackedTerritory());
+                    if (aiBehaviour.decideAttack(territories.getListTerritories())) {
+                        territorySelected(aiBehaviour.getNextAttackingTerritory());
+                        territorySelected(aiBehaviour.getNextAttackedTerritory());
+                    } else {
+                        this.gameStatus = GameStatus.READY_TO_ATTACK;
+                        skipTurn();
+                    }
                     break;
                 case CARDS_MANAGING:
                     List<Card> combo = aiBehaviour.checkCardCombo();
@@ -235,7 +241,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             case TERRITORY_OCCUPATION:
                 if (placeArmies(territory, 1)) {
                     redrawView();
-                    if(gameLoopManager.skippedToAI()){
+                    if (gameLoopManager.skippedToAI()) {
                         handleAIBehaviour();
                         redrawView();
                     }
@@ -338,7 +344,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
                 territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
             }
-            this.gameStatus = GameStatus.READY_TO_ATTACK; //prova
+            this.gameStatus = GameStatus.READY_TO_ATTACK; // prova
             skipTurn();
         }
     }

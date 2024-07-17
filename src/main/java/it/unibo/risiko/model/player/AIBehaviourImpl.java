@@ -61,14 +61,12 @@ public class AIBehaviourImpl implements AIBehaviour {
         Territory attackingTerritory;
         Iterator<Territory> it = playerTerritoryList.iterator();
         attackingTerritory = it.next();
-        while (!findAdjacentEnemy(attackingTerritory, territoryList)) {
+        while (!findAdjacentEnemy(attackingTerritory, territoryList)
+                || attackingTerritory.getNumberOfArmies() <= MINIMUM_ARMIES) {
             attackingTerritory = it.next();
             if (!it.hasNext()) {
                 return false;
             }
-        }
-        if (attackingTerritory.getNumberOfArmies() <= MINIMUM_ARMIES) {
-            return false;
         }
         nextAttackingTerritory = Optional.of(attackingTerritory);
         return true;
