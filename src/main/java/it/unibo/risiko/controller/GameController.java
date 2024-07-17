@@ -19,6 +19,8 @@ import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.player.AIBehaviour;
+import it.unibo.risiko.model.player.AIBehaviourImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
@@ -141,6 +143,34 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private void updateGameStatus() {
         activePlayerIndex = gameLoopManager.getActivePlayer();
         gameStatus = gameLoopManager.getGameStatus();
+        handleAIBehaviour();
+    }
+
+    /**
+     * AIBehaviour handler
+     * @author Michele Farneti
+     * @autho Manuele D'Ambrosio
+     */
+    private void handleAIBehaviour() {
+        if (currentPlayer().isAI()) {
+            AIBehaviour aiBehaviour = new AIBehaviourImpl(currentPlayer().getOwnedTerritories().stream().map(t-> getTerritoryFromString(t)).toList(),currentPlayer().getOwnedCards().stream().toList());
+            switch(this.gameStatus){
+                case ARMIES_PLACEMENT:
+                    break;
+                case ATTACKING:
+                    break;
+                case CARDS_MANAGING:
+                    break;
+                case GAME_OVER:
+                    break;
+                case READY_TO_ATTACK:
+                    break;
+                case TERRITORY_OCCUPATION:
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -208,8 +238,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
-                gameStatus = gameLoopManager.getGameStatus();
-                activePlayerIndex = gameLoopManager.getActivePlayer();
+                updateGameStatus();
                 if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
                     currentPlayer().computeReinforcements(territories.getListContinents());
                 }
@@ -220,8 +249,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
-                gameStatus = gameLoopManager.getGameStatus();
-                activePlayerIndex = gameLoopManager.getActivePlayer();
+                updateGameStatus();
                 return true;
             }
         }
@@ -326,7 +354,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         // defenderTerritory.get(),
         // game.getOwner(attackerTerritory.get().getTerritoryName()),
         // Optional.empty(), Optional.of(numberOfMovingArmies));
-        
+
         resetAttack();
         view.updateLog();
         redrawView();
@@ -429,6 +457,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();
         this.setupGameView();
+        handleAIBehaviour();
     }
 
     /**

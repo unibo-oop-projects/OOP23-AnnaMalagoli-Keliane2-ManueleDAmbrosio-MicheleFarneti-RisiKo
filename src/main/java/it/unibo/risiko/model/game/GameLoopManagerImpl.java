@@ -54,7 +54,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
                     if (getTotalArmiesLeftToPlace(players) == LAST_ARMY) {
-                        nextGamePhase(player, players,territories.getListContinents());
+                        nextGamePhase(player, players, territories.getListContinents());
                     } else {
                         armiesPlaced = 0;
                     }
@@ -63,7 +63,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case CARDS_MANAGING:
                 case ATTACKING:
                 case READY_TO_ATTACK:
-                    nextGamePhase(player, players,territories.getListContinents());
+                    nextGamePhase(player, players, territories.getListContinents());
                     break;
                 default:
                     break;
@@ -164,45 +164,6 @@ public class GameLoopManagerImpl implements GameLoopManager {
     @Override
     public Integer nextPlayer(Integer activePlayer, Integer playersCount) {
         return (activePlayer + 1) % playersCount;
-    }
-
-    /**
-     * 
-     * Based on the game status, handles AI's behavior
-     * 
-     */
-    private void handleAIBehaviour() {
-        // if (getCurrentPlayer().isAI()) {
-        // var aiBehaviour = new AIBehaviourImpl(getCurrentPlayer());
-        // switch (status) {
-        // case TERRITORY_OCCUPATION:
-        // while(getCurrentPlayer().isAI()){
-        // this.placeArmies(aiBehaviour.decidePositioning(), 1);
-        // }
-        // break;
-        // case CARDS_MANAGING:
-        // var cardCombo = aiBehaviour.checkCardCombo();
-        // //this.getDeck().playCards(cardCombo.get(0), cardCombo.get(1),
-        // cardCombo.get(2), getCurrentPlayer());
-        // case ARMIES_PLACEMENT:
-        // while (this.placeArmies(aiBehaviour.decidePositioning(), 1))
-        // ;
-        // if (aiBehaviour.decideAttack(getTerritoriesList())) {
-        // AttackPhase attackPhase = new AttackPhaseImpl(
-        // getCurrentPlayer(),
-        // aiBehaviour.getNextAttackingTerritory(),
-        // aiBehaviour.decideAttackingArmies(),
-        // getOwner(aiBehaviour.getNextAttackedTerritory()),
-        // aiBehaviour.getNextAttackedTerritory());
-        // attackPhase.destroyArmies();
-        // attackPhase.conquerTerritory(aiBehaviour.getArmiesToMove());
-        // }
-        // this.skipTurn();
-        // break;
-        // default:
-        // break;
-        // }
-        // }
     }
 
     @Override
