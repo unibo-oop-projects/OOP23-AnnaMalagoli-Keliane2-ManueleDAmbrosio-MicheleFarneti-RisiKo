@@ -144,13 +144,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             view.enableMovements(false);
             view.enableAttack(false);
             view.enableSkip(false);
+            if(gameLoopManager.skippedToAI()){
+                handleAIBehaviour();
+            }
         }
     }
 
     private void updateGameStatus() {
         activePlayerIndex = gameLoopManager.getActivePlayer();
         gameStatus = gameLoopManager.getGameStatus();
-        handleAIBehaviour();
     }
 
     /**
@@ -191,6 +193,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 default:
                     break;
             }
+            handleAIBehaviour();
         }
     }
 
@@ -251,6 +254,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 break;
         }
         redrawView();
+        if(gameLoopManager.skippedToAI()){
+            handleAIBehaviour();
+        }
     }
 
     private boolean placeArmies(String territory, Integer nArmies) {
@@ -258,8 +264,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             if (gameLoopManager.placeArmiesIfPossibile(players.get(activePlayerIndex), players, territory, gameStatus,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
-                territories.addArmiesInTerritory(territory, nArmies);
                 updateGameStatus();
+                territories.addArmiesInTerritory(territory, nArmies);
                 if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
                     currentPlayer().computeReinforcements(territories.getListContinents());
                 }

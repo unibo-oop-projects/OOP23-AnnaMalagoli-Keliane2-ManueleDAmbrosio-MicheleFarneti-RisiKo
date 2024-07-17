@@ -1,24 +1,12 @@
 package it.unibo.risiko.model.game;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Optional;
 
-import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.model.cards.Deck;
-import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.map.Continent;
-import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.Territories;
-import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.model.objective.ConquerContinentTarget;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
-import it.unibo.risiko.model.objective.DestroyPlayerTarget;
-import it.unibo.risiko.model.objective.Target;
-import it.unibo.risiko.model.objective.TargetType;
-import it.unibo.risiko.model.player.AIBehaviourImpl;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -40,6 +28,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
     private long turnsCount = 0;
     private GameStatus status;
     private Integer activePlayer = 0;
+    private boolean skippedToAI = false;
 
     public GameLoopManagerImpl() {
         status = GameStatus.TERRITORY_OCCUPATION;
@@ -67,6 +56,11 @@ public class GameLoopManagerImpl implements GameLoopManager {
                     break;
                 default:
                     break;
+            }
+            if(!players.get(activePlayer).isAI() && players.get(nextPlayer(player, players.size())).isAI()){
+                skippedToAI = true;
+            }else{
+                skippedToAI = false;
             }
             activePlayer = nextPlayer(player, players.size());
             return true;
@@ -212,6 +206,11 @@ public class GameLoopManagerImpl implements GameLoopManager {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean skippedToAI() {
+        return skippedToAI;
     }
 
 }
