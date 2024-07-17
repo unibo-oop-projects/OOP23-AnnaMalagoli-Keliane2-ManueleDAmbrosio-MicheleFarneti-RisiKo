@@ -9,6 +9,7 @@ import java.util.Optional;
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.cards.DeckImpl;
+import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
@@ -53,7 +54,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
                     if (getTotalArmiesLeftToPlace(players) == LAST_ARMY) {
-                        nextGamePhase(player, players);
+                        nextGamePhase(player, players,territories.getListContinents());
                     } else {
                         armiesPlaced = 0;
                     }
@@ -62,7 +63,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case CARDS_MANAGING:
                 case ATTACKING:
                 case READY_TO_ATTACK:
-                    nextGamePhase(player, players);
+                    nextGamePhase(player, players,territories.getListContinents());
                     break;
                 default:
                     break;
@@ -78,7 +79,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
      * loop by
      * updating the gameStatus following the gmae flow.
      */
-    private void nextGamePhase(final Integer player, final List<Player> players) {
+    private void nextGamePhase(final Integer player, final List<Player> players, final List<Continent> continents) {
         switch (status) {
             // Once territory occupation phase is over begins armiesPlacement phase
             case TERRITORY_OCCUPATION:
@@ -104,6 +105,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
             // Do any of those actions it's going directly to the attack phase.
             case ATTACKING:
             case READY_TO_ATTACK:
+                players.get(nextPlayer(player, players.size())).computeReinforcements(continents);
                 if (players.get(nextPlayer(player, players.size())).getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
                     status = GameStatus.CARDS_MANAGING;
                 } else if (players.get(nextPlayer(player, players.size())).getArmiesToPlace() > 0) {

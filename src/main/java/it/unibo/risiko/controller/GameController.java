@@ -230,7 +230,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     private Integer getArmiesInTerritory(String territory) {
         return territories.getListTerritories().stream()
-                .filter(t -> t.getTerritoryName().equals(attackerTerritory.get()))
+                .filter(t -> t.getTerritoryName().equals(territory))
                 .mapToInt(t -> t.getNumberOfArmies()).sum();
     }
 
@@ -302,11 +302,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             view.drawConquerPanel();
         } else {
             view.closeAttackPanel();
+            resetAttack();
             redrawView();
             checkWinner();
         }
-
-        resetAttack();
         this.gameStatus = GameStatus.READY_TO_ATTACK;
     }
 
@@ -327,7 +326,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         // defenderTerritory.get(),
         // game.getOwner(attackerTerritory.get().getTerritoryName()),
         // Optional.empty(), Optional.of(numberOfMovingArmies));
-
+        
+        resetAttack();
         view.updateLog();
         redrawView();
         checkWinner();
