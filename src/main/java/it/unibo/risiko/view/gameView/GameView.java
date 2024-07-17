@@ -18,14 +18,6 @@ import it.unibo.risiko.model.player.Player;
 public interface GameView {
 
     /**
-     * Sets the observer for the view
-     * 
-     * @param gameController Observer
-     * @author Michele Farneti
-     */
-    void setObserver(GameViewObserver gameController);
-
-    /**
      * Starts the view by setting up all of the main components
      * 
      * @author Michele Farneti
@@ -47,7 +39,7 @@ public interface GameView {
      * @param playersNumber The number of players playing the game
      * @author Michele Farneti
      */
-    void showGameWindow(final String mapName,final Integer playersNumber);
+    void showGameWindow(final String mapName, final Integer playersNumber);
 
     /**
      * Activates the placing and the viewing of the tanks buttons over their
@@ -56,24 +48,27 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(final List<Territory> territories);
+    void showTanks(final List<String> territories);
 
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param Player
-     * @param playersIndex
+     * @param Player       the player color
+     * @param playersIndex The player's index in the games turns
+     * @param isAI         True if the player is AI
      * @author Michele Farneti
      */
-    void showTurnIcon(final Player player,final int playerIndex);
+    void showTurnIcon(final String player, final int playerIndex, boolean isAI);
 
     /**
      * Edits the view in order to show wich player is the current player.
      * 
-     * @param player
+     * @param playerColor   The color of the player
+     * @param armiesToPlace The number of armies the plyaer has to place
+     * @param taget         The current player's target description
      * @author Michele Farneti
      */
-    void setCurrentPlayer(final Player player);
+    void setCurrentPlayer(final String playerColor, Integer armiesToPlace, String target);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
@@ -83,7 +78,7 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(final Territory territory,final boolean isAttacker);
+    void showFightingTerritory(final String territory, final boolean isAttacker);
 
     /**
      * Deletes higlightings for a fighting territory
@@ -91,7 +86,7 @@ public interface GameView {
      * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritory(final Territory fightingTerritory);
+    void resetFightingTerritory(final String fightingTerritory);
 
     /**
      * Updates the game view, changing a tank based on territory
@@ -99,9 +94,10 @@ public interface GameView {
      * 
      * @param territory
      * @param playerColor
+     * @param numberOfArmies The count of the armies placed over the territory.
      * @author Michele Farneti
      */
-    void redrawTank(final Territory territory, final String playerColor);
+    void redrawTank(final String territory, final String playerColor, Integer numberOfArmies);
 
     /**
      * Updates the gameView making it show who is the winner of the game
@@ -190,6 +186,7 @@ public interface GameView {
     /**
      * Method used to create a panel that allows to move armies between two
      * adjacent territories.
+     * 
      * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
@@ -197,6 +194,7 @@ public interface GameView {
 
     /**
      * Method used to create a panel that allows the player to play three cards.
+     * 
      * @param playerCards is the list of cards of the player
      * @author Anna Malagoli
      */
@@ -241,6 +239,7 @@ public interface GameView {
      * @author Keliane2
      */
     public void updateLog();
+
     /**
      * Creates the territory table panel.
      * 
@@ -263,6 +262,7 @@ public interface GameView {
 
     /**
      * Updates the view with infos about the gamestatus and current turn.
+     * 
      * @param gameStatus
      * @param turnsCount
      */

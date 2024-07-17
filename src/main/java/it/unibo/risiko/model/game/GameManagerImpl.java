@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class GameManagerImpl implements GameManager {
      * @param saveGamesFilePath filePath of the savegame file.
      */
     public GameManagerImpl(String saveGamesPath, String resourcesPath) {
-        try (JsonReader reader = new JsonReader(new FileReader(resourcesPath + saveGamesPath))) {
+        try (JsonReader reader = new JsonReader(new FileReader(resourcesPath + saveGamesPath,StandardCharsets.UTF_8))) {
             Gson gson = new Gson();
             currentGame = gson.fromJson(reader, Game.class);
         } catch (JsonIOException | JsonSyntaxException | IOException e) {
@@ -65,7 +66,7 @@ public class GameManagerImpl implements GameManager {
 
     @Override
     public boolean saveGameOnFile(String saveGamesFilePath) {
-        try (Writer writer = new FileWriter(saveGamesFilePath)) {
+        try (Writer writer = new FileWriter(saveGamesFilePath,StandardCharsets.UTF_8)) {
             Gson gson = new GsonBuilder().create();
             gson.toJson(currentGame, writer);
         } catch (IOException e) {

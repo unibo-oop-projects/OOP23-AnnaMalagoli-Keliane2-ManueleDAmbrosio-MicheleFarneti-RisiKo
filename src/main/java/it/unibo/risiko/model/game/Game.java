@@ -73,7 +73,7 @@ public interface Game {
      * @param nArmies
      * @return True if it was possbile to place the armies, false otherwise.
      */
-    public boolean placeArmies(final Territory territory, final int nArmies);
+    public boolean placeArmies(final String territory, final int nArmies);
 
     /**
      * 
@@ -115,7 +115,7 @@ public interface Game {
      * @return True if the two territories of the game's map are near, false
      *         otherwise.
      */
-    boolean areTerritoriesNear(Territory territory1, Territory territory2);
+    boolean areTerritoriesNear(String territory1, String territory2);
 
     /**
      * If the game is in CARD_MANAGING phase, makes it go to the next phase.
@@ -128,5 +128,11 @@ public interface Game {
      *         first player
      */
     Long getTurnsCount();
+
+    int getNumberOfArmies(String territory);
+
+    void removeArmies(String Territory, int numberOfMovingArmies);
+
+    void setOwner(String Territory, String color_id);
 
 }

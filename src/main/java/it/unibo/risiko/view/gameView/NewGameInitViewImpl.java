@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -162,7 +163,7 @@ public class NewGameInitViewImpl extends JPanel {
         int numberOfMaps = mapList.size();
         JPanel mapSelectorPanel = new JPanel();
         JTextField mapSelectionText = new StandardTextField("SELECT THE MAP YOU WANT TO PLAY: ");
-        JTextField nameTextField = new StandardTextField(mapName.toUpperCase());
+        JTextField nameTextField = new StandardTextField(mapName.toUpperCase(Locale.ROOT));
         JButton nextName = new DefaultButton("NEXT");
 
         mapSelectionText.setBackground(BACKGROUND_COLOR);
@@ -181,7 +182,7 @@ public class NewGameInitViewImpl extends JPanel {
             resetPlayers();
             updateMaxPlayers();
             mapName = mapList.get(mapIndex);
-            nameTextField.setText(mapName.toUpperCase());
+            nameTextField.setText(mapName.toUpperCase(Locale.ROOT));
             redrawPlayerPanels();
         });
 

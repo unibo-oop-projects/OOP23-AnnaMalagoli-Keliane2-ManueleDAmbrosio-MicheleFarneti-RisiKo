@@ -18,17 +18,18 @@ import javax.swing.JButton;
  * 
  * @author Michele Farneti
  */
-public class ColoredImageButton extends JButton {
-    private final String STANDARD_COLOR = "white";
+public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
     private static final String fileFormat = ".png";
     private static final int BORDER_THICKNESS = 2;
 
     private String imageUri;
-    private String imageColor = STANDARD_COLOR;
+    private String imageColor = "white";
 
     /**
-     * @param imageUri The url of the image to be set as backgroud of the button
+     * @param imageUri             The url of the image to be set as backgroud of
+     *                             the button
+     * @param resourcesPackagePath The path needed to reach the button image
      */
     public ColoredImageButton(String resourcesPackagePath, final String imageUri) {
         this.imageUri = imageUri;
@@ -38,6 +39,7 @@ public class ColoredImageButton extends JButton {
     /**
      * Constructor wich sets the button background image and also sets its bounds
      * 
+     * @param resourcesPackagePath The path needed to reach the button image
      * @param imageUrl
      * @param x
      * @param y

@@ -71,7 +71,7 @@ public interface GameMap {
      * @param territory2
      * @return True if they are near, false otherwise.
      */
-    public boolean areTerritoriesNear(Territory territory1, Territory territory2);
+    public boolean areTerritoriesNear(String territory1, String territory2);
 
     /**
      * Returns the path to create the Game deck
@@ -79,4 +79,10 @@ public interface GameMap {
      * @return
      */
     public String getDeckPath();
+
+    void addArmies(String territory, int nArmies);
+
+    void removeArmies(String territory, int numberOfMovingArmies);
+
+    void setOwner(String territory, String color_id);
 }
