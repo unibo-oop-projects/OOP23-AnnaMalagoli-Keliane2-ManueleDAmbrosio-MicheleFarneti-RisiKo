@@ -134,6 +134,22 @@ public class Territories {
     }
 
     /**
+     * Method to extract from the list of territories the territory with
+     * a specified name.
+     * @param name is the name of a territory
+     * @return an optional that containes the territory searched or an empty
+     * optional. The optional should always contain the territory.
+     */
+    private Optional<Territory> getTerritoryFromName(final String name) {
+        for (var elem : this.listTerritories) {
+            if (elem.getTerritoryName().equals(name)) {
+                return Optional.of(elem);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Method to add a specified number of armies in a territory.
      * @param territoryName is the name of the territory in which we
      * want to add armies
@@ -162,16 +178,27 @@ public class Territories {
     }
     /**
      * Method to verify if the two territories passed in input are adjacent.
-     * @param terr1 is the first territory
-     * @param terr2 is the second territory
+     * @param name1 is the name of the first territory
+     * @param name2 is the name of the second territory
      * @return true if they are adjacent, or false if they are not adjacent
     */
-    public boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
+    public boolean territoriesAreNear(final String name1, final String name2) {
+        Territory terr1 = getTerritoryFromName(name1).get();
         for (var elem : terr1.getListOfNearTerritories()) {
-            if (elem.equals(terr2.getTerritoryName())) {
+            if (elem.equals(name2)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Method used to set the owner of a territory.
+     * @param terrName is the name of the territory
+     * @param player_id is the id of the player
+     */
+    public void setOwner(final String terrName, final String player_id) {
+        Territory terr = getTerritoryFromName(terrName).get();
+        terr.setPlayer(player_id);
     }
 }

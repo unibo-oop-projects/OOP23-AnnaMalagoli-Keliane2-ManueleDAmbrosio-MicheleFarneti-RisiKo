@@ -26,6 +26,8 @@ public class TablePanel extends JPanel {
 
     /**
      * Into the constructor is created the table. 
+     * @param terr is the list of territories
+     * @param player is the list of players
      */
     public TablePanel(final List<Territory> terr, final List<Player> players) {
 

@@ -104,32 +104,32 @@ public class TestDeck {
         assertEquals(10, player.getArmiesToPlace());
     }
 
-    /** Test per verificare funzionamento del metodo getCardFromNameTerritory */
-    /*
-     * @Test
-     * void testGetCardFromNameTerritory() {
-     * creation of a player*
-     * Player player = new SimplePlayerFactory().createStandardPlayer();
-     * final String path = "src/test/java/it/unibo/risiko/deck/DeckCards.txt";
-     * final Deck deck = new DeckImpl(path);
-     * definition of four cards*
-     * final Card card1 = new CardImpl("Italy", "Cavalry");
-     * final Card card2 = new CardImpl("Spain", "Cavalry");
-     * final Card card3 = new CardImpl("Great-Britain", "Infantry");
-     * final Card card4 = new CardImpl("France", "Cavalry");
-     * added the four cards to the player *
-     * player.addCard(card1);
-     * player.addCard(card2);
-     * player.addCard(card3);
-     * player.addCard(card4);
-     * verification that the card extracted from the list of cards of the player is
-     * corrected *
-     * assertEquals(card3, deck.getCardByTerritoryName("Great-Britain",
-     * player).get());
-     * assertEquals(card3.getTerritoryName(),
-     * deck.getCardByTerritoryName(card3.getTerritoryName(),
-     * player).get().getTerritoryName());
-     * }
-     */
+    /** DA RIMUOVERE PERCHè metodo privato
+     * Test per verificare funzionamento del metodo getCardFromNameTerritory 
+    @Test
+    void testGetCardFromNameTerritory() {
+    *creation of a player*
+    Player player = new SimplePlayerFactory().createStandardPlayer();
+    final String path = "src/test/java/it/unibo/risiko/deck/DeckCards.txt";
+    final Deck deck = new DeckImpl(path);
+    *definition of four cards*
+    final Card card1 = new CardImpl("Italy", "Cavalry");
+    final Card card2 = new CardImpl("Spain", "Cavalry");
+    final Card card3 = new CardImpl("Great-Britain", "Infantry");
+    final Card card4 = new CardImpl("France", "Cavalry");
+    * added the four cards to the player *
+    player.addCard(card1);
+    player.addCard(card2);
+    player.addCard(card3);
+    player.addCard(card4);
+    *verification that the card extracted from the list of cards of the player is
+    corrected *
+    assertEquals(card3, deck.getCardByTerritoryName("Great-Britain",
+    player).get());
+    assertEquals(card3.getTerritoryName(),
+    deck.getCardByTerritoryName(card3.getTerritoryName(),
+    player).get().getTerritoryName());
+    }*/
+    
 
 }

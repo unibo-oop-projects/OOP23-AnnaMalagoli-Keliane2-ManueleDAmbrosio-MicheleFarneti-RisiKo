@@ -58,7 +58,17 @@ public interface Territory {
      */
     List<String> getListOfNearTerritories();
 
+    /**
+     * Method to get the player that owns the territory.
+     * 
+     * @return the id of the player
+     */
     String getPlayer();
 
-    void setPlayer(final String player);
+    /**
+     * Method to set the owner of the territory.
+     * 
+     * @param player is the player id
+     */
+    void setPlayer(String player);
 }

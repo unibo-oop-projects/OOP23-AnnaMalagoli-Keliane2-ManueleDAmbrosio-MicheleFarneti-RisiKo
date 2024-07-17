@@ -13,7 +13,7 @@ public class TerritoryImpl implements Territory {
     private int numberOfArmies;
     private final List<String> listNearTerritories;
     private final String continent;
-    private String player_id;
+    private String playerId;
 
     /**
      * Constructor to set the parameters of the territory with the input parameters
@@ -50,12 +50,22 @@ public class TerritoryImpl implements Territory {
         return this.numberOfArmies;
     }
 
+    /**
+     * Method to get the player that owns the territory.
+     * 
+     * @return the id of the player
+     */
     public String getPlayer() {
-        return this.player_id;
+        return this.playerId;
     }
 
+    /**
+     * Method to set the owner of the territory.
+     * 
+     * @param player is the player id
+     */
     public void setPlayer(final String player) {
-        this.player_id = player;
+        this.playerId = player;
     }
 
     /**

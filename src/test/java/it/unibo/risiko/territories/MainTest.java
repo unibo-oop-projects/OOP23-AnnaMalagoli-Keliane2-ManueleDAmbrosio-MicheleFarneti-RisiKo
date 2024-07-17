@@ -73,6 +73,15 @@ class MainTest {
         }
     }
 
+    @Test
+    void testTwoTerritoriesAreNear() {
+        final String path = "src/test/java/it/unibo/risiko/territories/Territories.txt";
+        final Territories territories = new Territories(path);
+        assertTrue(territories.territoriesAreNear("Francia", "Italia"));
+        assertFalse(territories.territoriesAreNear("Italia", "Spagna"));
+    }
+
+    
     /*@Test
     public void testMovementOfArmiesBetweenTwoTerritory() {
         final String path = "src/test/java/it/unibo/risiko/Territories.txt";
