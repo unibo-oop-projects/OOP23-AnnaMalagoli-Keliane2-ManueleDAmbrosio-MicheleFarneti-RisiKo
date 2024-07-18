@@ -44,6 +44,12 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case TERRITORY_OCCUPATION:
                     if (getTotalArmiesLeftToPlace(players) <= LAST_ARMY) {
                         nextGamePhase(player, players, territories.getListContinents());
+                        if (!players.get(activePlayer).isAI()
+                                && players.get(nextPlayer(player, players.size())).isAI()) {
+                            skippedToAI = true;
+                        } else {
+                            skippedToAI = false;
+                        }
                         activePlayer = nextPlayer(player, players.size());
                     } else {
                         armiesPlaced = 0;
