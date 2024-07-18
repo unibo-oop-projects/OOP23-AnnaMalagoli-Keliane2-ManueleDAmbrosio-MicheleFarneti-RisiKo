@@ -29,7 +29,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
 import it.unibo.risiko.view.InitialViewObserver;
-import it.unibo.risiko.view.InitialView.GameFrame;
+import it.unibo.risiko.view.InitialView.GameFrameImpl;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
 import it.unibo.risiko.view.gameView.GameViewObserver;
@@ -41,7 +41,7 @@ import it.unibo.risiko.view.gameView.GameViewObserver;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
- * @author Keliane2
+ * @author Keliane Nana
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private static final String FILE_SEPARATOR = File.separator;
@@ -77,7 +77,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public GameController() {
         // resourcesPackageString + saveGamesFilePath
 
-        new GameFrame(this);
+        new GameFrameImpl(this);
     }
 
     @Override
@@ -351,7 +351,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void setAttackingArmies(int numberOfAttackingAmies) {
@@ -376,17 +376,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
-            // currentPlayer().get().drawNewCardIfPossible(gameManager.getCurrentGame().get().pullCard());
 
-            // createEvent(EventType.TERRITORY_CONQUEST, attackerTerritory.get(),
-            // defenderTerritory.get(), currentPlayer().get(),
-            // Optional.of(game.getOwner(defenderTerritory.get().getTerritoryName())),
-            // Optional.empty());
+            createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
+            getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
+            Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
+            Optional.empty());
 
             view.updateLog();
             view.drawConquerPanel();
@@ -401,7 +400,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * @author Manuele D'Ambrosio
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
@@ -437,15 +436,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param defender
      * @param eventLeader
      * @param eventLeaderAdversary
-     * @author Keliane2
+     * @author Keliane Nana
      */
     private void createEvent(EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary, Optional<Integer> numArmies) {
-        if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
-            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
-        } else {
-            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, numArmies.get()));
-        }
+                register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
     }
 
     /**
@@ -562,9 +557,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @param srcTerritory is the source territory
      * @param dstTerritory is the destination territory
-     * @param numArmies    is the number of armies that the player
-     *                     wants to move
-     * @author Keliane2
+     * @param numArmies is the number of armies that the player
+     * wants to move
+     * @author Keliane Nana
      * @author Anna Malagoli
      */
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {

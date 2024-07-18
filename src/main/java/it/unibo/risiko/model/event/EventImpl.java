@@ -1,74 +1,65 @@
 package it.unibo.risiko.model.event;
 
+import java.util.Optional;
+
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
-public class EventImpl implements Event {
-    private EventType type;
-    private Territory attacker;
-    private Territory defender;
-    private Player eventLeader;
-    private Player eventLeaderAdversary;
+/**
+ * An implementation of the Event interface
+ * @author Keliane Nana
+ */
+public final class EventImpl implements Event {
+    private final EventType type;
+    private final String attackerTerritoryName;
+    private final int attackerNumArmies;
+    private final String defenderTerritoryName;
+    private final int defenderNumArmies;
+    private final String eventLeaderId;
+    private final Optional<String> eventLeaderAdversaryId;
+    private final Optional<Integer> numArmies;
     private String description;
-    private int numArmies;
 
 
-    public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader, int numArmies) {
+    public EventImpl(final EventType type,final Territory attacker,final Territory defender,final Player eventLeader,final Optional<Player> eventLeaderAdversary,final Optional<Integer> numArmies) {
         this.type = type;
-        this.attacker = attacker;
-        this.defender = defender;
-        this.eventLeader = eventLeader;
+        this.attackerTerritoryName = attacker.getTerritoryName();
+        this.attackerNumArmies = attacker.getNumberOfArmies();
+        this.defenderTerritoryName = defender.getTerritoryName();
+        this.defenderNumArmies = defender.getNumberOfArmies();
+        this.eventLeaderId = eventLeader.getColorID();
+        if (eventLeaderAdversary.isPresent()) {
+            this.eventLeaderAdversaryId = Optional.of(eventLeaderAdversary.get().getColorID());  
+        }else{
+            this.eventLeaderAdversaryId = Optional.empty();
+        }  
         this.numArmies = numArmies;
         this.setDescription();
     }
 
-    public EventImpl(EventType type, Territory attacker, Territory defender, Player eventLeader, Player eventLeaderAdversary) {
-        this.type = type;
-        this.attacker = attacker;
-        this.defender = defender;
-        this.eventLeader = eventLeader;
-        this.eventLeaderAdversary = eventLeaderAdversary;
-        this.setDescription();
-    }
-
     @Override
-    public EventType getEventType() {
-        return this.type;
-    }
-
-    @Override
-    public Player getEventLeader() {
-        return this.eventLeader;
-    }
-
-    @Override
-    public Territory getAttackingTerritory() {
-        return this.attacker;
-    }
-
-    @Override
-    public Territory getDefenderTerritory() {
-        return this.defender;
+    public String getEventLeaderId() {
+        return this.eventLeaderId;
     }
 
     @Override
     public void setDescription() {
-        if (this.type.equals(EventType.ATTACK)) {
-            this.description= "--> ATTACK of "+eventLeader.getColorID()+
-                        "\nFrom "+attacker.getTerritoryName()+
-                        "( number of armies: "+attacker.getNumberOfArmies()+
-                        " )\nTo "+defender.getTerritoryName()+
-                        " ( number of armies: "+defender.getNumberOfArmies()+
-                        " ), territory of "+eventLeaderAdversary.getColorID();
-        }else if (this.type.equals(EventType.TERRITORY_CONQUEST)) {
-            this.description= "--> "+eventLeader.getColorID()+
-                        " has conquered "+defender.getTerritoryName()+
-                        " which was the territory of "+eventLeaderAdversary.getColorID();
-        }else if (this.type.equals(EventType.TROOP_MOVEMENT)) {
-            this.description= "--> Deployment of "+numArmies+
-                        " armies of "+eventLeader.getColorID()+
-                        " from "+attacker.getTerritoryName()+
-                        " to "+defender.getTerritoryName();
+        if (this.type.equals(EventType.ATTACK) && eventLeaderAdversaryId.isPresent()) {
+            this.description= "--> ATTACK of "+eventLeaderId+
+                        "\nFrom "+attackerTerritoryName+
+                        "( number of armies: "+attackerNumArmies+
+                        " )\nTo "+defenderTerritoryName+
+                        " ( number of armies: "+defenderNumArmies+
+                        " ), territory of "+eventLeaderAdversaryId.get();
+        }else if (this.type.equals(EventType.TERRITORY_CONQUEST) && eventLeaderAdversaryId.isPresent()) {
+            this.description= "--> "+eventLeaderId+
+                        " has conquered "+defenderTerritoryName+
+                        " which was the territory of "+eventLeaderAdversaryId.get();
+        }else if (this.type.equals(EventType.TROOP_MOVEMENT) && numArmies.isPresent()) {
+            this.description= "--> Deployment of "+numArmies.get()+
+                        " armies of "+eventLeaderId+
+                        " from "+attackerTerritoryName+
+                        " to "+defenderTerritoryName;
         }else{
             this.description= "Invalid Event"; 
         }

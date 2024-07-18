@@ -22,10 +22,14 @@ import javax.swing.ListCellRenderer;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * The panel used as events log
+ * @author Keliane Nana
+ */
 public class LoggerView extends JPanel{
-    private final Register register;
-    private String eventList="";
     private final List<Player> playerList;
+    private final Register register; 
+    private String eventList="";
     private String[] list;
     private JTextArea logText;
     
@@ -49,7 +53,6 @@ public class LoggerView extends JPanel{
         this.setList(playerNameList);
         //creating a JComboBox for the selection of the player we want to visualize the events
         JComboBox<String> playerOptions = new JComboBox<>(list);
-
         playerOptions.setRenderer(new MyComboBoxRenderer("Show events of:"));
         playerOptions.setSelectedIndex(-1);
         //the button used to show all the events
@@ -103,6 +106,10 @@ public class LoggerView extends JPanel{
         updateLogText(logText, eventList);
     }
 
+    /**
+     * 
+     * @return the textArea which should contains the events
+     */
     public JTextArea getTextArea(){
         return this.logText;
     }

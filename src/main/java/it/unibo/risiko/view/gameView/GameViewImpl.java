@@ -51,6 +51,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Anna Malagoli
+ * @author Keliane Nana
  */
 
 public class GameViewImpl implements GameView {
@@ -700,7 +701,7 @@ public class GameViewImpl implements GameView {
     }
 
     /**
-     * @author Keliane2
+     * @author Keliane Nana
      */
     @Override
     public void createLog(Register reg, List<Player> l) {
@@ -710,6 +711,9 @@ public class GameViewImpl implements GameView {
         logPanel.add(log);
     }
 
+    /**
+     * @author Keliane Nana
+     */
     @Override
     public void updateLog() {
         log.showAllEvents(log.getTextArea());

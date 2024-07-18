@@ -21,6 +21,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * A panel representing the principal menu's sub menu
+ * @author Keliane Nana
+ */
 public class OptionSubMenu extends JPanel{
     private String screenResolution="700x700";
     private ButtonGroup grp;
