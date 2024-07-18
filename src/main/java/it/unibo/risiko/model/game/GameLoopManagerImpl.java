@@ -62,6 +62,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
             }else{
                 skippedToAI = false;
             }
+            turnsCount ++;
             activePlayer = nextPlayer(player, players.size());
             return true;
         }

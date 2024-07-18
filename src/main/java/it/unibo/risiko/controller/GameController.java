@@ -237,6 +237,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             case TERRITORY_OCCUPATION:
                 if (placeArmies(territory, 1)) {
                     redrawView();
+                    updateGameStatus();
                     if (gameLoopManager.skippedToAI()) {
                         while(currentPlayer().isAI()){
                             handleAIBehaviour();
@@ -276,7 +277,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             if (gameLoopManager.placeArmiesIfPossibile(players.get(activePlayerIndex), players, territory, gameStatus,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
-                updateGameStatus();
                 territories.addArmiesInTerritory(territory, nArmies);
                 if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
                     currentPlayer().computeReinforcements(territories.getListContinents());
@@ -338,9 +338,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
                 int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
-                territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
                 getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
                 getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
+                territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
                 territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
                 drawCard();
@@ -407,9 +407,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
-        territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
         getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
         getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
+        territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
         territories.removeArmiesInTerritory(attackerTerritory.get(), numberOfMovingArmies);
         territories.addArmiesInTerritory(defenderTerritory.get(), numberOfMovingArmies);
         drawCard();
@@ -523,6 +523,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();
+        activePlayerIndex = 0;
         this.setupGameView();
         //Manages the case where the player selected at first is AI.
         while(currentPlayer().isAI()){
