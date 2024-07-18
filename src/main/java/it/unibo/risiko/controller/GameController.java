@@ -22,7 +22,6 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameFactory;
 import it.unibo.risiko.model.game.GameFactoryImpl;
 import it.unibo.risiko.view.InitialViewObserver;
-import it.unibo.risiko.view.InitialView.GameFrame;
 import it.unibo.risiko.view.InitialView.GameFrameImpl;
 import it.unibo.risiko.view.gameView.GameView;
 import it.unibo.risiko.view.gameView.GameViewImpl;
@@ -263,11 +262,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void createEvent( EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary, Optional<Integer> numArmies) {
-        if (type.equals(EventType.ATTACK) || type.equals(EventType.TERRITORY_CONQUEST)) {
-            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary.get()));
-        } else {
-            register.addEvent(new EventImpl(type, attacker, defender, eventLeader, numArmies.get()));
-        }
+                register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
     }
 
     /**
