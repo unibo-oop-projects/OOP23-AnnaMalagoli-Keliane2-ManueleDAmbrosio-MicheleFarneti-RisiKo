@@ -1,16 +1,21 @@
 package it.unibo.risiko.model.event_register;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import it.unibo.risiko.model.event.Event;
 import it.unibo.risiko.model.player.Player;
 
-public class RegisterImpl implements Register {
-    List<Event> register;
+public class RegisterImpl implements Register{
+    private List<Event> register;
 
     public RegisterImpl() {
         this.register = new ArrayList<>();
+    }
+
+    public RegisterImpl(Register reg){
+        this.register = reg.getAllEvents();
     }
 
     @Override
@@ -20,7 +25,7 @@ public class RegisterImpl implements Register {
 
     @Override
     public List<Event> getAllEvents() {
-        return this.register;
+        return Collections.unmodifiableList(this.register);
     }
 
     @Override
@@ -35,7 +40,7 @@ public class RegisterImpl implements Register {
     public List<Event> getAllEventsPlayer(final Player player) {
         List<Event> l=new ArrayList<>();
         for (Event e : this.register) {
-            if (e.getEventLeader().equals(player)) {
+            if (e.getEventLeaderId().equals(player.getColor_id())) {
                 l.add(e);
             }
         }
