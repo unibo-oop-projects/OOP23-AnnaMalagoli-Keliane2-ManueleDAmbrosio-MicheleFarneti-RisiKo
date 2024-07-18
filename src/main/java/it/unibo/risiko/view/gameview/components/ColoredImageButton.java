@@ -20,10 +20,11 @@ import javax.swing.JButton;
  */
 public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
-    private static final String fileFormat = ".png";
+    private static final String FILE_FORMAT = ".png";
     private static final int BORDER_THICKNESS = 2;
+    private static final long serialVersionUID = 1;
 
-    private String imageUri;
+    private final String imageUri;
     private String imageColor = "white";
 
     /**
@@ -31,7 +32,7 @@ public final class ColoredImageButton extends JButton {
      *                             the button
      * @param resourcesPackagePath The path needed to reach the button image
      */
-    public ColoredImageButton(String resourcesPackagePath, final String imageUri) {
+    public ColoredImageButton(final String resourcesPackagePath, final String imageUri) {
         this.imageUri = imageUri;
         this.resourcesPackagePath = resourcesPackagePath;
     }
@@ -46,7 +47,7 @@ public final class ColoredImageButton extends JButton {
      * @param width
      * @param height
      */
-    public ColoredImageButton(String resourcesPackagePath, final String imageUrl, final int x, final int y,
+    public ColoredImageButton(final String resourcesPackagePath, final String imageUrl, final int x, final int y,
             final int width, final int height) {
         this.resourcesPackagePath = resourcesPackagePath;
         this.imageUri = imageUrl;
@@ -63,19 +64,19 @@ public final class ColoredImageButton extends JButton {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        String coloredImageUrl = resourcesPackagePath + imageUri + imageColor + fileFormat;
+        final String coloredImageUrl = resourcesPackagePath + imageUri + imageColor + FILE_FORMAT;
         try {
-            Image image = ImageIO.read(new File(coloredImageUrl));
-            g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+            final Image image = ImageIO.read(new File(coloredImageUrl));
+            g.drawImage(image, 0, 0, getWidth(), getHeight(),null);
         } catch (IOException e) {
-            System.out.println("Failed to load image " + coloredImageUrl);
+            g.drawRect(0, 0, getWidth(), getHeight());
         }
     }
 
     /**
-     * Sets a prederminated border of a giveng color
+     * Sets a prederminated border of a given color
      */
-    public void setCustomBorder(Color borderColor) {
+    public void setCustomBorder(final Color borderColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor, BORDER_THICKNESS));
     }
 }

@@ -13,8 +13,9 @@ import java.awt.GradientPaint;
  */
 public class GradientPanel extends JPanel {
     private Color topColor;
-    private Color bottomColor;
-    private int gradientLevel;
+    private final Color bottomColor;
+    private final int gradientLevel;
+    private static final long serialVersionUID = 1;
 
     /**
      * @param topColor      Color of the upper part of the background
@@ -35,15 +36,15 @@ public class GradientPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+        final Graphics2D graphics2D = (Graphics2D) g;
 
         final int width = getWidth();
         final int height = getHeight();
-        GradientPaint gp = new GradientPaint(0, 0, topColor, 0, height / gradientLevel, bottomColor);
-        g2d.setPaint(gp);
-        g2d.fillRect(0, 0, width, height);
+        final GradientPaint gradientPaint= new GradientPaint(0, 0, topColor, 0, height / gradientLevel, bottomColor);
+        graphics2D.setPaint(gradientPaint);
+        graphics2D.fillRect(0, 0, width, height);
     }
 
 }

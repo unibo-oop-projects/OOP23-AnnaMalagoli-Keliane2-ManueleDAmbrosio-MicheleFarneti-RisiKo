@@ -54,7 +54,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Keliane Nana
  */
 
-public class GameViewImpl implements GameView {
+public final class GameViewImpl implements GameView {
+
+    private static final int MAX_COLOR_VALUE = 255;
+
+    private static final String FONT_NAME = "Arial";
 
     private static final int ARMIES_COUNT_THICKNESS = 3;
 
@@ -82,8 +86,8 @@ public class GameViewImpl implements GameView {
     private static final Integer TANKS_WIDTH = 45;
     private static final Integer TANKS_HEIGTH = 45;
 
-    private final Integer TURN_ICON_WIDTH;
-    private final Integer TURN_ICON_HEIGHT;
+    private final Integer turnIconWidth;
+    private final Integer turnIconHeight;
     private static final Integer TURNBAR_START_X = 10;
     private static final Integer TURNBAR_START_Y = 10;
 
@@ -109,27 +113,26 @@ public class GameViewImpl implements GameView {
     private final Integer frameHeigth;
     private String mapName;
 
-    private HashMap<String, Position> tanksCoordinates = new HashMap<>();;
-    private HashMap<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
-    private HashMap<String, ColoredImageButton> iconsMap = new HashMap<>();
+    private final Map<String, Position> tanksCoordinates = new HashMap<>();
+    private final Map<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
+    private final Map<String, ColoredImageButton> iconsMap = new HashMap<>();
     @SuppressFBWarnings(value = "EI2", justification = "GameViewObserver is an inteface intentionally mutable and safe to store.")
     private final GameViewObserver gameViewObserver;
-    private JFrame mainFrame = new JFrame();
-    private JLayeredPane baseLayoutPane = new JLayeredPane();
-    private JLayeredPane mapLayoutPane = new JLayeredPane();
-    private JLayeredPane attackBarLayoutPane = new JLayeredPane();
-    private JPanel gamePanel = new JPanel();
+    private final JFrame mainFrame = new JFrame();
+    private final JLayeredPane baseLayoutPane = new JLayeredPane();
+    private final JLayeredPane mapLayoutPane = new JLayeredPane();
+    private final JLayeredPane attackBarLayoutPane = new JLayeredPane();
+    private final JPanel gamePanel = new JPanel();
     private JPanel mapPanel;
-    private JPanel turnsBarPanel;
-    private JLabel playerArmiesLabel = new JLabel();
+    private final JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
     private JTextArea gameStatusPanel;
     private AttackPanel attackPanel;
     private JPanel moveArmiesPanel;
     private TablePanel tablePanel;
-    private JTextField targetTextField = new StandardTextField("Target");
-    private JPanel logPanel = new JPanel();
-    private JPanel territoriesTablePanel = new JPanel();
+    private final JTextField targetTextField = new StandardTextField("Target");
+    private final JPanel logPanel = new JPanel();
+    private final JPanel territoriesTablePanel = new JPanel();
     private JPanel choiceCardsPanel;
     private LoggerView log;
 
@@ -157,8 +160,8 @@ public class GameViewImpl implements GameView {
         this.frameWidth = frameWidth;
         this.frameHeigth = frameHeight;
         this.resourcesLocator = resourcesLocator;
-        TURN_ICON_WIDTH = frameWidth / 20;
-        TURN_ICON_HEIGHT = frameWidth / 20;
+        turnIconWidth = frameWidth / 20;
+        turnIconHeight = frameWidth / 20;
 
         mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(frameWidth, frameHeigth));
@@ -202,7 +205,7 @@ public class GameViewImpl implements GameView {
         mapHeight = mapLayoutPane.getSize().height;
 
         // Map background setting
-        GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
+        final GradientPanel mapBackgroundPanel = new GradientPanel(Color.GRAY, Color.WHITE, MAP_GRADIENT_LEVEL);
         mapBackgroundPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapBackgroundPanel.setOpaque(true);
         setLayerdPaneBackground(mapLayoutPane, mapBackgroundPanel);
@@ -229,7 +232,7 @@ public class GameViewImpl implements GameView {
      *                going to deactivate them
      * @author Michele Farneti
      */
-    private void setGameViewButtonsEnabled(Boolean enabled) {
+    private void setGameViewButtonsEnabled(final Boolean enabled) {
         tanksMap.entrySet().forEach(e -> e.getValue().button().setEnabled(enabled));
         skipButton.setEnabled(enabled);
         attackButton.setEnabled(enabled);
@@ -238,8 +241,12 @@ public class GameViewImpl implements GameView {
 
     /**
      * Sets up the attackbar part of the view
+     * 
+     * @param nPlayers the bumber of players playint the game, used to setup an cion
+     *                 bar of the right dimension
+     * @author Michele Farneti
      */
-    private void setupAttackBar(int nPlayers) {
+    private void setupAttackBar(final int nPlayers) {
         // AttackBar initiialization
         attackBarLayoutPane
                 .setPreferredSize(new Dimension((int) (gamePanel.getWidth()), (int) (gamePanel.getHeight() * 0.3)));
@@ -255,13 +262,14 @@ public class GameViewImpl implements GameView {
         setLayerdPaneBackground(attackBarLayoutPane, attackBarBackgroundPanel);
 
         // Turns bar
-        turnsBarPanel = new GradientPanel(Color.WHITE, ATTACK_BAR_FOREGROUND_COLOR, TURNS_BAR_GRADIENT_LEVEL);
-        turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, TURN_ICON_WIDTH * nPlayers, TURN_ICON_HEIGHT);
+        final JPanel turnsBarPanel = new GradientPanel(Color.WHITE, ATTACK_BAR_FOREGROUND_COLOR,
+                TURNS_BAR_GRADIENT_LEVEL);
+        turnsBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y, turnIconWidth * nPlayers, turnIconHeight);
         attackBarLayoutPane.add(turnsBarPanel, TURNSBAR_LAYER, 0);
         // Country bar
         countryBarPanel = new JTextArea();
         countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y, gamePanel.getWidth() / 6,
-                TURN_ICON_HEIGHT / 2);
+                turnIconHeight / 2);
         attackBarLayoutPane.add(countryBarPanel, TURNSBAR_LAYER, 0);
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         countryBarPanel.setEditable(false);
@@ -297,7 +305,7 @@ public class GameViewImpl implements GameView {
         playerArmiesLabel.setBounds(
                 turnTank.getBounds().x + TURN_TANK_WIDTH, turnTank.getBounds().y + TURN_TANK_HEIGHT / 3,
                 PLAYER_ARMIES_LABEL_WIDTH, PLAYER_ARMIES_LABEL_HEIGHT);
-        playerArmiesLabel.setFont(new Font("Arial", Font.BOLD, PLAYER_ARMIES_LABEL_FONT_SIZE));
+        playerArmiesLabel.setFont(new Font(FONT_NAME, Font.BOLD, PLAYER_ARMIES_LABEL_FONT_SIZE));
         playerArmiesLabel.setText("20");
         playerArmiesLabel.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
         playerArmiesLabel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
@@ -310,14 +318,14 @@ public class GameViewImpl implements GameView {
         targetTextField.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
         targetTextField.setBounds((int) (gamePanel.getWidth() * 0.75), (int) (attackBarLayoutPane.getHeight() * 0.2),
                 (int) (gamePanel.getWidth() * 0.25), 50);
-        targetTextField.setFont(new Font("Arial", Font.ITALIC, 13));
+        targetTextField.setFont(new Font(FONT_NAME, Font.ITALIC, 13));
         attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
 
         // Game Status Bar
         gameStatusPanel = new JTextArea();
         gameStatusPanel.setBounds((int) (gamePanel.getWidth() * 0.75),
                 (int) targetTextField.getLocation().getY() + targetTextField.getHeight(), targetTextField.getWidth(),
-                TURN_ICON_HEIGHT / 2);
+                turnIconHeight / 2);
         attackBarLayoutPane.add(gameStatusPanel, TURNSBAR_LAYER, 0);
         gameStatusPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         gameStatusPanel.setEditable(false);
@@ -331,7 +339,7 @@ public class GameViewImpl implements GameView {
      * @param background
      * @author Michele Farneti
      */
-    private void setLayerdPaneBackground(JLayeredPane layeredPane, JPanel background) {
+    private void setLayerdPaneBackground(final JLayeredPane layeredPane, final JPanel background) {
         setLayerdPaneLayer(layeredPane, background, BACKGROUND_LAYER);
     }
 
@@ -342,7 +350,7 @@ public class GameViewImpl implements GameView {
      * @param overlay
      * @author Michele Farneti
      */
-    private void setLayerdPaneOverlay(JLayeredPane layeredPane, JPanel overlay) {
+    private void setLayerdPaneOverlay(final JLayeredPane layeredPane, final JPanel overlay) {
         setLayerdPaneLayer(layeredPane, overlay, TOP_LAYER);
     }
 
@@ -353,7 +361,7 @@ public class GameViewImpl implements GameView {
      * @param jpanel
      * @author Michele Farneti
      */
-    private void setLayerdPaneLayer(JLayeredPane layeredPane, JPanel jpanel, Integer layer) {
+    private void setLayerdPaneLayer(final JLayeredPane layeredPane, final JPanel jpanel, final Integer layer) {
         layeredPane.add(jpanel, layer, 0);
     }
 
@@ -361,6 +369,7 @@ public class GameViewImpl implements GameView {
      * This funcion manages whenever a tank rapresenting a tank gets clicked
      * 
      * @param territory The territory that got clicked
+     * @author Michele Farneti
      */
     private void tankClicked(final String territory) {
         countryBarPanel.setText(territory.toUpperCase(Locale.ROOT));
@@ -374,9 +383,10 @@ public class GameViewImpl implements GameView {
      * a pannel reporting the error appears
      * 
      * @param mapPath The path of the image of the selected map
+     * @author Michele Farneti
      */
-    private void paintMap(String mapPath) {
-        Optional<Image> mapImage = readImage(mapPath);
+    private void paintMap(final String mapPath) {
+        final Optional<Image> mapImage = readImage(mapPath);
         if (mapImage.isPresent()) {
             mapPanel = new BackgroundImagePanel(mapImage.get());
             mapPanel.setOpaque(false);
@@ -399,13 +409,13 @@ public class GameViewImpl implements GameView {
      * @param imagePath The image path
      * @return An empty optional it failed toread the image, An optional of the
      *         image otherwise.
+     * @author Michele Farneti
      */
-    private Optional<Image> readImage(String imagePath) {
+    private Optional<Image> readImage(final String imagePath) {
         try {
-            Image image = ImageIO.read(new File(imagePath));
+            final Image image = ImageIO.read(new File(imagePath));
             return Optional.of(image);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             return Optional.empty();
         }
     }
@@ -414,25 +424,23 @@ public class GameViewImpl implements GameView {
      * 
      * @return The coordinates of a tank rapresenting a territory on the map,
      *         relatively to the map dimension.
-     * @authot Michele Farneti
+     * @author Michele Farneti
      */
-    private Position getRelativePoition(Position position) {
-        ;
+    private Position getRelativePoition(final Position position) {
         return new Position(Math.round(position.x() * (mapWidth / 1280f)),
                 Math.round(position.y() * (mapHeight / 630f)));
     }
 
     @Override
     public void showTanks(final List<Territory> territories) {
-
         territories.stream().forEach(territory -> tanksMap.put(territory.getTerritoryName(), new TerritoryPlaceHolder(
                 new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                         FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
                 new JLabel("0"))));
 
-        getTanksCoordinates();
-        for (var tank : tanksMap.entrySet()) {
-            var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
+        readTanksCoordinates();
+        for (final var tank : tanksMap.entrySet()) {
+            final var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
             tank.getValue().button().setBounds(relativePosition.x(),
                     relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
@@ -449,7 +457,7 @@ public class GameViewImpl implements GameView {
             tank.getValue().armiesCount().setBackground(Color.white);
             tank.getValue().armiesCount().setForeground(Color.black);
             tank.getValue().armiesCount().setOpaque(true);
-            tank.getValue().armiesCount().setFont(new Font("Arial", Font.BOLD, ARMIES_LABEL_FONT_SIZE));
+            tank.getValue().armiesCount().setFont(new Font(FONT_NAME, Font.BOLD, ARMIES_LABEL_FONT_SIZE));
             mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
             mapLayoutPane.add(tank.getValue().armiesCount(), TANK_LAYER, 0);
         }
@@ -459,17 +467,17 @@ public class GameViewImpl implements GameView {
      * Reads from file the coordinates needed for displaying tanks in the right
      * position.
      * 
-     * @param territoryName
+     * @author Michele Farneti
      */
-    private void getTanksCoordinates() {
-        var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
+    private void readTanksCoordinates() {
+        final var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
         try (BufferedReader coordinateReader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));) {
             coordinateReader.lines().map(s -> s.split(" ")).forEach(
                     t -> tanksCoordinates.put(t[0], new Position(Integer.parseInt(t[1]), Integer.parseInt(t[2]))));
         } catch (IOException e) {
+            tanksCoordinates.put("error", new Position(0, 0));
         }
-        ;
     }
 
     @Override
@@ -479,15 +487,15 @@ public class GameViewImpl implements GameView {
                     player.getColorID(),
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
-                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
+                            computeIconStartingX(playerIndex), TURNBAR_START_Y, turnIconWidth, turnIconHeight));
         } else {
             iconsMap.put(player.getColorID(),
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
-                            computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
+                            computeIconStartingX(playerIndex), TURNBAR_START_Y, turnIconWidth, turnIconHeight));
         }
 
-        for (var icon : iconsMap.entrySet()) {
+        for (final var icon : iconsMap.entrySet()) {
             icon.getValue().setColor(icon.getKey());
             icon.getValue().setEnabled(false);
             icon.getValue().setBorder(
@@ -501,9 +509,10 @@ public class GameViewImpl implements GameView {
      * Calculates the starting pixel for a turnIcon of a player at a given index
      * 
      * @param playerIndex
+     * @author Michele Farneti
      */
     private int computeIconStartingX(final int playerIndex) {
-        return (playerIndex * TURN_ICON_WIDTH) + TURNBAR_START_X;
+        return playerIndex * turnIconWidth + TURNBAR_START_X;
     }
 
     @Override
@@ -511,7 +520,7 @@ public class GameViewImpl implements GameView {
         turnTank.setColor(player.getColorID());
         iconsMap.entrySet().stream()
                 .forEach(e -> e.getValue()
-                        .setBorderPainted((e.getKey().equals(player.getColorID())) ? true : false));
+                        .setBorderPainted(e.getKey().equals(player.getColorID())));
         attackBarBackgroundPanel.setTopColor(stringToColor(player.getColorID()));
         playerArmiesLabel.setText(String.valueOf(player.getArmiesToPlace()));
         showTarget(player.getTarget().showTargetDescription());
@@ -519,10 +528,17 @@ public class GameViewImpl implements GameView {
         mainFrame.repaint();
     }
 
-    private Color stringToColor(String color_id) {
+    /**
+     * Converts a player's colo_id into a Color object
+     * 
+     * @param color_id a player's color id
+     * @return The curresponding color object
+     * @author Michele Farneti
+     */
+    private Color stringToColor(final String color_id) {
         switch (color_id) {
             case "cyan":
-                return new Color(0, 255, 255);
+                return new Color(0, MAX_COLOR_VALUE, 255);
             case "blue":
                 return new Color(0, 0, 255);
             case "green":
@@ -563,7 +579,7 @@ public class GameViewImpl implements GameView {
         winnerPanel.setOpaque(true);
 
         var winnerWriting = new JTextField(winnerColor.toUpperCase(Locale.ROOT) + " player has won the Game!");
-        winnerWriting.setFont(new Font("Arial", Font.BOLD, WINNER_FONT_SIZE));
+        winnerWriting.setFont(new Font(FONT_NAME, Font.BOLD, WINNER_FONT_SIZE));
         winnerWriting.setForeground(stringToColor(winnerColor));
         winnerWriting.setOpaque(false);
         winnerWriting.setBorder(BorderFactory.createEmptyBorder());
