@@ -47,7 +47,7 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     @Override
-    public int getStratingArmies(int nplayers) {
+    public int getStartingArmies(int nplayers) {
         return (MINIMUM_ARMIES + ARMIES_STEP * (maxPlayers - nplayers));
     }
 

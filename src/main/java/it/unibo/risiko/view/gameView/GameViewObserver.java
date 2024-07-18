@@ -1,7 +1,5 @@
 package it.unibo.risiko.view.gameView;
 
-import it.unibo.risiko.model.map.Territory;
-
 /**
  * Observer used by the view to interact with the controller by calling it's
  * void methods

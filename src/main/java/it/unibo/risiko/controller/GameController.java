@@ -516,7 +516,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
         this.territories = new Territories(gameInitializer.getTerritoriesPath());
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
-        players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStratingArmies(players.size())));
+        players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStartingArmies(players.size())));
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();

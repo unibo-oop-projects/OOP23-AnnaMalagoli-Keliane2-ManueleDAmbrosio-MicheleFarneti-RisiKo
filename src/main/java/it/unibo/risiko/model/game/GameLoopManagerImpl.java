@@ -42,10 +42,18 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 // Current player gets updated, if no player has armies left to place, the next
                 // player is going to enter the classic game loop.
                 case TERRITORY_OCCUPATION:
-                    if (getTotalArmiesLeftToPlace(players) == LAST_ARMY) {
+                    if (getTotalArmiesLeftToPlace(players) <= LAST_ARMY) {
                         nextGamePhase(player, players, territories.getListContinents());
+                        activePlayer = nextPlayer(player, players.size());
                     } else {
                         armiesPlaced = 0;
+                        if (!players.get(activePlayer).isAI()
+                                && players.get(nextPlayerWithArmies(player, players)).isAI()) {
+                            skippedToAI = true;
+                        } else {
+                            skippedToAI = false;
+                        }
+                        activePlayer = nextPlayerWithArmies(player, players);
                     }
                     break;
                 // Current player gets updated and the next player gets reinforcements
@@ -53,20 +61,28 @@ public class GameLoopManagerImpl implements GameLoopManager {
                 case ATTACKING:
                 case READY_TO_ATTACK:
                     nextGamePhase(player, players, territories.getListContinents());
+                    if (!players.get(activePlayer).isAI() && players.get(nextPlayer(player, players.size())).isAI()) {
+                        skippedToAI = true;
+                    } else {
+                        skippedToAI = false;
+                    }
+                    activePlayer = nextPlayer(player, players.size());
                     break;
                 default:
                     break;
             }
-            if(!players.get(activePlayer).isAI() && players.get(nextPlayer(player, players.size())).isAI()){
-                skippedToAI = true;
-            }else{
-                skippedToAI = false;
-            }
-            turnsCount ++;
-            activePlayer = nextPlayer(player, players.size());
+            turnsCount++;
             return true;
         }
         return false;
+    }
+
+    private Integer nextPlayerWithArmies(Integer playerIndex, List<Player> players) {
+        if (players.get(nextPlayer(playerIndex, players.size())).getArmiesToPlace() != 0) {
+            return nextPlayer(playerIndex, players.size());
+        } else {
+            return nextPlayerWithArmies(nextPlayer(playerIndex, players.size()), players);
+        }
     }
 
     /**
@@ -122,7 +138,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
         switch (status) {
             case TERRITORY_OCCUPATION:
                 if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
-                        || players.get(player).getArmiesToPlace() == LAST_ARMY) {
+                        || players.get(player).getArmiesToPlace() <= LAST_ARMY) {
                     return true;
                 }
                 return false;
@@ -212,7 +228,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
 
     @Override
     public boolean skippedToAI() {
-        if(skippedToAI){
+        if (skippedToAI) {
             skippedToAI = false;
             return true;
         }
