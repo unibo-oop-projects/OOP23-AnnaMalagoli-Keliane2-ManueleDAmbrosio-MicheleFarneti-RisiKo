@@ -1,4 +1,4 @@
-package it.unibo.risiko.deck;
+package it.unibo.risiko.model.deck;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

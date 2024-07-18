@@ -1,4 +1,4 @@
-package it.unibo.risiko.Game;
+package it.unibo.risiko.model.Game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

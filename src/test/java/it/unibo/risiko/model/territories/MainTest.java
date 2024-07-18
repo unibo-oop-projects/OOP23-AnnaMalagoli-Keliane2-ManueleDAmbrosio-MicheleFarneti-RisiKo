@@ -1,4 +1,4 @@
-package it.unibo.risiko.territories;
+package it.unibo.risiko.model.territories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

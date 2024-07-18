@@ -1,11 +1,8 @@
-package it.unibo.risiko.dice;
+package it.unibo.risiko.model.dice;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import it.unibo.risiko.model.dice.TripleDice;
-import it.unibo.risiko.model.dice.TripleDiceImpl;
 
 /**
  * @author Manuele D'Ambrosio

@@ -1,4 +1,4 @@
-package it.unibo.risiko.Event_Register;
+package it.unibo.risiko.model.Event_Register;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

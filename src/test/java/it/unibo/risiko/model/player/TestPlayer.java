@@ -1,4 +1,4 @@
-package it.unibo.risiko.player;
+package it.unibo.risiko.model.player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -17,9 +17,6 @@ import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.ContinentImpl;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
-import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.model.player.PlayerFactory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
 
 /**
  * @author Manuele D'Ambrosio
