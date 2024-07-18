@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public interface GameView {
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param Player       the player 
+     * @param Player       the player
      * @param playersIndex The player's index in the games turns
      * @author Michele Farneti
      */
@@ -63,7 +63,7 @@ public interface GameView {
     /**
      * Edits the view in order to show wich player is the current player.
      * 
-     * @param player 
+     * @param player
      * @author Michele Farneti
      */
     void setCurrentPlayer(final Player player);
@@ -88,14 +88,14 @@ public interface GameView {
 
     /**
      * Updates the game view, changing a tank based on territory
-     * occuaption and updating the armies count label
+     * occupation and updating the armies count label
      * 
      * @param territory
      * @param playerColor
      * @param numberOfArmies The count of the armies placed over the territory.
      * @author Michele Farneti
      */
-    void redrawTank(Territory t);
+    void redrawTank(Territory territory);
 
     /**
      * Updates the gameView making it show who is the winner of the game
@@ -153,7 +153,7 @@ public interface GameView {
      * @param attDice - results list of the attacker dices.
      * @author Manuele D'Ambrosio
      */
-    public void setAtt(final List<Integer> attDice);
+    void setAtt(final List<Integer> attDice);
 
     /**
      * Method used to set the defender's dice throws.
@@ -161,7 +161,7 @@ public interface GameView {
      * @param defDice - Results list of the defender dices.
      * @author Manuele D'Ambrosio
      */
-    public void setDef(final List<Integer> defDice);
+    void setDef(final List<Integer> defDice);
 
     /**
      * Method used to set the number of armies lost by the
@@ -170,7 +170,7 @@ public interface GameView {
      * @param attackerLostArmies - Number of armies lost by the attacker.
      * @author Manuele D'Ambrosio
      */
-    public void setAttackerLostArmies(final int attackerLostArmies);
+    void setAttackerLostArmies(final int attackerLostArmies);
 
     /**
      * Method used to set the number of armies lost by the
@@ -179,7 +179,7 @@ public interface GameView {
      * @param defenderLostArmies - Number of armies lost by the defender.
      * @author Manuele D'Ambrosio
      */
-    public void setDefenderLostArmies(final int defenderLostArmies);
+    void setDefenderLostArmies(final int defenderLostArmies);
 
     /**
      * Method used to create a panel that allows to move armies between two
@@ -188,7 +188,7 @@ public interface GameView {
      * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
-    public void createMoveArmies(final List<Territory> listTerritories);
+    void createMoveArmies(final List<Territory> listTerritories);
 
     /**
      * Method used to create a panel that allows the player to play three cards.
@@ -196,7 +196,7 @@ public interface GameView {
      * @param playerCards is the list of cards of the player
      * @author Anna Malagoli
      */
-    public void createChoiceCards(List<Card> playerCards);
+    void createChoiceCards(List<Card> playerCards);
 
     /**
      * 
@@ -205,7 +205,7 @@ public interface GameView {
      * @author Michele Farneti
      * @param enabled True if the button has to be enabled
      */
-    public void enableMovements(final boolean enabled);
+    void enableMovements(boolean enabled);
 
     /**
      * 
@@ -214,7 +214,7 @@ public interface GameView {
      * @author Michele Farneti
      * @param enabled True if the button has to be enabled
      */
-    public void enableSkip(final boolean enabled);
+    void enableSkip(boolean enabled);
 
     /**
      * 
@@ -223,21 +223,23 @@ public interface GameView {
      * @author Michele Farneti
      * @param enabled True if the button has to be enabled
      */
-    public void enableAttack(final boolean enabled);
+    void enableAttack(boolean enabled);
 
     /**
      * Creates the logPanel used to display the events of the register
+     * 
      * @param reg the register
-     * @param l the list of the players 
+     * @param l   the list of the players
      * @author Keliane Nana
      */
-    public void createLog(Register reg, List<Player> l);
+    void createLog(Register reg, List<Player> l);
 
     /**
      * Updates the log with the events that should be visualized
+     * 
      * @author Keliane Nana
      */
-    public void updateLog();
+    void updateLog();
 
     /**
      * Creates the territory table panel.
@@ -245,12 +247,12 @@ public interface GameView {
      * @param terr    - list of territories.
      * @param players - list of players.
      */
-    public void createTablePanel(List<Territory> terr, List<Player> players);
+    void createTablePanel(List<Territory> terr, List<Player> players);
 
     /**
      * Updates the table panel.
      */
-    public void updateTablePanel();
+    void updateTablePanel();
 
     /**
      * Handles Cards panel closure
@@ -264,6 +266,7 @@ public interface GameView {
      * 
      * @param gameStatus
      * @param turnsCount
+     * @author Michele Farneti
      */
     void showStatus(GameStatus gameStatus, Long turnsCount);
 }

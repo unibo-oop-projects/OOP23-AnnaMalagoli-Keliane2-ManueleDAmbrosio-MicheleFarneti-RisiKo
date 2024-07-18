@@ -22,22 +22,21 @@ public class GameLoopManagerImpl implements GameLoopManager {
     private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
     private static final int MIN_CARDS_PLAYABLE = 3; // Troppe carte cazzo ci metto troppo a testare!!!!!!
 
-    private static final Random randomNumberGenerator = new Random();
+    private final Random randomNumberGenerator = new Random();
 
-    private int armiesPlaced = 0;
-    private long turnsCount = 0;
+    private int armiesPlaced;
+    private long turnsCount;
     private GameStatus status;
     private Integer activePlayer = 0;
-    private boolean skippedToAI = false;
+    private boolean skippedToAI;
 
     public GameLoopManagerImpl() {
         status = GameStatus.TERRITORY_OCCUPATION;
     }
 
     @Override
-    public boolean skipTurn(Integer player, final List<Player> players, final Territories territories,
-            final GameStatus gameStatus) {
-        if (skipTurnPossible(players, territories, player, gameStatus)) {
+    public boolean skipTurn(final Integer player, final List<Player> players, final Territories territories) {
+        if (skipTurnPossible(players, player)) {
             switch (status) {
                 // Current player gets updated, if no player has armies left to place, the next
                 // player is going to enter the classic game loop.
@@ -83,7 +82,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
         return false;
     }
 
-    private Integer nextPlayerWithArmies(Integer playerIndex, List<Player> players) {
+    private Integer nextPlayerWithArmies(final Integer playerIndex, final List<Player> players) {
         if (players.get(nextPlayer(playerIndex, players.size())).getArmiesToPlace() != 0) {
             return nextPlayer(playerIndex, players.size());
         } else {
@@ -139,8 +138,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
     /**
      * @return False if the player is not allowed to skip his turn, true otherwise.
      */
-    private boolean skipTurnPossible(final List<Player> players, final Territories territories, final Integer player,
-            final GameStatus gameStatus) {
+    private boolean skipTurnPossible(final List<Player> players, final Integer player) {
         switch (status) {
             case TERRITORY_OCCUPATION:
                 if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
@@ -164,7 +162,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
      * @return The totale amount of armies that are still left to be placed among
      *         all the players.
      */
-    private int getTotalArmiesLeftToPlace(List<Player> players) {
+    private int getTotalArmiesLeftToPlace(final List<Player> players) {
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
     }
 
@@ -179,13 +177,13 @@ public class GameLoopManagerImpl implements GameLoopManager {
     }
 
     @Override
-    public Integer nextPlayer(Integer activePlayer, Integer playersCount) {
+    public Integer nextPlayer(final Integer activePlayer, final Integer playersCount) {
         return (activePlayer + 1) % playersCount;
     }
 
     @Override
-    public boolean isGameOver(Integer playerIndex, final List<Player> players, final Territories territories) {
-        Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved() == true).findAny();
+    public boolean isGameOver(final Integer playerIndex, final List<Player> players, final Territories territories) {
+        final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
         if (winner.isPresent()) {
             if (winner.get().equals(players.get(activePlayer))) {
                 return true;
@@ -206,15 +204,15 @@ public class GameLoopManagerImpl implements GameLoopManager {
 
     @Override
     public boolean placeArmiesIfPossible(final Player player, final List<Player> players, final String territory,
-            final GameStatus gameStatus, final Integer nArmies, final Territories territories) {
+            final Integer nArmies, final Territories territories) {
         if (player.getArmiesToPlace() > 0 && player.isOwnedTerritory(territory)) {
-            switch (gameStatus) {
+            switch (status) {
                 case TERRITORY_OCCUPATION:
                     if (armiesPlaced < PLACEABLE_ARMIES_PER_OCCUPATION_TURN) {
                         armiesPlaced++;
                         if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
                                 || player.getArmiesToPlace() == LAST_ARMY) {
-                            skipTurn(players.indexOf(player), players, territories, gameStatus);
+                            skipTurn(players.indexOf(player), players, territories);
                         }
                         return true;
                     }
@@ -223,7 +221,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
                     if (player.getArmiesToPlace() == LAST_ARMY) {
                         this.status = GameStatus.READY_TO_ATTACK;
                         this.skippedToAI = false;
-                    }else{
+                    } else {
                         this.status = GameStatus.ARMIES_PLACEMENT;
                     }
                     return true;

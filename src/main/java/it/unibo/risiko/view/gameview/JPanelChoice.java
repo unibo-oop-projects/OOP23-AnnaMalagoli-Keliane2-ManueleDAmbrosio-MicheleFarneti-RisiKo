@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import java.util.List;
 import java.awt.BorderLayout;
@@ -15,8 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.util.Optional;
 import it.unibo.risiko.model.cards.Card;
-import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
+import it.unibo.risiko.view.gameview.components.ContinuePanel;
+import it.unibo.risiko.view.gameview.components.DefaultButton;
 
 /**
  * Creation of the class JPanelChoice which is a panel that shows three

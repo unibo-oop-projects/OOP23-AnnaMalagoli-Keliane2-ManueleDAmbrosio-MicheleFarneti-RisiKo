@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,9 +16,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
-import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
+import it.unibo.risiko.view.gameview.components.ContinuePanel;
+import it.unibo.risiko.view.gameview.components.DefaultButton;
+import it.unibo.risiko.view.gameview.components.StandardTextField;
 
 /**
  * Panel used to initialize a new game.

@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 /**
  * Observer used by the view to interact with the controller by calling it's
@@ -25,7 +25,7 @@ public interface GameViewObserver {
      *                                computer.
      * @author Manuele D'Ambrosio.
      */
-    public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers);
+    void startNewGame(String mapName,int numberOfStandardPlayers,int numberOfAIPlayers);
 
     /**
      * Method that compute the attack after setting the number of

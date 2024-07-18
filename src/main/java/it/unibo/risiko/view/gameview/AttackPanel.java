@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -11,8 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
+import it.unibo.risiko.view.gameview.components.ContinuePanel;
+import it.unibo.risiko.view.gameview.components.StandardTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
