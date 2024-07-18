@@ -174,6 +174,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     currentPlayer().getOwnedCards().stream().toList());
             switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
+                case TERRITORY_OCCUPATION:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     break;
                 case ATTACKING:
@@ -198,9 +199,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     break;
                 case READY_TO_ATTACK:
                     setAttacking();
-                    break;
-                case TERRITORY_OCCUPATION:
-                    territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
                     break;
                 default:
                     break;
