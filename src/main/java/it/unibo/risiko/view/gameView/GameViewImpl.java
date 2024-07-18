@@ -1,18 +1,18 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import it.unibo.risiko.model.cards.Card;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.view.gameView.gameViewComponents.BackgroundImagePanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.ColoredImageButton;
-import it.unibo.risiko.view.gameView.gameViewComponents.CustomButton;
-import it.unibo.risiko.view.gameView.gameViewComponents.GradientPanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.LoggerView;
-import it.unibo.risiko.view.gameView.gameViewComponents.Position;
-import it.unibo.risiko.view.gameView.gameViewComponents.StandardTextField;
-import it.unibo.risiko.view.gameView.gameViewComponents.TerritoryPlaceHolder;
+import it.unibo.risiko.view.gameview.components.BackgroundImagePanel;
+import it.unibo.risiko.view.gameview.components.ColoredImageButton;
+import it.unibo.risiko.view.gameview.components.CustomButton;
+import it.unibo.risiko.view.gameview.components.GradientPanel;
+import it.unibo.risiko.view.gameview.components.LoggerView;
+import it.unibo.risiko.view.gameview.components.Position;
+import it.unibo.risiko.view.gameview.components.StandardTextField;
+import it.unibo.risiko.view.gameview.components.TerritoryPlaceHolder;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

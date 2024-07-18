@@ -30,9 +30,9 @@ import it.unibo.risiko.model.game.GameLoopManager;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
 import it.unibo.risiko.view.InitialViewObserver;
 import it.unibo.risiko.view.InitialView.GameFrameImpl;
-import it.unibo.risiko.view.gameView.GameView;
-import it.unibo.risiko.view.gameView.GameViewImpl;
-import it.unibo.risiko.view.gameView.GameViewObserver;
+import it.unibo.risiko.view.gameview.GameView;
+import it.unibo.risiko.view.gameview.GameViewImpl;
+import it.unibo.risiko.view.gameview.GameViewObserver;
 
 /**
  * Controller class for the risiko game, its function is to coordinate view and

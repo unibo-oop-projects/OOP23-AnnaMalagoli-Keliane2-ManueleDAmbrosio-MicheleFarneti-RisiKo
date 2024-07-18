@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 /**
  * Observer used by the view to interact with the controller by calling it's

@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import java.util.List;
 import java.util.ArrayList;

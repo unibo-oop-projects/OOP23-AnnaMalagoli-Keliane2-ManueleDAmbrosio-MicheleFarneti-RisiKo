@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView.gameViewComponents;
+package it.unibo.risiko.view.gameview.components;
 
 import java.awt.Graphics;
 import java.awt.Image;

@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameView;
+package it.unibo.risiko.view.gameview;
 
 import java.util.Optional;
 import java.util.List;
@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import it.unibo.risiko.model.map.Territory;
-import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
-import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;
+import it.unibo.risiko.view.gameview.components.ContinuePanel;
+import it.unibo.risiko.view.gameview.components.DefaultButton;
 
 import java.awt.Color;
 import java.awt.Dimension;

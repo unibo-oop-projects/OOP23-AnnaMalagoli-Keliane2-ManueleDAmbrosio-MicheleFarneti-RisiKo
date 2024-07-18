@@ -22,19 +22,20 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     private static final int MINIMUM_ARMIES_PER_TERRITORY = 1;
     private static final int ARMIES_STEP = 5;
 
-    private static final Random randomNumberGenerator = new Random();
+    private final Random randomNumberGenerator = new Random();
 
     private final String mapName;
     private final int maxPlayers;
 
-    public GameMapInitializerImpl(String mapName, String resourcesPackageString) {
+    public GameMapInitializerImpl(final String mapName, final String resourcesPackageString) {
         this.mapName = mapName;
         this.resourcesPackageString = resourcesPackageString;
         maxPlayers = GameMapInitializer.getMaxPlayers(buildResourceLocator());
     }
 
-    private String buildResourceLocator(String resourceName) {
-        return resourcesPackageString + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + resourceName;
+    private String buildResourceLocator(final String resourceName) {
+        return resourcesPackageString + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR
+                + resourceName;
     }
 
     private String buildResourceLocator() {
@@ -47,8 +48,8 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     @Override
-    public int getStartingArmies(int nplayers) {
-        return (MINIMUM_ARMIES + ARMIES_STEP * (maxPlayers - nplayers));
+    public int getStartingArmies(final int nplayers) {
+        return MINIMUM_ARMIES + ARMIES_STEP * (maxPlayers - nplayers);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     @Override
-    public String getTerritoriesPath(){
+    public String getTerritoriesPath() {
         return buildResourceLocator("territories.txt");
     }
 
@@ -76,16 +77,19 @@ public class GameMapInitializerImpl implements GameMapInitializer {
         switch (TargetType.randomTargetType()) {
             case PLAYER:
                 return new DestroyPlayerTarget(players.get(player), players.get(
-                    (player + randomNumberGenerator.nextInt(1, players.size())) % players.size()));
+                        (player + randomNumberGenerator.nextInt(1, players.size())) % players.size()));
             case TERRITORY:
                 return new ConquerTerritoriesTarget(players.get(player), randomNumberGenerator.nextInt(
                         Math.toIntExact(
-                                Math.round(territories.getListTerritories().size() * MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),
+                                Math.round(territories.getListTerritories().size()
+                                        * MIN_TERRITORIES_TO_CONQUER_PERCENTAGE)),
                         Math.toIntExact(
-                                Math.round(territories.getListTerritories().size() * MAX_TERRITORIES_TO_CONQUER_PERCENTAGE))));
+                                Math.round(territories.getListTerritories().size()
+                                        * MAX_TERRITORIES_TO_CONQUER_PERCENTAGE))));
             case CONTINENT:
                 return new ConquerContinentTarget(players.get(player),
-                        territories.getListContinents().get(randomNumberGenerator.nextInt(territories.getListContinents().size())));
+                        territories.getListContinents()
+                                .get(randomNumberGenerator.nextInt(territories.getListContinents().size())));
             default:
                 return new ConquerTerritoriesTarget(players.get(player), territories.getListTerritories().size());
         }
