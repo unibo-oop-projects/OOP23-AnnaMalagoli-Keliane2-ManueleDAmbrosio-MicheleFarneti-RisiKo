@@ -19,16 +19,16 @@ import it.unibo.risiko.model.objective.Target;
 public class StdPlayer implements Player {
     private static final int REINFORCEMENT_FACTOR = 3;
     private static final int INITIAL_ARMIES = 0;
-    private final String color_id;
-    private Set<String> ownedTerritories = new HashSet<>();
-    private Set<Card> ownedCards = new HashSet<>();
+    private final String colorID;
+    private final Set<String> ownedTerritories = new HashSet<>();
+    private final Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
     private Optional<Target> target;
     private boolean isAI;
     private boolean hasDrawnNewCard;
 
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
-        this.color_id = color;
+        this.colorID = color;
         this.armiesToPlace = armiesToPlace;
         this.target = Optional.empty();
         this.isAI = isAI;
@@ -64,8 +64,8 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public String getColor_id() {
-        return this.color_id;
+    public String getColorID() {
+        return this.colorID;
     }
 
     @Override
@@ -99,10 +99,10 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public void computeReinforcements(Collection<Continent> continentsList) {
+    public void computeReinforcements(final Collection<Continent> continentsList) {
         int bonusArmies = this.ownedTerritories.size() / REINFORCEMENT_FACTOR;
         List<String> territoriesNames;
-        for (Continent continent : continentsList) {
+        for (final Continent continent : continentsList) {
             territoriesNames = continent.getListTerritories().stream().map(t -> t.getTerritoryName())
                     .collect(Collectors.toList());
             if (this.ownedTerritories.containsAll(territoriesNames)) {
@@ -143,8 +143,9 @@ public class StdPlayer implements Player {
         return this.ownedTerritories.isEmpty();
     }
 
+    @Override
     public String toString() {
-        return "Color = " + this.color_id +
+        return "Color = " + this.colorID +
                 "\nTarget = " + this.target +
                 "\nNumber of cards = " + getNumberOfCards() +
                 "\nOwned cards = " + ownedCards.toString() +
@@ -169,7 +170,7 @@ public class StdPlayer implements Player {
     }
 
     @Override
-    public boolean drawNewCardIfPossible(Card card) {
+    public boolean drawNewCardIfPossible(final Card card) {
         if (!hasDrawnNewCard) {
             this.addCard(card);
             this.hasDrawnNewCard = true;

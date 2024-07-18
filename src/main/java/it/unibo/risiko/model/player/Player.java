@@ -69,7 +69,7 @@ public interface Player {
      * 
      * @return the player color.
      */
-    public String getColor_id();
+    public String getColorID();
 
     /**
      * This method is used to get the number of armies a player has yet

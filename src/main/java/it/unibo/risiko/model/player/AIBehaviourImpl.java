@@ -23,6 +23,7 @@ public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private static final int MAX_ATTACKING_ARMIES = 3;
+    private Random rnd;
     private List<Territory> playerTerritoryList;
     private List<Card> playerCardList;
     private Optional<Territory> nextAttackingTerritory;
@@ -33,6 +34,7 @@ public class AIBehaviourImpl implements AIBehaviour {
         this.playerCardList = new ArrayList<Card>(playerOwnedCards);
         this.nextAttackedTerritory = Optional.empty();
         this.nextAttackingTerritory = Optional.empty();
+        rnd = new Random();
     }
 
     @Override
@@ -52,7 +54,6 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public Territory decidePositioning() {
-        Random rnd = new Random();
         return playerTerritoryList.get(rnd.nextInt(playerTerritoryList.size()));
     }
 

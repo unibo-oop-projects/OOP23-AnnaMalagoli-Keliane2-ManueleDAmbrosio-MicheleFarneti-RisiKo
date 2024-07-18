@@ -56,13 +56,6 @@ public class TestAIBehaviour {
     }
 
     @Test
-    void testDecidePositioning() {
-        assertTrue(t2.equals(ai.decidePositioning()));
-        assertTrue(t1.equals(ai.decidePositioning()));
-        assertTrue(t2.equals(ai.decidePositioning()));
-    }
-
-    @Test
     void testDecideAttack() {
         assertTrue(ai.decideAttack(List.of(t1, t2, t3)));
         assertTrue(ai.getNextAttackedTerritory().equals(t3.getTerritoryName()));

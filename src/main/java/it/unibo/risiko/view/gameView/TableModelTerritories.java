@@ -71,7 +71,7 @@ public class TableModelTerritories extends AbstractTableModel{
             case 3:
                 for(var player : this.listPlayers) {
                     if(player.isOwnedTerritory(territory.getTerritoryName())) {
-                        return player.getColor_id();
+                        return player.getColorID();
                     }
                 }
             default:
