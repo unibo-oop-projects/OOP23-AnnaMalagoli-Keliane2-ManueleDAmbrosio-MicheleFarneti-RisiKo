@@ -345,6 +345,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
                 territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
+                drawCard();
             }
             this.gameStatus = GameStatus.READY_TO_ATTACK; // prova
             skipTurn();
@@ -413,6 +414,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
         territories.removeArmiesInTerritory(attackerTerritory.get(), numberOfMovingArmies);
         territories.addArmiesInTerritory(defenderTerritory.get(), numberOfMovingArmies);
+        drawCard();
 
         view.closeAttackPanel();
         // Creating moovement event.
@@ -603,6 +605,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Player getOwner(Territory territory) {
         String playerColor = territory.getPlayer();
         return players.stream().filter(p -> p.getColor_id().equals(playerColor)).findFirst().get();
+    }
+
+    private void drawCard() {
+        Card card = deck.pullCard();
+        if (!currentPlayer().drawNewCardIfPossible(card)) {
+            deck.addCard(card);
+        }
+
     }
 
     @Override
