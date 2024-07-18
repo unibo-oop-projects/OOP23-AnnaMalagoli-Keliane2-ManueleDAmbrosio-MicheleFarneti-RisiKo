@@ -240,6 +240,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 if (placeArmies(territory, 1)) {
                     redrawView();
                     updateGameStatus();
+                    if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
+                        currentPlayer().computeReinforcements(territories.getListContinents());
+                    }
                     if (gameLoopManager.skippedToAI()) {
                         while(currentPlayer().isAI()){
                             handleAIBehaviour();
@@ -280,9 +283,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
-                if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
-                    currentPlayer().computeReinforcements(territories.getListContinents());
-                }
                 return true;
             }
         } else {
@@ -628,7 +628,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         } else {
             gameStatus = GameStatus.ARMIES_PLACEMENT;
         }
-        this.view.exitCardsPanel();
+        if(!currentPlayer().isAI()){
+            this.view.exitCardsPanel();
+        }
         redrawView();
     }
 }
