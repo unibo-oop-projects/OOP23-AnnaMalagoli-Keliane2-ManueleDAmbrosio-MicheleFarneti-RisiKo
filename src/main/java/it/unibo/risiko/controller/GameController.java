@@ -2,6 +2,8 @@ package it.unibo.risiko.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +148,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             view.enableAttack(false);
             view.enableSkip(false);
             if (gameLoopManager.skippedToAI()) {
-                handleAIBehaviour();
+                while(currentPlayer().isAI()){
+                    handleAIBehaviour();
+                }
                 redrawView();
             }
         }
@@ -170,10 +174,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     currentPlayer().getOwnedCards().stream().toList());
             switch (this.gameStatus) {
                 case ARMIES_PLACEMENT:
-                    System.out.println(
-                            "p: " + currentPlayer().getColor_id() + " armies: " + currentPlayer().getArmiesToPlace());
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
-                    handleAIBehaviour();
                     break;
                 case ATTACKING:
                     if (aiBehaviour.decideAttack(territories.getListTerritories())) {
@@ -194,15 +195,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         exitCardsManagingPhase();
                     }
                     exitCardsManagingPhase();
-                    handleAIBehaviour();
                     break;
                 case READY_TO_ATTACK:
                     setAttacking();
-                    handleAIBehaviour();
                     break;
                 case TERRITORY_OCCUPATION:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
-                    handleAIBehaviour();
                     break;
                 default:
                     break;
@@ -242,7 +240,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 if (placeArmies(territory, 1)) {
                     redrawView();
                     if (gameLoopManager.skippedToAI()) {
-                        handleAIBehaviour();
+                        while(currentPlayer().isAI()){
+                            handleAIBehaviour();
+                        }
                         redrawView();
                     }
                 }
@@ -509,6 +509,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 players.add(playerFactory.createAIPlayer());
             }
         }
+        Collections.shuffle(players);
 
         gameLoopManager = new GameLoopManagerImpl();
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
@@ -519,7 +520,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();
         this.setupGameView();
-        handleAIBehaviour();
+        //Manages the case where the player selected at first is AI.
+        while(currentPlayer().isAI()){
+            handleAIBehaviour();
+        }
         redrawView();
     }
 
@@ -529,6 +533,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void assignTerritories(Integer minimumArmiesPerTerritory) {
+        territories.shuffle();
         for (Territory territory : this.territories.getListTerritories()) {
             currentPlayer().addTerritory(territory.getTerritoryName());
             territories.setOwner(territory.getTerritoryName(), currentPlayer().getColor_id());
