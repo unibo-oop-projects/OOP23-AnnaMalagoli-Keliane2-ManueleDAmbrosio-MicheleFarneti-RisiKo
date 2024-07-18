@@ -44,7 +44,7 @@ public class LoggerView extends JPanel{
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
         list=new String[playerList.size()];
-        playerList.stream().map(i->i.getColor_id())
+        playerList.stream().map(i->i.getColorID())
                            .forEach(j->playerNameList.add(j));
         this.setList(playerNameList);
         //creating a JComboBox for the selection of the player we want to visualize the events
@@ -85,7 +85,7 @@ public class LoggerView extends JPanel{
         Optional<Player> selectedPlayer=Optional.empty();
         String effectiveSelectedColor=(String)playerOptions.getSelectedItem();
         for (int j = 0; j < playerList.size() && selectedPlayer.equals(Optional.empty()); j++) {
-            if (playerList.get(j).getColor_id().equals(effectiveSelectedColor)) {
+            if (playerList.get(j).getColorID().equals(effectiveSelectedColor)) {
                 selectedPlayer=Optional.of(playerList.get(j));
             }
         }

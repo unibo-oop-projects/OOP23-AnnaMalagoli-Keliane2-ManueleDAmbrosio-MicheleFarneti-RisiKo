@@ -312,7 +312,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void checkWinner() {
         if (gameLoopManager.isGameOver(activePlayerIndex, players, territories)) {
-            this.view.gameOver(currentPlayer().getColor_id());
+            this.view.gameOver(currentPlayer().getColorID());
         }
     }
 
@@ -340,7 +340,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
                 int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
-                territories.setOwner(defenderTerritory.get(), currentPlayer().getColor_id());
+                territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
                 getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
                 getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
@@ -364,10 +364,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.setAttackerLostArmies(attackPhase.getAttackerLostArmies());
         view.setDefenderLostArmies(attackPhase.getDefenderLostArmies());
 
-        // // Creation of attack event.
-        // createEvent(EventType.ATTACK, attackerTerritory.get(),
-        // defenderTerritory.get(), currentPlayer().get(),
-        // Optional.of(getOwner(defenderTerritory.get())), Optional.empty());
+        // Creation of attack event.
+        createEvent(EventType.ATTACK, getTerritoryFromString(attackerTerritory.get()),
+        getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
+        Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))), Optional.empty());
         view.updateLog();
 
         // Destroying armies.
@@ -409,7 +409,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
-        territories.setOwner(defenderTerritory.get(), currentPlayer().getColor_id());
+        territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
         getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
         getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
         territories.removeArmiesInTerritory(attackerTerritory.get(), numberOfMovingArmies);
@@ -542,7 +542,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         territories.shuffle();
         for (Territory territory : this.territories.getListTerritories()) {
             currentPlayer().addTerritory(territory.getTerritoryName());
-            territories.setOwner(territory.getTerritoryName(), currentPlayer().getColor_id());
+            territories.setOwner(territory.getTerritoryName(), currentPlayer().getColorID());
             territories.addArmiesInTerritory(territory.getTerritoryName(), minimumArmiesPerTerritory);
             currentPlayer().decrementArmiesToPlace();
             activePlayerIndex = gameLoopManager.nextPlayer(activePlayerIndex, players.size());
@@ -568,10 +568,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         territories.removeArmiesInTerritory(srcTerritory, numArmies);
         territories.addArmiesInTerritory(dstTerritory, numArmies);
-        // createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
-        // getTerritoryFromString(dstTerritory),game.getOwner(srcTerritory),
-        // Optional.empty(),
-        // Optional.of(numArmies));
+
+        createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
+        getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(dstTerritory)),
+        Optional.empty(),
+        Optional.of(numArmies));
+
         view.updateLog();
         view.exitMoveArmiesPanel();
         this.skipTurn();
@@ -604,7 +606,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     private Player getOwner(Territory territory) {
         String playerColor = territory.getPlayer();
-        return players.stream().filter(p -> p.getColor_id().equals(playerColor)).findFirst().get();
+        return players.stream().filter(p -> p.getColorID().equals(playerColor)).findFirst().get();
     }
 
     private void drawCard() {

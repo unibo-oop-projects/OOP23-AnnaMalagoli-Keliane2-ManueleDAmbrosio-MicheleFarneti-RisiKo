@@ -20,12 +20,12 @@ public class DestroyPlayerTarget extends BaseTarget {
         return this.remainingActions()==0? 
         "Remainnig territories to conquer = 0. You won!":
         "You have to conquer "+this.remainingActions()+
-        " territory(ies) of "+this.playerToDestroy.getColor_id()+
+        " territory(ies) of "+this.playerToDestroy.getColorID()+
         " to win the game";
     }
 
     @Override
     public String showTargetDescription() {
-        return "Destroy the player "+this.playerToDestroy.getColor_id()+" to win the game";
+        return "Destroy the player "+this.playerToDestroy.getColorID()+" to win the game";
     }
 }

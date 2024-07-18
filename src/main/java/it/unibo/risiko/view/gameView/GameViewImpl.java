@@ -475,12 +475,12 @@ public class GameViewImpl implements GameView {
     public void showTurnIcon(final Player player, final int playerIndex) {
         if (player.isAI()) {
             iconsMap.put(
-                    player.getColor_id(),
+                    player.getColorID(),
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "aiplayers" + FILE_SEPARATOR + "aiplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
         } else {
-            iconsMap.put(player.getColor_id(),
+            iconsMap.put(player.getColorID(),
                     new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
                             FILE_SEPARATOR + "standardplayers" + FILE_SEPARATOR + "standardplayer_",
                             computeIconStartingX(playerIndex), TURNBAR_START_Y, TURN_ICON_WIDTH, TURN_ICON_HEIGHT));
@@ -507,11 +507,11 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void setCurrentPlayer(final Player player) {
-        turnTank.setColor(player.getColor_id());
+        turnTank.setColor(player.getColorID());
         iconsMap.entrySet().stream()
                 .forEach(e -> e.getValue()
-                        .setBorderPainted((e.getKey().equals(player.getColor_id())) ? true : false));
-        attackBarBackgroundPanel.setTopColor(stringToColor(player.getColor_id()));
+                        .setBorderPainted((e.getKey().equals(player.getColorID())) ? true : false));
+        attackBarBackgroundPanel.setTopColor(stringToColor(player.getColorID()));
         playerArmiesLabel.setText(String.valueOf(player.getArmiesToPlace()));
         showTarget(player.getTarget().showTargetDescription());
         mainFrame.validate();
