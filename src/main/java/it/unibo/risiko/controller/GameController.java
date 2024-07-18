@@ -341,6 +341,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             if (attackPhase.isTerritoryConquered()) {
                 int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
                 territories.setOwner(defenderTerritory.get(), currentPlayer().getColor_id());
+                getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
+                getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
                 territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
                 territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
             }
@@ -407,6 +409,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
         territories.setOwner(defenderTerritory.get(), currentPlayer().getColor_id());
+        getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
+        getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
         territories.removeArmiesInTerritory(attackerTerritory.get(), numberOfMovingArmies);
         territories.addArmiesInTerritory(defenderTerritory.get(), numberOfMovingArmies);
 
@@ -594,6 +598,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Territory getTerritoryFromString(String territoryName) {
         return territories.getListTerritories().stream().filter(t -> t.getTerritoryName().equals(territoryName))
                 .findFirst().get();
+    }
+
+    private Player getOwner(Territory territory) {
+        String playerColor = territory.getPlayer();
+        return players.stream().filter(p -> p.getColor_id().equals(playerColor)).findFirst().get();
     }
 
     @Override
