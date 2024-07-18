@@ -15,55 +15,55 @@ import it.unibo.risiko.model.player.Player;
 
 public interface GameLoopManager {
 
-    /**
-     * @param activePlayer The index of the current player
-     * @param playersCount The amount of player currentlyt in the game
-     * @return The index of the next player
-     */
-    Integer nextPlayer(Integer activePlayer, Integer playersCount);
+        /**
+         * @param activePlayer The index of the current player
+         * @param playersCount The amount of player currentlyt in the game
+         * @return The index of the next player
+         */
+        Integer nextPlayer(Integer activePlayer, Integer playersCount);
 
-    /**
-     * Allows the game to go on by updating the active players, but only after
-     * checking if he made all the actions needed to skip the turn.
-     * 
-     * @return True if the turn was succesfuly skipped
-     */
-    boolean skipTurn(final Integer player, final List<Player> players, final Territories territories,
-            final GameStatus gameStatus);
+        /**
+         * Allows the game to go on by updating the active players, but only after
+         * checking if he made all the actions needed to skip the turn.
+         * 
+         * @return True if the turn was succesfuly skipped
+         */
+        boolean skipTurn(Integer player, List<Player> players, Territories territories);
 
-    /**
-     * @return The current Stage of the game
-     */
-    GameStatus getGameStatus();
+        /**
+         * @return The current Stage of the game
+         */
+        GameStatus getGameStatus();
 
-    /**
-     * @param
-     * @return True if one of the players has reached is target
-     */
-    boolean isGameOver(Integer playerIndex, final List<Player> players, final Territories territories);
+        /**
+         * @param
+         * @return True if one of the players has reached is target
+         */
+        boolean isGameOver(Integer playerIndex, List<Player> players, Territories territories);
 
-    /**
-     * 
-     * @return The index of the active player
-     */
-    Integer getActivePlayer();
+        /**
+         * 
+         * @return The index of the active player
+         */
+        Integer getActivePlayer();
 
-    /**
-     * 
-     * @return a number indicating how many times the game loop has reached the
-     *         first player
-     */
-    Long getTurnsCount();
+        /**
+         * 
+         * @return a number indicating how many times the game loop has reached the
+         *         first player
+         */
+        Long getTurnsCount();
 
-    /**
-     * Alerts the gameLoopManager that the player is going to place armies. IF the action is possible
-     * updates the amries placed count.
-     * 
-     * @return True if the player can place the armies, false otherwise.
-     */
-    boolean placeArmiesIfPossible(Player player, List<Player> players, String territory, GameStatus gameStatus,
-            Integer nArmies, Territories territories);
+        /**
+         * Alerts the gameLoopManager that the player is going to place armies. IF the
+         * action is possible
+         * updates the amries placed count.
+         * 
+         * @return True if the player can place the armies, false otherwise.
+         */
+        boolean placeArmiesIfPossible(Player player, List<Player> players, String territory,
+                        Integer nArmies, Territories territories);
 
-    boolean skippedToAI();
+        boolean skippedToAI();
 
 }

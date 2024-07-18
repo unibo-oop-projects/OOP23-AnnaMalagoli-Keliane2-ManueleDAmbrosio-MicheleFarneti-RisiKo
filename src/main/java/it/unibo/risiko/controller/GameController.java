@@ -131,7 +131,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void skipTurn() {
-        if (gameLoopManager.skipTurn(activePlayerIndex, players, territories, gameStatus)) {
+        if (gameLoopManager.skipTurn(activePlayerIndex, players, territories)) {
             updateGameStatus();
             resetAttack();
             redrawView();
@@ -146,7 +146,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             view.enableAttack(false);
             view.enableSkip(false);
             if (gameLoopManager.skippedToAI()) {
-                while(currentPlayer().isAI()){
+                while (currentPlayer().isAI()) {
                     handleAIBehaviour();
                 }
                 redrawView();
@@ -240,7 +240,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         currentPlayer().computeReinforcements(territories.getListContinents());
                     }
                     if (gameLoopManager.skippedToAI()) {
-                        while(currentPlayer().isAI()){
+                        while (currentPlayer().isAI()) {
                             handleAIBehaviour();
                         }
                         redrawView();
@@ -253,7 +253,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         view.enableMovements(true);
                     }
                     if (gameLoopManager.skippedToAI()) {
-                        while(currentPlayer().isAI()){
+                        while (currentPlayer().isAI()) {
                             handleAIBehaviour();
                         }
                         redrawView();
@@ -281,14 +281,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     private boolean placeArmies(String territory, Integer nArmies) {
         if (gameStatus == GameStatus.TERRITORY_OCCUPATION) {
-            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory, gameStatus,
+            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
                 return true;
             }
         } else {
-            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory, gameStatus,
+            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
@@ -363,8 +363,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
         // Creation of attack event.
         createEvent(EventType.ATTACK, getTerritoryFromString(attackerTerritory.get()),
-        getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
-        Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))), Optional.empty());
+                getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
+                Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))), Optional.empty());
         view.updateLog();
 
         // Destroying armies.
@@ -383,9 +383,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (attackPhase.isTerritoryConquered()) {
 
             createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
-            getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
-            Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
-            Optional.empty());
+                    getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
+                    Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
+                    Optional.empty());
 
             view.updateLog();
             view.drawConquerPanel();
@@ -410,9 +410,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.closeAttackPanel();
         // Creating moovement event.
         createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(attackerTerritory.get()),
-        getTerritoryFromString(defenderTerritory.get()),
-        getOwner(getTerritoryFromString(attackerTerritory.get())),
-        Optional.empty(), Optional.of(numberOfMovingArmies));
+                getTerritoryFromString(defenderTerritory.get()),
+                getOwner(getTerritoryFromString(attackerTerritory.get())),
+                Optional.empty(), Optional.of(numberOfMovingArmies));
 
         resetAttack();
         view.updateLog();
@@ -440,7 +440,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void createEvent(EventType type, Territory attacker, Territory defender, Player eventLeader,
             Optional<Player> eventLeaderAdversary, Optional<Integer> numArmies) {
-                register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
+        register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
     }
 
     /**
@@ -523,8 +523,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.register = new RegisterImpl();
         activePlayerIndex = 0;
         this.setupGameView();
-        //Manages the case where the player selected at first is AI.
-        while(currentPlayer().isAI()){
+        // Manages the case where the player selected at first is AI.
+        while (currentPlayer().isAI()) {
             handleAIBehaviour();
         }
         redrawView();
@@ -557,8 +557,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @param srcTerritory is the source territory
      * @param dstTerritory is the destination territory
-     * @param numArmies is the number of armies that the player
-     * wants to move
+     * @param numArmies    is the number of armies that the player
+     *                     wants to move
      * @author Keliane Nana
      * @author Anna Malagoli
      */
@@ -567,9 +567,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         territories.addArmiesInTerritory(dstTerritory, numArmies);
 
         createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(srcTerritory),
-        getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(dstTerritory)),
-        Optional.empty(),
-        Optional.of(numArmies));
+                getTerritoryFromString(dstTerritory), getOwner(getTerritoryFromString(dstTerritory)),
+                Optional.empty(),
+                Optional.of(numArmies));
 
         view.updateLog();
         view.exitMoveArmiesPanel();
@@ -626,7 +626,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         } else {
             gameStatus = GameStatus.ARMIES_PLACEMENT;
         }
-        if(!currentPlayer().isAI()){
+        if (!currentPlayer().isAI()) {
             this.view.exitCardsPanel();
         }
         redrawView();
