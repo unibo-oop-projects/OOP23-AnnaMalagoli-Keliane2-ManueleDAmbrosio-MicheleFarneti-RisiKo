@@ -31,7 +31,7 @@ public class OptionSubMenu extends JPanel{
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(700, 700));
         //creating risolution button
-        JButton risolution=p.addButtonToMenu("Risolution",this);
+        JButton risolution=p.addButtonToMenu("Resolution",this);
         //creating risolution option panel
         JPanel risPane = p.addPanelToMenu(this);
         this.add(Box.createRigidArea(new Dimension(0,5)));

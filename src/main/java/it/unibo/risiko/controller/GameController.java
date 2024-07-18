@@ -1,8 +1,6 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -338,12 +336,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
                 int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
-                getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
-                getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
-                territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
-                territories.removeArmiesInTerritory(attackerTerritory.get(), armiesToMove);
-                territories.addArmiesInTerritory(defenderTerritory.get(), armiesToMove);
-                drawCard();
+                conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
             }
             this.gameStatus = GameStatus.READY_TO_ATTACK; // prova
             skipTurn();
@@ -407,24 +400,28 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void setMovingArmies(int numberOfMovingArmies) {
         // Conquer of the territory.
-        getOwner(getTerritoryFromString(defenderTerritory.get())).removeTerritory(defenderTerritory.get());
-        getOwner(getTerritoryFromString(attackerTerritory.get())).addTerritory(defenderTerritory.get());
-        territories.setOwner(defenderTerritory.get(), currentPlayer().getColorID());
-        territories.removeArmiesInTerritory(attackerTerritory.get(), numberOfMovingArmies);
-        territories.addArmiesInTerritory(defenderTerritory.get(), numberOfMovingArmies);
-        drawCard();
+        conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), numberOfMovingArmies);
 
         view.closeAttackPanel();
         // Creating moovement event.
-        // createEvent(EventType.TROOP_MOVEMENT, attackerTerritory.get(),
-        // defenderTerritory.get(),
-        // game.getOwner(attackerTerritory.get().getTerritoryName()),
-        // Optional.empty(), Optional.of(numberOfMovingArmies));
+        createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(attackerTerritory.get()),
+        getTerritoryFromString(defenderTerritory.get()),
+        getOwner(getTerritoryFromString(attackerTerritory.get())),
+        Optional.empty(), Optional.of(numberOfMovingArmies));
 
         resetAttack();
         view.updateLog();
         redrawView();
         checkWinner();
+    }
+
+    private void conquerAndDraw(String attTerritory, String conqueredTerritory, int movingArmies) {
+        getOwner(getTerritoryFromString(conqueredTerritory)).removeTerritory(conqueredTerritory);
+        getOwner(getTerritoryFromString(attTerritory)).addTerritory(conqueredTerritory);
+        territories.setOwner(conqueredTerritory, currentPlayer().getColorID());
+        territories.removeArmiesInTerritory(attTerritory, movingArmies);
+        territories.addArmiesInTerritory(conqueredTerritory, movingArmies);
+        drawCard();
     }
 
     /**
