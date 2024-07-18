@@ -27,16 +27,12 @@ import it.unibo.risiko.model.player.Player;
  * @author Keliane Nana
  */
 public class LoggerView extends JPanel{
-    private final List<Player> playerList;
-    private final Register register; 
+    private final JButton allEvent;
     private String eventList="";
     private String[] list;
     private JTextArea logText;
     
-    @SuppressWarnings("unchecked")
     public LoggerView(final Register register, final List<Player> playerList){
-        this.playerList=playerList;
-        this.register=register;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         //creating a textArea, the event container
         logText=new JTextArea(20,20);
@@ -44,7 +40,6 @@ public class LoggerView extends JPanel{
         logText.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
         //creating a scroller containing the event container
         JScrollPane logTextScroller=new JScrollPane(logText);
-        logTextScroller.setSize(new Dimension(this.getWidth(),this.getHeight()));
         //the list that will contain the color_id of the players
         List<String> playerNameList=new ArrayList<>();
         list=new String[playerList.size()];
@@ -56,7 +51,7 @@ public class LoggerView extends JPanel{
         playerOptions.setRenderer(new MyComboBoxRenderer("Show events of:"));
         playerOptions.setSelectedIndex(-1);
         //the button used to show all the events
-        JButton allEvent=new JButton("Show all events");
+        allEvent=new JButton("Show all events");
         allEvent.setFont(new Font("Arial", Font.BOLD, 14));
         allEvent.setAlignmentX(Component.CENTER_ALIGNMENT);
         //adding the button and the JComboBox to the panel options
@@ -67,8 +62,8 @@ public class LoggerView extends JPanel{
         //adding the options and logTextScroller to the loggerView
         this.add(logTextScroller,BorderLayout.CENTER);
         //adding actionListerner to the button and the JComboBox
-        allEvent.addActionListener(e->showAllEvents(logText));
-        playerOptions.addActionListener(e->showEventByPlayerName(logText,playerOptions));
+        allEvent.addActionListener(e->showAllEvents(logText, register));
+        playerOptions.addActionListener(e->showEventByPlayerName(logText,playerOptions,playerList, register));
     }
 
     private void setList(List<String> playerNameList) {
@@ -83,7 +78,7 @@ public class LoggerView extends JPanel{
      * @param playerOptions the element from which was selected the player whose events 
      * should be visualize 
      */
-    private void showEventByPlayerName(JTextArea logText, JComboBox<String> playerOptions) {
+    private void showEventByPlayerName(JTextArea logText, JComboBox<String> playerOptions, List<Player> playerList, Register register) {
         this.eventList="";
         Optional<Player> selectedPlayer=Optional.empty();
         String effectiveSelectedColor=(String)playerOptions.getSelectedItem();
@@ -92,6 +87,7 @@ public class LoggerView extends JPanel{
                 selectedPlayer=Optional.of(playerList.get(j));
             }
         }
+        eventList+=selectedPlayer.get().getTarget().remainingActionsToString()+"\n\n";
         register.getAllEventsPlayer(selectedPlayer.get()).forEach(i->eventList+=i.getDescription()+"\n");
         updateLogText(logText, eventList);
     }
@@ -100,18 +96,14 @@ public class LoggerView extends JPanel{
      * Method that shows all the events of the game
      * @param logText the textArea that will contain the events
      */
-    public void showAllEvents(JTextArea logText) {
+    public void showAllEvents(JTextArea logText,Register register) {
         this.eventList="";
         register.getAllEvents().forEach(i->{eventList+=i.getDescription()+"\n"; System.out.println(i.getDescription());});
         updateLogText(logText, eventList);
     }
 
-    /**
-     * 
-     * @return the textArea which should contains the events
-     */
-    public JTextArea getTextArea(){
-        return this.logText;
+    public void pressButtonAllEvent(){
+        this.allEvent.doClick();
     }
 
     /**
@@ -124,11 +116,10 @@ public class LoggerView extends JPanel{
     }
 
     /**
-     * Inner Class which help to set a title in the JComboBox 
+     * Inner static Class which help to set a title in the JComboBox 
      * used to select the player whose events we want to see
      */
-    @SuppressWarnings("rawtypes")
-    class MyComboBoxRenderer extends JLabel implements ListCellRenderer {
+    static class MyComboBoxRenderer extends JLabel implements ListCellRenderer<String> {
         private String _title;
 
         public MyComboBoxRenderer(String title) {
@@ -136,15 +127,16 @@ public class LoggerView extends JPanel{
         }
 
         @Override
-        public Component getListCellRendererComponent(JList list, Object value,
-            int index, boolean isSelected, boolean hasFocus) {
+        public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+                boolean isSelected, boolean cellHasFocus) {
             if (index == -1 && value == null){
-            setText(_title);
-            setFont(new Font("Arial", Font.BOLD, 14));
+                setText(_title);
+                setFont(new Font("Arial", Font.BOLD, 14));
             }else{
-            setText(value.toString());
+                setText(value.toString());
             }
             return this;
         }
+
     }
 }

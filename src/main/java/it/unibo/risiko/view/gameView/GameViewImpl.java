@@ -712,7 +712,7 @@ public class GameViewImpl implements GameView {
      */
     @Override
     public void updateLog(){
-        log.showAllEvents(log.getTextArea());
+        log.pressButtonAllEvent();
     }
 
     /**
