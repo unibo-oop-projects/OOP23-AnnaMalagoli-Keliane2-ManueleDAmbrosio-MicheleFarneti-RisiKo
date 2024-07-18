@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.view.gameView.gameViewComponents.ContinuePanel;
 import it.unibo.risiko.view.gameView.gameViewComponents.DefaultButton;

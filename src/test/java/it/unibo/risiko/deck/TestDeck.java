@@ -16,8 +16,6 @@ import it.unibo.risiko.model.cards.DeckImpl;
 import it.unibo.risiko.model.cards.CardImpl;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
-import it.unibo.risiko.model.map.TerritoryImpl;
-import it.unibo.risiko.model.map.Territory;
 import java.io.File;
 
 /**
@@ -100,8 +98,10 @@ public class TestDeck {
          * One of the cards is of Spain which is a territory that the player owns,
          * so he gain 2 extra armies. After the player play he has to set 10 armies.
          */
+        assertEquals(3, player.getOwnedCards().size());
         deck.playCards(card1.getTerritoryName(), card2.getTerritoryName(), card4.getTerritoryName(), player);
         assertEquals(10, player.getArmiesToPlace());
+        assertEquals(0, player.getOwnedCards().size());
     }
 
     /** DA RIMUOVERE PERCHè metodo privato
@@ -130,6 +130,5 @@ public class TestDeck {
     deck.getCardByTerritoryName(card3.getTerritoryName(),
     player).get().getTerritoryName());
     }*/
-    
 
 }

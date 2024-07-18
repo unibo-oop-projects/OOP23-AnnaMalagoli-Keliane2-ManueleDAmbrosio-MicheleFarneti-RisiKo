@@ -1,7 +1,6 @@
 package it.unibo.risiko.model.cards;
 
 import java.util.List;
-import java.util.Optional;
 
 import it.unibo.risiko.model.player.Player;
 /** 

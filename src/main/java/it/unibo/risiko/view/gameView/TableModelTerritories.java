@@ -16,14 +16,14 @@ import it.unibo.risiko.model.map.Territory;
  * in the fourth the players that own the territories.
  * @author Anna Malagoli 
  */
-public class TableModelTerritories extends AbstractTableModel{
+public class TableModelTerritories extends AbstractTableModel {
 
     private List<Territory> listTerritories = new ArrayList<>();
     private List<Player> listPlayers = new ArrayList<>();
-    private int NUM_COLUMN = 4;
+    private static final int NUM_COLUMN = 4;
     /*the following list is used to contain the name of every column in the table*/
     private String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
-    
+
     /**
      * Method to set datas in the table model.
      * @param terr is the list of territories
@@ -33,7 +33,7 @@ public class TableModelTerritories extends AbstractTableModel{
         this.listPlayers = players;
         this.listTerritories = terr;
     }
-    
+
     /**
      * Method to return the number of rows displayed in the table that corresponds
      * to the number of territories of the map.
@@ -61,7 +61,7 @@ public class TableModelTerritories extends AbstractTableModel{
     public Object getValueAt(final int rowIndex, final int columnIndex) {
         Territory territory = this.listTerritories.get(rowIndex);
 
-        switch(columnIndex) {
+        switch (columnIndex) {
             case 0:
                 return territory.getTerritoryName();
             case 1:
@@ -69,8 +69,8 @@ public class TableModelTerritories extends AbstractTableModel{
             case 2:
                 return territory.getNumberOfArmies();
             case 3:
-                for(var player : this.listPlayers) {
-                    if(player.isOwnedTerritory(territory.getTerritoryName())) {
+                for (var player : this.listPlayers) {
+                    if (player.isOwnedTerritory(territory.getTerritoryName())) {
                         return player.getColor_id();
                     }
                 }

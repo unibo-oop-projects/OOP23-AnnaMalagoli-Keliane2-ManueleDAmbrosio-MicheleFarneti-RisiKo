@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Collections;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The Territories class is used by the controller at the start of the game to generate 
@@ -37,8 +38,8 @@ public class Territories {
         final String absoluteFilePath = file.getAbsolutePath();
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
-            try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);){
+            try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
             String stringRow;
             String continentName = " ";
             List<String> continentInfo;
@@ -195,10 +196,10 @@ public class Territories {
     /**
      * Method used to set the owner of a territory.
      * @param terrName is the name of the territory
-     * @param player_id is the id of the player
+     * @param playerId is the id of the player
      */
-    public void setOwner(final String terrName, final String player_id) {
+    public void setOwner(final String terrName, final String playerId) {
         Territory terr = getTerritoryFromName(terrName).get();
-        terr.setPlayer(player_id);
+        terr.setPlayer(playerId);
     }
 }

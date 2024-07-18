@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Optional;
-
+import java.nio.charset.StandardCharsets;
 import it.unibo.risiko.model.player.Player;
 
 /**
@@ -48,8 +48,8 @@ public class DeckImpl implements Deck {
         final String absoluteFilePath = file.getAbsolutePath();
         try {
             final InputStream inputStream = new FileInputStream(absoluteFilePath);
-            try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
                 String stringRow = bufferedReader.readLine();
                 while (stringRow != null) {
                     Card card;

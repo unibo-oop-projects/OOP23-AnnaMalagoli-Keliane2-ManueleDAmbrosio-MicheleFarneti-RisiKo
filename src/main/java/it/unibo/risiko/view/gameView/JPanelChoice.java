@@ -42,6 +42,7 @@ public class JPanelChoice extends JPanel {
      * Through the constructor the JPanelChoice is set.
      * 
      * @param playerCards is the list of cards owned by the player
+     * @param observer is the game observer
      */
     JPanelChoice(final List<Card> playerCards, final GameViewObserver observer) {
         this.setLayout(new BorderLayout());
