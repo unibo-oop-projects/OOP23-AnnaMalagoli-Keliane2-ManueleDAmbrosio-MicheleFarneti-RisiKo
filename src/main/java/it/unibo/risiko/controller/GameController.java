@@ -252,6 +252,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     if (gameStatus == GameStatus.READY_TO_ATTACK) {
                         view.enableMovements(true);
                     }
+                    if (gameLoopManager.skippedToAI()) {
+                        while(currentPlayer().isAI()){
+                            handleAIBehaviour();
+                        }
+                        redrawView();
+                    }
                     redrawView();
                 }
                 break;
@@ -275,14 +281,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     private boolean placeArmies(String territory, Integer nArmies) {
         if (gameStatus == GameStatus.TERRITORY_OCCUPATION) {
-            if (gameLoopManager.placeArmiesIfPossibile(players.get(activePlayerIndex), players, territory, gameStatus,
+            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory, gameStatus,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);
                 return true;
             }
         } else {
-            if (gameLoopManager.placeArmiesIfPossibile(players.get(activePlayerIndex), players, territory, gameStatus,
+            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory, gameStatus,
                     nArmies, territories)) {
                 currentPlayer().decrementArmiesToPlace();
                 territories.addArmiesInTerritory(territory, nArmies);

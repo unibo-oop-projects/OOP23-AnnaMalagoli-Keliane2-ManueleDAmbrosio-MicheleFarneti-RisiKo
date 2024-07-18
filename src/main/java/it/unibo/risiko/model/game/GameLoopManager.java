@@ -61,7 +61,7 @@ public interface GameLoopManager {
      * 
      * @return True if the player can place the armies, false otherwise.
      */
-    boolean placeArmiesIfPossibile(Player player, List<Player> players, String territory, GameStatus gameStatus,
+    boolean placeArmiesIfPossible(Player player, List<Player> players, String territory, GameStatus gameStatus,
             Integer nArmies, Territories territories);
 
     boolean skippedToAI();
