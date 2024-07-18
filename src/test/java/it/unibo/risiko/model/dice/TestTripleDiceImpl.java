@@ -14,7 +14,7 @@ class TestTripleDiceImpl {
     private static final int MIN_VAL = 2;
 
     @Test
-    void TestBuilder() {
+    void testBuilder() {
         final TripleDice dice1 = new TripleDiceImpl(3);
         final TripleDice dice2 = new TripleDiceImpl(2);
         final TripleDice dice3 = new TripleDiceImpl(1);
