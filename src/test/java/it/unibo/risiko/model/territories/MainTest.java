@@ -53,13 +53,14 @@ class MainTest {
         final String path = "src/test/java/it/unibo/risiko/territories/Territories.txt";
         final Territories territories = new Territories(path);
         final Continent continent;
+        final int bonusArmyEurope = 5;
         final List<Territory> territoriesList = territories.getListTerritories();
         final List<Continent> continentList = territories.getListContinents();
         assertEquals(territoriesList.get(0).getTerritoryName(), ITALIA);
         assertEquals(territoriesList.get(0).getListOfNearTerritories().get(0), FRANCIA);
         assertEquals(territoriesList.get(1).getTerritoryName(), FRANCIA);
         assertEquals(continentList.get(0).getName(), "Europa");
-        assertEquals(continentList.get(0).getBonusArmies(), 5);
+        assertEquals(continentList.get(0).getBonusArmies(), bonusArmyEurope);
         assertEquals(continentList.size(), 1);
         continent = continentList.get(0);
         assertEquals(continent.getListTerritories().get(0).getTerritoryName(), ITALIA);
@@ -81,14 +82,13 @@ class MainTest {
         assertFalse(territories.territoriesAreNear("Italia", "Spagna"));
     }
 
-    
     /*@Test
     public void testMovementOfArmiesBetweenTwoTerritory() {
         final String path = "src/test/java/it/unibo/risiko/Territories.txt";
         final Territories territories = new Territories(path);
         Verify if the movement of 3 armies between ITALY and SPAIN is permetted
          * and does as expected.
-        
+
         territories.addArmiesInTerritory(ITALIA, 4);
         Territory France = territories.getListTerritories().get(1);
         Territory Italy = territories.getListTerritories().get(0);
