@@ -45,7 +45,7 @@ public interface GameMapInitializer {
      * @param nplayers Number of players playing in the map
      * @return The number of armies every player should start with.
      */
-    int getStratingArmies(int nplayers);
+    int getStartingArmies(int nplayers);
 
     /**
      * 

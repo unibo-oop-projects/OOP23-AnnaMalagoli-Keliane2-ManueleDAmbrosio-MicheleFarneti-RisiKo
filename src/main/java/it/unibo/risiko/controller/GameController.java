@@ -1,8 +1,6 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -521,7 +519,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
         this.territories = new Territories(gameInitializer.getTerritoriesPath());
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
-        players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStratingArmies(players.size())));
+        players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStartingArmies(players.size())));
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();

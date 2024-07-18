@@ -10,9 +10,15 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import it.unibo.risiko.model.cards.CardImpl;
+import it.unibo.risiko.model.cards.DeckImpl;
+import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
+import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.model.player.PlayerFactory;
 
 public class TestGameMap {
     private static final String SMALL_MAP_NAME = "smallMap";
@@ -23,6 +29,7 @@ public class TestGameMap {
     private static final String FILE_SEPARATOR = File.separator;
 
     private GameMapInitializer testMap;
+    private PlayerFactory playerFactory;
 
     @BeforeAll
     static void setResoucesString() {
@@ -39,29 +46,31 @@ public class TestGameMap {
                 GameMapInitializer.getMaxPlayers(TEST_RESOURCES_PATH + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + BIG_MAP_NAME));
     }
 
-    /*@Test
+    @Test
     void TestMap() {
-        testMap = new GameMapImpl("smallMap", TEST_RESOURCES_PATH);
+        testMap = new GameMapInitializerImpl("smallMap", TEST_RESOURCES_PATH);
 
-        assertEquals(SMALL_MAP_NAME, testMap.getName());
+        assertEquals(SMALL_MAP_NAME, testMap.getMapName());
         assertEquals(testMap.getMaxPlayers(), 2);
-        var territories = testMap.getTerritories();
-        assertEquals(2, territories.size());
-        List<String> territoriesNames = territories.stream().map(t -> t.getTerritoryName())
+        var territories = new Territories(testMap.getTerritoriesPath());
+        assertEquals(2, territories.getListTerritories().size());
+        List<String> territoriesNames = territories.getListTerritories().stream().map(t -> t.getTerritoryName())
                 .collect(Collectors.toList());
         assertEquals(List.of("Italia", "Francia"), territoriesNames);
 
-        var continents = testMap.getContinents();
-        assertEquals(1, continents.size());
-        List<String> continentsNames = continents.stream().map(t -> t.getName()).collect(Collectors.toList());
-        assertEquals(List.of("Europa"), continentsNames);
+        List<Continent> continentNames = territories.getListContinents();
+        assertEquals(List.of("Italia", "Francia"), continentNames);
 
-        assertEquals(15, testMap.getStratingArmies(3));
-        assertEquals(20, testMap.getStratingArmies(2));
+        assertEquals(15, testMap.getStartingArmies(3));
+        assertEquals(20, testMap.getStartingArmies(2));
 
-        var territory1 = new TerritoryImpl("Italia", "Europa", List.of("Francia", "Austria", "Slovenia", "Svizzera"));
-        var territory2 = new TerritoryImpl("Francia", "Europa" ,List.of("Belgio", "Lussemburgo", "Germania" ,"Svizzera" ,"Italia" ,"Monaco" ,"Spagna" ,"Andorra"));
+        var deck = new DeckImpl(testMap.getDeckPath());
+        assertEquals(deck.getListCards(),new CardImpl("Italy", "Infantry"));
 
-        assertTrue(testMap.areTerritoriesNear(territory1,territory2));
-    }*/
+        Player player1 = playerFactory.createStandardPlayer();
+        Player player2 = playerFactory.createAIPlayer();
+        var target = testMap.generateTarget(0,List.of(player1,player2),territories);
+        assertEquals(target.getPlayer(),player1);
+        assertEquals(target.isAchieved(),false);
+    }
 }
