@@ -13,16 +13,18 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import it.unibo.risiko.view.InitialViewObserver;
+
 /**
  *A panel which represents the principal menu
  @author Keliane Nana
  */
 public class PrincipalMenu extends JPanel {
-    private final GameFrame gameFrame;
+    //private final GameFrame gameFrame;
     private final ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
-    public PrincipalMenu(final GameFrame f){
-        this.gameFrame = f;
+    public PrincipalMenu(final GameFrame f, final InitialViewObserver controller){
+        //this.gameFrame = f;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(1600, 900));
@@ -37,12 +39,12 @@ public class PrincipalMenu extends JPanel {
         option.setBorder(BorderFactory.createEmptyBorder(12,61,12,61));
         quit.setBorder(BorderFactory.createEmptyBorder(12,69,12,69));
         //adding actionListeners to the JButton
-        newGame.addActionListener(a->startNewGame());
-        continueSavedGame.addActionListener(a->continueSavedGame());
-        option.addActionListener(a->showOptionPanel());
+        newGame.addActionListener(a->startNewGame(f, controller));
+        continueSavedGame.addActionListener(a->continueSavedGame(f, controller));
+        option.addActionListener(a->showOptionPanel(f));
         quit.addActionListener(e->{int answer=JOptionPane.showConfirmDialog(this,
         "Are you sure you want to quit?", "Impostazioni Risoluzione",
-        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE); if(answer==0){ this.gameFrame.unshow();}});
+        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE); if(answer==0){ f.unshow();}});
     }
 
     @Override
@@ -55,29 +57,29 @@ public class PrincipalMenu extends JPanel {
      * This method helps to update the gameFrame by showing
      * the OptionSubMenu panel
      */
-    private void showOptionPanel() {
-        this.gameFrame.updatePanel((this.gameFrame).getOptionSubMenu());
+    private void showOptionPanel(GameFrame gameFrame) {
+        gameFrame.updatePanel(new OptionSubMenu(this, gameFrame));
     }
 
     /**
      * this method organise everything so that a saved game
      * can continue
      */
-    private void continueSavedGame() {
-        var dim=this.gameFrame.getFrameRisolution();
-        this.gameFrame.unshow();
-        this.gameFrame.getController().startGameWindow(dim.width, dim.height);
-        this.gameFrame.getController().setupGameView();
+    private void continueSavedGame(GameFrame gameFrame, InitialViewObserver controller) {
+        var dim=gameFrame.getFrameRisolution();
+        gameFrame.unshow();
+        controller.startGameWindow(dim.width, dim.height);
+        controller.setupGameView();
     }
 
     /**
      * This method starts a new game
      */
-    private void startNewGame() {
-        var dim=this.gameFrame.getFrameRisolution();
-        this.gameFrame.unshow();
-        this.gameFrame.getController().startGameWindow(dim.width, dim.height);
-        this.gameFrame.getController().initializeNewGame();
+    private void startNewGame(GameFrame gameFrame, InitialViewObserver controller) {
+        var dim=gameFrame.getFrameRisolution();
+        gameFrame.unshow();
+        controller.startGameWindow(dim.width, dim.height);
+       controller.initializeNewGame();
     }
 
     /**
@@ -87,7 +89,7 @@ public class PrincipalMenu extends JPanel {
      * the insertion
      * @return the added JButton
      */
-    protected JButton addButtonToMenu(String name, Container container) {
+    protected final JButton addButtonToMenu(String name, Container container) {
         JButton button = new JButton(name);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         container.add(button);
@@ -101,7 +103,7 @@ public class PrincipalMenu extends JPanel {
      * the insertion
      * @return the added JPanel 
      */
-    public JPanel addPanelToMenu(Container c) {
+    protected final JPanel addPanelToMenu(Container c) {
         JPanel pane = new JPanel();
         pane.setVisible(false);
         c.add(pane);
@@ -112,8 +114,8 @@ public class PrincipalMenu extends JPanel {
      * getter, used to get the gameFrame associated to this panel
      * @return the gameFrame of this PrincipalMenu
      */
-    public GameFrame getGameFrame() {
+    /*public GameFrame getGameFrame() {
         return this.gameFrame;
-    }
+    } */
 
 }

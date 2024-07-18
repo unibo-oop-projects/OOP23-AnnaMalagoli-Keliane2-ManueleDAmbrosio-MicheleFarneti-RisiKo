@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -30,7 +32,7 @@ public class OptionSubMenu extends JPanel{
     private ButtonGroup grp;
     private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
-    public OptionSubMenu(PrincipalMenu p) {
+    public OptionSubMenu(PrincipalMenu p, GameFrame g) {
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(700, 700));
@@ -61,8 +63,8 @@ public class OptionSubMenu extends JPanel{
         //adding ActionListeners to buttons
         risolution.addActionListener(e->risPane.setVisible(true));
         regolamento.addActionListener(e->showRules());
-        save.addActionListener(e->saveOption(p,risPane));
-        back.addActionListener(e->p.getGameFrame().updatePanel(p));
+        save.addActionListener(e->saveOption(p,risPane,g));
+        back.addActionListener(e->g.updatePanel(p));
     }
 
     /**
@@ -94,20 +96,28 @@ public class OptionSubMenu extends JPanel{
      * @return a string that contains the rules of the game
      */
     private String getGameRules() {
-        String rules="", line, fileName="src\\main\\resources\\it\\unibo\\risiko\\gameRules\\rules.txt";
+        StringBuilder rules = new StringBuilder();
+        BufferedReader bufferReader = null;
+        String line, fileName="src\\main\\resources\\it\\unibo\\risiko\\gameRules\\rules.txt";
 
-        try{
-            FileReader fileReader=new FileReader(fileName);
-            BufferedReader bufferReader = new BufferedReader(fileReader);
+        try{ bufferReader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
             while ((line = bufferReader.readLine()) != null) {
-                rules+=line+"\n";
+                rules.append(line).append(System.lineSeparator());
             }
-            bufferReader.close();
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error while trying to read the file", "Error", JOptionPane.ERROR_MESSAGE);
+        }finally {
+            try {
+                if (bufferReader != null) {
+                    bufferReader.close(); 
+                }
+            } catch (IOException e) {
+                e.printStackTrace(); 
+            }
         }
-        return rules;
+        return rules.toString();
     }
 
     /**
@@ -115,10 +125,10 @@ public class OptionSubMenu extends JPanel{
      * @param p the parent principal menu of the OptionSubMenu
      * @param pane the risolution panel of the OptionSubMenu
      */
-    private void saveOption(final PrincipalMenu p,final JPanel pane) {
+    private void saveOption(final PrincipalMenu p,final JPanel pane, final GameFrame g) {
         screenResolution=grp.getSelection().getActionCommand();
         String ris[]=screenResolution.split("x");
-        p.getGameFrame().setResolution(Integer.parseInt(ris[0]), Integer.parseInt(ris[1]));
+        g.setResolution(Integer.parseInt(ris[0]), Integer.parseInt(ris[1]));
         pane.setVisible(false);
     }
 
