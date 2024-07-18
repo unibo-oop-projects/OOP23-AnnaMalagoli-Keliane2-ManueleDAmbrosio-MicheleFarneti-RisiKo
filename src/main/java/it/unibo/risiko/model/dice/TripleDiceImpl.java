@@ -40,14 +40,16 @@ public class TripleDiceImpl implements TripleDice {
         orderResults();
     }
 
+    @Override
     public List<Integer> getResults() {
         return List.copyOf(this.results);
     }
 
+    @Override
     public String toString() {
-        String max = Integer.toString(results.get(MAX_VAL));
-        String mid = results.get(MID_VAL) == NOT_A_THROW ? "/" : Integer.toString(results.get(MID_VAL));
-        String min = results.get(MIN_VAL) == NOT_A_THROW ? "/" : Integer.toString(results.get(MIN_VAL));
+        final String max = Integer.toString(results.get(MAX_VAL));
+        final String mid = results.get(MID_VAL) == NOT_A_THROW ? "/" : Integer.toString(results.get(MID_VAL));
+        final String min = results.get(MIN_VAL) == NOT_A_THROW ? "/" : Integer.toString(results.get(MIN_VAL));
         return "Results: " + max + ", " + mid + ", " + min;
 
     }
