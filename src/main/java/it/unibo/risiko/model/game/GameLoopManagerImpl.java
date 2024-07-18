@@ -223,6 +223,8 @@ public class GameLoopManagerImpl implements GameLoopManager {
                     if (player.getArmiesToPlace() == LAST_ARMY) {
                         this.status = GameStatus.READY_TO_ATTACK;
                         this.skippedToAI = false;
+                    }else{
+                        this.status = GameStatus.ARMIES_PLACEMENT;
                     }
                     return true;
                 default:
