@@ -19,7 +19,6 @@ public interface AIBehaviour {
      * by the AI player and which the player wants
      * to attack from. 
      * 
-     * @param territoryList - List of the territories in the current map.
      * @return the name of the next territory the AI wants to attack from.
      */
     String getNextAttackingTerritory();
@@ -62,7 +61,7 @@ public interface AIBehaviour {
      * This method is used to decide the next attacking territory and
      * the next adjacent defending territory the AI wants to attack. 
      * 
-     * @param listOfTerritories - List of the territories in the current map.
+     * @param territoryList - List of the territories in the current map.
      * @return true if the AI player can declare an attack, false
      * otherwise.
      */

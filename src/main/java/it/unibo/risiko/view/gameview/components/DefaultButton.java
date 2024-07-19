@@ -19,6 +19,10 @@ public class DefaultButton extends JButton {
     private static final Color BLACK_COLOR = new Color(0, 0, 0);
     private static final int DEFAULT_DIMENSION_FACTOR = 2;
 
+    /**
+     * @param text - text of the button.
+     * @param fontSize - font size of the text of the button.
+     */
     public DefaultButton(final String text, final int fontSize) {
         this.setFont(new Font("Copperplate", Font.BOLD, fontSize));
         this.setForeground(BLACK_COLOR);
@@ -29,6 +33,11 @@ public class DefaultButton extends JButton {
                 DEFAULT_FONT_SIZE * DEFAULT_DIMENSION_FACTOR));
     }
 
+    /**
+     * Font size is selected by default.
+     * 
+     * @param text - text of the button.
+     */
     public DefaultButton(final String text) {
         this(text, DEFAULT_FONT_SIZE);
     }

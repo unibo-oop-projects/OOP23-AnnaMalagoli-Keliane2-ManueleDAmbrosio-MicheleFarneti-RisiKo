@@ -11,7 +11,7 @@ import it.unibo.risiko.model.dice.TripleDiceImpl;
  * @author Manuele D'Ambrosio
  */
 
-public class AttackPhaseImpl implements AttackPhase {
+public final class AttackPhaseImpl implements AttackPhase {
     private static final int MAX_DEFENDING_ARMIES = 3;
 
     private final int attackingArmies;

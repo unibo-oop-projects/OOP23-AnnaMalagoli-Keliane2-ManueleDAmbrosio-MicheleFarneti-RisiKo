@@ -54,7 +54,7 @@ public interface Player {
      * 
      * @param newCard - card to add.
      */
-    void addCard (Card newCard);
+    void addCard(Card newCard);
 
     /**
      * This method is used to get the target of the 
@@ -184,7 +184,7 @@ public interface Player {
     boolean isAI();
 
     /**
-     * The player draws a card from deck
+     * The player draws a card from deck.
      * 
      * @param card - the card to draw.
      * @return true it a new card has been drawn,

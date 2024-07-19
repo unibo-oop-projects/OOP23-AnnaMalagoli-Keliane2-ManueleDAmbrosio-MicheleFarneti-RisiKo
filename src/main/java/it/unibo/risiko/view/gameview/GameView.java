@@ -54,7 +54,7 @@ public interface GameView {
     /**
      * Setups one turn icon bar with the players' info
      * 
-     * @param Player       the player
+     * @param player       the player
      * @param playersIndex The player's index in the games turns
      * @author Michele Farneti
      */

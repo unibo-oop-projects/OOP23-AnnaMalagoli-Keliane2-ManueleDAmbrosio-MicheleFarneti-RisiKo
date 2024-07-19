@@ -16,7 +16,7 @@ import it.unibo.risiko.model.objective.Target;
  * 
  * @author Manuele D'Ambrosio
  */
-public class StdPlayer implements Player {
+public final class StdPlayer implements Player {
     private static final int REINFORCEMENT_FACTOR = 3;
     private static final int INITIAL_ARMIES = 0;
     private final String colorID;
@@ -27,12 +27,21 @@ public class StdPlayer implements Player {
     private boolean isAI;
     private boolean hasDrawnNewCard;
 
+    /**
+     * @param color - color name of the player.
+     * @param armiesToPlace - initial armies.
+     * @param isAI - true if the player is AI, false otherwise.
+     */
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.colorID = color;
         this.armiesToPlace = armiesToPlace;
         this.isAI = isAI;
     }
 
+    /**
+     * @param color - color name of the player.
+     * @param isAI - true if the player is AI, false otherwise.
+     */
     protected StdPlayer(final String color, final boolean isAI) {
         this(color, INITIAL_ARMIES, isAI);
     }
@@ -144,13 +153,13 @@ public class StdPlayer implements Player {
 
     @Override
     public String toString() {
-        return "Color = " + this.colorID +
-                "\nTarget = " + this.target +
-                "\nNumber of cards = " + getNumberOfCards() +
-                "\nOwned cards = " + ownedCards.toString() +
-                "\nNumber of territories = " + getNumberOfTerritores() +
-                "\nOwned territories = " + ownedTerritories.toString() +
-                "\nArmies to place = " + this.armiesToPlace;
+        return "Color = " + this.colorID
+                + "\nTarget = " + this.target
+                + "\nNumber of cards = " + getNumberOfCards()
+                + "\nOwned cards = " + ownedCards.toString()
+                + "\nNumber of territories = " + getNumberOfTerritores()
+                + "\nOwned territories = " + ownedTerritories.toString()
+                + "\nArmies to place = " + this.armiesToPlace;
     }
 
     @Override

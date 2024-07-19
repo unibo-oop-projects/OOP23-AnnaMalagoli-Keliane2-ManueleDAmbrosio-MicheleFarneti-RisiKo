@@ -16,7 +16,7 @@ import it.unibo.risiko.model.cards.Card;
  * @author Manuele D'Ambrosio
  */
 
-public class AIBehaviourImpl implements AIBehaviour {
+public final class AIBehaviourImpl implements AIBehaviour {
     private static final int ONE_CARD = 1;
     private static final int TWO_CARDS = 2;
     private static final int THREE_CARDS = 3;

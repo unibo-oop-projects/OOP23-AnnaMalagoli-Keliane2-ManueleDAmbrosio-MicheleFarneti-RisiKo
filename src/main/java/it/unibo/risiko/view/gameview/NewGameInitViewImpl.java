@@ -53,6 +53,14 @@ public class NewGameInitViewImpl extends JPanel {
     private final List<Integer> maxPlayersList = new ArrayList<>();
     private final GameViewObserver observer;
 
+    /**
+     * New game default panel.
+     * 
+     * @param width - panel width.
+     * @param height - panel height.
+     * @param maps - map that contains a map name as key and its maximum players as value.
+     * @param observer - observer of the controller.
+     */
     public NewGameInitViewImpl(final int width, final int height, final Map<String, Integer> maps,
             final GameViewObserver observer) {
         this.width = width;
