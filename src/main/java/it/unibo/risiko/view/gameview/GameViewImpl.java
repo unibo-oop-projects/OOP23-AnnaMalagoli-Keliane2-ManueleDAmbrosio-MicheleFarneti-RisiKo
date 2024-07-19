@@ -667,13 +667,14 @@ public final class GameViewImpl implements GameView {
      * 
      * @param listTerritories is the list of territories owned by the player
      */
+    @Override
     public void createMoveArmies(final List<Territory> listTerritories) {
-        final int LOCATION_FACTOR = ATTACK_PANEL_LOCATION;
-        final int SIZE_FACTOR = ATTACK_PANEL_POSITIONING;
+        final int locationFactor = ATTACK_PANEL_LOCATION;
+        final int sizeFactor = ATTACK_PANEL_POSITIONING;
         moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
-        moveArmiesPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
-                frameWidth / SIZE_FACTOR,
-                frameHeigth / SIZE_FACTOR);
+        moveArmiesPanel.setBounds(frameWidth / locationFactor, frameHeigth / locationFactor,
+                frameWidth / sizeFactor,
+                frameHeigth / sizeFactor);
         moveArmiesPanel.setVisible(true);
         setGameViewButtonsEnabled(false);
         setLayerdPaneOverlay(baseLayoutPane, moveArmiesPanel);
@@ -694,13 +695,14 @@ public final class GameViewImpl implements GameView {
      * 
      * @param playerCards is the list of cards of the player
      */
+    @Override
     public void createChoiceCards(final List<Card> playerCards) {
-        final int LOCATION_FACTOR = ATTACK_PANEL_LOCATION;
-        final int SIZE_FACTOR = ATTACK_PANEL_POSITIONING;
+        final int locationFactor = ATTACK_PANEL_LOCATION;
+        final int sizeFactor = ATTACK_PANEL_POSITIONING;
         choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
-        choiceCardsPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
-                frameWidth / SIZE_FACTOR,
-                frameHeigth / SIZE_FACTOR);
+        choiceCardsPanel.setBounds(frameWidth / locationFactor, frameHeigth / locationFactor,
+                frameWidth / sizeFactor,
+                frameHeigth / sizeFactor);
         choiceCardsPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, choiceCardsPanel);
     }
