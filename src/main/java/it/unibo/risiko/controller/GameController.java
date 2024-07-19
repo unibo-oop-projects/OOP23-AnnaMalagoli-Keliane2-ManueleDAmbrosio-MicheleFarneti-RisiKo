@@ -45,7 +45,7 @@ import it.unibo.risiko.view.initview.InitialViewObserver;
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private static final String FILE_SEPARATOR = File.separator;
-    private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
+    private static final String RESOURCES_PACKAGE_STRING = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     private static final int MAX_ATTACKING_ARMIES = 3;
     private static final int MIN_ARMIES = 1;
@@ -77,14 +77,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     @Override
-    public void startGameWindow(Integer width, Integer height) {
-        this.view = new GameViewImpl(width, height, resourcesPackageString, this);
+    public void startGameWindow(final Integer width, final Integer height) {
+        this.view = new GameViewImpl(width, height, RESOURCES_PACKAGE_STRING, this);
         this.view.start();
     }
 
     @Override
     public void initializeNewGame() {
-        view.showInitializationWindow(GameMapInitializer.getAvailableMaps(resourcesPackageString + FILE_SEPARATOR));
+        view.showInitializationWindow(GameMapInitializer.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
     }
 
     @Override
@@ -104,7 +104,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void showTurnIcons() {
         for (int index = 0; index < players.size(); index++) {
-            var player = players.get(index);
+            final var player = players.get(index);
             this.view.showTurnIcon(player, index);
         }
     }
@@ -147,7 +147,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void handleAIBehaviour() {
         if (currentPlayer().isAI()) {
-            AIBehaviour aiBehaviour = new AIBehaviourImpl(
+            final AIBehaviour aiBehaviour = new AIBehaviourImpl(
                     currentPlayer().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList(),
                     currentPlayer().getOwnedCards().stream().toList());
             switch (this.gameStatus) {
@@ -165,7 +165,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     }
                     break;
                 case CARDS_MANAGING:
-                    List<Card> combo = aiBehaviour.checkCardCombo();
+                    final List<Card> combo = aiBehaviour.checkCardCombo();
                     if (!combo.isEmpty()) {
                         playCards(combo.get(FIRST_CARD).getTerritoryName(),
                                 combo.get(SECOND_CARD).getTerritoryName(),
@@ -209,11 +209,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         redrawView();
     }
 
-    // @Override
-    public void territorySelected(String territory) {
+    @Override
+    public void territorySelected(final String territory) { 
         switch (gameStatus) {
             case TERRITORY_OCCUPATION:
-                if (placeArmies(territory, 1)) {
+                if (placeArmies(territory, MIN_ARMIES)) {
                     redrawView();
                     updateGameStatus();
                     if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
@@ -259,7 +259,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         redrawView();
     }
 
-    private boolean placeArmies(String territory, Integer nArmies) {
+    private boolean placeArmies(final String territory, final Integer nArmies) {
         if (gameStatus == GameStatus.TERRITORY_OCCUPATION) {
             if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory,
                     nArmies, territories)) {
@@ -279,7 +279,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         return false;
     }
 
-    private Integer getArmiesInTerritory(String territory) {
+    private Integer getArmiesInTerritory(final String territory) {
         return territories.getListTerritories().stream()
                 .filter(t -> t.getTerritoryName().equals(territory))
                 .mapToInt(t -> t.getNumberOfArmies()).sum();
@@ -327,7 +327,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
-                int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
+                final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
                 conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
                 // Conquer Event
@@ -352,7 +352,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Keliane Nana
      */
     @Override
-    public void setAttackingArmies(int numberOfAttackingAmies) {
+    public void setAttackingArmies(final int numberOfAttackingAmies) {
         attackPhase = new AttackPhaseImpl(numberOfAttackingAmies, getArmiesInTerritory(defenderTerritory.get()));
         view.setAtt(attackPhase.getAttackerDiceThrows());
         view.setDef(attackPhase.getDefenderDiceThrows());
@@ -401,7 +401,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Keliane Nana
      */
     @Override
-    public void setMovingArmies(int numberOfMovingArmies) {
+    public void setMovingArmies(final int numberOfMovingArmies) {
         // Conquer of the territory.
         conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), numberOfMovingArmies);
 
@@ -419,7 +419,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         checkWinner();
     }
 
-    private void conquerAndDraw(String attTerritory, String conqueredTerritory, int movingArmies) {
+    private void conquerAndDraw(final String attTerritory, final String conqueredTerritory, final int movingArmies) {
         getOwner(getTerritoryFromString(conqueredTerritory)).removeTerritory(conqueredTerritory);
         getOwner(getTerritoryFromString(attTerritory)).addTerritory(conqueredTerritory);
         territories.setOwner(conqueredTerritory, currentPlayer().getColorID());
@@ -437,8 +437,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param eventLeaderAdversary
      * @author Keliane Nana
      */
-    private void createEvent(EventType type, Territory attacker, Territory defender, Player eventLeader,
-            Optional<Player> eventLeaderAdversary, Optional<Integer> numArmies) {
+    private void createEvent(final EventType type, final Territory attacker, final Territory defender, final Player eventLeader,
+            final Optional<Player> eventLeaderAdversary, final Optional<Integer> numArmies) {
         register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
     }
 
@@ -448,7 +448,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private Player currentPlayer() {
-        return (players.get(activePlayerIndex));
+        return players.get(activePlayerIndex);
     }
 
     /**
@@ -458,7 +458,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param territory
      * @author Michele Farneti
      */
-    private void setFighter(String territory, boolean isAttacker) {
+    private void setFighter(final String territory, final boolean isAttacker) {
         if (isAttacker) {
             resetAttack();
             attackerTerritory = Optional.of(territory);
@@ -499,9 +499,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers) {
-        gameInitializer = new GameMapInitializerImpl(mapName, resourcesPackageString);
+        gameInitializer = new GameMapInitializerImpl(mapName, RESOURCES_PACKAGE_STRING);
         players = new LinkedList<>();
-        PlayerFactory playerFactory = new SimplePlayerFactory();
+        final PlayerFactory playerFactory = new SimplePlayerFactory();
 
         for (int index = 0; index < numberOfStandardPlayers + numberOfAIPlayers; index++) {
             if (index < numberOfStandardPlayers) {
@@ -534,9 +534,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      *                                 has to have when it's owned by someone
      * @author Michele Farneti
      */
-    private void assignTerritories(Integer minimumArmiesPerTerritory) {
+    private void assignTerritories(final Integer minimumArmiesPerTerritory) {
         territories.shuffle();
-        for (Territory territory : this.territories.getListTerritories()) {
+        for (final Territory territory : this.territories.getListTerritories()) {
             currentPlayer().addTerritory(territory.getTerritoryName());
             territories.setOwner(territory.getTerritoryName(), currentPlayer().getColorID());
             territories.addArmiesInTerritory(territory.getTerritoryName(), minimumArmiesPerTerritory);
@@ -561,6 +561,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Keliane Nana
      * @author Anna Malagoli
      */
+    @Override
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         territories.removeArmiesInTerritory(srcTerritory, numArmies);
         territories.addArmiesInTerritory(dstTerritory, numArmies);
@@ -584,6 +585,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @author Anna Malagoli
      */
+    @Override
     public void playCards(final String card1, final String card2, final String card3) {
         deck.playCards(card1, card2, card2, currentPlayer());
         exitCardsManagingPhase();
@@ -595,18 +597,18 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 currentPlayer().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList());
     }
 
-    private Territory getTerritoryFromString(String territoryName) {
+    private Territory getTerritoryFromString(final String territoryName) {
         return territories.getListTerritories().stream().filter(t -> t.getTerritoryName().equals(territoryName))
                 .findFirst().get();
     }
 
-    private Player getOwner(Territory territory) {
-        String playerColor = territory.getPlayer();
+    private Player getOwner(final Territory territory) {
+        final String playerColor = territory.getPlayer();
         return players.stream().filter(p -> p.getColorID().equals(playerColor)).findFirst().get();
     }
 
     private void drawCard() {
-        Card card = deck.pullCard();
+        final Card card = deck.pullCard();
         if (!currentPlayer().drawNewCardIfPossible(card)) {
             deck.addCard(card);
         }
