@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SimplePlayerFactory implements PlayerFactory {
     private static final int FIRST_COLOR_INDEX = 0;
-    private List<String> colorList;
+    private final List<String> colorList;
     private int colorIndex;
 
     public SimplePlayerFactory() {

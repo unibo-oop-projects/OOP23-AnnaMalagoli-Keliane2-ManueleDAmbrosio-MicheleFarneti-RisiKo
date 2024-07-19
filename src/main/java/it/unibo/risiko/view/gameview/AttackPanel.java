@@ -31,6 +31,7 @@ import java.util.List;
  */
 
 public class AttackPanel extends JPanel {
+    public static final long serialVersionUID = 1L;
     private static final String SEP = File.separator;
     private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "dice" + SEP;
@@ -40,6 +41,15 @@ public class AttackPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color SECONDARY_COLOR = new Color(255, 204, 0);
     private static final Color BLACK_COLOR = new Color(0, 0, 0);
+    private static final int THICKNESS = 3;
+    private static final int DOUBLE = 2;
+    private static final int MIN_ATTACKING_ARMIES = 1;
+    private static final int MAX_ATTACKING_ARMIES = 3;
+    private static final int QUARTER_SIZE_FACTOR = 4;
+    private static final int TEN = 10;
+    private static final int DICE_ROWS = 3;
+    private static final int DICE_COLS = 1;
+    private static final int NO_THROWS = 0;
 
     final int height;
     final int width;
@@ -48,9 +58,9 @@ public class AttackPanel extends JPanel {
     private final GameViewObserver observer;
     private List<Integer> attDice;
     private List<Integer> defDice;
-    private String attacking;
-    private String defending;
-    private int attackingTerritoryArmies;
+    private final String attacking;
+    private final String defending;
+    private final int attackingTerritoryArmies;
     private int attackersNumber;
     private int armiesToMove;
     private int attackerLostArmies;
@@ -100,33 +110,28 @@ public class AttackPanel extends JPanel {
         }
     }
 
-    private Font changeFontSize(int fontSize) {
+    private Font changeFontSize(final int fontSize) {
         return new Font("Arial", Font.BOLD, fontSize);
     }
 
     private JButton selectorButton(final String text) {
-        final int THICKNESS = 3;
-        final int SIZE_FACTOR = 2;
-        JButton button = new JButton();
+        final JButton button = new JButton();
         button.setFont(changeFontSize(DEFAULT_FONT_SIZE));
         button.setForeground(BLACK_COLOR);
         button.setText(text);
         button.setBackground(SECONDARY_COLOR);
         button.setBorder(BorderFactory.createLineBorder(BLACK_COLOR, THICKNESS));
-        button.setPreferredSize(new Dimension(DEFAULT_FONT_SIZE * SIZE_FACTOR, DEFAULT_FONT_SIZE * SIZE_FACTOR));
+        button.setPreferredSize(new Dimension(DEFAULT_FONT_SIZE * DOUBLE, DEFAULT_FONT_SIZE * DOUBLE));
 
         return button;
     }
 
-    private JPanel selectorPanel(String selectorText) {
-        final int TEXT_VALUE_WIDTH = 2;
-        final int MIN_ATTACKING_ARMIES = 1;
-        final int MAX_ATTACKING_ARMIES = 3;
-        JPanel selectorPanel = new JPanel();
-        JTextField textField = new StandardTextField(selectorText);
-        JTextField textValue = new StandardTextField(Integer.toString(attackersNumber));
-        JButton decreaser = selectorButton("-");
-        JButton increaser = selectorButton("+");
+    private JPanel selectorPanel(final String selectorText) {
+        final JPanel selectorPanel = new JPanel();
+        final JTextField textField = new StandardTextField(selectorText);
+        final JTextField textValue = new StandardTextField(Integer.toString(attackersNumber));
+        final JButton decreaser = selectorButton("-");
+        final JButton increaser = selectorButton("+");
 
         decreaser.setEnabled(false);
         decreaser.addActionListener(e -> {
@@ -145,7 +150,7 @@ public class AttackPanel extends JPanel {
             decreaser.setEnabled(true);
         });
 
-        textValue.setPreferredSize(new Dimension(textValue.getPreferredSize().width * TEXT_VALUE_WIDTH,
+        textValue.setPreferredSize(new Dimension(textValue.getPreferredSize().width * DOUBLE,
                 textValue.getPreferredSize().height));
         selectorPanel.setLayout(new FlowLayout());
         selectorPanel.setBackground(BLACK_COLOR);
@@ -158,8 +163,8 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel titlePanel() {
-        JPanel titlePanel = new JPanel();
-        JTextField textField = new StandardTextField(attacking + " is attacking " + defending);
+        final JPanel titlePanel = new JPanel();
+        final JTextField textField = new StandardTextField(attacking + " is attacking " + defending);
 
         titlePanel.setBackground(BLACK_COLOR);
         titlePanel.setLayout(new FlowLayout());
@@ -169,48 +174,45 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel topPanel() {
-        final int HEIGHT = height / 4;
-        JPanel topPanel = new JPanel();
+        final JPanel topPanel = new JPanel();
 
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(BLACK_COLOR);
-        topPanel.setPreferredSize(new Dimension(width, HEIGHT));
+        topPanel.setPreferredSize(new Dimension(width, height / QUARTER_SIZE_FACTOR));
         topPanel.add(titlePanel(), BorderLayout.NORTH);
         topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "), BorderLayout.SOUTH);
 
         return topPanel;
     }
 
-    private JPanel sidePanel(String diceType) {
-        final int SIZE = width / 4;
-        final int WIDTH = width / 2;
-        JPanel sidePanel = new JPanel();
-        String path = PATH + "Standard" + diceType + "Dice.png";
+    private JPanel sidePanel(final String diceType) {
+        final int size = width / QUARTER_SIZE_FACTOR;
+        final JPanel sidePanel = new JPanel();
+        final String path = PATH + "Standard" + diceType + "Dice.png";
 
         sidePanel.setBackground(BACKGROUND_COLOR);
         sidePanel.setLayout(new BorderLayout());
-        sidePanel.setPreferredSize(new Dimension(WIDTH, height));
+        sidePanel.setPreferredSize(new Dimension(width / DOUBLE, height));
 
         try {
-            ImageIcon icon = new ImageIcon(ImageIO.read(new File(path)));
-            Image resizedIcon = icon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH);
+            final ImageIcon icon = new ImageIcon(ImageIO.read(new File(path)));
+            final Image resizedIcon = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
             sidePanel.add(new JLabel(new ImageIcon(resizedIcon)), BorderLayout.CENTER);
         } catch (IOException e) {
-            System.out.println(new File(path).getAbsolutePath());
-            e.printStackTrace();
+            return sidePanel;
         }
 
         return sidePanel;
     }
 
     private JPanel resultsPanel() {
-        final int WIDTH = width / 2;
-        final int HEIGHT = height / 10;
-        JPanel resultsPanel = new JPanel();
-        JTextField attackerResult = new StandardTextField("LOST: " + attackerLostArmies);
-        JTextField defenderResult = new StandardTextField("LOST: " + defenderLostArmies);
-        attackerResult.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        defenderResult.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        final int panelWidth = width / DOUBLE;
+        final int resultHeight = height / TEN;
+        final JPanel resultsPanel = new JPanel();
+        final JTextField attackerResult = new StandardTextField("LOST: " + attackerLostArmies);
+        final JTextField defenderResult = new StandardTextField("LOST: " + defenderLostArmies);
+        attackerResult.setPreferredSize(new Dimension(panelWidth, resultHeight));
+        defenderResult.setPreferredSize(new Dimension(panelWidth, resultHeight));
         resultsPanel.setBackground(BACKGROUND_COLOR);
         resultsPanel.setLayout(new BorderLayout());
         resultsPanel.add(attackerResult, BorderLayout.WEST);
@@ -219,36 +221,34 @@ public class AttackPanel extends JPanel {
     }
 
     private JPanel dicePanel(String diceColor) {
-        final int WIDTH = width / 2;
-        final int HEIGHT = height / 2;
-        String diceType = diceColor + "Dice" + "_";
-        JPanel dicePanel = new JPanel();
+        final int panelWidth = width / DOUBLE;
+        final int panelHeight = height / DOUBLE;
+        final int diceSize = panelHeight / THICKNESS;
+        final String diceType = diceColor + "Dice" + "_";
+        final JPanel dicePanel = new JPanel();
         List<Integer> dices = new ArrayList<>();
-        final int diceSize = HEIGHT / 3;
 
-        dicePanel.setLayout(new GridLayout(3, 1));
+        dicePanel.setLayout(new GridLayout(DICE_ROWS, DICE_COLS));
         dicePanel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         dicePanel.setBackground(BACKGROUND_COLOR);
-        dicePanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        dicePanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
-        if (diceColor.equals("Blue")) {
+        if ("Blue".equals(diceColor)) {
             dices = defDice;
         }
-        if (diceColor.equals("Red")) {
+        if ("Red".equals(diceColor)) {
             dices = attDice;
         }
 
-        for (int result : dices) {
-            if (result > 0) {
+        for (final int result : dices) {
+            if (result > NO_THROWS) { 
                 try {
-                    ImageIcon icon = new ImageIcon(ImageIO
+                    final ImageIcon icon = new ImageIcon(ImageIO
                             .read(new File(PATH + diceType + Integer.toString(result) + ".png")));
-                    Image resizedIcon = icon.getImage().getScaledInstance(diceSize, diceSize, Image.SCALE_SMOOTH);
+                    final Image resizedIcon = icon.getImage().getScaledInstance(diceSize, diceSize, Image.SCALE_SMOOTH);
                     dicePanel.add(new JLabel(new ImageIcon(resizedIcon)), JComponent.CENTER_ALIGNMENT);
                 } catch (IOException e) {
-                    System.out.println(new File(PATH + diceType + Integer.toString(result) + ".png")
-                            .getAbsolutePath());
-                    e.printStackTrace();
+                    return dicePanel;
                 }
             }
         }
@@ -257,10 +257,8 @@ public class AttackPanel extends JPanel {
     }
 
     public void drawDicePanels() {
-        final int ROWS = 2;
-        final int COLS = 1;
-        JPanel southPanel = new JPanel();
-        southPanel.setLayout(new GridLayout(ROWS, COLS));
+        final JPanel southPanel = new JPanel();
+        southPanel.setLayout(new GridLayout(DOUBLE, DICE_COLS));
         this.removeAll();
         this.add(titlePanel(), BorderLayout.NORTH);
         southPanel.add(resultsPanel());
@@ -281,20 +279,19 @@ public class AttackPanel extends JPanel {
         this.repaint();
     }
 
-    private JPanel conquerPanel(int minArmies, int maxArmies) {
-        final int TEXT_WIDTH_FACTOR = 3;
-        final int MID_HEIGHT_FACTOR = 2;
-        final int TEXT_HEIGHT_FACTOR = 5;
-        JPanel conquerPanel = new JPanel();
-        JPanel midPanel = new JPanel();
-        JTextField conquerText = new StandardTextField("CONQUERED: " + defending);
-        JTextField movingArmies = new StandardTextField(Integer.toString(minArmies));
-        JTextField adviceText = new StandardTextField("Select the number of armies to move: ");
-        JButton decreaser = selectorButton("-");
-        JButton increaser = selectorButton("+");
+    private JPanel conquerPanel(final int minArmies, final int maxArmies) {
+        final int midHeightFactor = DOUBLE;
+        final int textHeightFactor = TEN / DOUBLE;
+        final JPanel conquerPanel = new JPanel();
+        final JPanel midPanel = new JPanel();
+        final JTextField conquerText = new StandardTextField("CONQUERED: " + defending);
+        final JTextField movingArmies = new StandardTextField(Integer.toString(minArmies));
+        final JTextField adviceText = new StandardTextField("Select the number of armies to move: ");
+        final JButton decreaser = selectorButton("-");
+        final JButton increaser = selectorButton("+");
 
         movingArmies.setPreferredSize(
-                new Dimension(movingArmies.getPreferredSize().width * TEXT_WIDTH_FACTOR,
+                new Dimension(movingArmies.getPreferredSize().width * THICKNESS,
                         movingArmies.getPreferredSize().height));
         armiesToMove = minArmies;
         decreaser.setEnabled(false);
@@ -314,7 +311,7 @@ public class AttackPanel extends JPanel {
         });
         midPanel.setLayout(new FlowLayout());
         midPanel.setBackground(BLACK_COLOR);
-        midPanel.setPreferredSize(new Dimension(width, height / MID_HEIGHT_FACTOR));
+        midPanel.setPreferredSize(new Dimension(width, height / midHeightFactor));
         midPanel.add(adviceText);
         midPanel.add(decreaser);
         midPanel.add(movingArmies);
@@ -322,7 +319,7 @@ public class AttackPanel extends JPanel {
 
         conquerPanel.setLayout(new BorderLayout());
         conquerPanel.setBackground(BLACK_COLOR);
-        conquerText.setPreferredSize(new Dimension(width, height / TEXT_HEIGHT_FACTOR));
+        conquerText.setPreferredSize(new Dimension(width, height / textHeightFactor));
         conquerPanel.add(conquerText, BorderLayout.NORTH);
         conquerPanel.add(midPanel, BorderLayout.CENTER);
         conquerPanel.add(new ContinuePanel("CLOSE", width, e -> {
