@@ -25,11 +25,7 @@ public interface GameViewObserver {
      *                                computer.
      * @author Manuele D'Ambrosio.
      */
-<<<<<<< HEAD
     void startNewGame(String mapName, int players, int bots);
-=======
-    void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers);
->>>>>>> ab7c569a009347f69f1ecb5eba6e9894c21d1941
 
     /**
      * Method that compute the attack after setting the number of
