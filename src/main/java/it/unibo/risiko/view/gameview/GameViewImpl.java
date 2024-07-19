@@ -109,6 +109,9 @@ public final class GameViewImpl implements GameView {
     private static final int PLAYER_ARMIES_LABEL_WIDTH = 23;
     private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 20;
 
+    private static final int ATTACK_PANEL_POSITIONING = 2;
+    private static final int ATTACK_PANEL_LOCATION = 6;
+
     private final Integer frameWidth;
     private final Integer frameHeigth;
     private String mapName;
@@ -536,8 +539,8 @@ public final class GameViewImpl implements GameView {
      * @return The curresponding color object
      * @author Michele Farneti
      */
-    private Color stringToColor(final String color_id) {
-        switch (color_id) {
+    private Color stringToColor(final String colorID) {
+        switch (colorID) {
             case "cyan":
                 return new Color(0, MAX_COLOR_VALUE, 255);
             case "blue":
@@ -574,12 +577,12 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void gameOver(final String winnerColor) {
-        var winnerPanel = new GradientPanel(Color.BLACK, stringToColor(winnerColor), MAP_GRADIENT_LEVEL);
+        final var winnerPanel = new GradientPanel(Color.BLACK, stringToColor(winnerColor), MAP_GRADIENT_LEVEL);
         winnerPanel.setBackground(Color.RED);
         winnerPanel.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
         winnerPanel.setOpaque(true);
 
-        var winnerWriting = new JTextField(winnerColor.toUpperCase(Locale.ROOT) + " player has won the Game!");
+        final var winnerWriting = new JTextField(winnerColor.toUpperCase(Locale.ROOT) + " player has won the Game!");
         winnerWriting.setFont(new Font(FONT_NAME, Font.BOLD, WINNER_FONT_SIZE));
         winnerWriting.setForeground(stringToColor(winnerColor));
         winnerWriting.setOpaque(false);
@@ -589,40 +592,40 @@ public final class GameViewImpl implements GameView {
     }
 
     @Override
-    public void setAtt(List<Integer> attDice) {
+    public void setAtt(final List<Integer> attDice) {
         attackPanel.setAtt(attDice);
     }
 
     @Override
-    public void setDef(List<Integer> defDice) {
+    public void setDef(final List<Integer> defDice) {
         attackPanel.setDef(defDice);
     }
 
     @Override
-    public void setAttackerLostArmies(int attackerLostArmies) {
+    public void setAttackerLostArmies(final int attackerLostArmies) {
         attackPanel.setAttackerLostArmies(attackerLostArmies);
     }
 
     @Override
-    public void setDefenderLostArmies(int defenderLostArmies) {
+    public void setDefenderLostArmies(final int defenderLostArmies) {
         attackPanel.setDefenderLostArmies(defenderLostArmies);
     }
 
     @Override
-    public void createAttack(String attacking, String defending, int attackingTerritoryArmies) {
+    public void createAttack(final String attacking, final String defending, final int attackingTerritoryArmies) {
         setGameViewButtonsEnabled(false);
-        final int PANEL_WIDTH = frameWidth / 2;
-        final int PANEL_HEIGHT = frameHeigth / 2;
-        final int PANEL_LOCATION_X = frameWidth / 6;
-        final int PANEL_LOCATION_Y = frameHeigth / 6;
+        final int panelWidth = frameWidth / ATTACK_PANEL_POSITIONING;
+        final int panelHeight = frameHeigth / ATTACK_PANEL_POSITIONING;
+        final int panelLocationX = frameWidth / ATTACK_PANEL_LOCATION;
+        final int panelLocationY = frameHeigth / ATTACK_PANEL_LOCATION;
         attackPanel = new AttackPanel(
-                PANEL_HEIGHT,
-                PANEL_WIDTH,
+                panelHeight,
+                panelWidth,
                 attacking,
                 defending,
                 attackingTerritoryArmies,
                 gameViewObserver);
-        attackPanel.setLocation(PANEL_LOCATION_X, PANEL_LOCATION_Y);
+        attackPanel.setLocation(panelLocationX, panelLocationY);
         attackPanel.setVisible(true);
         setLayerdPaneOverlay(baseLayoutPane, attackPanel);
     }
@@ -650,8 +653,8 @@ public final class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showInitializationWindow(Map<String, Integer> mapNames) {
-        var initializationPanel = new NewGameInitViewImpl(frameWidth, frameHeigth, mapNames,
+    public void showInitializationWindow(final Map<String, Integer> mapNames) {
+        final var initializationPanel = new NewGameInitViewImpl(frameWidth, frameHeigth, mapNames,
                 gameViewObserver);
         mainFrame.add(initializationPanel, BorderLayout.CENTER);
         mainFrame.validate();
@@ -664,9 +667,9 @@ public final class GameViewImpl implements GameView {
      * 
      * @param listTerritories is the list of territories owned by the player
      */
-    public void createMoveArmies(List<Territory> listTerritories) {
-        final int LOCATION_FACTOR = 6;
-        final int SIZE_FACTOR = 2;
+    public void createMoveArmies(final List<Territory> listTerritories) {
+        final int LOCATION_FACTOR = ATTACK_PANEL_LOCATION;
+        final int SIZE_FACTOR = ATTACK_PANEL_POSITIONING;
         moveArmiesPanel = new JPanelMovementArmies(listTerritories, gameViewObserver);
         moveArmiesPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
                 frameWidth / SIZE_FACTOR,
@@ -681,7 +684,7 @@ public final class GameViewImpl implements GameView {
      * 
      * @param targetText
      */
-    private void showTarget(String targetText) {
+    private void showTarget(final String targetText) {
         targetTextField.setText(targetText);
     }
 
@@ -691,9 +694,9 @@ public final class GameViewImpl implements GameView {
      * 
      * @param playerCards is the list of cards of the player
      */
-    public void createChoiceCards(List<Card> playerCards) {
-        final int LOCATION_FACTOR = 6;
-        final int SIZE_FACTOR = 2;
+    public void createChoiceCards(final List<Card> playerCards) {
+        final int LOCATION_FACTOR = ATTACK_PANEL_LOCATION;
+        final int SIZE_FACTOR = ATTACK_PANEL_POSITIONING;
         choiceCardsPanel = new JPanelChoice(playerCards, gameViewObserver);
         choiceCardsPanel.setBounds(frameWidth / LOCATION_FACTOR, frameHeigth / LOCATION_FACTOR,
                 frameWidth / SIZE_FACTOR,
@@ -703,17 +706,17 @@ public final class GameViewImpl implements GameView {
     }
 
     @Override
-    public void enableMovements(boolean enabled) {
+    public void enableMovements(final boolean enabled) {
         moveArmiesButton.setEnabled(enabled);
     }
 
     @Override
-    public void enableSkip(boolean enabled) {
+    public void enableSkip(final boolean enabled) {
         skipButton.setEnabled(enabled);
     }
 
     @Override
-    public void enableAttack(boolean enabled) {
+    public void enableAttack(final boolean enabled) {
         attackButton.setEnabled(enabled);
     }
 
@@ -721,10 +724,10 @@ public final class GameViewImpl implements GameView {
      * @author Keliane Nana
      */
     @Override
-    public void createLog(Register reg, List<Player> l) {
+    public void createLog(final Register reg, final List<Player> l) {
         log = new LoggerView(reg, l);
         log.setPreferredSize(new Dimension(mainFrame.getWidth() - gamePanel.getWidth(),
-                mainFrame.getHeight() / 2));
+                mainFrame.getHeight() / ATTACK_PANEL_POSITIONING));
         logPanel.add(log);
     }
 
@@ -744,7 +747,8 @@ public final class GameViewImpl implements GameView {
      * 
      * @author Anna Malagoli
      */
-    public void createTablePanel(List<Territory> terr, List<Player> players) {
+    @Override
+    public void createTablePanel(final List<Territory> terr, final List<Player> players) {
         this.tablePanel = new TablePanel(terr, players);
         tablePanel.update();
         territoriesTablePanel.add(tablePanel);
@@ -762,7 +766,7 @@ public final class GameViewImpl implements GameView {
     }
 
     @Override
-    public void showStatus(GameStatus gameStatus, Long turnsCount) {
+    public void showStatus(final GameStatus gameStatus, final Long turnsCount) {
         String statusString = "[" + turnsCount + "] -";
         switch (gameStatus) {
             case ARMIES_PLACEMENT:

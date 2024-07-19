@@ -220,7 +220,7 @@ public class AttackPanel extends JPanel {
         return resultsPanel;
     }
 
-    private JPanel dicePanel(String diceColor) {
+    private JPanel dicePanel(final String diceColor) {
         final int panelWidth = width / DOUBLE;
         final int panelHeight = height / DOUBLE;
         final int diceSize = panelHeight / THICKNESS;

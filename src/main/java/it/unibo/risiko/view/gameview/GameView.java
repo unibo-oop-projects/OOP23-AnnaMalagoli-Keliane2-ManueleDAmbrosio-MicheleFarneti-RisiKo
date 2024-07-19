@@ -40,7 +40,7 @@ public interface GameView {
      * @param playersNumber The number of players playing the game
      * @author Michele Farneti
      */
-    void showGameWindow(final String mapName, final Integer playersNumber);
+    void showGameWindow(String mapName, Integer playersNumber);
 
     /**
      * Activates the placing and the viewing of the tanks buttons over their
@@ -49,7 +49,7 @@ public interface GameView {
      * @param territories Territories list of the game map
      * @author Michele Farneti
      */
-    void showTanks(final List<Territory> territories);
+    void showTanks(List<Territory> territories);
 
     /**
      * Setups one turn icon bar with the players' info
@@ -58,7 +58,7 @@ public interface GameView {
      * @param playersIndex The player's index in the games turns
      * @author Michele Farneti
      */
-    void showTurnIcon(final Player player, final int playerIndex);
+    void showTurnIcon(Player player, int playerIndex);
 
     /**
      * Edits the view in order to show wich player is the current player.
@@ -66,7 +66,7 @@ public interface GameView {
      * @param player
      * @author Michele Farneti
      */
-    void setCurrentPlayer(final Player player);
+    void setCurrentPlayer(Player player);
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
@@ -76,7 +76,7 @@ public interface GameView {
      * @param isAttacker
      * @author Michele Farneti
      */
-    void showFightingTerritory(final String territory, final boolean isAttacker);
+    void showFightingTerritory(String territory, boolean isAttacker);
 
     /**
      * Deletes higlightings for a fighting territory
@@ -84,7 +84,7 @@ public interface GameView {
      * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritory(final String fightingTerritory);
+    void resetFightingTerritory(String fightingTerritory);
 
     /**
      * Updates the game view, changing a tank based on territory
@@ -103,7 +103,7 @@ public interface GameView {
      * @param winnerColor
      * @author Michele Farneti
      */
-    void gameOver(final String winnerColor);
+    void gameOver(String winnerColor);
 
     /**
      * Updates the @GameView making it show the attack panel.
