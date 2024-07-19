@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameview.components;
+package it.unibo.risiko.view.gameview.components.mainpanel;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -11,7 +11,7 @@ import java.awt.GradientPaint;
  * 
  * @author Michele Farneti
  */
-public class GradientPanel extends JPanel {
+public final class GradientPanel extends JPanel {
     private Color topColor;
     private final Color bottomColor;
     private final int gradientLevel;
@@ -39,10 +39,10 @@ public class GradientPanel extends JPanel {
     protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
         final Graphics2D graphics2D = (Graphics2D) g;
-
         final int width = getWidth();
         final int height = getHeight();
-        final GradientPaint gradientPaint= new GradientPaint(0, 0, topColor, 0, height / gradientLevel, bottomColor);
+        final GradientPaint gradientPaint = new GradientPaint(0, 0, topColor, 0, (float) height / gradientLevel,
+                bottomColor);
         graphics2D.setPaint(gradientPaint);
         graphics2D.fillRect(0, 0, width, height);
     }

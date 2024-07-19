@@ -5,14 +5,14 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.view.gameview.components.BackgroundImagePanel;
-import it.unibo.risiko.view.gameview.components.ColoredImageButton;
-import it.unibo.risiko.view.gameview.components.CustomButton;
-import it.unibo.risiko.view.gameview.components.GradientPanel;
 import it.unibo.risiko.view.gameview.components.LoggerView;
 import it.unibo.risiko.view.gameview.components.Position;
 import it.unibo.risiko.view.gameview.components.StandardTextField;
 import it.unibo.risiko.view.gameview.components.TerritoryPlaceHolder;
+import it.unibo.risiko.view.gameview.components.mainpanel.BackgroundImagePanel;
+import it.unibo.risiko.view.gameview.components.mainpanel.ColoredImageButton;
+import it.unibo.risiko.view.gameview.components.mainpanel.CustomButton;
+import it.unibo.risiko.view.gameview.components.mainpanel.GradientPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

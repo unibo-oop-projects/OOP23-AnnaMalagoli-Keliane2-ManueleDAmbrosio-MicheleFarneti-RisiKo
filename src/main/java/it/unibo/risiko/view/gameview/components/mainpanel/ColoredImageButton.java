@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameview.components;
+package it.unibo.risiko.view.gameview.components.mainpanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
