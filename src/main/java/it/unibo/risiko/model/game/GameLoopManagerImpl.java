@@ -20,9 +20,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
     private static final Integer LAST_ARMY = 1;
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
-    private static final int MIN_CARDS_PLAYABLE = 3; // Troppe carte cazzo ci metto troppo a testare!!!!!!
-
-    private final Random randomNumberGenerator = new Random();
+    private static final int MIN_CARDS_PLAYABLE = 3;
 
     private int armiesPlaced;
     private long turnsCount;
@@ -183,6 +181,7 @@ public class GameLoopManagerImpl implements GameLoopManager {
 
     @Override
     public boolean isGameOver(final Integer playerIndex, final List<Player> players, final Territories territories) {
+        var randomNumberGenerator = new Random();
         final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
         if (winner.isPresent()) {
             if (winner.get().equals(players.get(activePlayer))) {
