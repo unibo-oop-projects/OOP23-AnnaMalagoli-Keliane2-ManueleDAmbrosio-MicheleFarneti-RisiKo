@@ -20,43 +20,45 @@ import javax.swing.JButton;
  */
 public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
-    private static final String FILE_FORMAT = ".png";
     private static final int BORDER_THICKNESS = 2;
     private static final long serialVersionUID = 1;
+    private ColoredImageReader imageReader = new SimpleImageReader();
 
-    private final String imageUri;
+    private final String imageName;
     private String imageColor = "white";
 
     /**
-     * @param imageUri             The url of the image to be set as backgroud of
+     * @param imageName             The name of the image to be set as backgroud of
      *                             the button
      * @param resourcesPackagePath The path needed to reach the button image
      */
-    public ColoredImageButton(final String resourcesPackagePath, final String imageUri) {
-        this.imageUri = imageUri;
+    public ColoredImageButton(final String resourcesPackagePath, final String imageName) {
+        this.imageName = imageName;
         this.resourcesPackagePath = resourcesPackagePath;
     }
 
     /**
-     * Constructor wich sets the button background image and also sets its bounds
+     * Constructor wich sets the button background image and also its bounds
      * 
      * @param resourcesPackagePath The path needed to reach the button image
-     * @param imageUrl
-     * @param x
-     * @param y
+     * @param imageName             The path reach the image file after the resources
+     *                             package ruling out the la spart of the name
+     *                             indicating the color
+     * @param x                    Starting x for the bounds to be set with
+     * @param y                    Starting y for the bounds to be set with
      * @param width
      * @param height
      */
-    public ColoredImageButton(final String resourcesPackagePath, final String imageUrl, final int x, final int y,
+    public ColoredImageButton(final String resourcesPackagePath, final String imageName , final int x, final int y,
             final int width, final int height) {
         this.resourcesPackagePath = resourcesPackagePath;
-        this.imageUri = imageUrl;
+        this.imageName = imageName ;
         this.setBounds(x, y, width, height);
         this.setOpaque(false);
     }
 
     /**
-     * @param imageColor A string raprresenting the color in rgb format.
+     * @param imageColor A string rappresenting the color in rgb format.
      */
     public void setColor(final String imageColor) {
         this.imageColor = imageColor;
@@ -64,13 +66,8 @@ public final class ColoredImageButton extends JButton {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        final String coloredImageUrl = resourcesPackagePath + imageUri + imageColor + FILE_FORMAT;
-        try {
-            final Image image = ImageIO.read(new File(coloredImageUrl));
-            g.drawImage(image, 0, 0, getWidth(), getHeight(),null);
-        } catch (IOException e) {
-            g.drawRect(0, 0, getWidth(), getHeight());
-        }
+        imageReader.loadColoredImage(resourcesPackagePath + imageName , imageColor)
+                .ifPresent(image -> g.drawImage(image, 0, 0, getWidth(), getHeight(), null));
     }
 
     /**
