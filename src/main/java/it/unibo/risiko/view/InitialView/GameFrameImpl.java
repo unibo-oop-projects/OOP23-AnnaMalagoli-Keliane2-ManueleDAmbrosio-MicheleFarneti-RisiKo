@@ -11,13 +11,12 @@ import it.unibo.risiko.view.InitialViewObserver;
 public class GameFrameImpl implements GameFrame {
     private final JFrame frame;
     private final PrincipalMenu menuPanel;
-    private final OptionSubMenu optionMenu;
-    private final InitialViewObserver controller;
+    //private final InitialViewObserver controller;
 
     public GameFrameImpl(final InitialViewObserver controller){ 
-        this.controller = controller;
-        this.menuPanel = new PrincipalMenu(this);
-        this.optionMenu = new OptionSubMenu(this.menuPanel);
+        //this.controller = controller;
+        this.menuPanel = new PrincipalMenu(this, controller);
+        //this.optionMenu = new OptionSubMenu(this.menuPanel, this);
         this.frame = new JFrame("***Risiko***");
         this.frame.setLayout(new BorderLayout());
         this.updatePanel(menuPanel);
@@ -49,18 +48,8 @@ public class GameFrameImpl implements GameFrame {
     }
 
     @Override
-    public OptionSubMenu getOptionSubMenu() {
-        return this.optionMenu;
-    }
-
-    @Override
     public Dimension getFrameRisolution(){
         return this.frame.getSize();
-    }
-
-    @Override
-    public InitialViewObserver getController() {
-        return this.controller;
     }
 
     @Override

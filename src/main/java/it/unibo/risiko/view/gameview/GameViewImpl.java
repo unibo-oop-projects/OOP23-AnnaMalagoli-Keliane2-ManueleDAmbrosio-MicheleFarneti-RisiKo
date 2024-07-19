@@ -731,8 +731,8 @@ public final class GameViewImpl implements GameView {
      * @author Keliane Nana
      */
     @Override
-    public void updateLog() {
-        log.showAllEvents(log.getTextArea());
+    public void updateLog(){
+        log.pressButtonAllEvent();
     }
 
     /**

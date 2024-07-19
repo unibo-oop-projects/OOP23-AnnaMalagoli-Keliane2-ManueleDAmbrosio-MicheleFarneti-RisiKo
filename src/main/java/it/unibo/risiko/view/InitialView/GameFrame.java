@@ -3,10 +3,6 @@ package it.unibo.risiko.view.InitialView;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JPanel;
-
-import it.unibo.risiko.view.InitialViewObserver;
-
 /**
  * An interface for the principal game view
  * @author Keliane Nana
@@ -29,7 +25,7 @@ public interface GameFrame {
      * Method used to get controller associated to the view
      * @return the controller associated to the game view
      */
-    public InitialViewObserver getController();
+    //public InitialViewObserver getController();
     
     //method used to remove the initial frame
     public void unshow();
@@ -38,7 +34,7 @@ public interface GameFrame {
      * This method is used to get the option menu panel
      * @return the OptionSubMenu of active GameFrame
      */
-    public JPanel getOptionSubMenu();
+    //public JPanel getOptionSubMenu();
 
     /**
      * This method helps to set the GameFrame resolution
