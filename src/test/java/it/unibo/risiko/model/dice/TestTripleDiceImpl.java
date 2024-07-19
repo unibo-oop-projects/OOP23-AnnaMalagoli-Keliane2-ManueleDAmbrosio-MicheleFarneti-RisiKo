@@ -1,5 +1,6 @@
 package it.unibo.risiko.model.dice;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,16 @@ class TestTripleDiceImpl {
     private static final int MAX_VAL = 0;
     private static final int MID_VAL = 1;
     private static final int MIN_VAL = 2;
+    private static final int ONE_ARMY = 1;
+    private static final int TWO_ARMIES = 2;
+    private static final int THREE_ARMIES = 3;
+    private static final int DICE_ONE = 1;
+    private static final int DICE_TWO = 2;
+    private static final int DICE_THREE = 3;
+    private static final int DICE_FOUR = 4;
+    private static final int DICE_FIVE = 5;
+    private static final int DICE_SIX = 6;
+
 
     @Test
     void testBuilder() {
@@ -33,18 +44,18 @@ class TestTripleDiceImpl {
 
     @Test
     void testAttackerLostArmies() {
-        TripleDiceImpl attDice = new TripleDiceImpl(3);
-        TripleDiceImpl defDice = new TripleDiceImpl(3);
+        final TripleDiceImpl attDice = new TripleDiceImpl(3);
+        final TripleDiceImpl defDice = new TripleDiceImpl(3);
 
-        attDice.setDummyResults(6, 4, 2);
-        defDice.setDummyResults(3, 3, 3);
-        assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 1);
-        attDice.setDummyResults(6, 6, 6);
-        defDice.setDummyResults(6, 6, 5);
-        assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 2);
-        attDice.setDummyResults(1, 1, 1);
-        defDice.setDummyResults(1, 1, 1);
-        assertTrue(TripleDice.attackerLostArmies(attDice, defDice) == 3);
+        attDice.setDummyResults(DICE_SIX, DICE_FOUR, DICE_TWO);
+        defDice.setDummyResults(DICE_THREE, DICE_THREE, DICE_THREE);
+        assertEquals(ONE_ARMY, TripleDice.attackerLostArmies(attDice, defDice));
+        attDice.setDummyResults(DICE_SIX, DICE_SIX, DICE_SIX);
+        defDice.setDummyResults(DICE_SIX, DICE_SIX, DICE_FIVE);
+        assertEquals(TWO_ARMIES, TripleDice.attackerLostArmies(attDice, defDice));
+        attDice.setDummyResults(DICE_ONE, DICE_ONE, DICE_ONE);
+        defDice.setDummyResults(DICE_ONE, DICE_ONE, DICE_ONE);
+        assertEquals(THREE_ARMIES, TripleDice.attackerLostArmies(attDice, defDice));
 
     }
 }
