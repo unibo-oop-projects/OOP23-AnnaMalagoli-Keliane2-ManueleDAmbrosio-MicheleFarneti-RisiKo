@@ -31,7 +31,7 @@ public class TestDeck {
     @Test
     void testGenerateDeck() {
         final String path = "src" + separator + "test" + separator + "java" + separator + "it" + separator + "unibo"
-                + separator + "risiko" + separator + "deck" + separator + "DeckCards.txt";
+                + separator + "risiko" + separator + "model" + separator + "deck" + separator + "DeckCards.txt";
         final Deck deck = new DeckImpl(path);
         final Card firstCardRemoved;
         final Card card = new CardImpl("Italy", "Infantry");
