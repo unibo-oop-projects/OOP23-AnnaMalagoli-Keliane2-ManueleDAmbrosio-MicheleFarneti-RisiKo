@@ -13,12 +13,12 @@ public interface PlayerFactory {
      * 
      * @return a new istance of a manually controlled player.
      */
-    public Player createStandardPlayer();
+    Player createStandardPlayer();
 
     /**
      * This method is used to create an AI Player.
      * 
      * @return a new istance of a computer controlled player.
      */
-    public Player createAIPlayer();
+    Player createAIPlayer();
 }

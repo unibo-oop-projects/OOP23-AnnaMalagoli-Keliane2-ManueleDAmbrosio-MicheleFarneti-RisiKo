@@ -56,11 +56,7 @@ public class AttackPhaseImpl implements AttackPhase {
 
     @Override
     public boolean isTerritoryConquered() {
-        if (defendingArmies <= defenderLostArmies) {
-            return true;
-        } else {
-            return false;
-        }
+        return defendingArmies <= defenderLostArmies;
     }
 
     private int assignDefendingArmies(final int defendingTerritoryArmies) {

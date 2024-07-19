@@ -1,6 +1,5 @@
 package it.unibo.risiko.model.player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,8 +9,8 @@ import java.util.List;
  */
 
 public class SimplePlayerFactory implements PlayerFactory {
-    private int FIRST_COLOR_INDEX = 0;
-    private List<String> colorList = new ArrayList<>();
+    private static final int FIRST_COLOR_INDEX = 0;
+    private List<String> colorList;
     private int colorIndex;
 
     public SimplePlayerFactory() {
@@ -30,7 +29,7 @@ public class SimplePlayerFactory implements PlayerFactory {
     }
 
     private String nextColor() {
-        int nextColor = colorIndex;
+        final int nextColor = colorIndex;
         colorIndex++;
         if (nextColor < colorList.size()) {
             return colorList.get(nextColor);

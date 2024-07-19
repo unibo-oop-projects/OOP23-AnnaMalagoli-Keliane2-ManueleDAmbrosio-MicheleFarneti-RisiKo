@@ -22,7 +22,7 @@ public interface Player {
      * @param armiesToPlace - int value representig the number
      * of armies that the player has to place.
      */
-    public void setArmiesToPlace(final int armiesToPlace);
+    void setArmiesToPlace(int armiesToPlace);
 
     /**
      * This method is used to set the territories owned
@@ -31,14 +31,14 @@ public interface Player {
      * @param ownedTerritories - Set containing the name of 
      * the territories owned by the player.
      */
-    public void setOwnedTerritories(final Set<String> ownedTerritories);
+    void setOwnedTerritories(Set<String> ownedTerritories);
 
     /**
      * This method is used to set the target of the player.
      * 
      * @param target - target of the player.
      */
-    public void setTarget(final Target target);
+    void setTarget(Target target);
 
     /**
      * This method is used to add a territory to the set of
@@ -46,7 +46,7 @@ public interface Player {
      * 
      * @param newTerritory - name of the territory to add.
      */
-    public void addTerritory(final String newTerritory);
+    void addTerritory(String newTerritory);
 
     /**
      * This method is used to add a card to the set of cards
@@ -54,7 +54,7 @@ public interface Player {
      * 
      * @param newCard - card to add.
      */
-    public void addCard (final Card newCard);
+    void addCard (Card newCard);
 
     /**
      * This method is used to get the target of the 
@@ -62,14 +62,14 @@ public interface Player {
      * 
      * @return the target of the player.
      */
-    public Target getTarget();
+    Target getTarget();
 
     /**
      * This method is used to get the color of the player.
      * 
      * @return the player color.
      */
-    public String getColorID();
+    String getColorID();
 
     /**
      * This method is used to get the number of armies a player has yet
@@ -77,7 +77,7 @@ public interface Player {
      * 
      * @return the number of armies to place.
      */
-    public int getArmiesToPlace();
+    int getArmiesToPlace();
 
     /**
      * This method is used to get a collection containing 
@@ -85,7 +85,7 @@ public interface Player {
      * 
      * @return the names of the territories owned by the player.
      */
-    public Collection<String> getOwnedTerritories();
+    Collection<String> getOwnedTerritories();
 
     /**
      * This method is used to get a collection containing 
@@ -93,7 +93,7 @@ public interface Player {
      * 
      * @return the cards owned by the player.
      */
-    public Collection<Card> getOwnedCards();
+    Collection<Card> getOwnedCards();
 
     /**
      * This method is used to get the number of cards 
@@ -101,7 +101,7 @@ public interface Player {
      * 
      * @return the number of cards owned by the player.
      */
-    public int getNumberOfCards();
+    int getNumberOfCards();
 
     /**
      * This method is used to know the number of cards
@@ -109,7 +109,7 @@ public interface Player {
      * 
      * @return the number of cards owned by the players.
      */
-    public int getNumberOfTerritores();
+    int getNumberOfTerritores();
 
     /**
      * This method calculates the number of armies the
@@ -117,12 +117,12 @@ public interface Player {
      * 
      * @param continentsList - list of the continents in the actual game.
      */
-    public void computeReinforcements(Collection<Continent> continentsList);
+    void computeReinforcements(Collection<Continent> continentsList);
 
     /**
      * This method reduces by one the armies to place.
      */
-    public void decrementArmiesToPlace();
+    void decrementArmiesToPlace();
 
     /**
      * This metod is used to remove a card from the 
@@ -132,7 +132,7 @@ public interface Player {
      * @return true if the card was possesed by the player,
      * false otherwise.
      */
-    public boolean removeCard(final Card card);
+    boolean removeCard(Card card);
 
     /**
      * This metod is used to remove a territory from the 
@@ -142,7 +142,7 @@ public interface Player {
      * @return true if the territory was possesed by the
      * player, false otherwise.
      */
-    public boolean removeTerritory(final String territory);
+    boolean removeTerritory(String territory);
 
     /**
      * This method is used to know if the player has lost
@@ -152,7 +152,7 @@ public interface Player {
      * @return true if the player has lost all of his
      * territories, false otherwise.
      */
-    public boolean isDefeated();
+    boolean isDefeated();
 
     /**
      * This method is used to know if a player owns a
@@ -162,7 +162,7 @@ public interface Player {
      * @return true if the player owns the card, false
      * otherwise.
      */
-    public boolean isOwnedCard(final Card card);
+    boolean isOwnedCard(Card card);
 
     /**
      * This method is used to know if a player owns a 
@@ -172,7 +172,7 @@ public interface Player {
      * @return True if the player owns the territory, false 
      * otherwise.
      */
-    public boolean isOwnedTerritory(final String territory);
+    boolean isOwnedTerritory(String territory);
 
     /**
      * This method is used to know if a player is controlled by
@@ -181,7 +181,7 @@ public interface Player {
      * @return true if the player is not controlled by
      * a human, false otherwise.
      */
-    public boolean isAI();
+    boolean isAI();
 
     /**
      * The player draws a card from deck
@@ -190,6 +190,6 @@ public interface Player {
      * @return true it a new card has been drawn,
      * false otherwise.
      */
-    public boolean drawNewCardIfPossible(Card card);
+    boolean drawNewCardIfPossible(Card card);
 
 }

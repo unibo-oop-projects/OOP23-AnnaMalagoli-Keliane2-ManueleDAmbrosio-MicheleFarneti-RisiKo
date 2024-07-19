@@ -66,7 +66,7 @@ public interface AIBehaviour {
      * @return true if the AI player can declare an attack, false
      * otherwise.
      */
-    boolean decideAttack(final List<Territory> territoryList);
+    boolean decideAttack(List<Territory> territoryList);
 
     /**
      * Checks the cards owned by the player and finds if there

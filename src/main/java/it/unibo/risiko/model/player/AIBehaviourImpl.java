@@ -23,15 +23,15 @@ public class AIBehaviourImpl implements AIBehaviour {
     private static final int MINIMUM_ARMIES = 1;
     private static final int INITIAL_INDEX = 0;
     private static final int MAX_ATTACKING_ARMIES = 3;
-    private Random rnd;
-    private List<Territory> playerTerritoryList;
-    private List<Card> playerCardList;
+    private final Random rnd;
+    private final List<Territory> playerTerritoryList;
+    private final List<Card> playerCardList;
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
 
     public AIBehaviourImpl(final List<Territory> playerOwnedTerritories, final List<Card> playerOwnedCards) {
-        this.playerTerritoryList = new ArrayList<Territory>(playerOwnedTerritories);
-        this.playerCardList = new ArrayList<Card>(playerOwnedCards);
+        this.playerTerritoryList = new ArrayList<>(playerOwnedTerritories);
+        this.playerCardList = new ArrayList<>(playerOwnedCards);
         this.nextAttackedTerritory = Optional.empty();
         this.nextAttackingTerritory = Optional.empty();
         rnd = new Random();
@@ -59,8 +59,8 @@ public class AIBehaviourImpl implements AIBehaviour {
 
     @Override
     public boolean decideAttack(final List<Territory> territoryList) {
+        final Iterator<Territory> it = playerTerritoryList.iterator();
         Territory attackingTerritory;
-        Iterator<Territory> it = playerTerritoryList.iterator();
         attackingTerritory = it.next();
         while (!findAdjacentEnemy(attackingTerritory, territoryList)
                 || attackingTerritory.getNumberOfArmies() <= MINIMUM_ARMIES) {
@@ -74,9 +74,9 @@ public class AIBehaviourImpl implements AIBehaviour {
     }
 
     private boolean findAdjacentEnemy(final Territory territory, final List<Territory> territoryList) {
-        List<String> adjacentNames = territory.getListOfNearTerritories();
-        List<Territory> adjacentTerritories = new ArrayList<>();
-        for (Territory t : territoryList) {
+        final List<String> adjacentNames = territory.getListOfNearTerritories();
+        final List<Territory> adjacentTerritories = new ArrayList<>();
+        for (final Territory t : territoryList) {
             if (adjacentNames.contains(t.getTerritoryName()) && !playerTerritoryList.contains(t)) {
                 adjacentTerritories.add(t);
             }
@@ -101,11 +101,11 @@ public class AIBehaviourImpl implements AIBehaviour {
     }
 
     private List<Card> findCombo() {
-        List<Card> tris = new ArrayList<>();
-        List<Card> jollyList = listOfType(playerCardList, "Jolly");
-        List<Card> cannonList = listOfType(playerCardList, "Cannon");
-        List<Card> infantryList = listOfType(playerCardList, "Infantry");
-        List<Card> calvalryList = listOfType(playerCardList, "Cavalry");
+        final List<Card> tris = new ArrayList<>();
+        final List<Card> jollyList = listOfType(playerCardList, "Jolly");
+        final List<Card> cannonList = listOfType(playerCardList, "Cannon");
+        final List<Card> infantryList = listOfType(playerCardList, "Infantry");
+        final List<Card> calvalryList = listOfType(playerCardList, "Cavalry");
         if (jollyList.size() >= ONE_CARD) {
             if (cannonList.size() >= TWO_CARDS) {
                 addFromListToList(jollyList, tris, ONE_CARD);
@@ -133,13 +133,13 @@ public class AIBehaviourImpl implements AIBehaviour {
         return List.of();
     }
 
-    private List<Card> listOfType(List<Card> playerCardList, String typeName) {
+    private List<Card> listOfType(final List<Card> playerCardList, final String typeName) {
         return playerCardList.stream()
                 .filter(t -> t.getTypeName().equals(typeName))
                 .collect(Collectors.toList());
     }
 
-    private void addFromListToList(List<Card> srcList, List<Card> destList, final int numberOfCards) {
+    private void addFromListToList(final List<Card> srcList, final List<Card> destList, final int numberOfCards) {
         for (int i = 0; i < numberOfCards; i++) {
             destList.add(srcList.get(i));
         }
