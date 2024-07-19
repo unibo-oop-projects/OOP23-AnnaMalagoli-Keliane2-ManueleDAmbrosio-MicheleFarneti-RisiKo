@@ -316,14 +316,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                             : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies(),
                     getArmiesInTerritory(defenderTerritory.get()));
 
-            territories.removeArmiesInTerritory(attackerTerritory.get(), attackPhase.getAttackerLostArmies());
-            territories.removeArmiesInTerritory(defenderTerritory.get(), attackPhase.getDefenderLostArmies());
-
             // Creation of attack event.
             createEvent(EventType.ATTACK, getTerritoryFromString(attackerTerritory.get()),
                     getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
                     Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))), Optional.empty());
             view.updateLog();
+
+            territories.removeArmiesInTerritory(attackerTerritory.get(), attackPhase.getAttackerLostArmies());
+            territories.removeArmiesInTerritory(defenderTerritory.get(), attackPhase.getDefenderLostArmies());
 
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
