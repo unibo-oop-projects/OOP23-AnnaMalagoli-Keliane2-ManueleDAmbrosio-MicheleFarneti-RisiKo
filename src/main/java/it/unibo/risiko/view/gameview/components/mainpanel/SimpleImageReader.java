@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
  * 
  * @author Michele Farneti
  */
-public class SimpleImageReader implements ColoredImageReader,StandradImageReader{
-    private final static String fileFormat = File.separator + ".png";
+public class SimpleImageReader implements ColoredImageReader, StandradImageReader {
+    private final static String fileFormat = ".png";
 
     @Override
     public Optional<Image> loadImage(final String imagePath) {

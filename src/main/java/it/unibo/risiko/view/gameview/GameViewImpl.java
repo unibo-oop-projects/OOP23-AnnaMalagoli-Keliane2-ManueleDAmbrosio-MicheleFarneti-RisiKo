@@ -204,7 +204,7 @@ public final class GameViewImpl implements GameView {
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE));
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap(createPath(resourcesLocator, List.of("maps", mapName, mapName + ".png")));
+        paintMap(resourcesLocator,FILE_SEPARATOR + "maps" + FILE_SEPARATOR +  mapName + FILE_SEPARATOR + mapName );
         mapWidth = mapLayoutPane.getSize().width;
         mapHeight = mapLayoutPane.getSize().height;
 
@@ -386,18 +386,12 @@ public final class GameViewImpl implements GameView {
      * fails,
      * a pannel reporting the error appears
      * 
+     * @param resourcePackagePath
      * @param mapPath The path of the image of the selected map
      * @author Michele Farneti
      */
-    private void paintMap(final String mapPath) {
-        final Optional<Image> mapImage = readImage(mapPath);
-        if (mapImage.isPresent()) {
-            mapPanel = new BackgroundImagePanel(mapImage.get());
-            mapPanel.setOpaque(false);
-        } else {
-            mapPanel = new JPanel();
-            mapPanel.add(new JLabel("Failed to load Map image"));
-        }
+    private void paintMap(final String resourcePackagePath, String imageName) {
+        mapPanel = new BackgroundImagePanel(resourcePackagePath, imageName);
         mapPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapLayoutPane.add(mapPanel, MAP_LAYER, 0);
         gamePanel.add(mapLayoutPane);
