@@ -7,7 +7,7 @@ import java.awt.Dimension;
  * An interface for the principal game view
  * @author Keliane Nana
  */
-public interface GameFrame {
+public interface InitialView {
 
     /**
      * This method updates the view that should be shown by the GameFrame

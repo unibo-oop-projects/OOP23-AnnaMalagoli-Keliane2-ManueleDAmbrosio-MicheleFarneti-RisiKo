@@ -32,7 +32,7 @@ public class OptionSubMenu extends JPanel{
     private ButtonGroup grp;
     private ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
-    public OptionSubMenu(PrincipalMenu p, GameFrame g) {
+    public OptionSubMenu(PrincipalMenu p, InitialView g) {
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
         this.setPreferredSize(new Dimension(700, 700));
@@ -125,7 +125,7 @@ public class OptionSubMenu extends JPanel{
      * @param p the parent principal menu of the OptionSubMenu
      * @param pane the risolution panel of the OptionSubMenu
      */
-    private void saveOption(final PrincipalMenu p,final JPanel pane, final GameFrame g) {
+    private void saveOption(final PrincipalMenu p,final JPanel pane, final InitialView g) {
         screenResolution=grp.getSelection().getActionCommand();
         String ris[]=screenResolution.split("x");
         g.setResolution(Integer.parseInt(ris[0]), Integer.parseInt(ris[1]));

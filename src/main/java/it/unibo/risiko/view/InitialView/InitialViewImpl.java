@@ -8,12 +8,12 @@ import it.unibo.risiko.view.InitialViewObserver;
 /**The gameFrame implementation
  * @author Keliane Nana
  */
-public class GameFrameImpl implements GameFrame {
+public class InitialViewImpl implements InitialView {
     private final JFrame frame;
     private final PrincipalMenu menuPanel;
     //private final InitialViewObserver controller;
 
-    public GameFrameImpl(final InitialViewObserver controller){ 
+    public InitialViewImpl(final InitialViewObserver controller){ 
         //this.controller = controller;
         this.menuPanel = new PrincipalMenu(this, controller);
         //this.optionMenu = new OptionSubMenu(this.menuPanel, this);
