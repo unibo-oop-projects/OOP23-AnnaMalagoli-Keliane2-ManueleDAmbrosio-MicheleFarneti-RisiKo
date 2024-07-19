@@ -31,7 +31,7 @@ public class NewGameInitViewImpl extends JPanel {
     private static final int MIN_PLAYERS = 2;
     private static final int FIRST_MAP_INDEX = 0;
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
-    private static final Color MAP_TEXT_COLOR = new Color(54, 8, 14);
+    private static final Color MAP_TEXT_COLOR = new Color(100, 200, 140);
     private int width;
     private int height;
     private boolean startable;
