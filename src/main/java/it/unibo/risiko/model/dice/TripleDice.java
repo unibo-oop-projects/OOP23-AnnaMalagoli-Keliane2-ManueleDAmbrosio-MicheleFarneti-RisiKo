@@ -2,8 +2,21 @@ package it.unibo.risiko.model.dice;
 
 import java.util.List;
 
+/**
+ * A triple dice with a method for computing results.
+ * 
+ * @author Manuele D'Ambrosio
+ */
+
 public interface TripleDice {
+    /**
+     *Initial value.
+     */
     int INITIAL_VALUE = 0;
+    
+    /**
+     * Value of an invalid or unused throw. 
+     */
     int NOT_A_THROW = -1;
 
     /**

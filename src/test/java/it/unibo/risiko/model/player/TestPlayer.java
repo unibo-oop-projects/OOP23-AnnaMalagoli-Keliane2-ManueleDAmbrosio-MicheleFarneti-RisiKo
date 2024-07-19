@@ -22,51 +22,56 @@ import it.unibo.risiko.model.map.TerritoryImpl;
  * @author Manuele D'Ambrosio
  */
 
-public class TestPlayer {
+class TestPlayer {
+    private static final int BONUS_ARMIES = 3;
+    private static final int NO_ARMIES = 0;
+    private static final int ARMIES_COMPUTED = 4;
+    private static final int ONE_CARD = 1;
+    private static final int ZERO_CARDS = 0;
 
     @Test
     void testRemoveCard() {
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createStandardPlayer();
-        Card card = new CardImpl("Territory1", "A");
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createStandardPlayer();
+        final Card card = new CardImpl("Territory1", "A");
         player.addCard(card);
-        assertEquals(player.getNumberOfCards(), 1);
+        assertEquals(player.getNumberOfCards(), ONE_CARD);
         assertTrue(player.removeCard(card));
-        assertEquals(player.getNumberOfCards(), 0);
+        assertEquals(player.getNumberOfCards(), ZERO_CARDS);
     }
 
     @Test
     void testComputeReinforcement() {
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createStandardPlayer();
-        Continent cont = new ContinentImpl("cont", 3);
-        Territory t1 = new TerritoryImpl("ter1", cont.getName(), List.of("ter2", "ter3"));
-        Territory t2 = new TerritoryImpl("ter2", cont.getName(), List.of("ter3", "ter1"));
-        Territory t3 = new TerritoryImpl("ter5", cont.getName(), List.of("ter4"));
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createStandardPlayer();
+        final Continent cont = new ContinentImpl("cont", BONUS_ARMIES);
+        final Territory t1 = new TerritoryImpl("ter1", cont.getName(), List.of("ter2", "ter3"));
+        final Territory t2 = new TerritoryImpl("ter2", cont.getName(), List.of("ter3", "ter1"));
+        final Territory t3 = new TerritoryImpl("ter5", cont.getName(), List.of("ter4"));
         cont.addTerritory(t3);
         cont.addTerritory(t2);
         cont.addTerritory(t1);
         player.addTerritory(t1.getTerritoryName());
         player.addTerritory(t2.getTerritoryName());
         player.computeReinforcements(List.of(cont));
-        assertEquals(0, player.getArmiesToPlace());
+        assertEquals(NO_ARMIES, player.getArmiesToPlace());
         player.addTerritory(t3.getTerritoryName());
         player.computeReinforcements(List.of(cont));
-        assertEquals(1+3, player.getArmiesToPlace());
+        assertEquals(ARMIES_COMPUTED, player.getArmiesToPlace());
     }
 
     @Test
     void testDrawNewCardIfPossible() {
-        final String SEP = File.separator;
-        final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
-            + "risiko" + SEP + "maps" + SEP + "standard" + SEP + "cards.txt";
-        Deck deck = new DeckImpl(PATH);
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createStandardPlayer();
+        final String sep = File.separator;
+        final String path = "src" + sep + "main" + sep + "resources" + sep + "it" + sep + "unibo" + sep
+            + "risiko" + sep + "maps" + sep + "standard" + sep + "cards.txt";
+        final Deck deck = new DeckImpl(path);
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createStandardPlayer();
         assertTrue(player.drawNewCardIfPossible(deck.pullCard()));
-        assertEquals(player.getNumberOfCards(), 1);
+        assertEquals(player.getNumberOfCards(), ONE_CARD);
         assertFalse(player.drawNewCardIfPossible(deck.pullCard()));
-        player.computeReinforcements(List.of(new ContinentImpl("no", 0)));
+        player.computeReinforcements(List.of(new ContinentImpl("no", NO_ARMIES)));
         assertTrue(player.drawNewCardIfPossible(deck.pullCard()));
     }
 

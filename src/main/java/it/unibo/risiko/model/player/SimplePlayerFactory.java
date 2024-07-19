@@ -8,11 +8,14 @@ import java.util.List;
  * @author Manuele D'Ambrosio
  */
 
-public class SimplePlayerFactory implements PlayerFactory {
+public final class SimplePlayerFactory implements PlayerFactory {
     private static final int FIRST_COLOR_INDEX = 0;
     private final List<String> colorList;
     private int colorIndex;
 
+    /**
+     * Constructor with a color list defined by default.
+     */
     public SimplePlayerFactory() {
         this.colorList = List.of("cyan", "blue", "green", "red", "pink", "yellow");
         this.colorIndex = FIRST_COLOR_INDEX;

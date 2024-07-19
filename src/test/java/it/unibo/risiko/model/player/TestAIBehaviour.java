@@ -1,6 +1,7 @@
 package it.unibo.risiko.model.player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -34,15 +35,15 @@ class TestAIBehaviour {
                 + "risiko" + SEP + "maps" + SEP + "standard" + SEP + "cards.txt";
 
     private AIBehaviour ai;
-    private Deck deck = new DeckImpl(PATH);
-    private Territory t1 = new TerritoryImpl("t1", "cont", List.of("t2", "t3"));
-    private Territory t2 = new TerritoryImpl("t2", "cont", List.of("t1"));
-    private Territory t3 = new TerritoryImpl("t3", "cont", List.of("t2", "t1"));
+    private final Deck deck = new DeckImpl(PATH);
+    private final Territory t1 = new TerritoryImpl("t1", "cont", List.of("t2", "t3"));
+    private final Territory t2 = new TerritoryImpl("t2", "cont", List.of("t1"));
+    private final Territory t3 = new TerritoryImpl("t3", "cont", List.of("t2", "t1"));
 
     @BeforeEach
     void setUp() {
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createAIPlayer();
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createAIPlayer();
         player.addTerritory(t2.getTerritoryName());
         player.addTerritory(t1.getTerritoryName());
         t1.addArmies(INITIAL_10_ARMIES);
@@ -54,25 +55,25 @@ class TestAIBehaviour {
 
     @Test
     void testDecideAttack() {
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createAIPlayer();
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createAIPlayer();
         player.addTerritory(t2.getTerritoryName());
         player.addTerritory(t1.getTerritoryName());
         ai = new AIBehaviourImpl(List.of(t1, t2), player.getOwnedCards().stream().toList());
         assertTrue(ai.decideAttack(List.of(t1, t2, t3)));
-        assertTrue(ai.getNextAttackedTerritory().equals(t3.getTerritoryName()));
-        assertTrue(ai.getNextAttackingTerritory().equals(t1.getTerritoryName()));
+        assertEquals(t3.getTerritoryName(), ai.getNextAttackedTerritory());
+        assertEquals(t1.getTerritoryName(), ai.getNextAttackingTerritory());
         assertEquals(MAX_ARMIES, ai.decideAttackingArmies());
         assertEquals(INITIAL_10_ARMIES - MIN_ARMIES, ai.getArmiesToMove());
     }
 
     @Test
     void testCheckCardCombo() {
-        PlayerFactory factory = new SimplePlayerFactory();
-        Player player = factory.createAIPlayer();
+        final PlayerFactory factory = new SimplePlayerFactory();
+        final Player player = factory.createAIPlayer();
         player.addTerritory(t2.getTerritoryName());
         player.addTerritory(t1.getTerritoryName());
-        assertTrue(!deck.getListCards().isEmpty());
+        assertFalse(deck.getListCards().isEmpty());
         List<Card> cardList;
         int numberOfCards = NO_CARDS;
         for (int i = NO_CARDS; i < INITIAL_10_ARMIES; i++) {

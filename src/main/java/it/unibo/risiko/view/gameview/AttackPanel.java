@@ -51,8 +51,8 @@ public class AttackPanel extends JPanel {
     private static final int DICE_COLS = 1;
     private static final int NO_THROWS = 0;
 
-    final int height;
-    final int width;
+    private final int height;
+    private final int width;
 
     @SuppressFBWarnings(value = "EI2", justification = "observer is intentionally mutable")
     private final GameViewObserver observer;
@@ -66,6 +66,14 @@ public class AttackPanel extends JPanel {
     private int attackerLostArmies;
     private int defenderLostArmies;
 
+    /**
+     * @param height - height of the panel
+     * @param width - width of the panel
+     * @param attacking - name of the attacking territory
+     * @param defending - name of the defender territory
+     * @param attackingTerritoryArmies - number of armies in attacking territory 
+     * @param observer - observer of the controller
+     */
     public AttackPanel(final int height, final int width, final String attacking, final String defending,
             final int attackingTerritoryArmies, final GameViewObserver observer) {
         this.height = height;
@@ -256,6 +264,9 @@ public class AttackPanel extends JPanel {
         return dicePanel;
     }
 
+    /**
+     * Redraws the panel and shows dice results.
+     */
     public void drawDicePanels() {
         final JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(DOUBLE, DICE_COLS));
@@ -271,6 +282,9 @@ public class AttackPanel extends JPanel {
 
     }
 
+    /**
+     * Redraws the panel changed in conquer phase.
+     */
     public void drawConquerPanel() {
         this.removeAll();
         this.add(conquerPanel(attackersNumber - attackerLostArmies,
@@ -329,18 +343,38 @@ public class AttackPanel extends JPanel {
         return conquerPanel;
     }
 
+    /**
+     * Sets the result of the attacker dice.
+     * 
+     * @param attDice - results of attacker dice.
+     */
     public void setAtt(final List<Integer> attDice) {
         this.attDice = List.copyOf(attDice);
     }
 
+    /**
+     * Sets the result of the defender dice.
+     * 
+     * @param defDice - results of defender dice.
+     */
     public void setDef(final List<Integer> defDice) {
         this.defDice = List.copyOf(defDice);
     }
 
+    /**
+     * Sets the number of armies lost by the defender player.
+     * 
+     * @param defenderLostArmies - number of armies lost
+     */
     public void setDefenderLostArmies(final int defenderLostArmies) {
         this.defenderLostArmies = defenderLostArmies;
     }
 
+    /**
+     * Sets the number of armies lost by the attacker player.
+     * 
+     * @param attackerLostArmies - number of armies lost
+     */
     public void setAttackerLostArmies(final int attackerLostArmies) {
         this.attackerLostArmies = attackerLostArmies;
     }
