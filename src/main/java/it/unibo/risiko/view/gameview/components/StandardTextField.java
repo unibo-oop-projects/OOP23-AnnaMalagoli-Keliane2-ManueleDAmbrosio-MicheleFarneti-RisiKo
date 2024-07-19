@@ -13,6 +13,7 @@ import javax.swing.JTextField;
  */
 
 public class StandardTextField extends JTextField{
+    public static final long serialVersionUID = 1L;
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final Color TEXT_COLOR = new Color(200, 200, 200);
     private static final Color BLACK_COLOR = new Color(0, 0, 0);

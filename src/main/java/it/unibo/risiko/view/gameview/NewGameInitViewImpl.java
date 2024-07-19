@@ -27,13 +27,21 @@ import it.unibo.risiko.view.gameview.components.StandardTextField;
  */
 
 public class NewGameInitViewImpl extends JPanel {
+    public static final long serialVersionUID = 1L;
     private static final int NO_PLAYERS = 0;
     private static final int MIN_PLAYERS = 2;
     private static final int FIRST_MAP_INDEX = 0;
+    private static final int TITLE_HEIGHT = 6;
+    private static final int FONT_SIZE = 26;
+    private static final int ROWS = 3;
+    private static final int COLS = 1;
+    private static final int HEIGHT_FACTOR = 4;
+    private static final int TEXT_SELECTOR = 6;
+    private static final int PLAYER_SELECTOR_SIZE = 5;
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color MAP_TEXT_COLOR = new Color(100, 200, 140);
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private boolean startable;
     private int humanPlayers;
     private int aiPlayers;
@@ -41,12 +49,12 @@ public class NewGameInitViewImpl extends JPanel {
     private int maxPlayers;
     private int mapIndex;
     private String mapName;
-    private List<String> mapList = new ArrayList<>();
-    private List<Integer> maxPlayersList = new ArrayList<>();
-    private GameViewObserver observer;
+    private List<String> mapList;
+    private final List<Integer> maxPlayersList = new ArrayList<>();
+    private final GameViewObserver observer;
 
     public NewGameInitViewImpl(final int width, final int height, final Map<String, Integer> maps,
-            GameViewObserver observer) {
+            final GameViewObserver observer) {
         this.width = width;
         this.height = height;
         this.observer = observer;
@@ -129,26 +137,24 @@ public class NewGameInitViewImpl extends JPanel {
         this.maxPlayers = maxPlayersList.get(mapIndex);
     }
 
-    private void setStartable(boolean isStartable) {
+    private void setStartable(final boolean isStartable) {
         this.startable = isStartable;
     }
 
     private JTextField titlePanel() {
-        final int TITLE_HEIGHT = height / 6;
-        JTextField title = new StandardTextField("NEW GAME");
-        title.setPreferredSize(new Dimension(width, TITLE_HEIGHT));
-        title.setFont(new Font("Arial", Font.BOLD, 26));
+        final int titleHeight = height / TITLE_HEIGHT;
+        final JTextField title = new StandardTextField("NEW GAME");
+        title.setPreferredSize(new Dimension(width, titleHeight));
+        title.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
 
         return title;
     }
 
     private JPanel centralPanel() {
-        final int CENTRAL_PANEL_HEIGHT = width / 3;
-        final int ROWS = 3;
-        final int COLS = 1;
-        JPanel central = new JPanel();
+        final int centralPanelHeight = width / ROWS;
+        final JPanel central = new JPanel();
         central.setLayout(new GridLayout(ROWS, COLS));
-        central.setPreferredSize(new Dimension(width, CENTRAL_PANEL_HEIGHT));
+        central.setPreferredSize(new Dimension(width, centralPanelHeight));
         central.add(mapSelectorPanel(mapList));
         central.add(playersSelectorPanel("PLAYERS: ", true));
         central.add(playersSelectorPanel("BOTS: ", false));
@@ -157,23 +163,22 @@ public class NewGameInitViewImpl extends JPanel {
     }
 
     private JPanel mapSelectorPanel(final List<String> mapList) {
-        final int TEXT_WIDTH = width / 6;
-        final int HEIGHT_SIZE = 4;
-        final Font selectorFont = new Font("Arial", Font.BOLD, 26);
-        int numberOfMaps = mapList.size();
-        JPanel mapSelectorPanel = new JPanel();
-        JTextField mapSelectionText = new StandardTextField("SELECT THE MAP YOU WANT TO PLAY: ");
-        JTextField nameTextField = new StandardTextField(mapName.toUpperCase(Locale.ROOT));
-        JButton nextName = new DefaultButton("NEXT");
+        final int textWidth = width / TEXT_SELECTOR;
+        final Font selectorFont = new Font("Arial", Font.BOLD, FONT_SIZE);
+        final int numberOfMaps = mapList.size();
+        final JPanel mapSelectorPanel = new JPanel();
+        final JTextField mapSelectionText = new StandardTextField("SELECT THE MAP YOU WANT TO PLAY: ");
+        final JTextField nameTextField = new StandardTextField(mapName.toUpperCase(Locale.ROOT));
+        final JButton nextName = new DefaultButton("NEXT");
 
         mapSelectionText.setBackground(BACKGROUND_COLOR);
         mapSelectionText.setFont(selectorFont);
         nameTextField.setForeground(MAP_TEXT_COLOR);
         nameTextField.setBackground(BACKGROUND_COLOR);
         nameTextField.setFont(selectorFont);
-        nameTextField.setPreferredSize(new Dimension(TEXT_WIDTH, mapSelectionText.getPreferredSize().height));
+        nameTextField.setPreferredSize(new Dimension(textWidth, mapSelectionText.getPreferredSize().height));
 
-        nextName.setPreferredSize(new Dimension(TEXT_WIDTH, mapSelectionText.getPreferredSize().height));
+        nextName.setPreferredSize(new Dimension(textWidth, mapSelectionText.getPreferredSize().height));
         nextName.addActionListener(e -> {
             mapIndex++;
             if (mapIndex >= numberOfMaps) {
@@ -188,7 +193,7 @@ public class NewGameInitViewImpl extends JPanel {
 
         mapSelectorPanel.setLayout(new FlowLayout());
         mapSelectorPanel.setBackground(BACKGROUND_COLOR);
-        mapSelectorPanel.setPreferredSize(new Dimension(width, height / HEIGHT_SIZE));
+        mapSelectorPanel.setPreferredSize(new Dimension(width, height / HEIGHT_FACTOR));
         mapSelectorPanel.add(mapSelectionText);
         mapSelectorPanel.add(nameTextField);
         mapSelectorPanel.add(nextName);
@@ -197,12 +202,12 @@ public class NewGameInitViewImpl extends JPanel {
     }
 
     private JPanel playersSelectorPanel(final String playerType, final boolean isHuman) {
-        final int PLAYER_SELECTOR_HEIGHT = height / 5;
-        JPanel playerSelectorPanel = new JPanel();
-        JTextField typeText = new StandardTextField(playerType);
-        JTextField value = new StandardTextField(Integer.toString(NO_PLAYERS));
-        JButton increaser = new DefaultButton("+");
-        JButton decreaser = new DefaultButton("-");
+        final int playerSelectorHeight = height / PLAYER_SELECTOR_SIZE;
+        final JPanel playerSelectorPanel = new JPanel();
+        final JTextField typeText = new StandardTextField(playerType);
+        final JTextField value = new StandardTextField(Integer.toString(NO_PLAYERS));
+        final JButton increaser = new DefaultButton("+");
+        final JButton decreaser = new DefaultButton("-");
 
         decreaser.setEnabled(false);
         decreaser.addActionListener(e -> {
@@ -235,7 +240,7 @@ public class NewGameInitViewImpl extends JPanel {
 
         typeText.setBackground(BACKGROUND_COLOR);
         value.setBackground(BACKGROUND_COLOR);
-        playerSelectorPanel.setPreferredSize(new Dimension(width, PLAYER_SELECTOR_HEIGHT));
+        playerSelectorPanel.setPreferredSize(new Dimension(width, playerSelectorHeight));
         playerSelectorPanel.setLayout(new FlowLayout());
         playerSelectorPanel.setBackground(BACKGROUND_COLOR);
         playerSelectorPanel.add(typeText);
