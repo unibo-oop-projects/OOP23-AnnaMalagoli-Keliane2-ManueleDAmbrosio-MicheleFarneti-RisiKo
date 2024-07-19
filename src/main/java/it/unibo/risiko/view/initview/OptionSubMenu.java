@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.initialview;
+package it.unibo.risiko.view.initview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

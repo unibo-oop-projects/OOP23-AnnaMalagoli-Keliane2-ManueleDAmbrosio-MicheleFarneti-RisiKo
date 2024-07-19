@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.InitialView;
+package it.unibo.risiko.view.initview;
 
 public interface InitialViewObserver {
     /**

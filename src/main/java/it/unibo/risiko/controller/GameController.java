@@ -28,11 +28,11 @@ import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
-import it.unibo.risiko.view.InitialView.InitialViewImpl;
-import it.unibo.risiko.view.InitialView.InitialViewObserver;
 import it.unibo.risiko.view.gameview.GameView;
 import it.unibo.risiko.view.gameview.GameViewImpl;
 import it.unibo.risiko.view.gameview.GameViewObserver;
+import it.unibo.risiko.view.initview.InitialViewImpl;
+import it.unibo.risiko.view.initview.InitialViewObserver;
 
 /**
  * Controller class for the risiko game, its function is to coordinate view and
