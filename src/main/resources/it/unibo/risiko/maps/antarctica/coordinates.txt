@@ -1,0 +1,13 @@
+Antartic-Peninsula 190 190
+Ronne-Ice-Shelf 310 230
+Ellsworth-Land 300 310
+Marie-Byrd-Land 330 370
+Ross-Ice-Shelf 450 380
+South-Pole 455 290
+Dronning-Maud-Land 456 130
+Queen-Elizabeth-Land 465 210
+Kemp-Land 626 150
+Wilhelm-II-Land 676 275
+Queen-Maud-Montains 560 355
+Oates-Land 580 450
+Wilkes-Land 730 400
