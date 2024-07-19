@@ -14,12 +14,12 @@ import it.unibo.risiko.model.dice.TripleDiceImpl;
 public class AttackPhaseImpl implements AttackPhase {
     private static final int MAX_DEFENDING_ARMIES = 3;
 
-    private int attackingArmies;
-    private int defendingArmies;
-    private TripleDiceImpl attackerDiceThrows;
-    private TripleDiceImpl defenderDiceThrows;
-    private int attackerLostArmies;
-    private int defenderLostArmies;
+    private final int attackingArmies;
+    private final int defendingArmies;
+    private final TripleDiceImpl attackerDiceThrows;
+    private final TripleDiceImpl defenderDiceThrows;
+    private final int attackerLostArmies;
+    private final int defenderLostArmies;
 
     /**
      * @param numberOfAttackingArmis   - number of attacking armies.
