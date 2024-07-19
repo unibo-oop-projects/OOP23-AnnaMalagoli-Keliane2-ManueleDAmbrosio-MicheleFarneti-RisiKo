@@ -16,7 +16,6 @@ import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
 import it.unibo.risiko.model.game.GameStatus;
-import it.unibo.risiko.model.game.SaveGame;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
 import it.unibo.risiko.model.map.Territories;
@@ -29,10 +28,10 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
 import it.unibo.risiko.view.InitialViewObserver;
-import it.unibo.risiko.view.InitialView.InitialViewImpl;
 import it.unibo.risiko.view.gameview.GameView;
 import it.unibo.risiko.view.gameview.GameViewImpl;
 import it.unibo.risiko.view.gameview.GameViewObserver;
+import it.unibo.risiko.view.initialview.InitialViewImpl;
 
 /**
  * Controller class for the risiko game, its function is to coordinate view and
@@ -45,8 +44,6 @@ import it.unibo.risiko.view.gameview.GameViewObserver;
  */
 public class GameController implements GameViewObserver, InitialViewObserver {
     private static final String FILE_SEPARATOR = File.separator;
-    private static final String saveGamesFilePath = FILE_SEPARATOR + "resources" + FILE_SEPARATOR + "savegames"
-            + FILE_SEPARATOR + "savegames.json";
     private static final String resourcesPackageString = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
     private static final int MAX_ATTACKING_ARMIES = 3;
@@ -89,22 +86,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void initializeNewGame() {
         view.showInitializationWindow(GameMapInitializer.getAvailableMaps(resourcesPackageString + FILE_SEPARATOR));
-    }
-
-    @Override
-    public void continueSavedGame() {
-        var save = SaveGame.readFromFile(resourcesPackageString + saveGamesFilePath);
-        if (save.isPresent()) {
-            players = save.get().players();
-            deck = save.get().deck();
-            territories = save.get().territories();
-            gameStatus = save.get().gamestatus();
-            gameLoopManager = save.get().gameLoopManager();
-            activePlayerIndex = save.get().playerIndex();
-            setupGameView();
-        } else {
-            initializeNewGame();
-        }
     }
 
     @Override

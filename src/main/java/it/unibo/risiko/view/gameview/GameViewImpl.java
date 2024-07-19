@@ -167,6 +167,7 @@ public final class GameViewImpl implements GameView {
         mainFrame.setSize(new Dimension(frameWidth, frameHeigth));
         mainFrame.setTitle("Risiko!");
         readImage(createPath(resourcesLocator, List.of("icon.png"))).ifPresent(image -> mainFrame.setIconImage(image));
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -731,7 +732,7 @@ public final class GameViewImpl implements GameView {
      * @author Keliane Nana
      */
     @Override
-    public void updateLog(){
+    public void updateLog() {
         log.pressButtonAllEvent();
     }
 

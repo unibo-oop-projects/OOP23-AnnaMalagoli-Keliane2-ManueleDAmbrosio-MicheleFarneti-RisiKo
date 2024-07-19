@@ -23,14 +23,13 @@ public class StdPlayer implements Player {
     private final Set<String> ownedTerritories = new HashSet<>();
     private final Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
-    private Optional<Target> target;
+    private Target target;
     private boolean isAI;
     private boolean hasDrawnNewCard;
 
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.colorID = color;
         this.armiesToPlace = armiesToPlace;
-        this.target = Optional.empty();
         this.isAI = isAI;
     }
 
@@ -50,7 +49,7 @@ public class StdPlayer implements Player {
 
     @Override
     public void setTarget(final Target target) {
-        this.target = Optional.of(target);
+        this.target = target;
     }
 
     @Override
@@ -95,7 +94,7 @@ public class StdPlayer implements Player {
 
     @Override
     public Target getTarget() {
-        return this.target.get();
+        return this.target;
     }
 
     @Override

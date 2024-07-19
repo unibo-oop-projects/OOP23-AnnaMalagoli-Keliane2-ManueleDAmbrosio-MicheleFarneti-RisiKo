@@ -16,11 +16,11 @@ public interface InitialViewObserver {
     void setupGameView();
 
     /**
-     * Start a new window used for the game playing phase and eventually for game initialization
-     * @param width Window's width
+     * Start a new window used for the game playing phase and eventually for game
+     * initialization
+     * 
+     * @param width  Window's width
      * @param height Window's height
      */
     void startGameWindow(Integer width, Integer height);
-
-    void continueSavedGame();
 }
