@@ -23,7 +23,7 @@ public class PrincipalMenu extends JPanel {
     //private final GameFrame gameFrame;
     private final ImageIcon backgroundImage = new ImageIcon("src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
 
-    public PrincipalMenu(final GameFrame f, final InitialViewObserver controller){
+    public PrincipalMenu(final InitialView f, final InitialViewObserver controller){
         //this.gameFrame = f;
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(350,0,0,0));
@@ -57,7 +57,7 @@ public class PrincipalMenu extends JPanel {
      * This method helps to update the gameFrame by showing
      * the OptionSubMenu panel
      */
-    private void showOptionPanel(GameFrame gameFrame) {
+    private void showOptionPanel(InitialView gameFrame) {
         gameFrame.updatePanel(new OptionSubMenu(this, gameFrame));
     }
 
@@ -65,7 +65,7 @@ public class PrincipalMenu extends JPanel {
      * this method organise everything so that a saved game
      * can continue
      */
-    private void continueSavedGame(GameFrame gameFrame, InitialViewObserver controller) {
+    private void continueSavedGame(InitialView gameFrame, InitialViewObserver controller) {
         var dim=gameFrame.getFrameRisolution();
         gameFrame.unshow();
         controller.startGameWindow(dim.width, dim.height);
@@ -75,7 +75,7 @@ public class PrincipalMenu extends JPanel {
     /**
      * This method starts a new game
      */
-    private void startNewGame(GameFrame gameFrame, InitialViewObserver controller) {
+    private void startNewGame(InitialView gameFrame, InitialViewObserver controller) {
         var dim=gameFrame.getFrameRisolution();
         gameFrame.unshow();
         controller.startGameWindow(dim.width, dim.height);
