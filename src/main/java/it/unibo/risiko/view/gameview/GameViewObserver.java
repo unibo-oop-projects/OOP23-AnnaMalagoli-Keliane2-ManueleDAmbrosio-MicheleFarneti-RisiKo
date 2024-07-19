@@ -20,21 +20,21 @@ public interface GameViewObserver {
      * Method used to start a new game.
      * 
      * @param mapName                 - name of the map.
-     * @param numberOfStandardPlayers - number of players controlled by humans.
-     * @param numberOfAIPlayers       - number of players controlled by the
+     * @param players - number of players controlled by humans.
+     * @param bots       - number of players controlled by the
      *                                computer.
      * @author Manuele D'Ambrosio.
      */
-    void startNewGame(String mapName,int numberOfStandardPlayers,int numberOfAIPlayers);
+    void startNewGame(String mapName, int players, int bots);
 
     /**
      * Method that compute the attack after setting the number of
      * attacking armies and updates the view
      * 
-     * @param numberOfAttackingAmies - Number of armies that are attacking.
+     * @param armies - Number of armies that are attacking.
      * @author Manuele D'Ambrosio.
      */
-    void setAttackingArmies(int numberOfAttackingAmies);
+    void setAttackingArmies(int armies);
 
     /**
      * If a territory has been conquered opens the conquer panel,
@@ -48,10 +48,10 @@ public interface GameViewObserver {
      * Method used to set the number of armies to move in a
      * conquered territory.
      * 
-     * @param numberOfMovingArmies - Number of armies to move.
+     * @param armies - Number of armies to move.
      * @author Manuele D'Ambrosio.
      */
-    void setMovingArmies(int numberOfMovingArmies);
+    void setMovingArmies(int armies);
 
     /**
      * Tells the controller that the user clicked on a territory
@@ -72,14 +72,14 @@ public interface GameViewObserver {
      * Method used to move a certain amount of armies between two 
      * adjacent territories.
      * 
-     * @param srcTerritory is the source territory
-     * @param dstTerritory is the destination territory
-     * @param numArmies is the number of armies that the player
+     * @param src is the source territory
+     * @param dst is the destination territory
+     * @param armies is the number of armies that the player
      * wants to move
      * 
      * @author Anna Malagoli
      */
-    void moveArmies(String srcTerritory, String dstTerritory, int numArmies);
+    void moveArmies(String src, String dst, int armies);
 
     /**
      * Method used to play the three cards selected by a player.

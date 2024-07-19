@@ -3,8 +3,6 @@ package it.unibo.risiko.view.InitialView;
 import java.awt.*;
 import javax.swing.*;
 
-import it.unibo.risiko.view.InitialViewObserver;
-
 /**The gameFrame implementation
  * @author Keliane Nana
  */

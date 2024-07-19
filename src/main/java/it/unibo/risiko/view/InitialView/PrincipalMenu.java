@@ -13,8 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import it.unibo.risiko.view.InitialViewObserver;
-
 /**
  *A panel which represents the principal menu
  @author Keliane Nana

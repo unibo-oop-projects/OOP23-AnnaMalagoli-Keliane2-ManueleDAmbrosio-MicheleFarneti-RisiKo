@@ -14,7 +14,7 @@ public interface Register {
      * This method adds an event in the log
      * @param e the event to be added
      */
-    void addEvent(final Event e);
+    void addEvent(Event e);
 
     /**
      * @return a list containing all the events that have been registered in the log
@@ -26,7 +26,7 @@ public interface Register {
      * registered in the log
      * @param player the player that carried out the events we want to get
      */
-    List<Event> getAllEventsPlayer(final Player player);
+    List<Event> getAllEventsPlayer(Player player);
 
     /**
      * @return the last event added to the log

@@ -108,14 +108,13 @@ public interface GameView {
     /**
      * Updates the @GameView making it show the attack panel.
      * 
-     * @param attacking                - Name of the attacking territory.
-     * @param defending                - Name of the the defending territory
-     * @param attackingTerritoryArmies - Number of armies in the attacking
-     *                                 territory.
+     * @param attacking - Name of the attacking territory.
+     * @param defending - Name of the the defending territory
+     * @param armies    - Number of armies in the attacking
+     *                  territory.
      * @author Manuele D'Ambrosio
      */
-    void createAttack(final String attacking, final String defending,
-            final int attackingTerritoryArmies);
+    void createAttack(String attacking, String defending, int armies);
 
     /**
      * Updates the attack panel after the attacking player has selected
@@ -153,7 +152,7 @@ public interface GameView {
      * @param attDice - results list of the attacker dices.
      * @author Manuele D'Ambrosio
      */
-    void setAtt(final List<Integer> attDice);
+    void setAtt(List<Integer> attDice);
 
     /**
      * Method used to set the defender's dice throws.
@@ -161,7 +160,7 @@ public interface GameView {
      * @param defDice - Results list of the defender dices.
      * @author Manuele D'Ambrosio
      */
-    void setDef(final List<Integer> defDice);
+    void setDef(List<Integer> defDice);
 
     /**
      * Method used to set the number of armies lost by the
@@ -170,7 +169,7 @@ public interface GameView {
      * @param attackerLostArmies - Number of armies lost by the attacker.
      * @author Manuele D'Ambrosio
      */
-    void setAttackerLostArmies(final int attackerLostArmies);
+    void setAttackerLostArmies(int attackerLostArmies);
 
     /**
      * Method used to set the number of armies lost by the
@@ -179,7 +178,7 @@ public interface GameView {
      * @param defenderLostArmies - Number of armies lost by the defender.
      * @author Manuele D'Ambrosio
      */
-    void setDefenderLostArmies(final int defenderLostArmies);
+    void setDefenderLostArmies(int defenderLostArmies);
 
     /**
      * Method used to create a panel that allows to move armies between two
@@ -188,7 +187,7 @@ public interface GameView {
      * @param listTerritories is the list of territories of a player
      * @author Anna Malagoli
      */
-    void createMoveArmies(final List<Territory> listTerritories);
+    void createMoveArmies(List<Territory> listTerritories);
 
     /**
      * Method used to create a panel that allows the player to play three cards.

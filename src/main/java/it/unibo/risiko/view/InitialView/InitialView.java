@@ -13,13 +13,13 @@ public interface InitialView {
      * This method updates the view that should be shown by the GameFrame
      * @param c the component to show
      */
-    public void updatePanel(final Component  c);
+    void updatePanel(Component  c);
 
     /**
      * Method used to get the dimensios of the GameFrame
      * @return GameFrame's risolutions
      */
-    public Dimension getFrameRisolution();
+    Dimension getFrameRisolution();
     
     /**
      * Method used to get controller associated to the view
@@ -28,7 +28,7 @@ public interface InitialView {
     //public InitialViewObserver getController();
     
     //method used to remove the initial frame
-    public void unshow();
+    void unshow();
 
     /**
      * This method is used to get the option menu panel
@@ -41,5 +41,5 @@ public interface InitialView {
      * @param width the width of the GameFrame
      * @param height the height of the GameFrame
      */
-    public void setResolution(int int1, int int2);
+    void setResolution(int int1, int int2);
 }
