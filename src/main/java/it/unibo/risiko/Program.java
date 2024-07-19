@@ -2,7 +2,7 @@ package it.unibo.risiko;
 
 import it.unibo.risiko.controller.GameController;
 
-public class Program {
+public final class Program {
 
     private Program() {
         //This constructor is intentionally private.

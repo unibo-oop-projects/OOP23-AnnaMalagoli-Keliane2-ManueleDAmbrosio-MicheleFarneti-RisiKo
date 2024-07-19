@@ -49,7 +49,7 @@ public class NewGameInitViewImpl extends JPanel {
     private int maxPlayers;
     private int mapIndex;
     private String mapName;
-    private List<String> mapList;
+    private final List<String> mapList;
     private final List<Integer> maxPlayersList = new ArrayList<>();
     private final GameViewObserver observer;
 
