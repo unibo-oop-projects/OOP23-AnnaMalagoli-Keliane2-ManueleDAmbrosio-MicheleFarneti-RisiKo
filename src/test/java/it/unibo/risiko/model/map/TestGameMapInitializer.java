@@ -49,7 +49,7 @@ class TestGameMapInitializer {
 
                 assertEquals(SMALL_MAP_NAME, testMap.getMapName());
                 assertEquals(testMap.getMaxPlayers(), 2);
-                final var territories = new Territories(testMap.getTerritoriesPath());
+                final Territories territories = new TerritoriesImpl(testMap.getTerritoriesPath());
                 assertEquals(6, territories.getListTerritories().size());
                 final List<String> territoriesNames = territories.getListTerritories().stream()
                                 .map(t -> t.getTerritoryName())

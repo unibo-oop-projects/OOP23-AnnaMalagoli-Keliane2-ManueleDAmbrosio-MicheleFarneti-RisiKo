@@ -1,0 +1,26 @@
+South-West-Antartica 3:
+Antartic-Peninsula Ronne-Ice-Shelf Ellsworth-Land
+South-West-Antartica:
+Ronne-Ice-Shelf Queen-Elizabeth-Land South-Pole Ellsworth-Land Dronning-Maud-Land
+South-West-Antartica:
+Ellsworth-Land Antartic-Peninsula Ronne-Ice-Shelf South-Pole Marie-Byrd-Land
+South-West-Antartica:
+Marie-Byrd-Land Ross-Ice-Shelf Ellsworth-Land South-Pole Queen-Maud-Montains
+South-West-Antartica:
+Ross-Ice-Shelf Marie-Byrd-Land Queen-Maud-Montains South-Pole
+South-West-Antartica:
+South-Pole Ellsworth-Land Marie-Byrd-Land Ronne-Ice-Shelf Ross-Ice-Shelf Queen-Maud-Montains Queen-Elizabeth-Land Wilhelm-II-Land
+East-Antartica 3:
+Dronning-Maud-Land Ronne-Ice-Shelf Queen-Elizabeth-Land Kemp-Land
+East-Antartica:
+Queen-Elizabeth-Land Dronning-Maud-Land South-Pole Ronne-Ice-Shelf Wilhelm-II-Land Kemp-Land
+East-Antartica:
+Kemp-Land Dronning-Maud-Land Queen-Elizabeth-Land Wilhelm-II-Land
+East-Antartica:
+Wilhelm-II-Land Kemp-Land Queen-Elizabeth-Land South-Pole Queen-Maud-Montains Wilkes-Land Oates-Land
+East-Antartica:
+Queen-Maud-Montains South-Pole Ross-Ice-Shelf Marie-Byrd-Land Oates-Land Wilkes-Land Wilhelm-II-Land
+East-Antartica:
+Oates-Land Queen-Maud-Montains Wilhelm-II-Land Wilkes-Land
+East-Antartica:
+Wilkes-Land Wilhelm-II-Land Queen-Maud-Montains Oates-Land

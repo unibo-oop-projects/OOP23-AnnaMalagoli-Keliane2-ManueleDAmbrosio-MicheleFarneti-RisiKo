@@ -25,7 +25,11 @@ public interface GameViewObserver {
      *                                computer.
      * @author Manuele D'Ambrosio.
      */
+<<<<<<< HEAD
     void startNewGame(String mapName, int players, int bots);
+=======
+    void startNewGame(String mapName, int numberOfStandardPlayers, int numberOfAIPlayers);
+>>>>>>> ab7c569a009347f69f1ecb5eba6e9894c21d1941
 
     /**
      * Method that compute the attack after setting the number of
@@ -69,7 +73,7 @@ public interface GameViewObserver {
     void setAttacking();
 
     /**
-     * Method used to move a certain amount of armies between two 
+     * Method used to move a certain amount of armies between two
      * adjacent territories.
      * 
      * @param src is the source territory
@@ -83,6 +87,7 @@ public interface GameViewObserver {
 
     /**
      * Method used to play the three cards selected by a player.
+     * 
      * @param card1 is the first card selected
      * @param card2 is the second card selected
      * @param card3 is the third card selected

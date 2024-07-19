@@ -30,7 +30,6 @@ public class StdPlayer implements Player {
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.colorID = color;
         this.armiesToPlace = armiesToPlace;
-        this.target = Optional.empty();
         this.isAI = isAI;
     }
 
