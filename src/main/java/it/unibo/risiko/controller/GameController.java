@@ -19,6 +19,7 @@ import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.game.SaveGame;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
+import it.unibo.risiko.model.map.TerritoriesImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.AIBehaviour;
@@ -515,7 +516,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
         gameLoopManager = new GameLoopManagerImpl();
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
-        this.territories = new Territories(gameInitializer.getTerritoriesPath());
+        this.territories = new TerritoriesImpl(gameInitializer.getTerritoriesPath());
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
         players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStartingArmies(players.size())));
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));

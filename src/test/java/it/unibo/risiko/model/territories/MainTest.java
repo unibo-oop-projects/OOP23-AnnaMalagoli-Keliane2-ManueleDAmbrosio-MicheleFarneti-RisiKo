@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.risiko.model.map.Continent;
+import it.unibo.risiko.model.map.TerritoriesImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
-import java.io.File;
 
 /**
  * Class used to execute the tests on the classes for the territories.
@@ -57,7 +57,7 @@ class MainTest {
         final String path = "src" + separator + "test" + separator + "java" + separator + "it" + separator + "unibo"
                 + separator + "risiko" + separator + "model" + separator + "territories" + separator
                 + "Territories.txt";
-        final Territories territories = new Territories(path);
+        final Territories territories = new TerritoriesImpl(path);
         final Continent continent;
         final int bonusArmyEurope = 5;
         final List<Territory> territoriesList = territories.getListTerritories();
@@ -85,7 +85,7 @@ class MainTest {
         final String path = "src" + separator + "test" + separator + "java" + separator + "it" + separator + "unibo"
                 + separator + "risiko" + separator + "model" + separator + "territories" + separator
                 + "Territories.txt";
-        final Territories territories = new Territories(path);
+        final Territories territories = new TerritoriesImpl(path);
         System.out.println(territories.getListTerritories().size());
         for (var elem : territories.getListTerritories()) {
             System.out.println(elem.getTerritoryName());
