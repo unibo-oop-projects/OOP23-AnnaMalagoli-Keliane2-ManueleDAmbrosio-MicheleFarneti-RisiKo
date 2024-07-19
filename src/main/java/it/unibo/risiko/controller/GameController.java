@@ -30,7 +30,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
 import it.unibo.risiko.view.InitialViewObserver;
-import it.unibo.risiko.view.InitialView.InitialViewImpl;
+import it.unibo.risiko.view.initialview.InitialViewImpl;
 import it.unibo.risiko.view.gameview.GameView;
 import it.unibo.risiko.view.gameview.GameViewImpl;
 import it.unibo.risiko.view.gameview.GameViewObserver;
@@ -76,8 +76,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     public GameController() {
-        // resourcesPackageString + saveGamesFilePath
-
         new InitialViewImpl(this);
     }
 
