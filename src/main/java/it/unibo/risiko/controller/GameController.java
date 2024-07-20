@@ -328,13 +328,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             if (attackPhase.isTerritoryConquered()) {
                 final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies()
                         - MIN_ARMIES;
-                conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
                 // Conquer Event
                 createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
                         getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
                         Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
                         Optional.empty());
+
+                conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
                 // Creating moovement event.
                 createEvent(EventType.TROOP_MOVEMENT, getTerritoryFromString(attackerTerritory.get()),
@@ -557,8 +558,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @param srcTerritory is the source territory
      * @param dstTerritory is the destination territory
-     * @param numArmies is the number of armies that the player
-     * wants to move
+     * @param numArmies    is the number of armies that the player
+     *                     wants to move
      * @author Anna Malagoli
      * @author Keliane Nana
      */
