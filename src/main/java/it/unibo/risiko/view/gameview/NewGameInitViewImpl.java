@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.risiko.view.gameview.components.ContinuePanel;
 import it.unibo.risiko.view.gameview.components.DefaultButton;
 import it.unibo.risiko.view.gameview.components.StandardTextField;
@@ -51,7 +52,9 @@ public class NewGameInitViewImpl extends JPanel {
     private String mapName;
     private final List<String> mapList;
     private final List<Integer> maxPlayersList = new ArrayList<>();
-    private final GameViewObserver observer;
+
+    @SuppressFBWarnings(value = "EI2", justification = "observer is intentionally mutable")
+    private transient final GameViewObserver observer;
 
     /**
      * New game default panel.
