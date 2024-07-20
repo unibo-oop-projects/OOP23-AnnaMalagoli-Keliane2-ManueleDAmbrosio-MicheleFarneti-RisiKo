@@ -51,7 +51,7 @@ public class NewGameInitViewImpl extends JPanel {
     private String mapName;
     private final List<String> mapList;
     private final List<Integer> maxPlayersList = new ArrayList<>();
-    private final GameViewObserver observer;
+    private transient final GameViewObserver observer;
 
     /**
      * New game default panel.
