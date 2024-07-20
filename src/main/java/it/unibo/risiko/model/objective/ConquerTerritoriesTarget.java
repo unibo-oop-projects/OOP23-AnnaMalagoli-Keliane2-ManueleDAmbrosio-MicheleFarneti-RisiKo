@@ -2,10 +2,14 @@ package it.unibo.risiko.model.objective;
 
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * ConquerTerritoriesTarget, a BaseTarget extension
+ * @author Keliane Nana
+ */
 public class ConquerTerritoriesTarget extends BaseTarget{
-    private int territoryWantedNumber;
+    private final int territoryWantedNumber;
 
-    public ConquerTerritoriesTarget(Player player, int territoryWantedNumber) {
+    public ConquerTerritoriesTarget(final Player player,final int territoryWantedNumber) {
         super(player);
         this.territoryWantedNumber=territoryWantedNumber;
     }

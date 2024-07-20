@@ -7,7 +7,7 @@ import it.unibo.risiko.model.player.Player;
 
 /**
  * This interface contains methods for keeping track of in-game events
- * @author Keliane Tchoumkeu
+ * @author Keliane Nana
  */
 public interface Register {
     /**
@@ -17,11 +17,13 @@ public interface Register {
     void addEvent(Event e);
 
     /**
+     * Method used to get all the events of the register
      * @return a list containing all the events that have been registered in the log
      */
     List<Event> getAllEvents();
 
     /**
+     * This method helps to get all the events of a specific player
      * @return a list containing all the events of a particular player that have been 
      * registered in the log
      * @param player the player that carried out the events we want to get
@@ -29,6 +31,7 @@ public interface Register {
     List<Event> getAllEventsPlayer(Player player);
 
     /**
+     * Method used to get the last event from the register
      * @return the last event added to the log
      */
     Event getLastEvent();

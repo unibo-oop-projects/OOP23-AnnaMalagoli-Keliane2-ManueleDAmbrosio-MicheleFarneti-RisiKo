@@ -108,12 +108,4 @@ public class PrincipalMenu extends JPanel {
         return pane;
     }
 
-    /**
-     * getter, used to get the gameFrame associated to this panel
-     * @return the gameFrame of this PrincipalMenu
-     */
-    /*public GameFrame getGameFrame() {
-        return this.gameFrame;
-    } */
-
 }

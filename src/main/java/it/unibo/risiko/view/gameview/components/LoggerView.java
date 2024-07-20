@@ -133,7 +133,7 @@ public class LoggerView extends JPanel{
                 setText(_title);
                 setFont(new Font("Arial", Font.BOLD, 14));
             }else{
-                setText(value.toString());
+                setText(value);
             }
             return this;
         }
