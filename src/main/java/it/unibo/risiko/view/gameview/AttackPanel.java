@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Panel containing the view of the attack phase.
+ * 
  * @author Manuele D'Ambrosio
  */
 
