@@ -3,7 +3,7 @@ package it.unibo.risiko.model.event;
 /**
  * This interface contains methods that 
  * help to know more about an event
- * @author Keliane Tchoumkeu
+ * @author Keliane Nana
  */
 public interface Event {
    

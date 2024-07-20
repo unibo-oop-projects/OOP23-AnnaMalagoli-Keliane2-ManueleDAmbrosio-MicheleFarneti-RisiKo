@@ -614,10 +614,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @param srcTerritory is the source territory
      * @param dstTerritory is the destination territory
-     * @param numArmies    is the number of armies that the player
-     *                     wants to move
-     * @author Keliane Nana
+     * @param numArmies is the number of armies that the player
+     * wants to move
      * @author Anna Malagoli
+     * @author Keliane Nana
      */
     @Override
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {

@@ -98,7 +98,7 @@ public class LoggerView extends JPanel{
      */
     public void showAllEvents(JTextArea logText,Register register) {
         this.eventList="";
-        register.getAllEvents().forEach(i->{eventList+=i.getDescription()+"\n"; System.out.println(i.getDescription());});
+        register.getAllEvents().forEach(i->{eventList+=i.getDescription()+"\n";});
         updateLogText(logText, eventList);
     }
 
@@ -133,7 +133,7 @@ public class LoggerView extends JPanel{
                 setText(_title);
                 setFont(new Font("Arial", Font.BOLD, 14));
             }else{
-                setText(value.toString());
+                setText(value);
             }
             return this;
         }

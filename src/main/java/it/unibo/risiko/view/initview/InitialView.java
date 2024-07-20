@@ -20,21 +20,11 @@ public interface InitialView {
      * @return GameFrame's risolutions
      */
     Dimension getFrameRisolution();
-    
-    /**
-     * Method used to get controller associated to the view
-     * @return the controller associated to the game view
-     */
-    //public InitialViewObserver getController();
-    
-    //method used to remove the initial frame
-    void unshow();
 
     /**
-     * This method is used to get the option menu panel
-     * @return the OptionSubMenu of active GameFrame
+     * method used to remove the initial frame
      */
-    //public JPanel getOptionSubMenu();
+    public void unshow();
 
     /**
      * This method helps to set the GameFrame resolution
