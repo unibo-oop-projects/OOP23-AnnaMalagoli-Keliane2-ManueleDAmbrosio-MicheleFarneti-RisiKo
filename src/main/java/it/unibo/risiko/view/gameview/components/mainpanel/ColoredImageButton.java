@@ -2,19 +2,14 @@ package it.unibo.risiko.view.gameview.components.mainpanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 /**
  * ColoredImageButton enables to create a button with a given image as
- * background,
- * it also allows to change the image color by generating the right path to find
- * it in the resources folder.
+ * background,it also allows to change the image color by generating the right
+ * path to find it in the resources folder.
  * 
  * @author Michele Farneti
  */
@@ -22,7 +17,7 @@ public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
     private static final int BORDER_THICKNESS = 2;
     private static final long serialVersionUID = 1;
-    private transient final ColoredImageReader imageReader = new SimpleImageReader();
+    private final transient ColoredImageReader imageReader = new SimpleImageReader();
 
     private final String imageName;
     private String imageColor = "white";
@@ -38,7 +33,7 @@ public final class ColoredImageButton extends JButton {
     }
 
     /**
-     * Constructor wich sets the button background image and also its bounds
+     * Constructor wich sets the button background image and also its bounds.
      * 
      * @param resourcesPackagePath The path needed to reach the button image
      * @param imageName            The path reach the image file after the resources
@@ -71,7 +66,9 @@ public final class ColoredImageButton extends JButton {
     }
 
     /**
-     * Sets a prederminated border of a given color
+     * Sets a prederminated border of a given color.
+     * 
+     * @param borderColor The color the border should be painted with.
      */
     public void setCustomBorder(final Color borderColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor, BORDER_THICKNESS));

@@ -43,6 +43,22 @@ public final class TerritoryPlaceHolderFactory {
         }
     }
 
+    /**
+     * Generates a new territoryPlacehoder for a given territory if it's present in
+     * the coordinates list known by the factory, setting already its relative
+     * coordinates in the game map,and adding it's actionListner.
+     * 
+     * @param territory
+     * @param coordinatesGenerator   A function used for generating coordinates that
+     *                               are relative to the actuale game map proportion
+     *                               from the standard coordinates know from the map
+     *                               folder.
+     * @param resourcesPackageString
+     * @param al                     ActionListener for when te tankIcon gets
+     *                               clicked.
+     * @return An optional of a tank Icon if it was possible to find the coordinates
+     *         of the territory, an empty optional otherwiswe.
+     */
     public Optional<TankIcon> generateTank(final Territory territory,
             final Function<Position, Position> coordinatesGenerator, final String resourcesPackageString,
             final ActionListener al) {

@@ -8,18 +8,18 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 /**
- * Image read class is used to load an image from the game's resources
+ * Image read class is used to load an image from the game's resources.
  * 
  * @author Michele Farneti
  */
-public class SimpleImageReader implements ColoredImageReader, StandradImageReader {
-    private final static String fileFormat = ".png";
+public final class SimpleImageReader implements ColoredImageReader, StandradImageReader {
+    private static final  String FILE_FORMAT = ".png";
 
     @Override
     public Optional<Image> loadImage(final String imagePath) {
         Optional<Image> image = Optional.empty();
         try {
-            image = Optional.of(ImageIO.read(new File(imagePath + fileFormat)));
+            image = Optional.of(ImageIO.read(new File(imagePath + FILE_FORMAT)));
             return image;
         } catch (IOException e) {
             return image;

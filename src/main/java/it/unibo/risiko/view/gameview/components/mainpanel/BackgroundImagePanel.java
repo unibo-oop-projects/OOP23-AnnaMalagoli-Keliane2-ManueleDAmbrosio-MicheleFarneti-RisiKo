@@ -4,18 +4,18 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * Realizes a JPanel with an image as background
+ * Realizes a JPanel with an image as background.
  * 
  * @author Michele Farneti
  */
-public class BackgroundImagePanel extends JPanel {
+public final class BackgroundImagePanel extends JPanel {
     private static final long serialVersionUID = 1;
-    private transient final StandradImageReader imageReader = new SimpleImageReader();
+    private final transient StandradImageReader imageReader = new SimpleImageReader();
     private final String imageName;
     private final String resourcesPackagePath;
 
     /**
-     * Initialization with the path for the resource
+     * Initialization with the path for the resource.
      * 
      * @param resourcesPackage
      * @param imageName
