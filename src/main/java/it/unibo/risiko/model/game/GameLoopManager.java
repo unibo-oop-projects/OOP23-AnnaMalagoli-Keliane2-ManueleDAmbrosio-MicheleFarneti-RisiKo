@@ -17,7 +17,7 @@ public interface GameLoopManager {
 
         /**
          * @param activePlayer The index of the current player
-         * @param playersCount The amount of player currentlyt in the game
+         * @param playersCount The amount of player currently in the game
          * @return The index of the next player
          */
         Integer nextPlayer(Integer activePlayer, Integer playersCount);

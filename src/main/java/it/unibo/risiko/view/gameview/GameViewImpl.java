@@ -725,4 +725,9 @@ public final class GameViewImpl implements GameView {
         }
         gameStatusPanel.setText(statusString);
     }
+
+    @Override
+    public void enableTanks(boolean enabled) {
+        tanks.forEach(t->t.setEnabled(enabled));
+    }
 }

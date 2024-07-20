@@ -207,6 +207,15 @@ public interface GameView {
 
     /**
      * 
+     * Enables or deactivates Clicks over the maps tanks
+     * 
+     * @author Michele Farneti
+     * @param enabled True if the buttons have to be enabled
+     */
+    void enableTanks(boolean enabled);
+
+    /**
+     * 
      * Enables or deactivates the button used for skipping
      * 
      * @author Michele Farneti

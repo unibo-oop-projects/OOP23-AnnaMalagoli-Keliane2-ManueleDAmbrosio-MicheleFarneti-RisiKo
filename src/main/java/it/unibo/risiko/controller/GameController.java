@@ -27,7 +27,9 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
+import it.unibo.risiko.model.game.GameLoopManager2;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
+import it.unibo.risiko.model.game.GameLoopManagerImpl2;
 import it.unibo.risiko.view.gameview.GameView;
 import it.unibo.risiko.view.gameview.GameViewImpl;
 import it.unibo.risiko.view.gameview.GameViewObserver;
@@ -54,6 +56,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private static final int THIRD_CARD = 2;
     private GameMapInitializer gameInitializer;
     private GameLoopManager gameLoopManager;
+    private GameLoopManager2 gameLoopManager2;
     private GameView view;
     private Optional<String> attackerTerritory = Optional.empty();
     private Optional<String> defenderTerritory = Optional.empty();
@@ -210,6 +213,18 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void territorySelected(final String territory) {
+        //GameLoop2
+        switch (gameLoopManager2.getGameStatus()) {
+            case TERRITORY_OCCUPATION:
+                if(gameLoopManager2.doActionIfPossible(players,ac)){
+
+                }
+                break;
+        
+            default:
+                break;
+        }
+        //GameLoop2
         switch (gameStatus) {
             case TERRITORY_OCCUPATION:
                 if (placeArmies(territory, MIN_ARMIES)) {
@@ -471,7 +486,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * Updates the game view by changhing the map and the turns
+     * Updates the game view by displaying all of the the info about territories
+     * occupation and infos about the player whoose tunrn it is. Also manages to
+     * only enable for the player only the buttons he is allowed to press in the
+     * given game turn.
      * 
      * @author Michele Farneti
      */
@@ -489,6 +507,37 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 view.enableSkip(true);
                 break;
             case ARMIES_PLACEMENT:
+                view.enableAttack(false);
+                view.enableSkip(false);
+                view.enableMovements(false);
+                break;
+            default:
+                break;
+        }
+
+        //Con gameLoopManager2
+        switch (gameLoopManager2.getGameStatus()) {
+            case TERRITORY_OCCUPATION:
+                view.enableTanks(true);
+                view.enableAttack(true);
+                view.enableSkip(true);
+                view.enableMovements(false);
+                break;
+            case ATTACKING:
+            case READY_TO_ATTACK:
+                view.enableTanks(true);
+                view.enableAttack(true);
+                view.enableSkip(true);
+                view.enableMovements(false);
+                break;
+            case CARDS_MANAGING:
+                view.enableTanks(false);
+                view.enableAttack(false);
+                view.enableSkip(false);
+                view.enableMovements(false);
+                break;
+            case ARMIES_PLACEMENT:
+                view.enableTanks(true);
                 view.enableAttack(false);
                 view.enableSkip(false);
                 view.enableMovements(false);
@@ -525,6 +574,13 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         this.setupGameView();
         // Manages the case where the player selected at first is AI.
         while (currentPlayer().isAI()) {
+            handleAIBehaviour();
+        }
+        redrawView();
+
+        //With game loop manager2
+        gameLoopManager2 = new GameLoopManagerImpl2();
+        while(players.get(gameLoopManager2.getActivePlayer()).isAI()){
             handleAIBehaviour();
         }
         redrawView();
