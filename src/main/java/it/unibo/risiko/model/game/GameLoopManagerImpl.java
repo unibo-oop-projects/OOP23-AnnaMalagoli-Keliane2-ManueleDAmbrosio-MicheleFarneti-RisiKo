@@ -15,7 +15,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     private PlaceArmiesActionHandler placementPhaseActionHandler = new PlacementPhaseActionHandler();
     private Boolean wasAI = false;
     private Boolean skippedToAI = false;
-    private Long turnsCount;
+    private Integer turnsCount = 0;
 
     public GameLoopManagerImpl() {
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
@@ -90,6 +90,9 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
                 break;
         }
         checkSkipToAI(players);
+        if(this.activePlayerIndex == 0){
+            turnsCount ++;
+        }
     }
 
     @Override
@@ -98,7 +101,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     }
 
     @Override
-    public Long getTurnsCount() {
+    public Integer getTurnsCount() {
         return turnsCount;
     }
 

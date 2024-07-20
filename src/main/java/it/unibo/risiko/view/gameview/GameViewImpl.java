@@ -702,13 +702,14 @@ public final class GameViewImpl implements GameView {
     @Override
     public void exitCardsPanel() {
         setGameViewButtonsEnabled(true);
-        if(choiceCardsPanel!=null){
+        if (choiceCardsPanel != null) {
             choiceCardsPanel.setVisible(false);
+            baseLayoutPane.remove(choiceCardsPanel);
         }
     }
 
     @Override
-    public void showStatus(final GameStatus gameStatus, final Long turnsCount) {
+    public void showStatus(final GameStatus gameStatus, final Integer turnsCount) {
         String statusString = "[" + turnsCount + "] -";
         switch (gameStatus) {
             case ARMIES_PLACEMENT:
@@ -730,6 +731,6 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void enableTanks(boolean enabled) {
-        tanks.forEach(t->t.setEnabled(enabled));
+        tanks.forEach(t -> t.setEnabled(enabled));
     }
 }

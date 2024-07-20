@@ -63,6 +63,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Territories territories;
     private List<Player> players;
     private Deck deck;
+    Boolean cardsPanelOpened = false;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -150,7 +151,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         playCards(combo.get(FIRST_CARD).getTerritoryName(),
                                 combo.get(SECOND_CARD).getTerritoryName(),
                                 combo.get(THIRD_CARD).getTerritoryName());
-                    }else{
+                    } else {
                         exitCardsManagingPhase();
                     }
                     break;
@@ -211,13 +212,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             default:
                 break;
         }
-        redrawView();
         if (gameLoopManager.skippedToAi()) {
             while (currentPlayer().isAI()) {
                 handleAIBehaviour();
             }
-            redrawView();
         }
+        redrawView();
     }
 
     private Integer getArmiesInTerritory(final String territory) {
@@ -229,14 +229,16 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     /**
      * 
      * Checks if the current player won the game, eventually displaying
-     * a gameover window
+     * a gameover window, also remove player without territories from the players
+     * lists
      * 
      * @author Michele Farneti
      */
     private void checkWinner() {
-        if (gameLoopManager.isGameOver(players, territories)) {
-            this.view.gameOver(currentPlayer().getColorID());
-        }
+        players.removeIf(p -> p.getOwnedTerritories().size() == 0);
+        // if (gameLoopManager.isGameOver(players, territories)) {
+        // this.view.gameOver(currentPlayer().getColorID());
+        // }
     }
 
     /**
@@ -451,7 +453,10 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     view.enableAttack(false);
                     view.enableSkip(false);
                     view.enableMovements(false);
-                    showCards();
+                    if (!currentPlayer().isAI() && !cardsPanelOpened) {
+                        showCards();
+                        cardsPanelOpened = true;
+                    }
                     break;
                 case ARMIES_PLACEMENT:
                     view.enableTanks(true);
@@ -588,13 +593,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void exitCardsManagingPhase() {
-
-        this.view.exitCardsPanel();
-        if(currentPlayer().getArmiesToPlace() == 0){
+        if (currentPlayer().getArmiesToPlace() == 0) {
             gameLoopManager.setLoopPhase(GameStatus.READY_TO_ATTACK);
-            redrawView();
-        }else{
+        } else {
             gameLoopManager.setLoopPhase(GameStatus.ARMIES_PLACEMENT);
+        }
+        if (!currentPlayer().isAI()) {
+            this.view.exitCardsPanel();
+            cardsPanelOpened = false;
             redrawView();
         }
     }

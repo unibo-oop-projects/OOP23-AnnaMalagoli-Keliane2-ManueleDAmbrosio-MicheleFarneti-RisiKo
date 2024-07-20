@@ -12,7 +12,7 @@ public interface GameLoopManager {
     void placeArmiesIfPossible(List<Player> players, String territory, Territories territories);
     void skipTurn(List<Player> players, Territories territories);
     Integer nextPlayer(Integer activePlayerIndex,Integer playersCount);
-    Long getTurnsCount();
+    Integer getTurnsCount();
     Boolean skippedToAi();
     void setLoopPhase(GameStatus status);
     boolean isGameOver(List<Player> players, Territories territories);

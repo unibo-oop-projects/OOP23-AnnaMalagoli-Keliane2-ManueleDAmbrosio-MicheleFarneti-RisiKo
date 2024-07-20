@@ -275,5 +275,5 @@ public interface GameView {
      * @param turnsCount
      * @author Michele Farneti
      */
-    void showStatus(GameStatus gameStatus, Long turnsCount);
+    void showStatus(GameStatus gameStatus, Integer turnsCount);
 }
