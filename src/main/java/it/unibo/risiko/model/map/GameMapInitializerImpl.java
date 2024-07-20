@@ -3,6 +3,15 @@ package it.unibo.risiko.model.map;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import it.unibo.risiko.model.objective.ConquerContinentTarget;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
@@ -11,6 +20,11 @@ import it.unibo.risiko.model.objective.Target;
 import it.unibo.risiko.model.objective.TargetType;
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * Implementation of a gameMapInitializer.
+ * 
+ * @author Michele Farneti
+ */
 public class GameMapInitializerImpl implements GameMapInitializer {
 
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
@@ -27,17 +41,33 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     private final String mapName;
     private final int maxPlayers;
 
+    /**
+     * Basic constructor for the game map Initializer for a given map.
+     * 
+     * @param mapName                The name of the map.
+     * @param resourcesPackageString The path to reach the rources folder.
+     */
     public GameMapInitializerImpl(final String mapName, final String resourcesPackageString) {
         this.mapName = mapName;
         this.resourcesPackageString = resourcesPackageString;
-        maxPlayers = GameMapInitializer.getMaxPlayers(buildResourceLocator());
+        maxPlayers = getMaxPlayers(buildResourceLocator());
     }
 
+    /**
+     * Builds a path string for a specific resource for specific map.
+     * 
+     * @param resourceName
+     * @return A Path string.
+     */
     private String buildResourceLocator(final String resourceName) {
         return resourcesPackageString + FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR
                 + resourceName;
     }
 
+    /**
+     * 
+     * @return A Path string for the map resources folder
+     */
     private String buildResourceLocator() {
         return buildResourceLocator("");
     }
@@ -93,5 +123,57 @@ public class GameMapInitializerImpl implements GameMapInitializer {
             default:
                 return new ConquerTerritoriesTarget(players.get(player), territories.getListTerritories().size());
         }
+    }
+
+    /**
+     * Given a path for a map in the file system, returns it's max players value by
+     * checking inside its territories file if the are more ore less territories
+     * than a certain limit.
+     * 
+     * @param mapPath The path for the map's folder in the file system.
+     * @return The maxNumberOfPLayers for the map
+     */
+    public static Integer getMaxPlayers(final String mapPath) {
+        final Integer maxPlayersSmallMaps = 2;
+        final Integer maxPlayersBigMaps = 6;
+        final Integer bigMapLimit = 30;
+        try {
+            final var territoriesNumber = Files.lines(Path.of(mapPath + File.separator + "territories.txt")).count()
+                    / 2;
+            if (territoriesNumber >= bigMapLimit) {
+                return maxPlayersBigMaps;
+            } else {
+                return maxPlayersSmallMaps;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Reads from file thw available maps to be played by checking their related
+     * directory.
+     * 
+     * @param resourcesPath
+     * @return A map for the the maps and their max number of players.
+     */
+    public static Map<String, Integer> getAvailableMaps(final String resourcesPath) {
+        final Map<String, Integer> availableMaps = new HashMap<>();
+        final var mapsFoldersLocation = resourcesPath + "maps";
+        final var mapsFolderPath = Paths.get(mapsFoldersLocation);
+        if (Files.exists(mapsFolderPath) && Files.isDirectory(mapsFolderPath)) {
+            try {
+                for (final var path : Files.list(mapsFolderPath).collect(Collectors.toList())) {
+                    final var key = Optional.ofNullable(path.getFileName()).map(Path::toString);
+                    final Optional<Integer> value = key.map(k -> getMaxPlayers(mapsFolderPath.resolve(k).toString()));
+                    if (key.isPresent() && value.isPresent()) {
+                        availableMaps.put(key.get(), value.get());
+                    }
+                }
+            } catch (IOException e) {
+                return Collections.emptyMap();
+            }
+        }
+        return availableMaps;
     }
 }

@@ -83,7 +83,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void initializeNewGame() {
-        view.showInitializationWindow(GameMapInitializer.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
+        view.showInitializationWindow(GameMapInitializerImpl.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
     }
 
     @Override
@@ -437,6 +437,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (!currentPlayer().isAI()) {
             switch (gameLoopManager.getGameStatus()) {
                 case TERRITORY_OCCUPATION:
+                case ARMIES_PLACEMENT:
                     view.enableTanks(true);
                     view.enableAttack(false);
                     view.enableSkip(false);
@@ -457,12 +458,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         showCards();
                         cardsPanelOpened = true;
                     }
-                    break;
-                case ARMIES_PLACEMENT:
-                    view.enableTanks(true);
-                    view.enableAttack(false);
-                    view.enableSkip(false);
-                    view.enableMovements(false);
                     break;
                 default:
                     break;

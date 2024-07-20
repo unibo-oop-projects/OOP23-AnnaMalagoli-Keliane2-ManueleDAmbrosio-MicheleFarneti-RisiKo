@@ -11,6 +11,7 @@ import it.unibo.risiko.model.player.Player;
 public class GameLoopManagerImpl extends ActionHandler implements GameLoopManager {
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int MIN_CARDS_PLAYABLE = 1;
+    private static final Random RANDOM = new Random();
     private PlaceArmiesActionHandler occupationPhaseActionHandler = new OccupationPhaseActionHandler();
     private PlaceArmiesActionHandler placementPhaseActionHandler = new PlacementPhaseActionHandler();
     private Boolean wasAI = false;
@@ -83,15 +84,15 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
                 } else {
                     newStatus = GameStatus.READY_TO_ATTACK;
                 }
-                activePlayerIndex = nextPlayer(activePlayerIndex, players.size());  
+                activePlayerIndex = nextPlayer(activePlayerIndex, players.size());
                 this.gameStatus = newStatus;
                 break;
             default:
                 break;
         }
         checkSkipToAI(players);
-        if(this.activePlayerIndex == 0){
-            turnsCount ++;
+        if (this.activePlayerIndex == 0) {
+            turnsCount++;
         }
     }
 
@@ -117,7 +118,6 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
 
     @Override
     public boolean isGameOver(final List<Player> players, final Territories territories) {
-        var randomNumberGenerator = new Random();
         final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
         if (winner.isPresent()) {
             if (winner.get().equals(players.get(this.activePlayerIndex))) {
@@ -125,7 +125,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
             } else {
                 players.get(this.activePlayerIndex)
                         .setTarget(new ConquerTerritoriesTarget(players.get(this.activePlayerIndex),
-                                randomNumberGenerator
+                                RANDOM
                                         .nextInt(Math.toIntExact(
                                                 Math.round(territories.getListTerritories().size()
                                                         * NEW_TARGET_PERCENTAGE)))));
