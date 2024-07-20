@@ -1,199 +1,100 @@
 package it.unibo.risiko.model.game;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Optional;
+import java.util.Random;
 
-import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
 import it.unibo.risiko.model.player.Player;
 
-/**
- * Implementation of the game interface
- * 
- * @author Michele Farneti
- */
-
-public class GameLoopManagerImpl implements GameLoopManager {
-
-    private static final Integer LAST_ARMY = 1;
+public class GameLoopManagerImpl extends ActionHandler implements GameLoopManager {
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
-    private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
-    private static final int MIN_CARDS_PLAYABLE = 3;
-
-    private int armiesPlaced;
-    private long turnsCount;
-    private GameStatus status;
-    private Integer activePlayer = 0;
-    private boolean skippedToAI;
+    private static final int MIN_CARDS_PLAYABLE = 1;
+    private PlaceArmiesActionHandler occupationPhaseActionHandler = new OccupationPhaseActionHandler();
+    private PlaceArmiesActionHandler placementPhaseActionHandler = new PlacementPhaseActionHandler();
+    private Boolean wasAI = false;
+    private Boolean skippedToAI = false;
+    private Long turnsCount;
 
     public GameLoopManagerImpl() {
-        status = GameStatus.TERRITORY_OCCUPATION;
-    }
-
-    @Override
-    public boolean skipTurn(final Integer player, final List<Player> players, final Territories territories) {
-        if (skipTurnPossible(players, player)) {
-            switch (status) {
-                // Current player gets updated, if no player has armies left to place, the next
-                // player is going to enter the classic game loop.
-                case TERRITORY_OCCUPATION:
-                    if (getTotalArmiesLeftToPlace(players) <= LAST_ARMY) {
-                        nextGamePhase(player, players, territories.getListContinents());
-                        if (!players.get(activePlayer).isAI()
-                                && players.get(nextPlayer(player, players.size())).isAI()) {
-                            skippedToAI = true;
-                        } else {
-                            skippedToAI = false;
-                        }
-                        activePlayer = nextPlayer(player, players.size());
-                    } else {
-                        armiesPlaced = 0;
-                        if (!players.get(activePlayer).isAI()
-                                && players.get(nextPlayerWithArmies(player, players)).isAI()) {
-                            skippedToAI = true;
-                        } else {
-                            skippedToAI = false;
-                        }
-                        activePlayer = nextPlayerWithArmies(player, players);
-                    }
-                    break;
-                // Current player gets updated and the next player gets reinforcements
-                case CARDS_MANAGING:
-                case ATTACKING:
-                case READY_TO_ATTACK:
-                    nextGamePhase(player, players, territories.getListContinents());
-                    if (!players.get(activePlayer).isAI() && players.get(nextPlayer(player, players.size())).isAI()) {
-                        skippedToAI = true;
-                    } else {
-                        skippedToAI = false;
-                    }
-                    activePlayer = nextPlayer(player, players.size());
-                    break;
-                default:
-                    break;
-            }
-            turnsCount++;
-            return true;
-        }
-        return false;
-    }
-
-    private Integer nextPlayerWithArmies(final Integer playerIndex, final List<Player> players) {
-        if (players.get(nextPlayer(playerIndex, players.size())).getArmiesToPlace() != 0) {
-            return nextPlayer(playerIndex, players.size());
-        } else {
-            return nextPlayerWithArmies(nextPlayer(playerIndex, players.size()), players);
-        }
-    }
-
-    /**
-     * Private function used to manage the alternation of game phases in the game
-     * loop by
-     * updating the gameStatus following the gmae flow.
-     */
-    private void nextGamePhase(final Integer player, final List<Player> players, final List<Continent> continents) {
-        switch (status) {
-            // Once territory occupation phase is over begins armiesPlacement phase
-            case TERRITORY_OCCUPATION:
-                status = GameStatus.ARMIES_PLACEMENT;
-                break;
-            // If the player has armies to place status goes to armies placement, otherwise
-            // directly to Ready to attack
-            case CARDS_MANAGING:
-                if (players.get(player).getArmiesToPlace() > 0) {
-                    status = GameStatus.ARMIES_PLACEMENT;
-                } else {
-                    status = GameStatus.READY_TO_ATTACK;
-                }
-                break;
-            // After armies placement the player can attack
-            case ARMIES_PLACEMENT:
-                status = GameStatus.READY_TO_ATTACK;
-                break;
-            // After attacking a new turn is going to begin, if the player has enough cards
-            // to play them it will go CARDS MANAGING phase,
-            // OtherWhise if he hasn't enough cards but enough armies to place the new game
-            // status is going to armies Placement. If it can't
-            // Do any of those actions it's going directly to the attack phase.
-            case ATTACKING:
-            case READY_TO_ATTACK:
-                players.get(nextPlayer(player, players.size())).computeReinforcements(continents);
-                if (players.get(nextPlayer(player, players.size())).getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
-                    status = GameStatus.CARDS_MANAGING;
-                } else if (players.get(nextPlayer(player, players.size())).getArmiesToPlace() > 0) {
-                    status = GameStatus.ARMIES_PLACEMENT;
-                } else {
-                    status = GameStatus.READY_TO_ATTACK;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * @return False if the player is not allowed to skip his turn, true otherwise.
-     */
-    private boolean skipTurnPossible(final List<Player> players, final Integer player) {
-        switch (status) {
-            case TERRITORY_OCCUPATION:
-                if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
-                        || players.get(player).getArmiesToPlace() <= LAST_ARMY) {
-                    return true;
-                }
-                return false;
-            case ARMIES_PLACEMENT:
-                return players.get(player).getArmiesToPlace() == LAST_ARMY;
-            case CARDS_MANAGING:
-            case READY_TO_ATTACK:
-            case ATTACKING:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /**
-     * @param players The list of players in the game
-     * @return The totale amount of armies that are still left to be placed among
-     *         all the players.
-     */
-    private int getTotalArmiesLeftToPlace(final List<Player> players) {
-        return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
+        this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
+        this.activePlayerIndex = 0;
     }
 
     @Override
     public GameStatus getGameStatus() {
-        return this.status;
+        return gameStatus;
     }
 
     @Override
-    public Integer getActivePlayer() {
-        return this.activePlayer;
+    public Integer getActivePlayerIndex() {
+        return activePlayerIndex;
     }
 
     @Override
-    public Integer nextPlayer(final Integer activePlayer, final Integer playersCount) {
-        return (activePlayer + 1) % playersCount;
-    }
-
-    @Override
-    public boolean isGameOver(final Integer playerIndex, final List<Player> players, final Territories territories) {
-        var randomNumberGenerator = new Random();
-        final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
-        if (winner.isPresent()) {
-            if (winner.get().equals(players.get(activePlayer))) {
-                return true;
-            } else {
-                players.get(activePlayer)
-                        .setTarget(new ConquerTerritoriesTarget(players.get(playerIndex), randomNumberGenerator
-                                .nextInt(Math.toIntExact(
-                                        Math.round(territories.getListTerritories().size() * NEW_TARGET_PERCENTAGE)))));
-            }
+    public void placeArmiesIfPossible(List<Player> players, String territory, Territories territories) {
+        wasAI = players.get(this.activePlayerIndex).isAI();
+        GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
+        switch (this.gameStatus) {
+            case TERRITORY_OCCUPATION:
+                if (occupationPhaseActionHandler.checkActionAndExceute(activePlayerIndex, players, territory,
+                        territories)) {
+                    newStatus = occupationPhaseActionHandler.getGameStatus();
+                    this.activePlayerIndex = occupationPhaseActionHandler.getActivePlayerIndex();
+                }
+                break;
+            case ARMIES_PLACEMENT:
+                if (placementPhaseActionHandler.checkActionAndExceute(activePlayerIndex, players, territory,
+                        territories)) {
+                    newStatus = placementPhaseActionHandler.getGameStatus();
+                    this.activePlayerIndex = placementPhaseActionHandler.getActivePlayerIndex();
+                }
+                break;
+            default:
+                break;
         }
-        return false;
+        this.gameStatus = newStatus;
+        checkSkipToAI(players);
+    }
+
+    private void checkSkipToAI(List<Player> players) {
+        if (!wasAI && players.get(activePlayerIndex).isAI()) {
+            skippedToAI = true;
+        } else {
+            skippedToAI = false;
+        }
+    }
+
+    @Override
+    public void skipTurn(List<Player> players, Territories territories) {
+        wasAI = players.get(this.activePlayerIndex).isAI();
+        GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
+        switch (this.gameStatus) {
+            case ATTACKING:
+            case READY_TO_ATTACK:
+                players.get(nextPlayer(this.activePlayerIndex, players.size()))
+                        .computeReinforcements(territories.getListContinents());
+                if (players.get(nextPlayer(this.activePlayerIndex, players.size()))
+                        .getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
+                    newStatus = GameStatus.CARDS_MANAGING;
+                } else if (players.get(nextPlayer(this.activePlayerIndex, players.size())).getArmiesToPlace() > 0) {
+                    newStatus = GameStatus.ARMIES_PLACEMENT;
+                } else {
+                    newStatus = GameStatus.READY_TO_ATTACK;
+                }
+                activePlayerIndex = nextPlayer(activePlayerIndex, players.size());  
+                this.gameStatus = newStatus;
+                break;
+            default:
+                break;
+        }
+        checkSkipToAI(players);
+    }
+
+    @Override
+    public Integer nextPlayer(Integer activePlayer, Integer playersCount) {
+        return super.nextPlayer(activePlayer, playersCount);
     }
 
     @Override
@@ -202,42 +103,31 @@ public class GameLoopManagerImpl implements GameLoopManager {
     }
 
     @Override
-    public boolean placeArmiesIfPossible(final Player player, final List<Player> players, final String territory,
-            final Integer nArmies, final Territories territories) {
-        if (player.getArmiesToPlace() > 0 && player.isOwnedTerritory(territory)) {
-            switch (status) {
-                case TERRITORY_OCCUPATION:
-                    if (armiesPlaced < PLACEABLE_ARMIES_PER_OCCUPATION_TURN) {
-                        armiesPlaced++;
-                        if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
-                                || player.getArmiesToPlace() == LAST_ARMY) {
-                            skipTurn(players.indexOf(player), players, territories);
-                        }
-                        return true;
-                    }
-                    break;
-                case ARMIES_PLACEMENT:
-                    if (player.getArmiesToPlace() == LAST_ARMY) {
-                        this.status = GameStatus.READY_TO_ATTACK;
-                        this.skippedToAI = false;
-                    } else {
-                        this.status = GameStatus.ARMIES_PLACEMENT;
-                    }
-                    return true;
-                default:
-                    break;
+    public Boolean skippedToAi() {
+        return skippedToAI;
+    }
+
+    @Override
+    public void setLoopPhase(GameStatus status) {
+        this.gameStatus = status;
+    }
+
+    @Override
+    public boolean isGameOver(final List<Player> players, final Territories territories) {
+        var randomNumberGenerator = new Random();
+        final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
+        if (winner.isPresent()) {
+            if (winner.get().equals(players.get(this.activePlayerIndex))) {
+                return true;
+            } else {
+                players.get(this.activePlayerIndex)
+                        .setTarget(new ConquerTerritoriesTarget(players.get(this.activePlayerIndex),
+                                randomNumberGenerator
+                                        .nextInt(Math.toIntExact(
+                                                Math.round(territories.getListTerritories().size()
+                                                        * NEW_TARGET_PERCENTAGE)))));
             }
         }
         return false;
     }
-
-    @Override
-    public boolean skippedToAI() {
-        if (skippedToAI) {
-            skippedToAI = false;
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -551,7 +551,6 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void createAttack(final String attacking, final String defending, final int attackingTerritoryArmies) {
-        setGameViewButtonsEnabled(false);
         final int panelWidth = frameWidth / ATTACK_PANEL_POSITIONING;
         final int panelHeight = frameHeigth / ATTACK_PANEL_POSITIONING;
         final int panelLocationX = frameWidth / ATTACK_PANEL_LOCATION;
@@ -565,6 +564,7 @@ public final class GameViewImpl implements GameView {
                 gameViewObserver);
         attackPanel.setLocation(panelLocationX, panelLocationY);
         attackPanel.setVisible(true);
+        setGameViewButtonsEnabled(false);
         setLayerdPaneOverlay(baseLayoutPane, attackPanel);
     }
 
@@ -702,7 +702,9 @@ public final class GameViewImpl implements GameView {
     @Override
     public void exitCardsPanel() {
         setGameViewButtonsEnabled(true);
-        choiceCardsPanel.setVisible(false);
+        if(choiceCardsPanel!=null){
+            choiceCardsPanel.setVisible(false);
+        }
     }
 
     @Override

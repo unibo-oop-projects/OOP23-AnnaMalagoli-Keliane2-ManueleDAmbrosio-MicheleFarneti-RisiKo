@@ -15,7 +15,6 @@ import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
-import it.unibo.risiko.model.game.GameActionType;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
@@ -28,9 +27,7 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 import it.unibo.risiko.model.game.GameLoopManager;
-import it.unibo.risiko.model.game.GameLoopManager2;
 import it.unibo.risiko.model.game.GameLoopManagerImpl;
-import it.unibo.risiko.model.game.GameLoopManagerImpl2;
 import it.unibo.risiko.view.gameview.GameView;
 import it.unibo.risiko.view.gameview.GameViewImpl;
 import it.unibo.risiko.view.gameview.GameViewObserver;
@@ -57,7 +54,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private static final int THIRD_CARD = 2;
     private GameMapInitializer gameInitializer;
     private GameLoopManager gameLoopManager;
-    private GameLoopManager2 gameLoopManager2;
     private GameView view;
     private Optional<String> attackerTerritory = Optional.empty();
     private Optional<String> defenderTerritory = Optional.empty();
@@ -67,8 +63,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Territories territories;
     private List<Player> players;
     private Deck deck;
-    private GameStatus gameStatus;
-    private int activePlayerIndex;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
@@ -115,32 +109,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void skipTurn() {
-        if (gameLoopManager.skipTurn(activePlayerIndex, players, territories)) {
-            updateGameStatus();
-            resetAttack();
-            redrawView();
-            view.setCurrentPlayer(currentPlayer());
-            currentPlayer().computeReinforcements(territories.getListContinents());
-            if (gameStatus == GameStatus.CARDS_MANAGING && currentPlayer().getOwnedCards().size() > 0
-                    && !currentPlayer().isAI()) {
-                showCards();
-            }
-            redrawView();
-            view.enableMovements(false);
-            view.enableAttack(false);
-            view.enableSkip(false);
-            if (gameLoopManager.skippedToAI()) {
-                while (currentPlayer().isAI()) {
-                    handleAIBehaviour();
-                }
-                redrawView();
+        gameLoopManager.skipTurn(players, territories);
+        resetAttack();
+        if (gameLoopManager.skippedToAi()) {
+            while (currentPlayer().isAI()) {
+                handleAIBehaviour();
             }
         }
-    }
-
-    private void updateGameStatus() {
-        activePlayerIndex = gameLoopManager.getActivePlayer();
-        gameStatus = gameLoopManager.getGameStatus();
+        redrawView();
     }
 
     /**
@@ -154,7 +130,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             final AIBehaviour aiBehaviour = new AIBehaviourImpl(
                     currentPlayer().getOwnedTerritories().stream().map(t -> getTerritoryFromString(t)).toList(),
                     currentPlayer().getOwnedCards().stream().toList());
-            switch (this.gameStatus) {
+            switch (gameLoopManager.getGameStatus()) {
                 case ARMIES_PLACEMENT:
                 case TERRITORY_OCCUPATION:
                     territorySelected(aiBehaviour.decidePositioning().getTerritoryName());
@@ -164,7 +140,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         territorySelected(aiBehaviour.getNextAttackingTerritory());
                         territorySelected(aiBehaviour.getNextAttackedTerritory());
                     } else {
-                        this.gameStatus = GameStatus.READY_TO_ATTACK;
+                        gameLoopManager.setLoopPhase(GameStatus.READY_TO_ATTACK);
                         skipTurn();
                     }
                     break;
@@ -174,13 +150,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         playCards(combo.get(FIRST_CARD).getTerritoryName(),
                                 combo.get(SECOND_CARD).getTerritoryName(),
                                 combo.get(THIRD_CARD).getTerritoryName());
-                    } else {
+                    }else{
                         exitCardsManagingPhase();
                     }
-                    exitCardsManagingPhase();
                     break;
                 case READY_TO_ATTACK:
-                    setAttacking();
+                    gameLoopManager.setLoopPhase(GameStatus.ATTACKING);
                     break;
                 default:
                     break;
@@ -209,51 +184,15 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         view.resetFightingTerritories();
         attackerTerritory = Optional.empty();
         defenderTerritory = Optional.empty();
-        redrawView();
     }
 
     @Override
     public void territorySelected(final String territory) {
-        //GameLoop2
-        switch (gameLoopManager2.getGameStatus()) {
+        switch (gameLoopManager.getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                if(gameLoopManager2.doActionIfPossible(players,GameActionType.PLACE_ARMIES)){
-                    redrawView();
-                }
-                break;
-        
-            default:
-                break;
-        }
-        //GameLoop2
-        switch (gameStatus) {
-            case TERRITORY_OCCUPATION:
-                if (placeArmies(territory, MIN_ARMIES)) {
-                    redrawView();
-                    updateGameStatus();
-                    if (gameStatus == GameStatus.ARMIES_PLACEMENT) {
-                        currentPlayer().computeReinforcements(territories.getListContinents());
-                    }
-                    if (gameLoopManager.skippedToAI()) {
-                        while (currentPlayer().isAI()) {
-                            handleAIBehaviour();
-                        }
-                        redrawView();
-                    }
-                }
-                break;
             case ARMIES_PLACEMENT:
-                if (placeArmies(territory, 1)) {
-                    if (gameStatus == GameStatus.READY_TO_ATTACK) {
-                        view.enableMovements(true);
-                    }
-                    if (gameLoopManager.skippedToAI()) {
-                        while (currentPlayer().isAI()) {
-                            handleAIBehaviour();
-                        }
-                        redrawView();
-                    }
-                    redrawView();
+                if (currentPlayer().isOwnedTerritory(territory)) {
+                    gameLoopManager.placeArmiesIfPossible(players, territory, territories);
                 }
                 break;
             case ATTACKING:
@@ -268,30 +207,17 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                     }
                 }
                 break;
+
             default:
                 break;
         }
         redrawView();
-    }
-
-    private boolean placeArmies(final String territory, final Integer nArmies) {
-        if (gameStatus == GameStatus.TERRITORY_OCCUPATION) {
-            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory,
-                    nArmies, territories)) {
-                currentPlayer().decrementArmiesToPlace();
-                territories.addArmiesInTerritory(territory, nArmies);
-                return true;
+        if (gameLoopManager.skippedToAi()) {
+            while (currentPlayer().isAI()) {
+                handleAIBehaviour();
             }
-        } else {
-            if (gameLoopManager.placeArmiesIfPossible(players.get(activePlayerIndex), players, territory,
-                    nArmies, territories)) {
-                currentPlayer().decrementArmiesToPlace();
-                territories.addArmiesInTerritory(territory, nArmies);
-                updateGameStatus();
-                return true;
-            }
+            redrawView();
         }
-        return false;
     }
 
     private Integer getArmiesInTerritory(final String territory) {
@@ -308,7 +234,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void checkWinner() {
-        if (gameLoopManager.isGameOver(activePlayerIndex, players, territories)) {
+        if (gameLoopManager.isGameOver(players, territories)) {
             this.view.gameOver(currentPlayer().getColorID());
         }
     }
@@ -322,6 +248,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void startAttack() {
         if (!currentPlayer().isAI()) {
+            gameLoopManager.setLoopPhase(GameStatus.ATTACKING);
             view.createAttack(attackerTerritory.get(), defenderTerritory.get(),
                     getArmiesInTerritory(attackerTerritory.get()));
         } else {
@@ -358,7 +285,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         getOwner(getTerritoryFromString(attackerTerritory.get())),
                         Optional.empty(), Optional.of(armiesToMove));
             }
-            this.gameStatus = GameStatus.READY_TO_ATTACK; // prova
+            gameLoopManager.setLoopPhase(GameStatus.READY_TO_ATTACK);
             skipTurn();
         }
     }
@@ -409,7 +336,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             redrawView();
             checkWinner();
         }
-        this.gameStatus = GameStatus.READY_TO_ATTACK;
+        gameLoopManager.setLoopPhase(GameStatus.READY_TO_ATTACK);
     }
 
     /**
@@ -460,12 +387,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
+     * Funcions used to easly get from the players list the activeplayer given by
+     * the index stored in the gameLOppmanager.
      * 
      * @return The current player
      * @author Michele Farneti
      */
     private Player currentPlayer() {
-        return players.get(activePlayerIndex);
+        return players.get(gameLoopManager.getActivePlayerIndex());
     }
 
     /**
@@ -499,52 +428,39 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 .forEach(t -> view.redrawTank(t));
         view.setCurrentPlayer(currentPlayer());
         view.updateTablePanel();
-        view.showStatus(gameStatus,
+        view.showStatus(gameLoopManager.getGameStatus(),
                 gameLoopManager.getTurnsCount());
 
-        switch (gameStatus) {
-            case READY_TO_ATTACK:
-                view.enableAttack(true);
-                view.enableSkip(true);
-                break;
-            case ARMIES_PLACEMENT:
-                view.enableAttack(false);
-                view.enableSkip(false);
-                view.enableMovements(false);
-                break;
-            default:
-                break;
-        }
-
-        //Con gameLoopManager2
-        switch (gameLoopManager2.getGameStatus()) {
-            case TERRITORY_OCCUPATION:
-                view.enableTanks(true);
-                view.enableAttack(true);
-                view.enableSkip(true);
-                view.enableMovements(false);
-                break;
-            case ATTACKING:
-            case READY_TO_ATTACK:
-                view.enableTanks(true);
-                view.enableAttack(true);
-                view.enableSkip(true);
-                view.enableMovements(false);
-                break;
-            case CARDS_MANAGING:
-                view.enableTanks(false);
-                view.enableAttack(false);
-                view.enableSkip(false);
-                view.enableMovements(false);
-                break;
-            case ARMIES_PLACEMENT:
-                view.enableTanks(true);
-                view.enableAttack(false);
-                view.enableSkip(false);
-                view.enableMovements(false);
-                break;
-            default:
-                break;
+        if (!currentPlayer().isAI()) {
+            switch (gameLoopManager.getGameStatus()) {
+                case TERRITORY_OCCUPATION:
+                    view.enableTanks(true);
+                    view.enableAttack(false);
+                    view.enableSkip(false);
+                    view.enableMovements(false);
+                    break;
+                case READY_TO_ATTACK:
+                    view.enableTanks(true);
+                    view.enableAttack(true);
+                    view.enableSkip(true);
+                    view.enableMovements(true);
+                    break;
+                case CARDS_MANAGING:
+                    view.enableTanks(false);
+                    view.enableAttack(false);
+                    view.enableSkip(false);
+                    view.enableMovements(false);
+                    showCards();
+                    break;
+                case ARMIES_PLACEMENT:
+                    view.enableTanks(true);
+                    view.enableAttack(false);
+                    view.enableSkip(false);
+                    view.enableMovements(false);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -566,22 +482,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         gameLoopManager = new GameLoopManagerImpl();
         this.deck = new DeckImpl(gameInitializer.getDeckPath());
         this.territories = new TerritoriesImpl(gameInitializer.getTerritoriesPath());
-        this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
         players.forEach(p -> p.setArmiesToPlace(gameInitializer.getStartingArmies(players.size())));
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
         assignTerritories(gameInitializer.minimumArmiesPerTerritory());
         this.register = new RegisterImpl();
-        activePlayerIndex = 0;
         this.setupGameView();
-        // Manages the case where the player selected at first is AI.
-        while (currentPlayer().isAI()) {
-            handleAIBehaviour();
-        }
-        redrawView();
-
-        //With game loop manager2
-        gameLoopManager2 = new GameLoopManagerImpl2();
-        while(players.get(gameLoopManager2.getActivePlayer()).isAI()){
+        while (players.get(gameLoopManager.getActivePlayerIndex()).isAI()) {
             handleAIBehaviour();
         }
         redrawView();
@@ -594,18 +500,19 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void assignTerritories(final Integer minimumArmiesPerTerritory) {
         territories.shuffle();
+        Integer territoyAssigningIndex = 0;
         for (final Territory territory : this.territories.getListTerritories()) {
-            currentPlayer().addTerritory(territory.getTerritoryName());
-            territories.setOwner(territory.getTerritoryName(), currentPlayer().getColorID());
+            players.get(territoyAssigningIndex).addTerritory(territory.getTerritoryName());
+            territories.setOwner(territory.getTerritoryName(), players.get(territoyAssigningIndex).getColorID());
             territories.addArmiesInTerritory(territory.getTerritoryName(), minimumArmiesPerTerritory);
-            currentPlayer().decrementArmiesToPlace();
-            activePlayerIndex = gameLoopManager.nextPlayer(activePlayerIndex, players.size());
+            players.get(territoyAssigningIndex).decrementArmiesToPlace();
+            territoyAssigningIndex = gameLoopManager.nextPlayer(territoyAssigningIndex, players.size());
         }
     }
 
     @Override
     public void setAttacking() {
-        gameStatus = GameStatus.ATTACKING;
+        gameLoopManager.setLoopPhase(GameStatus.ATTACKING);
     }
 
     /**
@@ -614,8 +521,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * @param srcTerritory is the source territory
      * @param dstTerritory is the destination territory
-     * @param numArmies is the number of armies that the player
-     * wants to move
+     * @param numArmies    is the number of armies that the player
+     *                     wants to move
      * @author Anna Malagoli
      * @author Keliane Nana
      */
@@ -680,14 +587,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void exitCardsManagingPhase() {
-        if (players.get(activePlayerIndex).getArmiesToPlace() == 0) {
-            gameStatus = GameStatus.READY_TO_ATTACK;
-        } else {
-            gameStatus = GameStatus.ARMIES_PLACEMENT;
+
+        this.view.exitCardsPanel();
+        if(currentPlayer().getArmiesToPlace() == 0){
+            gameLoopManager.setLoopPhase(GameStatus.READY_TO_ATTACK);
+            redrawView();
+        }else{
+            gameLoopManager.setLoopPhase(GameStatus.ARMIES_PLACEMENT);
+            redrawView();
         }
-        if (!currentPlayer().isAI()) {
-            this.view.exitCardsPanel();
-        }
-        redrawView();
     }
 }
