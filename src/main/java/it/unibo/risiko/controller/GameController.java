@@ -202,15 +202,14 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @author Michele Farneti
      */
     private void resetAttack() {
-        attackerTerritory.ifPresent(t -> view.resetFightingTerritory(t));
-        defenderTerritory.ifPresent(t -> view.resetFightingTerritory(t));
+        view.resetFightingTerritories();
         attackerTerritory = Optional.empty();
         defenderTerritory = Optional.empty();
         redrawView();
     }
 
     @Override
-    public void territorySelected(final String territory) { 
+    public void territorySelected(final String territory) {
         switch (gameStatus) {
             case TERRITORY_OCCUPATION:
                 if (placeArmies(territory, MIN_ARMIES)) {
@@ -327,7 +326,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
-                final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES;
+                final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies()
+                        - MIN_ARMIES;
                 conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
                 // Conquer Event
@@ -437,7 +437,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param eventLeaderAdversary
      * @author Keliane Nana
      */
-    private void createEvent(final EventType type, final Territory attacker, final Territory defender, final Player eventLeader,
+    private void createEvent(final EventType type, final Territory attacker, final Territory defender,
+            final Player eventLeader,
             final Optional<Player> eventLeaderAdversary, final Optional<Integer> numArmies) {
         register.addEvent(new EventImpl(type, attacker, defender, eventLeader, eventLeaderAdversary, numArmies));
     }

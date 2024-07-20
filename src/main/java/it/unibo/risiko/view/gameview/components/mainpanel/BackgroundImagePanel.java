@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  */
 public class BackgroundImagePanel extends JPanel {
     private static final long serialVersionUID = 1;
-    private final StandradImageReader imageReader = new SimpleImageReader();
+    private transient final StandradImageReader imageReader = new SimpleImageReader();
     private final String imageName;
     private final String resourcesPackagePath;
 

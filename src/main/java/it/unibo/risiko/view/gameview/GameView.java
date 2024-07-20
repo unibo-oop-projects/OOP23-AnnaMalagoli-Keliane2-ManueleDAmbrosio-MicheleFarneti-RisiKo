@@ -79,16 +79,15 @@ public interface GameView {
     void showFightingTerritory(String territory, boolean isAttacker);
 
     /**
-     * Deletes higlightings for a fighting territory
+     * Deletes higlightings for all of the fighting territories.
      * 
-     * @param fightingTerritory
      * @author Michele Farneti
      */
-    void resetFightingTerritory(String fightingTerritory);
+    void resetFightingTerritories();
 
     /**
      * Updates the game view, changing a tank based on territory
-     * occupation and updating the armies count label
+     * occupation and updating the armies count label.
      * 
      * @param territory
      * @param playerColor

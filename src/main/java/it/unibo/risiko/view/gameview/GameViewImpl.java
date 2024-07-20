@@ -8,23 +8,20 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameview.components.LoggerView;
 import it.unibo.risiko.view.gameview.components.Position;
 import it.unibo.risiko.view.gameview.components.StandardTextField;
-import it.unibo.risiko.view.gameview.components.TerritoryPlaceHolder;
 import it.unibo.risiko.view.gameview.components.mainpanel.BackgroundImagePanel;
 import it.unibo.risiko.view.gameview.components.mainpanel.ColoredImageButton;
 import it.unibo.risiko.view.gameview.components.mainpanel.CustomButton;
 import it.unibo.risiko.view.gameview.components.mainpanel.GradientPanel;
+import it.unibo.risiko.view.gameview.components.mainpanel.TerritoryPlaceHolder;
+import it.unibo.risiko.view.gameview.components.mainpanel.TerritoryPlaceHolderFactory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -85,9 +82,6 @@ public final class GameViewImpl implements GameView {
     private static final Color ATTACK_BAR_BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color ATTACK_BAR_FOREGROUND_COLOR = new Color(255, 204, 0);
 
-    private static final Integer TANKS_WIDTH = 45;
-    private static final Integer TANKS_HEIGTH = 45;
-
     private final Integer turnIconWidth;
     private final Integer turnIconHeight;
     private static final Integer TURNBAR_START_X = 10;
@@ -103,10 +97,6 @@ public final class GameViewImpl implements GameView {
     private static final Integer TURN_TANK_HEIGHT = 100;
     private static final Integer TURN_TANK_LAYER = 5;
 
-    private static final int ARMIES_LABEL_HEIGHT = 17;
-    private static final int ARMIES_LABEL_WIDTH = 17;
-    private static final int ARMIES_LABEL_FONT_SIZE = 14;
-
     private static final int PLAYER_ARMIES_LABEL_HEIGHT = 23;
     private static final int PLAYER_ARMIES_LABEL_WIDTH = 23;
     private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 20;
@@ -119,8 +109,6 @@ public final class GameViewImpl implements GameView {
     private String mapName;
 
     private final Set<TerritoryPlaceHolder> tanks = new HashSet<TerritoryPlaceHolder>();
-    private final Map<String, Position> tanksCoordinates = new HashMap<>();
-    private final Map<String, TerritoryPlaceHolder> tanksMap = new HashMap<>();
     private final Map<String, ColoredImageButton> iconsMap = new HashMap<>();
     @SuppressFBWarnings(value = "EI2", justification = "GameViewObserver is an inteface intentionally mutable and safe to store.")
     private final GameViewObserver gameViewObserver;
@@ -207,7 +195,7 @@ public final class GameViewImpl implements GameView {
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE));
         mapLayoutPane.setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
                 (int) (gamePanel.getHeight() * MAP_PANEL_HEIGHT_PERCENTAGE)));
-        paintMap(resourcesLocator,FILE_SEPARATOR + "maps" + FILE_SEPARATOR +  mapName + FILE_SEPARATOR + mapName );
+        paintMap(resourcesLocator, FILE_SEPARATOR + "maps" + FILE_SEPARATOR + mapName + FILE_SEPARATOR + mapName);
         mapWidth = mapLayoutPane.getSize().width;
         mapHeight = mapLayoutPane.getSize().height;
 
@@ -240,7 +228,7 @@ public final class GameViewImpl implements GameView {
      * @author Michele Farneti
      */
     private void setGameViewButtonsEnabled(final Boolean enabled) {
-        tanksMap.entrySet().forEach(e -> e.getValue().button().setEnabled(enabled));
+        tanks.forEach(e -> e.setEnabled(enabled));
         skipButton.setEnabled(enabled);
         attackButton.setEnabled(enabled);
         moveArmiesButton.setEnabled(enabled);
@@ -373,7 +361,7 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * This funcion manages whenever a tank rapresenting a tank gets clicked
+     * This funcion manages whenever a tank rapresenting a territory gets clicked
      * 
      * @param territory The territory that got clicked
      * @author Michele Farneti
@@ -390,7 +378,7 @@ public final class GameViewImpl implements GameView {
      * a pannel reporting the error appears
      * 
      * @param resourcePackagePath
-     * @param mapPath The path of the image of the selected map
+     * @param mapPath             The path of the image of the selected map
      * @author Michele Farneti
      */
     private void paintMap(final String resourcePackagePath, String imageName) {
@@ -421,64 +409,17 @@ public final class GameViewImpl implements GameView {
         }
     }
 
-    /**
-     * 
-     * @return The coordinates of a tank rapresenting a territory on the map,
-     *         relatively to the map dimension.
-     * @author Michele Farneti
-     */
-    private Position getRelativePoition(final Position position) {
-        return new Position(Math.round(position.x() * (mapWidth / 1280f)),
-                Math.round(position.y() * (mapHeight / 630f)));
-    }
-
     @Override
     public void showTanks(final List<Territory> territories) {
-        territories.stream().forEach(territory -> tanksMap.put(territory.getTerritoryName(), new TerritoryPlaceHolder(
-                new ColoredImageButton(resourcesLocator + FILE_SEPARATOR,
-                        FILE_SEPARATOR + "tanks" + FILE_SEPARATOR + "tank_"),
-                new JLabel("0"))));
-
-        readTanksCoordinates();
-        for (final var tank : tanksMap.entrySet()) {
-            final var relativePosition = getRelativePoition(tanksCoordinates.get(tank.getKey()));
-            tank.getValue().button().setBounds(relativePosition.x(),
-                    relativePosition.y(), TANKS_WIDTH, TANKS_HEIGTH);
-            mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
-            tank.getValue().button().addActionListener(e -> tankClicked(tank.getKey()));
-            tank.getValue().button().setBorderPainted(false);
-            tank.getValue().button().setContentAreaFilled(false);
-
-            tank.getValue().armiesCount().setBounds(
-                    (int) tank.getValue().button().getBounds().getLocation().getX() + TANKS_WIDTH
-                            - (ARMIES_LABEL_WIDTH / 2),
-                    (int) tank.getValue().button().getBounds().getLocation().getY() + TANKS_HEIGTH
-                            - ARMIES_LABEL_HEIGHT,
-                    ARMIES_LABEL_WIDTH, ARMIES_LABEL_HEIGHT);
-            tank.getValue().armiesCount().setBackground(Color.white);
-            tank.getValue().armiesCount().setForeground(Color.black);
-            tank.getValue().armiesCount().setOpaque(true);
-            tank.getValue().armiesCount().setFont(new Font(FONT_NAME, Font.BOLD, ARMIES_LABEL_FONT_SIZE));
-            mapLayoutPane.add(tank.getValue().button(), TANK_LAYER, 0);
-            mapLayoutPane.add(tank.getValue().armiesCount(), TANK_LAYER, 0);
-        }
-    }
-
-    /**
-     * Reads from file the coordinates needed for displaying tanks in the right
-     * position.
-     * 
-     * @author Michele Farneti
-     */
-    private void readTanksCoordinates() {
-        final var filePath = createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt"));
-        try (BufferedReader coordinateReader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));) {
-            coordinateReader.lines().map(s -> s.split(" ")).forEach(
-                    t -> tanksCoordinates.put(t[0], new Position(Integer.parseInt(t[1]), Integer.parseInt(t[2]))));
-        } catch (IOException e) {
-            tanksCoordinates.put("error", new Position(0, 0));
-        }
+        final TerritoryPlaceHolderFactory tanksFactory = new TerritoryPlaceHolderFactory(
+                createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt")));
+        territories.stream().map(territory -> tanksFactory.generateTank(territory,
+                position -> new Position(Math.round(position.x() * (mapWidth / 1280f)),
+                        Math.round(position.y() * (mapHeight / 630f))),
+                resourcesLocator, e -> tankClicked(territory.getTerritoryName())))
+                .filter(optional -> optional.isPresent()).map(placeholder -> placeholder.get())
+                .forEach(placeholder -> tanks.add(placeholder));
+        tanks.forEach(t -> t.addToLayoutPane(mapLayoutPane, TANK_LAYER));
     }
 
     @Override
@@ -557,19 +498,19 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void showFightingTerritory(final String territory, final boolean isAttacker) {
-        tanksMap.get(territory).button().setCustomBorder(isAttacker ? Color.RED : Color.BLUE);
-        tanksMap.get(territory).button().setBorderPainted(true);
+        tanks.stream().filter(t -> t.getTerritoryName().equals(territory))
+                .forEach(t -> t.setFighting(isAttacker ? Color.RED : Color.BLUE));
     }
 
     @Override
     public void redrawTank(final Territory territory) {
-        tanksMap.get(territory.getTerritoryName()).button().setColor(territory.getPlayer());
-        tanksMap.get(territory.getTerritoryName()).armiesCount().setText(String.valueOf(territory.getNumberOfArmies()));
+        tanks.stream().filter(t -> t.getTerritoryName().equals(territory.getTerritoryName()))
+                .forEach(t -> t.redrawTank(territory));
     }
 
     @Override
-    public void resetFightingTerritory(final String fightingTerritory) {
-        tanksMap.get(fightingTerritory).button().setBorderPainted(false);
+    public void resetFightingTerritories() {
+        tanks.stream().forEach(t -> t.resetBorder());
     }
 
     @Override

@@ -22,13 +22,13 @@ public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
     private static final int BORDER_THICKNESS = 2;
     private static final long serialVersionUID = 1;
-    private ColoredImageReader imageReader = new SimpleImageReader();
+    private transient final ColoredImageReader imageReader = new SimpleImageReader();
 
     private final String imageName;
     private String imageColor = "white";
 
     /**
-     * @param imageName             The name of the image to be set as backgroud of
+     * @param imageName            The name of the image to be set as backgroud of
      *                             the button
      * @param resourcesPackagePath The path needed to reach the button image
      */
@@ -41,7 +41,7 @@ public final class ColoredImageButton extends JButton {
      * Constructor wich sets the button background image and also its bounds
      * 
      * @param resourcesPackagePath The path needed to reach the button image
-     * @param imageName             The path reach the image file after the resources
+     * @param imageName            The path reach the image file after the resources
      *                             package ruling out the la spart of the name
      *                             indicating the color
      * @param x                    Starting x for the bounds to be set with
@@ -49,10 +49,10 @@ public final class ColoredImageButton extends JButton {
      * @param width
      * @param height
      */
-    public ColoredImageButton(final String resourcesPackagePath, final String imageName , final int x, final int y,
+    public ColoredImageButton(final String resourcesPackagePath, final String imageName, final int x, final int y,
             final int width, final int height) {
         this.resourcesPackagePath = resourcesPackagePath;
-        this.imageName = imageName ;
+        this.imageName = imageName;
         this.setBounds(x, y, width, height);
         this.setOpaque(false);
     }
@@ -66,7 +66,7 @@ public final class ColoredImageButton extends JButton {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        imageReader.loadColoredImage(resourcesPackagePath + imageName , imageColor)
+        imageReader.loadColoredImage(resourcesPackagePath + imageName, imageColor)
                 .ifPresent(image -> g.drawImage(image, 0, 0, getWidth(), getHeight(), null));
     }
 

@@ -1,5 +1,6 @@
 package it.unibo.risiko.view.gameview.components.mainpanel;
 
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,10 +43,13 @@ public final class TerritoryPlaceHolderFactory {
         }
     }
 
-    public Optional<TankIcon> generateTank(final Territory territory,final Function<Position,Position> coordinatesGenerator,String resourcesPackageString){
-        if(tanksCoordinates.containsKey(territory.getTerritoryName())){
+    public Optional<TankIcon> generateTank(final Territory territory,
+            final Function<Position, Position> coordinatesGenerator, final String resourcesPackageString,
+            final ActionListener al) {
+        if (tanksCoordinates.containsKey(territory.getTerritoryName())) {
             final Position newPosition = coordinatesGenerator.apply(tanksCoordinates.get(territory.getTerritoryName()));
-            return Optional.of(new TankIcon(newPosition.x(), newPosition.y(), territory.getTerritoryName(),resourcesPackageString));
+            return Optional.of(new TankIcon(newPosition.x(), newPosition.y(), territory.getTerritoryName(),
+                    resourcesPackageString, al));
         }
         return Optional.empty();
     }

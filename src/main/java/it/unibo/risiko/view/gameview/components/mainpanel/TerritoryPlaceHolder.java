@@ -1,10 +1,22 @@
 package it.unibo.risiko.view.gameview.components.mainpanel;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import java.awt.Color;
 
-import it.unibo.risiko.view.gameview.components.Position;
+import javax.swing.JLayeredPane;
 
-public interface TerritoryPlaceHolder{
-    
+import it.unibo.risiko.model.map.Territory;
+
+public interface TerritoryPlaceHolder {
+
+    public void addToLayoutPane(JLayeredPane layerdPane, Integer layer);
+
+    public void redrawTank(Territory territory);
+
+    public String getTerritoryName();
+
+    public void resetBorder();
+
+    public void setEnabled(Boolean enabled);
+
+    public void setFighting(Color color);
 }
