@@ -15,6 +15,7 @@ import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.event_register.RegisterImpl;
 import it.unibo.risiko.model.game.AttackPhase;
 import it.unibo.risiko.model.game.AttackPhaseImpl;
+import it.unibo.risiko.model.game.GameActionType;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.map.GameMapInitializer;
 import it.unibo.risiko.model.map.GameMapInitializerImpl;
@@ -216,8 +217,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         //GameLoop2
         switch (gameLoopManager2.getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                if(gameLoopManager2.doActionIfPossible(players,ac)){
-
+                if(gameLoopManager2.doActionIfPossible(players,GameActionType.PLACE_ARMIES)){
+                    redrawView();
                 }
                 break;
         
