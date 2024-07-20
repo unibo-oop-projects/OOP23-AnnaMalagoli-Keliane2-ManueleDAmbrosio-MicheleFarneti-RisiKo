@@ -2,6 +2,10 @@ package it.unibo.risiko.model.objective;
 
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * An abstract class implementing Target
+ * @author Keliane Nana
+ */
 public abstract class BaseTarget implements Target{
     private final Player player;
 
@@ -11,7 +15,7 @@ public abstract class BaseTarget implements Target{
     
     @Override
     public Player getPlayer(){
-        return this.player;
+        return this.player.clone();
     }
 
     @Override

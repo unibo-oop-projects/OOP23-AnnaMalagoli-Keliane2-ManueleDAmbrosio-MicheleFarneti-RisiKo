@@ -50,8 +50,8 @@ public class GameImpl implements Game {
     public void startGame() {
         Collections.shuffle(players);
         players.forEach(p -> p.setArmiesToPlace(map.getStratingArmies(players.size())));
-        assignTargets();
         assignTerritories();
+        assignTargets();
         activePlayer = 0;
         handleAIBehaviour();
     }

@@ -13,9 +13,10 @@ import it.unibo.risiko.model.objective.Target;
  * Contains player status and informations as well as owned territories and cards.
  * 
  * @author Manuele D'Ambrosio
+ * @author Keliane Nana
  */
 
-public interface Player {
+public interface Player extends Cloneable{
 
     /**
      * This method is used to set the number of armies
@@ -194,4 +195,9 @@ public interface Player {
      */
     public boolean drawNewCardIfPossible(Deck deck);
 
+    /**
+     * This method is used to clone a player
+     * @return a player's clone
+     */
+    public Player clone();
 }

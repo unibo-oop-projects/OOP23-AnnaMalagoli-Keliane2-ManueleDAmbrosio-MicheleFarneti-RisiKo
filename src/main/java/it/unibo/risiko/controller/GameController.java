@@ -388,8 +388,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * @param dstTerritory is the destination territory
      * @param numArmies is the number of armies that the player
      * wants to move
-     * @author Keliane Nana
      * @author Anna Malagoli
+     * @author Keliane Nana
      */
     public void moveArmies(final String srcTerritory, final String dstTerritory, final int numArmies) {
         getTerritoryFromString(srcTerritory).removeArmies(numArmies);

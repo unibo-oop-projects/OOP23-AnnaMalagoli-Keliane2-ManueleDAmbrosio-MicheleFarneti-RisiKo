@@ -15,6 +15,7 @@ import it.unibo.risiko.model.objective.Target;
  * Implementation of Player interface.
  * 
  * @author Manuele D'Ambrosio
+ * @author Keliane Nana
  */
 public class StdPlayer implements Player {
     private static final int REINFORCEMENT_FACTOR = 3;
@@ -26,6 +27,7 @@ public class StdPlayer implements Player {
     private Optional<Target> target;
     private boolean isAI;
     private boolean hasDrawnNewCard;
+
 
     protected StdPlayer(final String color, final int armiesToPlace, final boolean isAI) {
         this.color_id = color;
@@ -177,5 +179,17 @@ public class StdPlayer implements Player {
 
     private void resetDraw() {
         this.hasDrawnNewCard = false;
+    }
+
+    @Override
+    public Player clone() {
+        try {
+            StdPlayer cloned = (StdPlayer) super.clone();
+            cloned.ownedTerritories = new HashSet<>(this.ownedTerritories);
+            cloned.ownedCards = new HashSet<>(this.ownedCards);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

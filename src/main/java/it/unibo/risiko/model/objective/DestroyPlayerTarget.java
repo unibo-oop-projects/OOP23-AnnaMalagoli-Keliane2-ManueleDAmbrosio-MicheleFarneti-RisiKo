@@ -2,12 +2,16 @@ package it.unibo.risiko.model.objective;
 
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * DestroyPlayerTarget, a BaseTarget extension
+ * @author Keliane Nana
+ */
 public class DestroyPlayerTarget extends BaseTarget {
-    private Player playerToDestroy;
+    private final Player playerToDestroy;
     
-    public DestroyPlayerTarget(Player player, Player playerToDestroy) {
+    public DestroyPlayerTarget(final Player player,final Player playerToDestroy) {
         super(player);
-        this.playerToDestroy=playerToDestroy;
+        this.playerToDestroy=playerToDestroy.clone();
     }
 
     @Override

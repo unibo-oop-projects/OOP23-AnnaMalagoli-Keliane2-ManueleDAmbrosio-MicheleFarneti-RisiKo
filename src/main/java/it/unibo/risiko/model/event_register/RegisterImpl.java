@@ -7,6 +7,10 @@ import java.util.List;
 import it.unibo.risiko.model.event.Event;
 import it.unibo.risiko.model.player.Player;
 
+/**
+ * The Register's implementation
+ * @author Keliane Nana
+ */
 public class RegisterImpl implements Register{
     private List<Event> register;
 

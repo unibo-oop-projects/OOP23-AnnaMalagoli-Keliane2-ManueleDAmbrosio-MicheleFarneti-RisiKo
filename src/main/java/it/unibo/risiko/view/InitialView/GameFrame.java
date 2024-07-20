@@ -27,14 +27,10 @@ public interface GameFrame {
      */
     //public InitialViewObserver getController();
     
-    //method used to remove the initial frame
-    public void unshow();
-
     /**
-     * This method is used to get the option menu panel
-     * @return the OptionSubMenu of active GameFrame
+     * method used to remove the initial frame
      */
-    //public JPanel getOptionSubMenu();
+    public void unshow();
 
     /**
      * This method helps to set the GameFrame resolution
