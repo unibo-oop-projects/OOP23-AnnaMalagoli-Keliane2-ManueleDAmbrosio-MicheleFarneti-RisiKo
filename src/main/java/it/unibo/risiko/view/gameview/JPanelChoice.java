@@ -36,7 +36,7 @@ public class JPanelChoice extends JPanel {
     private String firstChoice = "";
     private String secondChoice = "";
     private String thirdChoice = "";
-    private List<Card> listCards;
+    private final List<Card> listCards;
 
     /**
      * Through the constructor the JPanelChoice is set.
@@ -51,7 +51,7 @@ public class JPanelChoice extends JPanel {
          * creation of buttonPanel that is a panel that contains the button that shows
          * the operations that have to be done by the player to play the three cards.
          */
-        JPanel buttonPanel = new JPanel();
+        final JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(BLACK);
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(createInfoButton(), BorderLayout.WEST);
@@ -61,12 +61,12 @@ public class JPanelChoice extends JPanel {
          * there is a choice selection that shows the name of every territories of the
          * cards owned by the player.
          */
-        JPanel choicePanel = new JPanel();
+        final JPanel choicePanel = new JPanel();
         choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 3));
-        Choice firstChoiceTerritories = new Choice();
-        Choice secondChoiceTerritories = new Choice();
-        Choice thirdChoiceTerritories = new Choice();
+        final Choice firstChoiceTerritories = new Choice();
+        final Choice secondChoiceTerritories = new Choice();
+        final Choice thirdChoiceTerritories = new Choice();
         /*setting the size and font of the three Choice */
         firstChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         secondChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
@@ -76,15 +76,15 @@ public class JPanelChoice extends JPanel {
          * of the cards owned by the player and the type of the card.
          */
         String type;
-        for (var card : playerCards) {
+        for (final var card : playerCards) {
             type = "";
-            if (card.getTypeName().equals("Cannon")) {
+            if ("Cannon".equals(card.getTypeName())) {
                 type = "CAN";
             } else {
-                if (card.getTypeName().equals("Cavalry")) {
+                if ("Cavalry".equals(card.getTypeName())) {
                     type = "CAV";
                 } else {
-                    if (card.getTypeName().equals("Infantry")) {
+                    if ("Infantry".equals(card.getTypeName())) {
                         type = "INF";
                     }
                 }
@@ -103,10 +103,10 @@ public class JPanelChoice extends JPanel {
          * cards selected by the player, and of another button used to exit from the
          * current panel displayed.
          */
-        JPanel southPanel = new JPanel();
+        final JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
-        JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.exitCardsManagingPhase());
-        JPanel executePanel = new ContinuePanel("Play selected cards", BOTTON_DIMENSION,
+        final JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.exitCardsManagingPhase());
+        final JPanel executePanel = new ContinuePanel("Play selected cards", BOTTON_DIMENSION,
                 e -> {
                     final String[] firstTerritoryName = firstChoiceTerritories.getSelectedItem().split(" ");
                     final String[] secondTerritoryName = secondChoiceTerritories.getSelectedItem().split(" ");
@@ -114,13 +114,13 @@ public class JPanelChoice extends JPanel {
                     firstChoice = firstTerritoryName[0];
                     secondChoice = secondTerritoryName[0];
                     thirdChoice = thirdTerritoryName[0];
-                    List<Card> selectedCards = List.of(getSelectedItem(firstChoice).get(),
+                    final List<Card> selectedCards = List.of(getSelectedItem(firstChoice).get(),
                             getSelectedItem(secondChoice).get(), getSelectedItem(thirdChoice).get());
                     if (checkSelectedCards(selectedCards)) {
                         observer.playCards(firstChoice, secondChoice, thirdChoice);
                         this.setVisible(false);
                     } else {
-                        String message = "Error of the item selected.\n Retry!";
+                        final String message = "Error of the item selected.\n Retry!";
                         JOptionPane.showMessageDialog(this, message, "", JOptionPane.ERROR_MESSAGE);
                     }
                 });
@@ -137,8 +137,8 @@ public class JPanelChoice extends JPanel {
      * @return the button created
      */
     private JButton createInfoButton() {
-        JButton infoButton = new DefaultButton("INFO");
-        String message = "Choose three territories whose cards\n"
+        final JButton infoButton = new DefaultButton("INFO");
+        final String message = "Choose three territories whose cards\n"
                 + "you already own to play those cards."
                 + "There are 5 possible combos:\n"
                 + "-cannon + infantry + cavalry -> +10 armies\n"
@@ -148,6 +148,7 @@ public class JPanelChoice extends JPanel {
                 + "-jolly + two cards of the same type -> +12 armies";
         infoButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 JOptionPane.showMessageDialog(infoButton, message, "How to play the cards",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -167,7 +168,7 @@ public class JPanelChoice extends JPanel {
      * are only present the cards of the player. 
      */
     private Optional<Card> getSelectedItem(final String cardName) {
-        for (var card : this.listCards) {
+        for (final var card : this.listCards) {
             if (card.getTerritoryName().equals(cardName)) {
                 return Optional.of(card);
             }
@@ -181,10 +182,7 @@ public class JPanelChoice extends JPanel {
      * @return true if the cards can be played, false otherwise
      */
     private boolean checkSelectedCards(final List<Card> cards) {
-        if (cardsAreDifferent(cards) && checkCombo(cards)) {
-            return true;
-        }
-        return false;
+        return cardsAreDifferent(cards) && checkCombo(cards);
     }
 
     /**
@@ -194,12 +192,10 @@ public class JPanelChoice extends JPanel {
      * are equal
      */
     private boolean cardsAreDifferent(final List<Card> cards) {
-        if (cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName())
-                || cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName())
-                || cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName())) {
-            return false;
-        }
-            return true;
+
+        return !cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName())
+            || !cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName())
+            || !cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName());
     }
 
     /**
@@ -213,17 +209,17 @@ public class JPanelChoice extends JPanel {
         int contInf = 0;
         int contCan = 0;
 
-        for (var card : cards) {
-            if (card.getTypeName().equals("Cannon")) {
+        for (final var card : cards) {
+            if ("Cannon".equals(card.getTypeName())) {
                 contCan++;
             }
-            if (card.getTypeName().equals("Cavalry")) {
+            if ("Cavalry".equals(card.getTypeName())) {
                 contCav++;
             }
-            if (card.getTypeName().equals("Infantry")) {
+            if ("Infantry".equals(card.getTypeName())) {
                 contInf++;
             }
-            if (card.getTypeName().equals("Jolly")) {
+            if ("Jolly".equals(card.getTypeName())) {
                 contJolly++;
             }
         }
@@ -231,16 +227,11 @@ public class JPanelChoice extends JPanel {
         if (contCan == 3 || contCav == 3 || contInf == 3) {
             return true;
         }
-        if (contJolly == 1) {
-            if (contCan == 2 || contCav == 2 || contInf == 2) {
+        if (contJolly == 1 && (contCan == 2 || contCav == 2 || contInf == 2)) {
                 return true;
-            }
-        }
-        if (contCan == 1 && contInf == 1 && contCav == 1) {
-            return true;
         }
 
-        return false;
+        return contCan == 1 && contInf == 1 && contCav == 1;
     }
 
 }

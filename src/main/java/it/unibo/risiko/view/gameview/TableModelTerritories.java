@@ -1,7 +1,6 @@
 package it.unibo.risiko.view.gameview;
 
 import java.util.List;
-import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.map.Territory;
@@ -18,11 +17,11 @@ import it.unibo.risiko.model.map.Territory;
  */
 public class TableModelTerritories extends AbstractTableModel {
 
-    private List<Territory> listTerritories = new ArrayList<>();
-    private List<Player> listPlayers = new ArrayList<>();
+    private final List<Territory> listTerritories;
+    private final List<Player> listPlayers;
     private static final int NUM_COLUMN = 4;
     /*the following list is used to contain the name of every column in the table*/
-    private String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
+    private final String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
 
     /**
      * Method to set datas in the table model.
@@ -39,6 +38,7 @@ public class TableModelTerritories extends AbstractTableModel {
      * to the number of territories of the map.
      * @return the number of rows that are displayed in the table.
      */
+    @Override
     public int getRowCount() {
         return listTerritories.size();
     }
@@ -48,6 +48,7 @@ public class TableModelTerritories extends AbstractTableModel {
      * the properties that must be displayed for each territory in the table.
      * @return the number of columns of the table.
      */
+    @Override
     public int getColumnCount() {
         return NUM_COLUMN;
     }
@@ -58,8 +59,9 @@ public class TableModelTerritories extends AbstractTableModel {
      * @param columnIndex is the column whose value is to be queried
      * @return the value for the cell at columnIndex and rowIndex
      */
+    @Override
     public Object getValueAt(final int rowIndex, final int columnIndex) {
-        Territory territory = this.listTerritories.get(rowIndex);
+        final Territory territory = this.listTerritories.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
@@ -69,7 +71,7 @@ public class TableModelTerritories extends AbstractTableModel {
             case 2:
                 return territory.getNumberOfArmies();
             case 3:
-                for(var player : this.listPlayers) {
+                for(final var player : this.listPlayers) {
                     if(player.isOwnedTerritory(territory.getTerritoryName())) {
                         return player.getColorID();
                     }
@@ -84,6 +86,7 @@ public class TableModelTerritories extends AbstractTableModel {
      * @param columnIndex is the number of the column
      * @return the name of the column
      */
+    @Override
     public String getColumnName(final int columnIndex) {
         return this.columnsName[columnIndex];
     }

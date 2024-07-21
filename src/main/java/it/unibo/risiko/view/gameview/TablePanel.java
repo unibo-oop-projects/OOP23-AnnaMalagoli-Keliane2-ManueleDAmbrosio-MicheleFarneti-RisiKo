@@ -21,8 +21,7 @@ public class TablePanel extends JPanel {
     private static final int WIDTH = 270;
     private static final int COLUMN_INDEX_PLAYER_ID = 3;
     private static final int COLUMN_INDEX_NUM_ARMIES = 2;
-    private JTable table;
-    private TableModelTerritories tableModelTerritories;
+    private final TableModelTerritories tableModelTerritories;
 
     /**
      * Into the constructor is created the table. 
@@ -35,7 +34,7 @@ public class TablePanel extends JPanel {
         /*the constructor of the JTable takes as input the table model 
          * previously created.
         */
-        table = new JTable(tableModelTerritories);
+        final JTable table = new JTable(tableModelTerritories);
         this.setLayout(new BorderLayout());
         /*When the table is inserted into the panel
         it must be inserted into a scroll pane (a panel

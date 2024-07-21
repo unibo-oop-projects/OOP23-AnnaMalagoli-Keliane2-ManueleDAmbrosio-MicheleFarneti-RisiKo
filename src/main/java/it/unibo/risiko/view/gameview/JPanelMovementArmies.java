@@ -53,7 +53,7 @@ public class JPanelMovementArmies extends JPanel {
          * the operations that have to be done by the player to move armies
          * between two near territories.
          */
-        JPanel buttonPanel = new JPanel();
+        final JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(BLACK);
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(createInfoButton(), BorderLayout.WEST);
@@ -63,15 +63,15 @@ public class JPanelMovementArmies extends JPanel {
          * territories and the last one for the setting of the number of armies that
          * the player wants to move between the two territories selected.
          */
-        JPanel centerPanel = new JPanel();
+        final JPanel centerPanel = new JPanel();
         centerPanel.setBackground(BACKGROUND_COLOR);
         centerPanel.setLayout(new BorderLayout());
-        JPanel choicePanel = new JPanel();
+        final JPanel choicePanel = new JPanel();
         choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 2));
-        Choice srcTerrChoice = new Choice();
-        Choice dstTerrChoice = new Choice();
-        Choice choiceNumArmies = new Choice();
+        final Choice srcTerrChoice = new Choice();
+        final Choice dstTerrChoice = new Choice();
+        final Choice choiceNumArmies = new Choice();
         /*setting the size and font of the three Choice */
         srcTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         dstTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
@@ -81,7 +81,7 @@ public class JPanelMovementArmies extends JPanel {
          * owned by the player for the first two Choice. In the third Choice
          * there are numbers between 1 and 100
          */
-        for (var terr : territories) {
+        for (final var terr : territories) {
             srcTerrChoice.add(terr.getTerritoryName());
             dstTerrChoice.add(terr.getTerritoryName());
         }
@@ -99,10 +99,10 @@ public class JPanelMovementArmies extends JPanel {
          * the selected amount of armies between the two territories,
          * and of another botton used to exit from the current displayed panel.
          */
-        JPanel southPanel = new JPanel();
+        final JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(1, 2));
-        JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.closeMovementPhase());
-        JPanel executePanel = new ContinuePanel("Move armies", BOTTON_DIMENSION,
+        final JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.closeMovementPhase());
+        final JPanel executePanel = new ContinuePanel("Move armies", BOTTON_DIMENSION,
                 e -> {
                     if (checkSelectedItem(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(),
                             Integer.parseInt(choiceNumArmies.getSelectedItem()))) {
@@ -110,7 +110,7 @@ public class JPanelMovementArmies extends JPanel {
                                 Integer.parseInt(choiceNumArmies.getSelectedItem()));
                         this.setVisible(false);
                     } else {
-                        String message = "Error of the item selected.\n Retry!";
+                        final String message = "Error of the item selected.\n Retry!";
                         JOptionPane.showMessageDialog(this, message, "", JOptionPane.ERROR_MESSAGE);
                     }
                 });
@@ -127,8 +127,8 @@ public class JPanelMovementArmies extends JPanel {
      * @return the info button created
      */
     private JButton createInfoButton() {
-        JButton infoButton = new DefaultButton("INFO");
-        String message = "In the first selection cell choose the territory\n"
+        final JButton infoButton = new DefaultButton("INFO");
+        final String message = "In the first selection cell choose the territory\n"
                 + "whom armies you want to move.\n"
                 + "In the second choose the territory\n"
                 + "in which you want to place the armies.\n"
@@ -140,6 +140,7 @@ public class JPanelMovementArmies extends JPanel {
                 + "will not succeed.";
         infoButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 JOptionPane.showMessageDialog(infoButton, message, "How to move armies",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -159,12 +160,10 @@ public class JPanelMovementArmies extends JPanel {
      * @return true if the operation is permitted, false otherwise
      */
     private boolean checkSelectedItem(final String src, final String dst, final int numArmies) {
-        Territory srcTerritory = getTerritory(src).get();
-        Territory dstTerritory = getTerritory(dst).get();
-        if (territoriesAreNear(srcTerritory, dstTerritory) && checkNumberArmies(srcTerritory, numArmies)) {
-            return true;
-        }
-        return false;
+        final Territory srcTerritory = getTerritory(src).get();
+        final Territory dstTerritory = getTerritory(dst).get();
+
+        return territoriesAreNear(srcTerritory, dstTerritory) && checkNumberArmies(srcTerritory, numArmies);
     }
 
     /**
@@ -175,7 +174,7 @@ public class JPanelMovementArmies extends JPanel {
      * @return an optional that always contains the territory searched
      */
     private Optional<Territory> getTerritory(final String terr) {
-        for (var territory : this.listTerritories) {
+        for (final var territory : this.listTerritories) {
             if (territory.getTerritoryName().equals(terr)) {
                 return Optional.of(territory);
             }
@@ -191,7 +190,7 @@ public class JPanelMovementArmies extends JPanel {
      * @return true if the territories are adjacent, false otherwise
      */
     private boolean territoriesAreNear(final Territory terr1, final Territory terr2) {
-        for (var elem : terr1.getListOfNearTerritories()) {
+        for (final var elem : terr1.getListOfNearTerritories()) {
             if (elem.equals(terr2.getTerritoryName())) {
                 return true;
             }
@@ -212,9 +211,7 @@ public class JPanelMovementArmies extends JPanel {
      * than the number of armies placed in the territory, false otherwise
      */
     private boolean checkNumberArmies(final Territory terr, final int numArmies) {
-        if (terr.getNumberOfArmies() > numArmies) {
-            return true;
-        }
-        return false;
+
+        return terr.getNumberOfArmies() > numArmies;
     }
 }
