@@ -20,7 +20,7 @@ import it.unibo.risiko.view.gameview.components.DefaultButton;
 
 /**
  * Creation of the class JPanelChoice which is a panel that shows three
- * different selection cells that contain the territories of the cards 
+ * different selection cells that contain the territories of the cards
  * owned by the player.
  * This panel is used to play three cards to gain new armies.
  * 
@@ -42,7 +42,7 @@ public class JPanelChoice extends JPanel {
      * Through the constructor the JPanelChoice is set.
      * 
      * @param playerCards is the list of cards owned by the player
-     * @param observer is the game observer
+     * @param observer    is the game observer
      */
     JPanelChoice(final List<Card> playerCards, final GameViewObserver observer) {
         this.setLayout(new BorderLayout());
@@ -159,13 +159,14 @@ public class JPanelChoice extends JPanel {
     }
 
     /**
-     * Method used to get a card from the name of the 
+     * Method used to get a card from the name of the
      * territory in the list of cards of the player.
+     * 
      * @param cardName is the name of the territory
      * @return an empty optional if case the player does not
-     * have the card or an optional that contains the required card.
-     * In this case the card is always found because in the choice cells
-     * are only present the cards of the player. 
+     *         have the card or an optional that contains the required card.
+     *         In this case the card is always found because in the choice cells
+     *         are only present the cards of the player.
      */
     private Optional<Card> getSelectedItem(final String cardName) {
         for (final var card : this.listCards) {
@@ -178,6 +179,7 @@ public class JPanelChoice extends JPanel {
 
     /**
      * Method used to verify if the three cards selected are playable.
+     * 
      * @param cards is the list of cards selected by the player
      * @return true if the cards can be played, false otherwise
      */
@@ -187,9 +189,10 @@ public class JPanelChoice extends JPanel {
 
     /**
      * Method to verify if the three cards are different.
+     * 
      * @param cards is the list of cards that the player wants to play
      * @return true if the cards are different or false if at least two cards
-     * are equal
+     *              * are equal
      */
     private boolean cardsAreDifferent(final List<Card> cards) {
 
@@ -200,6 +203,7 @@ public class JPanelChoice extends JPanel {
 
     /**
      * Method used to verify if the three cards selected by the player are a combo.
+     * 
      * @param cards is the list of cards
      * @return true if the cards are a combo, false if not
      */
