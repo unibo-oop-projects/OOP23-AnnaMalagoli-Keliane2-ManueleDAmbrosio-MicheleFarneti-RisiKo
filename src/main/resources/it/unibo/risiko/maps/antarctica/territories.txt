@@ -1,7 +1,7 @@
 South-West-Antartica 3:
 Antartic-Peninsula Ronne-Ice-Shelf Ellsworth-Land
 South-West-Antartica:
-Ronne-Ice-Shelf Queen-Elizabeth-Land South-Pole Ellsworth-Land Dronning-Maud-Land
+Ronne-Ice-Shelf Queen-Elizabeth-Land South-Pole Ellsworth-Land Dronning-Maud-Land Antartic-Peninsula
 South-West-Antartica:
 Ellsworth-Land Antartic-Peninsula Ronne-Ice-Shelf South-Pole Marie-Byrd-Land
 South-West-Antartica:
