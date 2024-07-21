@@ -55,6 +55,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class GameViewImpl implements GameView {
 
+    private static final float MAP_HEIGHT_SCALE = 630f;
+    private static final float MAP_WIDTH_SCALE = 1280f;
+    private static final int TARGET_FONT_SIZE = 13;
+    private static final int TARGET_HEIGHT = 50;
+    private static final double TARGET_WIDTH_PERCENTAGE = 0.25;
+    private static final double TARGET_Y_PERCENTAGE = 0.2;
+    private static final double TARGET_X_PERCENTAGE = 0.75;
+    private static final double GAMESTATUS_WIDTH_PERCENTAGE = 0.75;
+    private static final double SKIP_BUTTON_X_PERCENTAGE = 0.8;
+    private static final int BUTTONS_LAYER = 5;
+    private static final int ATTACK_BUTTON_Y_DISTANCE = 100;
+    private static final int GAMEPANEL_WIDTH_DIVIDER = 6;
+    private static final double ATTACK_BAR_HEIGHT_PERCENTAGE = 0.3;
+    private static final int TURN_ICON_DIMENSION_DIVIDER = 20;
     private static final int MAX_COLOR_VALUE = 255;
 
     private static final String FONT_NAME = "Arial";
@@ -108,7 +122,7 @@ public final class GameViewImpl implements GameView {
     private final Integer frameHeigth;
     private String mapName;
 
-    private final Set<TerritoryPlaceHolder> tanks = new HashSet<TerritoryPlaceHolder>();
+    private final Set<TerritoryPlaceHolder> tanks = new HashSet<>();
     private final Map<String, ColoredImageButton> iconsMap = new HashMap<>();
     @SuppressFBWarnings(value = "EI2", justification = "GameViewObserver is an inteface intentionally mutable and safe to store.")
     private final GameViewObserver gameViewObserver;
@@ -117,7 +131,6 @@ public final class GameViewImpl implements GameView {
     private final JLayeredPane mapLayoutPane = new JLayeredPane();
     private final JLayeredPane attackBarLayoutPane = new JLayeredPane();
     private final JPanel gamePanel = new JPanel();
-    private JPanel mapPanel;
     private final JLabel playerArmiesLabel = new JLabel();
     private JTextArea countryBarPanel;
     private JTextArea gameStatusPanel;
@@ -143,10 +156,12 @@ public final class GameViewImpl implements GameView {
     private int mapHeight;
 
     /**
-     * Initializes the GUI for the game by creating the frame.
+     * Initializes the GUI for the game by creating the frame of a given dimension.
      * 
      * @param frameWidth
      * @param frameHeight
+     * @param resourcesLocator The string used for locating the game view resources.
+     * @param observer         The observer for the game controller.
      */
     public GameViewImpl(final Integer frameWidth, final Integer frameHeight, final String resourcesLocator,
             final GameViewObserver observer) {
@@ -154,8 +169,8 @@ public final class GameViewImpl implements GameView {
         this.frameWidth = frameWidth;
         this.frameHeigth = frameHeight;
         this.resourcesLocator = resourcesLocator;
-        turnIconWidth = frameWidth / 20;
-        turnIconHeight = frameWidth / 20;
+        turnIconWidth = frameWidth / TURN_ICON_DIMENSION_DIVIDER;
+        turnIconHeight = frameWidth / TURN_ICON_DIMENSION_DIVIDER;
 
         mainFrame.setResizable(false);
         mainFrame.setSize(new Dimension(frameWidth, frameHeigth));
@@ -167,7 +182,7 @@ public final class GameViewImpl implements GameView {
 
     /**
      * Function used to create paths withou having to manually specify the file
-     * separator every time
+     * separator every time.
      * 
      * @return A path for a given resource
      * @author Michele Farneti
@@ -235,7 +250,7 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Sets up the attackbar part of the view
+     * Sets up the attackbar part of the view.
      * 
      * @param nPlayers the bumber of players playint the game, used to setup an cion
      *                 bar of the right dimension
@@ -244,7 +259,8 @@ public final class GameViewImpl implements GameView {
     private void setupAttackBar(final int nPlayers) {
         // AttackBar initiialization
         attackBarLayoutPane
-                .setPreferredSize(new Dimension((int) (gamePanel.getWidth()), (int) (gamePanel.getHeight() * 0.3)));
+                .setPreferredSize(new Dimension((int) (gamePanel.getWidth()),
+                        (int) (gamePanel.getHeight() * ATTACK_BAR_HEIGHT_PERCENTAGE)));
         gamePanel.add(attackBarLayoutPane);
         attackBarLayoutPane.setOpaque(true);
 
@@ -263,7 +279,8 @@ public final class GameViewImpl implements GameView {
         attackBarLayoutPane.add(turnsBarPanel, TURNSBAR_LAYER, 0);
         // Country bar
         countryBarPanel = new JTextArea();
-        countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y, gamePanel.getWidth() / 6,
+        countryBarPanel.setBounds(TURNBAR_START_X, TURNBAR_START_Y + COUNTRYBAR_START_Y,
+                gamePanel.getWidth() / GAMEPANEL_WIDTH_DIVIDER,
                 turnIconHeight / 2);
         attackBarLayoutPane.add(countryBarPanel, TURNSBAR_LAYER, 0);
         countryBarPanel.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
@@ -271,23 +288,24 @@ public final class GameViewImpl implements GameView {
         countryBarPanel.setLineWrap(true);
 
         attackButton = new CustomButton("ATTACK");
-        attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE, 100,
+        attackButton.setBounds(gamePanel.getWidth() / 2 - ATTACKBAR_BUTTONS_WIDTH - ATTACKBAR_BUTTONS_DISTANCE,
+                ATTACK_BUTTON_Y_DISTANCE,
                 ATTACKBAR_BUTTONS_WIDTH, ATTACKBAR_BUTTONS_HEIGHT);
-        attackBarLayoutPane.add(attackButton, 5, 0);
+        attackBarLayoutPane.add(attackButton, BUTTONS_LAYER, 0);
         attackButton.addActionListener(e -> gameViewObserver.setAttacking());
         attackButton.setEnabled(false);
 
         skipButton = new CustomButton("SKIP");
-        skipButton.setBounds((int) (gamePanel.getWidth() * 0.8), 100, ATTACKBAR_BUTTONS_WIDTH,
+        skipButton.setBounds((int) (gamePanel.getWidth() * SKIP_BUTTON_X_PERCENTAGE), 100, ATTACKBAR_BUTTONS_WIDTH,
                 ATTACKBAR_BUTTONS_HEIGHT);
-        attackBarLayoutPane.add(skipButton, 5, 0);
+        attackBarLayoutPane.add(skipButton, BUTTONS_LAYER, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
         skipButton.setEnabled(false);
 
         moveArmiesButton = new CustomButton("MOVE");
         moveArmiesButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
                 ATTACKBAR_BUTTONS_HEIGHT);
-        attackBarLayoutPane.add(moveArmiesButton, 5, 0);
+        attackBarLayoutPane.add(moveArmiesButton, BUTTONS_LAYER, 0);
         moveArmiesButton.addActionListener(e -> gameViewObserver.moveClicked());
         moveArmiesButton.setEnabled(false);
 
@@ -311,14 +329,15 @@ public final class GameViewImpl implements GameView {
 
         targetTextField.setForeground(ATTACK_BAR_BACKGROUND_COLOR);
         targetTextField.setBackground(ATTACK_BAR_FOREGROUND_COLOR);
-        targetTextField.setBounds((int) (gamePanel.getWidth() * 0.75), (int) (attackBarLayoutPane.getHeight() * 0.2),
-                (int) (gamePanel.getWidth() * 0.25), 50);
-        targetTextField.setFont(new Font(FONT_NAME, Font.ITALIC, 13));
+        targetTextField.setBounds((int) (gamePanel.getWidth() * TARGET_X_PERCENTAGE),
+                (int) (attackBarLayoutPane.getHeight() * TARGET_Y_PERCENTAGE),
+                (int) (gamePanel.getWidth() * TARGET_WIDTH_PERCENTAGE), TARGET_HEIGHT);
+        targetTextField.setFont(new Font(FONT_NAME, Font.ITALIC, TARGET_FONT_SIZE));
         attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
 
         // Game Status Bar
         gameStatusPanel = new JTextArea();
-        gameStatusPanel.setBounds((int) (gamePanel.getWidth() * 0.75),
+        gameStatusPanel.setBounds((int) (gamePanel.getWidth() * GAMESTATUS_WIDTH_PERCENTAGE),
                 (int) targetTextField.getLocation().getY() + targetTextField.getHeight(), targetTextField.getWidth(),
                 turnIconHeight / 2);
         attackBarLayoutPane.add(gameStatusPanel, TURNSBAR_LAYER, 0);
@@ -328,7 +347,7 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Sets a Jpanel as a JlayerdPane background
+     * Sets a Jpanel as a JlayerdPane background.
      * 
      * @param layeredPane
      * @param background
@@ -339,7 +358,7 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Sets a Jpanel at a Jlayerde pane top level
+     * Sets a Jpanel at a Jlayerdpane pane top level.
      * 
      * @param layeredPane
      * @param overlay
@@ -350,10 +369,11 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Sets a Jpanel at a Jlayerde given layer
+     * Sets a Jpanel at a Jlayerdpane given layer.
      * 
      * @param layeredPane
      * @param jpanel
+     * @param layer
      * @author Michele Farneti
      */
     private void setLayerdPaneLayer(final JLayeredPane layeredPane, final JPanel jpanel, final Integer layer) {
@@ -361,7 +381,7 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * This funcion manages whenever a tank rapresenting a territory gets clicked
+     * This funcion manages whenever a tank rappresenting a territory gets clicked.
      * 
      * @param territory The territory that got clicked
      * @author Michele Farneti
@@ -373,16 +393,14 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Sets the background of mapPanel as the mapImage, if the loading of the image
-     * fails,
-     * a pannel reporting the error appears
+     * Sets the background of mapPanel as the mapImage, if the loading of the image.
      * 
      * @param resourcePackagePath
-     * @param mapPath             The path of the image of the selected map
+     * @param imageName           The name of the map image.
      * @author Michele Farneti
      */
-    private void paintMap(final String resourcePackagePath, String imageName) {
-        mapPanel = new BackgroundImagePanel(resourcePackagePath, imageName);
+    private void paintMap(final String resourcePackagePath, final String imageName) {
+        final JPanel mapPanel = new BackgroundImagePanel(resourcePackagePath, imageName);
         mapPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapLayoutPane.add(mapPanel, MAP_LAYER, 0);
         gamePanel.add(mapLayoutPane);
@@ -414,8 +432,8 @@ public final class GameViewImpl implements GameView {
         final TerritoryPlaceHolderFactory tanksFactory = new TerritoryPlaceHolderFactory(
                 createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt")));
         territories.stream().map(territory -> tanksFactory.generateTank(territory,
-                position -> new Position(Math.round(position.x() * (mapWidth / 1280f)),
-                        Math.round(position.y() * (mapHeight / 630f))),
+                position -> new Position(Math.round(position.x() * (mapWidth / MAP_WIDTH_SCALE)),
+                        Math.round(position.y() * (mapHeight / MAP_HEIGHT_SCALE))),
                 resourcesLocator, e -> tankClicked(territory.getTerritoryName())))
                 .filter(optional -> optional.isPresent()).map(placeholder -> placeholder.get())
                 .forEach(placeholder -> tanks.add(placeholder));
@@ -448,9 +466,11 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Calculates the starting pixel for a turnIcon of a player at a given index
+     * Calculates the starting pixel for a turnIcon of a player at a given index.
      * 
      * @param playerIndex
+     * @return The distance in pixels from the left side of the frame the turn icon
+     *         of a player at a given index should appear.
      * @author Michele Farneti
      */
     private int computeIconStartingX(final int playerIndex) {
@@ -471,28 +491,28 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Converts a player's colo_id into a Color object
+     * Converts a player's color_id into a Color object.
      * 
-     * @param color_id a player's color id
+     * @param colorID a player's color id
      * @return The curresponding color object
      * @author Michele Farneti
      */
     private Color stringToColor(final String colorID) {
         switch (colorID) {
             case "cyan":
-                return new Color(0, MAX_COLOR_VALUE, 255);
+                return new Color(0, MAX_COLOR_VALUE, MAX_COLOR_VALUE);
             case "blue":
-                return new Color(0, 0, 255);
+                return new Color(0, 0, MAX_COLOR_VALUE);
             case "green":
-                return new Color(0, 255, 0);
+                return new Color(0, MAX_COLOR_VALUE, 0);
             case "red":
-                return new Color(255, 0, 0);
+                return new Color(MAX_COLOR_VALUE, 0, 0);
             case "pink":
-                return new Color(255, 0, 255);
+                return new Color(MAX_COLOR_VALUE, 0, MAX_COLOR_VALUE);
             case "yellow":
-                return new Color(255, 255, 0);
+                return new Color(MAX_COLOR_VALUE, MAX_COLOR_VALUE, 0);
             default:
-                return new Color(255, 255, 255);
+                return new Color(MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE);
         }
     }
 
@@ -619,9 +639,10 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Updates the target text area
+     * Updates the target text area.
      * 
-     * @param targetText
+     * @param targetText Target description.
+     * @autho Michele Farneti.
      */
     private void showTarget(final String targetText) {
         targetTextField.setText(targetText);
@@ -710,27 +731,29 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void showStatus(final GameStatus gameStatus, final Integer turnsCount) {
-        String statusString = "[" + turnsCount + "] -";
+        final int stringSize = 40;
+        final StringBuilder stringBuilder = new StringBuilder(stringSize);
+        stringBuilder.append("[" + turnsCount + "] -");
         switch (gameStatus) {
             case ARMIES_PLACEMENT:
             case TERRITORY_OCCUPATION:
-                statusString += "Click the map territory where you want to add armies";
+                stringBuilder.append("Click the map territory where you want to add armies");
                 break;
             case READY_TO_ATTACK:
             case ATTACKING:
-                statusString += "Feel free to attack!";
+                stringBuilder.append("Feel free to attack!");
                 break;
             case CARDS_MANAGING:
-                statusString += "Cards Managing!";
+                stringBuilder.append("Cards Managing!");
                 break;
             default:
                 break;
         }
-        gameStatusPanel.setText(statusString);
+        gameStatusPanel.setText(stringBuilder.toString());
     }
 
     @Override
-    public void enableTanks(boolean enabled) {
+    public void enableTanks(final boolean enabled) {
         tanks.forEach(t -> t.setEnabled(enabled));
     }
 }
