@@ -36,12 +36,12 @@ public final class GameLoopManagerImpl extends ActionHandler implements GameLoop
 
     @Override
     public GameStatus getGameStatus() {
-        return this.getGameStatus();
+        return super.getGameStatus();
     }
 
     @Override
     public Integer getActivePlayerIndex() {
-        return this.getActivePlayerIndex();
+        return super.getActivePlayerIndex();
     }
 
     @Override
