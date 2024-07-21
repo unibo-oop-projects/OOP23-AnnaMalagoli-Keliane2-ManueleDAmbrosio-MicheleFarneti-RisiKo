@@ -7,7 +7,6 @@ import java.util.Map;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
@@ -151,28 +150,31 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     /**
-     * Reads from file thw available maps to be played by checking their related
-     * directory.
+     * Read
      * 
      * @param resourcesPath
-     * @return A map for the the maps and their max number of players.
+     * @return
      */
     public static Map<String, Integer> getAvailableMaps(final String resourcesPath) {
         final Map<String, Integer> availableMaps = new HashMap<>();
-        final var mapsFoldersLocation = resourcesPath + "maps";
-        final var mapsFolderPath = Paths.get(mapsFoldersLocation);
-        if (Files.exists(mapsFolderPath) && Files.isDirectory(mapsFolderPath)) {
-            try {
-                for (final var path : Files.list(mapsFolderPath).collect(Collectors.toList())) {
-                    final var key = Optional.ofNullable(path.getFileName()).map(Path::toString);
-                    final Optional<Integer> value = key.map(k -> getMaxPlayers(mapsFolderPath.resolve(k).toString()));
-                    if (key.isPresent() && value.isPresent()) {
-                        availableMaps.put(key.get(), value.get());
+        final var mapsFoldersLocations = resourcesPath + "maps";
+
+        try {
+            for (final var path : Files.list(Path.of(mapsFoldersLocations)).collect(Collectors.toList())) {
+                if (path != null) {
+                    final var fileName = path.getFileName();
+                    if (fileName != null) {
+                        final var key = Optional.ofNullable(fileName.toString());
+                        if (key.isPresent()) {
+                            final var value = Optional.ofNullable(
+                                    getMaxPlayers(mapsFoldersLocations + File.separator + key.get()));
+                            key.ifPresent(k -> value.ifPresent(v -> availableMaps.put(k, v)));
+                        }
                     }
                 }
-            } catch (IOException e) {
-                return Collections.emptyMap();
             }
+        } catch (IOException e) {
+            return Collections.emptyMap();
         }
         return availableMaps;
     }
