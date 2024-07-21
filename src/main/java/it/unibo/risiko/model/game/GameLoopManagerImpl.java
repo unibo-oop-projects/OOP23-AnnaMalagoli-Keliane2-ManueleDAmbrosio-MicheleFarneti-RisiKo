@@ -30,49 +30,49 @@ public final class GameLoopManagerImpl extends ActionHandler implements GameLoop
      * status of the game and to 0 the index of the activePlayer.
      */
     public GameLoopManagerImpl() {
-        this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
-        this.activePlayerIndex = 0;
+        this.setGameStatus(GameStatus.TERRITORY_OCCUPATION);
+        this.setActivePlayerIndex(0);
     }
 
     @Override
     public GameStatus getGameStatus() {
-        return gameStatus;
+        return this.getGameStatus();
     }
 
     @Override
     public Integer getActivePlayerIndex() {
-        return activePlayerIndex;
+        return this.getActivePlayerIndex();
     }
 
     @Override
     public void placeArmiesIfPossible(final List<Player> players, final String territory,
             final Territories territories) {
-        wasAI = players.get(this.activePlayerIndex).isAI();
+        wasAI = players.get(this.getActivePlayerIndex()).isAI();
         GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
-        switch (this.gameStatus) {
+        switch (this.getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                if (occupationPhaseActionHandler.checkActionAndExceute(activePlayerIndex, players, territory,
+                if (occupationPhaseActionHandler.checkActionAndExceute(this.getActivePlayerIndex(), players, territory,
                         territories)) {
                     newStatus = occupationPhaseActionHandler.getGameStatus();
-                    this.activePlayerIndex = occupationPhaseActionHandler.getActivePlayerIndex();
+                    this.setActivePlayerIndex(occupationPhaseActionHandler.getActivePlayerIndex());
                 }
                 break;
             case ARMIES_PLACEMENT:
-                if (placementPhaseActionHandler.checkActionAndExceute(activePlayerIndex, players, territory,
+                if (placementPhaseActionHandler.checkActionAndExceute(this.getActivePlayerIndex(), players, territory,
                         territories)) {
                     newStatus = placementPhaseActionHandler.getGameStatus();
-                    this.activePlayerIndex = placementPhaseActionHandler.getActivePlayerIndex();
+                    this.setActivePlayerIndex(placementPhaseActionHandler.getActivePlayerIndex());
                 }
                 break;
             default:
                 break;
         }
-        this.gameStatus = newStatus;
+        this.setGameStatus(newStatus);
         checkSkipToAI(players);
     }
 
     private void checkSkipToAI(final List<Player> players) {
-        if (!wasAI && players.get(activePlayerIndex).isAI()) {
+        if (!wasAI && players.get(this.getActivePlayerIndex()).isAI()) {
             skippedToAI = true;
         } else {
             skippedToAI = false;
@@ -81,29 +81,30 @@ public final class GameLoopManagerImpl extends ActionHandler implements GameLoop
 
     @Override
     public void skipTurn(final List<Player> players, final Territories territories) {
-        wasAI = players.get(this.activePlayerIndex).isAI();
+        wasAI = players.get(this.getActivePlayerIndex()).isAI();
         GameStatus newStatus;
-        switch (this.gameStatus) {
+        switch (this.getGameStatus()) {
             case ATTACKING:
             case READY_TO_ATTACK:
-                players.get(nextPlayer(this.activePlayerIndex, players.size()))
+                players.get(nextPlayer(this.getActivePlayerIndex(), players.size()))
                         .computeReinforcements(territories.getListContinents());
-                if (players.get(nextPlayer(this.activePlayerIndex, players.size()))
+                if (players.get(nextPlayer(this.getActivePlayerIndex(), players.size()))
                         .getNumberOfCards() >= MIN_CARDS_PLAYABLE) {
                     newStatus = GameStatus.CARDS_MANAGING;
-                } else if (players.get(nextPlayer(this.activePlayerIndex, players.size())).getArmiesToPlace() > 0) {
+                } else if (players.get(nextPlayer(this.getActivePlayerIndex(), players.size()))
+                        .getArmiesToPlace() > 0) {
                     newStatus = GameStatus.ARMIES_PLACEMENT;
                 } else {
                     newStatus = GameStatus.READY_TO_ATTACK;
                 }
-                activePlayerIndex = nextPlayer(activePlayerIndex, players.size());
-                this.gameStatus = newStatus;
+                this.setActivePlayerIndex(nextPlayer(this.getActivePlayerIndex(), players.size()));
+                this.setGameStatus(newStatus);
                 break;
             default:
                 break;
         }
         checkSkipToAI(players);
-        if (this.activePlayerIndex == 0) {
+        if (this.getActivePlayerIndex() == 0) {
             turnsCount++;
         }
     }
@@ -125,18 +126,18 @@ public final class GameLoopManagerImpl extends ActionHandler implements GameLoop
 
     @Override
     public void setLoopPhase(final GameStatus status) {
-        this.gameStatus = status;
+        this.setGameStatus(status);
     }
 
     @Override
     public boolean isGameOver(final List<Player> players, final Territories territories) {
         final Optional<Player> winner = players.stream().filter(p -> p.getTarget().isAchieved()).findAny();
         if (winner.isPresent()) {
-            if (winner.get().equals(players.get(this.activePlayerIndex))) {
+            if (winner.get().equals(players.get(this.getActivePlayerIndex()))) {
                 return true;
             } else {
-                players.get(this.activePlayerIndex)
-                        .setTarget(new ConquerTerritoriesTarget(players.get(this.activePlayerIndex),
+                players.get(this.getActivePlayerIndex())
+                        .setTarget(new ConquerTerritoriesTarget(players.get(this.getActivePlayerIndex()),
                                 RANDOM
                                         .nextInt(Math.toIntExact(
                                                 Math.round(territories.getListTerritories().size()
