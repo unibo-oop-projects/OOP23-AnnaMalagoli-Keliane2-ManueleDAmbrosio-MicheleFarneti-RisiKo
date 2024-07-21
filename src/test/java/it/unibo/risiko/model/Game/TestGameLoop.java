@@ -22,6 +22,7 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 /**
  * Test for the gameLoopManagement objects. Done by simulating players actions
  * on a game.
+ * @author Michele Farneti
  */
 class TestGameLoop {
 
