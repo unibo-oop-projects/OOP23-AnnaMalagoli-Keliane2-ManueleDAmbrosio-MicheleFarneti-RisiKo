@@ -197,8 +197,8 @@ public class JPanelChoice extends JPanel {
     private boolean cardsAreDifferent(final List<Card> cards) {
 
         return !cards.get(0).getTerritoryName().equals(cards.get(1).getTerritoryName())
-            || !cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName())
-            || !cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName());
+            && !cards.get(0).getTerritoryName().equals(cards.get(2).getTerritoryName())
+            && !cards.get(1).getTerritoryName().equals(cards.get(2).getTerritoryName());
     }
 
     /**
