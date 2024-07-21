@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,20 +21,20 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
-/*public class TestRegister0 {
+public class TestRegister {
     private PlayerFactory pf=new SimplePlayerFactory();
     private Player eventLeader=pf.createStandardPlayer();
-    private Target elTarget= new ConquerTerritoriesTarget(null, 15);
+    private Target elTarget= new ConquerTerritoriesTarget(eventLeader, 15);
     private Player eventLeaderAdversary=pf.createStandardPlayer();
-    private Target elaTarget=new ConquerTerritoriesTarget(null, 0) ;
+    private Target elaTarget=new ConquerTerritoriesTarget(eventLeaderAdversary, 0) ;
     private Territory attacker=new TerritoryImpl("Belgia", "Europe", new ArrayList<String>());
     private Territory defender=new TerritoryImpl("France", "Europe", new ArrayList<String>());
-    private Event e1=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader, eventLeaderAdversary);
-    private Event e2=new EventImpl(EventType.TROOP_MOVEMENT, attacker, defender, eventLeader, eventLeaderAdversary);
-    private Event e3=new EventImpl(EventType.TERRITORY_CONQUEST, attacker, defender, eventLeader, eventLeaderAdversary);
-    private Event e4=new EventImpl(EventType.ATTACK, attacker, defender, eventLeaderAdversary, eventLeader);
-    private Event e5=new EventImpl(EventType.TROOP_MOVEMENT, attacker, defender, eventLeaderAdversary, eventLeader);
-    private Event e6=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader, eventLeaderAdversary);
+    private Event e1=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader,Optional.of(eventLeaderAdversary), Optional.of(5));
+    private Event e2=new EventImpl(EventType.TROOP_MOVEMENT, attacker, defender, eventLeader, Optional.of(eventLeaderAdversary), Optional.of(5));
+    private Event e3=new EventImpl(EventType.TERRITORY_CONQUEST, attacker, defender, eventLeader, Optional.of(eventLeaderAdversary), Optional.of(5));
+    private Event e4=new EventImpl(EventType.ATTACK, attacker, defender, eventLeaderAdversary, Optional.of(eventLeader), Optional.of(5));
+    private Event e5=new EventImpl(EventType.TROOP_MOVEMENT, attacker, defender, eventLeaderAdversary, Optional.of(eventLeader), Optional.of(5));
+    private Event e6=new EventImpl(EventType.ATTACK, attacker, defender, eventLeader, Optional.of(eventLeaderAdversary), Optional.of(5));
 
     @Test
     void testAddEvents(){
@@ -67,4 +68,4 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
         assertEquals(List.of(e1, e2, e6), register.getAllEventsPlayer(this.eventLeader));
     }
 
-}*/
+}
