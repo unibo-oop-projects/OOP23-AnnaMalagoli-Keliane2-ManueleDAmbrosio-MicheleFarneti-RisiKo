@@ -8,16 +8,27 @@ import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
 import it.unibo.risiko.model.player.Player;
 
-public class GameLoopManagerImpl extends ActionHandler implements GameLoopManager {
+/**
+ * Implementation of a gameLoopManger: It will keep track of the status of a
+ * game by updating its gameStatus and activePlayerIndex in relation to the
+ * player's actions.
+ * 
+ * @author Michele Farneti
+ */
+public final class GameLoopManagerImpl extends ActionHandler implements GameLoopManager {
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int MIN_CARDS_PLAYABLE = 1;
     private static final Random RANDOM = new Random();
-    private PlaceArmiesActionHandler occupationPhaseActionHandler = new OccupationPhaseActionHandler();
-    private PlaceArmiesActionHandler placementPhaseActionHandler = new PlacementPhaseActionHandler();
+    private final PlaceArmiesActionHandler occupationPhaseActionHandler = new OccupationPhaseActionHandler();
+    private final PlaceArmiesActionHandler placementPhaseActionHandler = new PlacementPhaseActionHandler();
     private Boolean wasAI = false;
     private Boolean skippedToAI = false;
     private Integer turnsCount = 0;
 
+    /**
+     * Constructor for the gameLoopManager setting to TERRITORY_OCCUPATION the
+     * status of the game and to 0 the index of the activePlayer.
+     */
     public GameLoopManagerImpl() {
         this.gameStatus = GameStatus.TERRITORY_OCCUPATION;
         this.activePlayerIndex = 0;
@@ -34,7 +45,8 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     }
 
     @Override
-    public void placeArmiesIfPossible(List<Player> players, String territory, Territories territories) {
+    public void placeArmiesIfPossible(final List<Player> players, final String territory,
+            final Territories territories) {
         wasAI = players.get(this.activePlayerIndex).isAI();
         GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
         switch (this.gameStatus) {
@@ -59,7 +71,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
         checkSkipToAI(players);
     }
 
-    private void checkSkipToAI(List<Player> players) {
+    private void checkSkipToAI(final List<Player> players) {
         if (!wasAI && players.get(activePlayerIndex).isAI()) {
             skippedToAI = true;
         } else {
@@ -68,9 +80,9 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     }
 
     @Override
-    public void skipTurn(List<Player> players, Territories territories) {
+    public void skipTurn(final List<Player> players, final Territories territories) {
         wasAI = players.get(this.activePlayerIndex).isAI();
-        GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
+        GameStatus newStatus;
         switch (this.gameStatus) {
             case ATTACKING:
             case READY_TO_ATTACK:
@@ -97,7 +109,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     }
 
     @Override
-    public Integer nextPlayer(Integer activePlayer, Integer playersCount) {
+    public Integer nextPlayer(final Integer activePlayer, final Integer playersCount) {
         return super.nextPlayer(activePlayer, playersCount);
     }
 
@@ -112,7 +124,7 @@ public class GameLoopManagerImpl extends ActionHandler implements GameLoopManage
     }
 
     @Override
-    public void setLoopPhase(GameStatus status) {
+    public void setLoopPhase(final GameStatus status) {
         this.gameStatus = status;
     }
 

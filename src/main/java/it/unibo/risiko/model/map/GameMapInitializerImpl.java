@@ -24,7 +24,7 @@ import it.unibo.risiko.model.player.Player;
  * 
  * @author Michele Farneti
  */
-public class GameMapInitializerImpl implements GameMapInitializer {
+public final class GameMapInitializerImpl implements GameMapInitializer {
 
     private static final double MIN_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.6;
     private static final double MAX_TERRITORIES_TO_CONQUER_PERCENTAGE = 0.8;
@@ -150,10 +150,14 @@ public class GameMapInitializerImpl implements GameMapInitializer {
     }
 
     /**
-     * Read
+     * Searches for the names of the folders inside resources/.../maps. Each one of
+     * this folder is going to rappresent a playable map and it's going to have a
+     * maximum number of players who can play it at a time that che extrapolated
+     * from its territories file.
      * 
      * @param resourcesPath
-     * @return
+     * @return A map with the name of every map playable and its associated max
+     *         number of players.
      */
     public static Map<String, Integer> getAvailableMaps(final String resourcesPath) {
         final Map<String, Integer> availableMaps = new HashMap<>();

@@ -54,7 +54,7 @@ public interface GameMapInitializer {
      * @param activePlayer
      * @param players
      * @param territories
-     * @return
+     * @return A random target for a given player
      */
     Target generateTarget(Integer activePlayer, List<Player> players, Territories territories);
 }
