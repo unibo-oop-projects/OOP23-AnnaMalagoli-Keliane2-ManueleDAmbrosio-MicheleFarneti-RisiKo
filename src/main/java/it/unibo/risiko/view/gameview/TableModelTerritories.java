@@ -17,6 +17,7 @@ import it.unibo.risiko.model.map.Territory;
  */
 public class TableModelTerritories extends AbstractTableModel {
 
+    private static final long serialVersionUID = 23L;
     private final List<Territory> listTerritories;
     private final List<Player> listPlayers;
     private static final int NUM_COLUMN = 4;
@@ -71,8 +72,8 @@ public class TableModelTerritories extends AbstractTableModel {
             case 2:
                 return territory.getNumberOfArmies();
             case 3:
-                for(final var player : this.listPlayers) {
-                    if(player.isOwnedTerritory(territory.getTerritoryName())) {
+                for (final var player : this.listPlayers) {
+                    if (player.isOwnedTerritory(territory.getTerritoryName())) {
                         return player.getColorID();
                     }
                 }

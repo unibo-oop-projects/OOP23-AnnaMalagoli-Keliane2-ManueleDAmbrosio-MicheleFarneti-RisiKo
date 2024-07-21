@@ -28,6 +28,7 @@ import it.unibo.risiko.view.gameview.components.DefaultButton;
  */
 public class JPanelChoice extends JPanel {
 
+    private static final long serialVersionUID = 21L;
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color BLACK = new Color(0, 0, 0);
     private static final int INFO_BOTTON_DIMENSION = 80;

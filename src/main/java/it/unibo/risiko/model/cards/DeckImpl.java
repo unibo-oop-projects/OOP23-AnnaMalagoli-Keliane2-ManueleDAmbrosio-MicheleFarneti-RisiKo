@@ -253,13 +253,12 @@ public class DeckImpl implements Deck {
                 if ("Infantry".equals(card.getTypeName())) {
                     numInfantry++;
                 } else {
-                    if ("Cavalry".equals(card.getTypeName())) {
+                    if (!"Jolly".equals(card.getTerritoryName())) {
                         numCavalry++;
                     }
                 }
             }
         }
-
         return numCannons == 1 && numCavalry == 1 && numInfantry == 1;
     }
 
