@@ -27,6 +27,7 @@ public class ContinentImpl implements Continent {
      * Method that returns the continent's name.
      * @return the name of the continent
      */
+    @Override
     public String getName() {
         return this.name;
     }
@@ -35,6 +36,7 @@ public class ContinentImpl implements Continent {
      * Method to get the list of territories of a continent.
      * @return the list of territories
      */
+    @Override
     public List<Territory> getListTerritories() {
         return List.copyOf(this.listTerritories);
     }
@@ -43,6 +45,7 @@ public class ContinentImpl implements Continent {
      * Method used to add a territory in the list of territories of the continent.
      * @param terr is a territory
      */
+    @Override
     public void addTerritory(final Territory terr) {
         listTerritories.add(terr);
     }
@@ -52,6 +55,7 @@ public class ContinentImpl implements Continent {
      * gaines if he has all the territory of the continent.
      * @return the number of bonus armies
      */
+    @Override
     public int getBonusArmies() {
         return this.bonusArmies;
     } 

@@ -22,7 +22,7 @@ public interface Continent {
     /**
      * Method used to add a territory in the list of the continent.
      * @param terr is the territory that has to be added in the list
-     */
+    */
     void addTerritory(Territory terr);
 
     /**

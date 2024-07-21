@@ -75,6 +75,7 @@ public class DeckImpl implements Deck {
      * 
      * @param card is the card that has to be added in the deck
      */
+    @Override
     public void addCard(final Card card) {
         listCards.add(card);
     }
@@ -84,6 +85,7 @@ public class DeckImpl implements Deck {
      * 
      * @return firstCard is the card pulled out from the deck
      */
+    @Override
     public Card pullCard() {
         Card firstCard;
         firstCard = listCards.get(0);
@@ -103,6 +105,7 @@ public class DeckImpl implements Deck {
      * 
      * @return the list of cards
      */
+    @Override
     public List<Card> getListCards() {
         return List.copyOf(this.listCards);
     }
@@ -117,7 +120,7 @@ public class DeckImpl implements Deck {
      *         have the card or an optional that contains the required card
      */
     private Optional<Card> getCardByTerritoryName(final String territoryName, final Player player) {
-        for (var card : player.getOwnedCards()) {
+        for (final var card : player.getOwnedCards()) {
             if (card.getTerritoryName().equals(territoryName)) {
                 return Optional.of(card);
             }
@@ -136,12 +139,13 @@ public class DeckImpl implements Deck {
      * @param name3 is the name of the territory in the third card to be played
      * @param player is the one who plays the three cards during his turn
      */
+    @Override
     public void playCards(final String name1, final String name2, final String name3, final Player player) {
         int numberOfArmies = 0;
-        Card card1 = getCardByTerritoryName(name1, player).get();
-        Card card2 = getCardByTerritoryName(name2, player).get();
-        Card card3 = getCardByTerritoryName(name3, player).get();
-        List<Card> cards = List.of(card1, card2, card3);
+        final Card card1 = getCardByTerritoryName(name1, player).get();
+        final Card card2 = getCardByTerritoryName(name2, player).get();
+        final Card card3 = getCardByTerritoryName(name3, player).get();
+        final List<Card> cards = List.of(card1, card2, card3);
         if (playedThreeCannons(cards)) {
             numberOfArmies = COMBO_THREE_CANNON;
         }
@@ -192,14 +196,14 @@ public class DeckImpl implements Deck {
         int contCannon = 0;
         int contInfantry = 0;
         int contCavalry = 0;
-        for (var card : cards) {
-            if (card.getTypeName().equals("Jolly")) {
+        for (final var card : cards) {
+            if ("Jolly".equals(card.getTypeName())) {
                 contJolly++;
             } else {
-                if (card.getTypeName().equals("Cannon")) {
+                if ("Cannon".equals(card.getTypeName())) {
                     contCannon++;
                 } else {
-                    if (card.getTypeName().equals("Cavalry")) {
+                    if ("Cavalry".equals(card.getTypeName())) {
                         contCavalry++;
                     } else {
                         contInfantry++;
@@ -207,12 +211,8 @@ public class DeckImpl implements Deck {
                 }
             }
         }
-        if (contJolly == 1) {
-            if (contCannon == 2 || contCavalry == 2 || contInfantry == 2) {
-                return true;
-            }
-        }
-        return false;
+
+        return contJolly == 1 && (contCannon == 2 || contCavalry == 2 || contInfantry == 2);
     }
 
     /**
@@ -225,8 +225,8 @@ public class DeckImpl implements Deck {
      */
     private int extraArmies(final List<Card> cards, final Player player) {
         int numExtraArmies = 0;
-        for (var card : cards) {
-            for (var elem : player.getOwnedTerritories()) {
+        for (final var card : cards) {
+            for (final var elem : player.getOwnedTerritories()) {
                 if (elem.equals(card.getTerritoryName())) {
                     numExtraArmies = numExtraArmies + BONUS_ARMIES;
                 }
@@ -246,22 +246,20 @@ public class DeckImpl implements Deck {
         int numCannons = 0;
         int numInfantry = 0;
         int numCavalry = 0;
-        for (var card : cards) {
-            if (card.getTypeName().equals("Cannon")) {
+        for (final var card : cards) {
+            if ("Cannon".equals(card.getTypeName())) {
                 numCannons++;
-            }
-            if (card.getTypeName().equals("Infantry")) {
-                numInfantry++;
-            }
-            if (card.getTypeName().equals("Cavalry")) {
-                numCavalry++;
+            } else {
+                if ("Infantry".equals(card.getTypeName())) {
+                    numInfantry++;
+                } else {
+                    if ("Cavalry".equals(card.getTypeName())) {
+                        numCavalry++;
+                    }
+                }
             }
         }
-        if (numCannons == 1 && numCavalry == 1 && numInfantry == 1) {
-            return true;
-        }
-
-        return false;
+        return numCannons == 1 && numCavalry == 1 && numInfantry == 1;
     }
 
     /**
@@ -272,16 +270,13 @@ public class DeckImpl implements Deck {
      */
     private boolean playedThreeCannons(final List<Card> cards) {
         int numberOfCannons = 0;
-        for (var card : cards) {
-            if (card.getTypeName().equals("Cannon")) {
+        for (final var card : cards) {
+            if ("Cannon".equals(card.getTypeName())) {
                 numberOfCannons++;
             }
         }
-        if (numberOfCannons == 3) {
-            return true;
-        }
 
-        return false;
+        return numberOfCannons == 3;
     }
 
     /**
@@ -292,16 +287,13 @@ public class DeckImpl implements Deck {
      */
     private boolean playedThreeInfantry(final List<Card> cards) {
         int numberOfInfantry = 0;
-        for (var card : cards) {
-            if (card.getTypeName().equals("Infantry")) {
+        for (final var card : cards) {
+            if ("Infantry".equals(card.getTypeName())) {
                 numberOfInfantry++;
             }
         }
-        if (numberOfInfantry == 3) {
-            return true;
-        }
 
-        return false;
+        return numberOfInfantry == 3;
     }
 
     /**
@@ -312,15 +304,12 @@ public class DeckImpl implements Deck {
      */
     private boolean playedThreeCavalry(final List<Card> cards) {
         int numberOfCavalry = 0;
-        for (var card : cards) {
-            if (card.getTypeName().equals("Cavalry")) {
+        for (final var card : cards) {
+            if ("Cavalry".equals(card.getTypeName())) {
                 numberOfCavalry++;
             }
         }
-        if (numberOfCavalry == 3) {
-            return true;
-        }
-        return false;
+        return numberOfCavalry == 3;
     }
 
 }

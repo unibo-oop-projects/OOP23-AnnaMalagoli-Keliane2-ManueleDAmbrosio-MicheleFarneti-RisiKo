@@ -553,7 +553,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     @Override
     public void playCards(final String card1, final String card2, final String card3) {
-        deck.playCards(card1, card2, card2, currentPlayer());
+        deck.playCards(card1, card2, card3, currentPlayer());
         exitCardsManagingPhase();
     }
 
