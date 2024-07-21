@@ -253,7 +253,7 @@ public class DeckImpl implements Deck {
                 if ("Infantry".equals(card.getTypeName())) {
                     numInfantry++;
                 } else {
-                    if (!"Jolly".equals(card.getTerritoryName())) {
+                    if ("Cavalry".equals(card.getTypeName())) {
                         numCavalry++;
                     }
                 }
