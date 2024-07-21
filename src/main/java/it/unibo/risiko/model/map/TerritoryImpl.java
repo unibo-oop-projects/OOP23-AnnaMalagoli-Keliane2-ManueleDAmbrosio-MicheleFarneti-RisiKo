@@ -55,6 +55,7 @@ public class TerritoryImpl implements Territory {
      * 
      * @return the id of the player
      */
+    @Override
     public String getPlayer() {
         return this.playerId;
     }
@@ -64,6 +65,7 @@ public class TerritoryImpl implements Territory {
      * 
      * @param player is the player id
      */
+    @Override
     public void setPlayer(final String player) {
         this.playerId = player;
     }

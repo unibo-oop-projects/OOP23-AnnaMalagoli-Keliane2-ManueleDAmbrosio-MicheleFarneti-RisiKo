@@ -83,7 +83,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void initializeNewGame() {
-        view.showInitializationWindow(GameMapInitializer.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
+        view.showInitializationWindow(GameMapInitializerImpl.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
     }
 
     @Override
@@ -236,9 +236,9 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     private void checkWinner() {
         players.removeIf(p -> p.getOwnedTerritories().size() == 0);
-        // if (gameLoopManager.isGameOver(players, territories)) {
-        // this.view.gameOver(currentPlayer().getColorID());
-        // }
+        if (gameLoopManager.isGameOver(players, territories)) {
+        this.view.gameOver(currentPlayer().getColorID());
+        }
     }
 
     /**
@@ -437,6 +437,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
         if (!currentPlayer().isAI()) {
             switch (gameLoopManager.getGameStatus()) {
                 case TERRITORY_OCCUPATION:
+                case ARMIES_PLACEMENT:
                     view.enableTanks(true);
                     view.enableAttack(false);
                     view.enableSkip(false);
@@ -457,12 +458,6 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                         showCards();
                         cardsPanelOpened = true;
                     }
-                    break;
-                case ARMIES_PLACEMENT:
-                    view.enableTanks(true);
-                    view.enableAttack(false);
-                    view.enableSkip(false);
-                    view.enableMovements(false);
                     break;
                 default:
                     break;
@@ -558,7 +553,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      */
     @Override
     public void playCards(final String card1, final String card2, final String card3) {
-        deck.playCards(card1, card2, card2, currentPlayer());
+        deck.playCards(card1, card2, card3, currentPlayer());
         exitCardsManagingPhase();
     }
 

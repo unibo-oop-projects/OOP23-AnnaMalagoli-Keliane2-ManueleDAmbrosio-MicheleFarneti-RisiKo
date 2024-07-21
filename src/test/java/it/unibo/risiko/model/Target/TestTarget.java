@@ -28,7 +28,7 @@ public class TestTarget {
 
     @Test
     void testPlayerDestroyTarget(){
-        //testing remainingActions and isAchieved of DestroyPlayerTarget
+        testing remainingActions and isAchieved of DestroyPlayerTarget
         PlayerFactory pf=new SimplePlayerFactory();
         Player p1=pf.createStandardPlayer();
         p1.addTerritory(cameroon.getTerritoryName());
@@ -52,7 +52,7 @@ public class TestTarget {
 
     @Test
     void testRemainingActions_ContinentTarget(){
-        //testing remainingActions and isAchieved of ConquerContinentTarget
+        testing remainingActions and isAchieved of ConquerContinentTarget
         PlayerFactory pf=new SimplePlayerFactory();
         Player p2=pf.createStandardPlayer();
         Continent africa=new ContinentImpl("Africa",2);
@@ -75,7 +75,7 @@ public class TestTarget {
     
     @Test
     void testRemainingActions_TerritoryTarget(){
-        //testing remainingActions and isAchieved of ConquerTerritoryTarget
+        testing remainingActions and isAchieved of ConquerTerritoryTarget
         PlayerFactory pf=new SimplePlayerFactory();
         Player p3=pf.createStandardPlayer();
         Target territoryTarget=new ConquerTerritoriesTarget(p3, 3);

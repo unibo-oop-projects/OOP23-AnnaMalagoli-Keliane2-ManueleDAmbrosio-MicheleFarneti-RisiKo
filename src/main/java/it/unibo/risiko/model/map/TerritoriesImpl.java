@@ -113,7 +113,7 @@ public class TerritoriesImpl implements Territories {
      *         -false if the continet has to be inserted into the list of continents
      */
     private boolean isInList(final String continent) {
-        for (var elem : this.listContinents) {
+        for (final var elem : this.listContinents) {
             if (elem.getName().equals(continent)) {
                 return true;
             }
@@ -129,7 +129,7 @@ public class TerritoriesImpl implements Territories {
      * optional. The optional should always contain the continent.
      */
     private Optional<Continent> getContinentFromName(final String name) {
-        for (var elem : this.listContinents) {
+        for (final var elem : this.listContinents) {
             if (elem.getName().equals(name)) {
                 return Optional.of(elem);
             }
@@ -145,7 +145,7 @@ public class TerritoriesImpl implements Territories {
      * optional. The optional should always contain the territory.
      */
     private Optional<Territory> getTerritoryFromName(final String name) {
-        for (var elem : this.listTerritories) {
+        for (final var elem : this.listTerritories) {
             if (elem.getTerritoryName().equals(name)) {
                 return Optional.of(elem);
             }
@@ -161,7 +161,7 @@ public class TerritoriesImpl implements Territories {
      */
     @Override
     public void addArmiesInTerritory(final String territoryName, final int numArmies) {
-        for (var terr : this.listTerritories) {
+        for (final var terr : this.listTerritories) {
             if (terr.getTerritoryName().equals(territoryName)) {
                 terr.addArmies(numArmies);
             }
@@ -176,7 +176,7 @@ public class TerritoriesImpl implements Territories {
      */
     @Override
     public void removeArmiesInTerritory(final String territoryName, final int numArmies) {
-        for (var terr : this.listTerritories) {
+        for (final var terr : this.listTerritories) {
             if (terr.getTerritoryName().equals(territoryName)) {
                 terr.removeArmies(numArmies);
             }
@@ -190,8 +190,8 @@ public class TerritoriesImpl implements Territories {
     */
     @Override
     public boolean territoriesAreNear(final String name1, final String name2) {
-        Territory terr1 = getTerritoryFromName(name1).get();
-        for (var elem : terr1.getListOfNearTerritories()) {
+        final Territory terr1 = getTerritoryFromName(name1).get();
+        for (final var elem : terr1.getListOfNearTerritories()) {
             if (elem.equals(name2)) {
                 return true;
             }
@@ -206,7 +206,7 @@ public class TerritoriesImpl implements Territories {
      */
     @Override
     public void setOwner(final String terrName, final String playerId) {
-        Territory terr = getTerritoryFromName(terrName).get();
+        final Territory terr = getTerritoryFromName(terrName).get();
         terr.setPlayer(playerId);
     }
 }

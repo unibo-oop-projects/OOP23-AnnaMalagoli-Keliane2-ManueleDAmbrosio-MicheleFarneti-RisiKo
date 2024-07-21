@@ -1,5 +1,4 @@
 package it.unibo.risiko.model.map;
-
 import java.util.List;
 
 /**

@@ -5,25 +5,33 @@ import java.util.List;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.player.Player;
 
-public class OccupationPhaseActionHandler extends PlaceArmiesActionHandler {
+/**
+ * A specific actionHandler which is going to handle the placement of armies in
+ * the Territory occupation phase, automatically skipping the turn if the player
+ * has placed enough armies or doesn't have armies left to place and skipping to
+ * the next game phase when every player has no armies left to place.
+ * 
+ * @author Michele Farneti
+ */
+public final class OccupationPhaseActionHandler extends PlaceArmiesActionHandler {
 
     private static final int PLACEABLE_ARMIES_PER_OCCUPATION_TURN = 3;
-    private int armiesPlaced = 0;
+    private int armiesPlaced;
 
     @Override
-    boolean doAction(final Integer actionPlayerIndex, List<Player> players, final String territory,
-            Territories territories) {
+    boolean doAction(final Integer actionPlayerIndex, final List<Player> players, final String territory,
+            final Territories territories) {
         if (armiesPlaced < PLACEABLE_ARMIES_PER_OCCUPATION_TURN) {
             armiesPlaced++;
             this.addArmies(players.get(actionPlayerIndex), territory, territories);
             if (armiesPlaced == PLACEABLE_ARMIES_PER_OCCUPATION_TURN
                     || players.get(actionPlayerIndex).getArmiesToPlace() == 0) {
                 if (getTotalArmiesLeftToPlace(players) <= 0) {
-                    this.activePlayerIndex = nextPlayer(actionPlayerIndex, players.size());
-                    players.get(activePlayerIndex).computeReinforcements(territories.getListContinents());
-                    this.gameStatus = GameStatus.ARMIES_PLACEMENT;
+                    this.setActivePlayerIndex(nextPlayer(actionPlayerIndex, players.size()));
+                    players.get(this.getActivePlayerIndex()).computeReinforcements(territories.getListContinents());
+                    this.setGameStatus(GameStatus.ARMIES_PLACEMENT);
                 } else {
-                    this.activePlayerIndex = nextPlayerWithArmies(actionPlayerIndex, players);
+                    this.setActivePlayerIndex(nextPlayerWithArmies(actionPlayerIndex, players));
                 }
                 armiesPlaced = 0;
             }
@@ -37,9 +45,9 @@ public class OccupationPhaseActionHandler extends PlaceArmiesActionHandler {
      * the game.
      * 
      * @param players
-     * @return
+     * @return number of armies left to be placed.
      */
-    private Integer getTotalArmiesLeftToPlace(List<Player> players) {
+    private Integer getTotalArmiesLeftToPlace(final List<Player> players) {
         return players.stream().mapToInt(p -> p.getArmiesToPlace()).sum();
     }
 
