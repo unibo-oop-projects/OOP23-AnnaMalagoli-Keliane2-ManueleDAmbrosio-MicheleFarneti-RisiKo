@@ -7,17 +7,15 @@ package it.unibo.risiko.model.game;
  * 
  * @author Michele Farneti.
  */
-public class ActionHandlerImpl implements ActionHandler {
+public abstract class ActionHandlerImpl implements ActionHandler {
     private GameStatus gameStatus = GameStatus.TERRITORY_OCCUPATION;
     private Integer activePlayerIndex = 0;
 
     /**
-     * Setter for the gameStatus.
-     * 
      * @implSpec Sublcasses should be careful overriding in order to
      *           not mess up new calls for methods of this class.
-     * @param gameStatus
      */
+    @Override
     public void setGameStatus(final GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
@@ -29,7 +27,7 @@ public class ActionHandlerImpl implements ActionHandler {
      *           not mess up new calls for methods of this class.
      * @param activePlayerIndex
      */
-    public void setActivePlayerIndex(final Integer activePlayerIndex) {
+    protected void setActivePlayerIndex(final Integer activePlayerIndex) {
         this.activePlayerIndex = activePlayerIndex;
     }
 
