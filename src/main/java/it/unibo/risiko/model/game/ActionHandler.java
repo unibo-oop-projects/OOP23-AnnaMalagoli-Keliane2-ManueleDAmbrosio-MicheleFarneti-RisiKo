@@ -25,4 +25,13 @@ public interface ActionHandler {
      */
     GameStatus getGameStatus();
 
+    /**
+     * Setter for the gameStatus.
+     * 
+     * @implSpec Sublcasses should be careful overriding in order to
+     *           not mess up new calls for methods of this class.
+     * @param gameStatus
+     */
+    void setGameStatus(final GameStatus gameStatus);
+
 }
