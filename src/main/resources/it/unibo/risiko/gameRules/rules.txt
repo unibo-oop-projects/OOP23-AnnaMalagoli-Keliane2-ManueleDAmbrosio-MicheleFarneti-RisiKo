@@ -1,33 +1,19 @@
 Regole
+
 Il gioco comincia con la distribuzione ad ogni giocatore di una carta Obiettivo 
 (pescata a caso tra quelle mescolate) e da un numero prestabilito di armate, che 
-cala con l'aumentare dei giocatori (35 armate se si gioca in tre, 30 se si gioca 
-in quattro, 25 se i giocatori sono cinque e 20 se i giocatori sono 6). In seguito, 
-si procede alla distribuzione delle carte territorio, date a tutti i giocatori 
-fino all'esaurimento. Su ognuna di queste carte è indicato un territorio presente 
-sul tabellone: pertanto indicano quali territori siano già in possesso di ogni 
-giocatore, il quale si occuperà di disporre su di essi un numero a propria scelta 
-di carri armati, in modo da occuparli tutti. Una volta effettuata questa 
-preparazione, le carte vengono restituite al giocatore che copre anche il ruolo di 
-mazziere, il quale si occuperà di mescolarle nuovamente e metterle a lato. Si 
-comincia la partita stabilendo chi inizia con il lancio più alto del dado e 
-proseguendo in senso antiorario. Durante il proprio turno ogni giocatore può 
-svolgere tre attività principali: rinforzare le proprie armate, attaccare, spostare. 
-Il rinforzo avviene all'inizio del proprio turno, e consiste nell'incrementare il 
-numero delle proprie armate aggiungendovi ulteriori carri armati risultanti dal 
-numero di territori già occupati diviso tre, arrotondato per difetto. Pertanto, se 
-un giocatore all'inizio del suo turno possiede 9 territori, avrà diritto a rinforzare 
-le proprie armate con tre ulteriori carri armati. Ulteriori rinforzi sono previsti 
-qualora un giocatore sia riuscito ad occupare un intero continente, secondo questo 
-criterio:
-Occupazione dell'Asia: 7 armate
-Nord America o Europa: 5 armate
-Africa : 3 armate
-Oceania o Sud America: 2 armate
-Una volta stabiliti i rinforzi, il giocatore può decidere di svolgere una delle due 
-seguenti azioni: Attacco e/o Spostamento. Attacco: Al suo turno, il giocatore può 
-decidere di attaccare un numero a sua scelta di territori confinanti con le proprie 
-armate. La fase di attacco si svolge tra il giocatore che attacca e quello che 
+cala con l'aumentare dei giocatori. In seguito, si procede alla distribuzione delle carte
+territorio, date a tutti i giocatori fino all'esaurimento. Su ognuna di queste carte è 
+indicato un territorio presente sul tabellone: pertanto indicano quali territori siano già 
+in possesso di ogni giocatore, il quale si occuperà di disporre su di essi un numero a 
+propria scelta di carri armati, in modo da occuparli tutti. Si comincia quindi la partita 
+e durante il proprio turno ogni giocatore può rinforzare le proprie armate, incrementando il 
+numero delle proprie armate aggiungendovi ulteriori carri armati. Una volta stabiliti i rinforzi, 
+il giocatore può decidere di svolgere una delle due seguenti azioni: Attacco e/o Spostamento. 
+
+Attacco: 
+Al suo turno, il giocatore può decidere di attaccare un numero a sua scelta di territori confinanti 
+con le proprie armate. La fase di attacco si svolge tra il giocatore che attacca e quello che 
 difende attraverso il lancio dei dadi. Il numero dei dadi da lanciare è stabilito 
 dal numero di armate che si decide di schierare in guerra meno una, fino ad un massimo 
 di tre dadi per volta. Ognuno dei giocatori lancia il numero di dadi corrispondenti, 
@@ -36,11 +22,13 @@ difensore, il secondo con il secondo e così via. Per ogni punteggio più alto, 
 perdente deve togliere un'armata dal tabellone. In caso di parità il punto va al 
 difensore. La fase di attacco può continuare fino a che uno dei due giocatori non 
 ha esaurito le armate (e in tal caso il territorio viene conquistato) o se l'attaccante 
-decide deliberatamente di sospendere l'attacco. Spostamento: conclusa la fase di attacco, 
-il giocatore può decidere di eseguire un solo spostamento, di quante armate vuole, da un 
-territorio ad un altro. Una volta che un giocatore conquista un nuovo territorio, pesca 
-una carta territorio. Su di esse, oltre al simbolo di un territorio (che in questa fase 
-non viene considerato) c'è un piccolo stemma raffigurante un cannone, un fante o un 
+decide deliberatamente di sospendere l'attacco. 
+
+Spostamento: 
+Conclusa la fase di attacco, il giocatore può decidere di eseguire un solo spostamento, di quante 
+armate vuole, da un territorio ad un altro. Una volta che un giocatore conquista un nuovo
+territorio, pesca una carta territorio. Su di esse, oltre al simbolo di un territorio (che in questa 
+fase non viene considerato) c'è un piccolo stemma raffigurante un cannone, un fante o un 
 cavaliere. Questi stemmi permettono di accrescere ulteriormente il rinforzo. Al 
 raggiungimento di determinate combinazioni di stemmi, si può fare una dichiarazione di 
 gioco e ottenere:
@@ -49,23 +37,15 @@ gioco e ottenere:
 8 armate con tre cavalieri;
 10 armate con tre simboli diversi;
 12 armate con un simbolo jolly e altri due simboli uguali.
-Si può contare inoltre su altre due armate extra se tra le carte dichiarate ce n'è una 
-corrispondente a un territorio già occupato.
-Scopo
-Per determinare lo scopo di gioco, ogni giocatore all'inizio della partita pesca una 
-carta Obiettivo. Queste si differenziano tra loro e solitamente richiedono la conquista 
+
+Scopo:
+All'inizio della partita viene attribuita una carta Obiettivo ad ogni giocatore. Queste si 
+differenziano tra loro e solitamente richiedono la conquista 
 di determinati continenti, di un numero stabilito di territori, o l'eliminazione di 
 un'armata. Più nello specifico, gli obiettivi sono: 
--Conquistare 24 territori; 
--Conquistare 18 territori tenendoli però tutti occupati con almeno due armate ciascuno; 
--Conquistare il Nord America e l'Africa; 
--Conquistare il Nord America e l'Oceania; 
--Conquistare l'Asia e il Sud America; 
--Conquistare l'Asia e l'Africa; 
--Conquistare l'Europa, il Sud America e un terzo continente a scelta; 
--Conquistare l'Europa, l'Oceania e un terzo continente a scelta; 
--Distruggere completamente tutte le armate di un colore (se però tale colore non sta 
-giocando o se corrisponde a quello del giocatore, l'Obiettivo si trasforma in "Conquista 
-24 territori"). Ogni giocatore dovrà quindi riuscire a raggiungere il proprio obiettivo 
+-Conquistare un certo numero di territori; 
+-Conquistare un continente
+-Distruggere completamente tutte le armate di un colore  
+Ogni giocatore dovrà quindi riuscire a raggiungere il proprio obiettivo 
 cercando di non farlo scoprire agli altri giocatori, in modo da essere ostacolato il meno 
 possibile nel raggiungimento dello stesso.
