@@ -15,7 +15,7 @@ public interface InitialView {
      * 
      * @param c the component to show
      */
-    void updatePanel(final Component c);
+    void updatePanel(Component c);
 
     /**
      * Method used to get the dimensios of the GameFrame
@@ -35,5 +35,5 @@ public interface InitialView {
      * @param width  the width of the GameFrame
      * @param height the height of the GameFrame
      */
-    void setResolution(final int int1, final int int2);
+    void setResolution(int int1, int int2);
 }
