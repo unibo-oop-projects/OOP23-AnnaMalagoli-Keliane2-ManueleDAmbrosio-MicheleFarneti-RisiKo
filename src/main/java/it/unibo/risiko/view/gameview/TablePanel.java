@@ -17,12 +17,12 @@ import it.unibo.risiko.model.map.Territory;
  */
 public class TablePanel extends JPanel {
 
-    private static final long serialVersionUID = 22L;
     private static final int HEIGHT = 383;
     private static final int WIDTH = 270;
     private static final int COLUMN_INDEX_PLAYER_ID = 3;
     private static final int COLUMN_INDEX_NUM_ARMIES = 2;
     private final TableModelTerritories tableModelTerritories;
+    public static final long serialVersionUID = 22L;
 
     /**
      * Into the constructor is created the table. 

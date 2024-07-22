@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * A simpl panel with a single button at the centre.
+ * A simple panel with a single button at the centre.
  * 
  * @author Manuele D'Ambrosio
  */
@@ -23,16 +23,14 @@ public class ContinuePanel extends JPanel {
     /** 
      * @param buttonText - text of the central button.
      * @param width - width of the panel.
-     * @param e - action listener of the panel.
+     * @param e - action listener of the button.
      */
     public ContinuePanel(final String buttonText, final int width, final ActionListener e) {
         final JButton continueButton = new DefaultButton(buttonText);
-
         continueButton.setPreferredSize(new Dimension(width / BUTTON_WIDTH_FACTOR, BUTTON_HEIGHT));
         continueButton.addActionListener(e);
         this.setPreferredSize(new Dimension(width, DEFAULT_HEIGHT));
         this.setBackground(BLACK_COLOR);
         this.add(continueButton);
-        
     }
 }

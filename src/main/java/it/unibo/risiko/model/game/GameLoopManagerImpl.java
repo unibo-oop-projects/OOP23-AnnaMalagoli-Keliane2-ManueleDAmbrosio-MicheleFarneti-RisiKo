@@ -15,7 +15,7 @@ import it.unibo.risiko.model.player.Player;
  * 
  * @author Michele Farneti
  */
-public final class GameLoopManagerImpl extends ActionHandler implements GameLoopManager {
+public final class GameLoopManagerImpl extends ActionHandlerImpl implements GameLoopManager {
     private static final double NEW_TARGET_PERCENTAGE = 0.7;
     private static final int MIN_CARDS_PLAYABLE = 1;
     private static final Random RANDOM = new Random();
@@ -32,16 +32,6 @@ public final class GameLoopManagerImpl extends ActionHandler implements GameLoop
     public GameLoopManagerImpl() {
         this.setGameStatus(GameStatus.TERRITORY_OCCUPATION);
         this.setActivePlayerIndex(0);
-    }
-
-    @Override
-    public GameStatus getGameStatus() {
-        return super.getGameStatus();
-    }
-
-    @Override
-    public Integer getActivePlayerIndex() {
-        return super.getActivePlayerIndex();
     }
 
     @Override

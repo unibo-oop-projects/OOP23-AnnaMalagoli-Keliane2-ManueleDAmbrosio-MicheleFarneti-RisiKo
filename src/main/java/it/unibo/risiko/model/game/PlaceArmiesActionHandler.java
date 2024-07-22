@@ -12,7 +12,7 @@ import it.unibo.risiko.model.player.Player;
  * 
  * @author Michele Farneti
  */
-public abstract class PlaceArmiesActionHandler extends ActionHandler {
+public abstract class PlaceArmiesActionHandler extends ActionHandlerImpl {
     /** Number of armies placeable at a time. */
     protected static final Integer PLACEABLE_ARMIES_AT_A_TIME = 1;
 

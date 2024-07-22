@@ -9,25 +9,11 @@ import it.unibo.risiko.model.player.Player;
  * GameLoopManager interface rappresents a class keeping track of the status of
  * the game, calculating and updating it in relation to the players actions. It
  * will be possibile to get infos about the updates in the game status from
- * getters.
+ * getters. Extends the actionHandler interface.
  * 
  * @author Michele Farneti
  */
-public interface GameLoopManager {
-
-    /**
-     * Index of the active player of the game, who is the player who is going to
-     * have the opportunity to make actions.
-     * 
-     * @return An index for the game's player list.
-     */
-    Integer getActivePlayerIndex();
-
-    /**
-     * 
-     * @return Status of the game saved in the GameLoopManager.
-     */
-    GameStatus getGameStatus();
+public interface GameLoopManager extends ActionHandler {
 
     /**
      * If the status of the game allows it (risiko rules), the gameloopmanager will

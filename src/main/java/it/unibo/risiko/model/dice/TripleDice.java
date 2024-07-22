@@ -13,7 +13,6 @@ public interface TripleDice {
      *Initial value.
      */
     int INITIAL_VALUE = 0;
-    
     /**
      * Value of an invalid or unused throw. 
      */

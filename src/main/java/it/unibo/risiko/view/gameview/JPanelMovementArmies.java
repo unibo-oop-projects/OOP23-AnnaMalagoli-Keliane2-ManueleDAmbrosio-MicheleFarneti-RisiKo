@@ -31,7 +31,6 @@ import java.awt.Dimension;
  */
 public class JPanelMovementArmies extends JPanel {
 
-    private static final long serialVersionUID = 24L;
     private static final Color BACKGROUND_COLOR = new Color(63, 58, 20);
     private static final Color BLACK = new Color(0, 0, 0);
     private static final int BOTTON_DIMENSION = 600;
@@ -39,6 +38,7 @@ public class JPanelMovementArmies extends JPanel {
     private static final int MAX_NUM_ARMIES = 100;
     private static final int CHOICE_SIZE = 30;
     private final List<Territory> listTerritories;
+    public static final long serialVersionUID = 24L;
 
     /**
      * Through the constructor the JPanelMovementArmies is set.
