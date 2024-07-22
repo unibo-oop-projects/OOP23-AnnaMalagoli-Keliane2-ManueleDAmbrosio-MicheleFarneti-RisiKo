@@ -54,7 +54,7 @@ public class NewGameInitViewImpl extends JPanel {
     private final List<Integer> maxPlayersList = new ArrayList<>();
 
     @SuppressFBWarnings(value = "EI2", justification = "observer is intentionally mutable")
-    private transient final GameViewObserver observer;
+    private final transient GameViewObserver observer;
 
     /**
      * New game default panel.

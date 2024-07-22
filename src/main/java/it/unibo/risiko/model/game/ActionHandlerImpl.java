@@ -14,7 +14,7 @@ public class ActionHandlerImpl implements ActionHandler {
     /**
      * Setter for the gameStatus.
      * 
-     * @implSpec Sublcasses should be careful voerriding in order to
+     * @implSpec Sublcasses should be careful overriding in order to
      *           not mess up new calls for methods of this class.
      * @param gameStatus
      */
@@ -25,7 +25,7 @@ public class ActionHandlerImpl implements ActionHandler {
     /**
      * Setter for the player index.
      * 
-     * @implSpec Sublcasses should be careful voerriding in order to
+     * @implSpec Sublcasses should be careful overriding in order to
      *           not mess up new calls for methods of this class.
      * @param activePlayerIndex
      */
@@ -33,11 +33,19 @@ public class ActionHandlerImpl implements ActionHandler {
         this.activePlayerIndex = activePlayerIndex;
     }
 
+    /**
+     * @implSpec Sublcasses should be careful overriding in order to
+     *           not mess up new calls for methods of this class.
+     */
     @Override
     public Integer getActivePlayerIndex() {
         return activePlayerIndex;
     }
 
+    /**
+     * @implSpec Sublcasses should be careful overriding in order to
+     *           not mess up new calls for methods of this class.
+     */
     @Override
     public GameStatus getGameStatus() {
         return gameStatus;
@@ -47,7 +55,7 @@ public class ActionHandlerImpl implements ActionHandler {
      * @param activePlayer the index of the current player.
      * @param playersCount the number of players in the game.
      * @return The index of the player coming up next.
-     * @implSpec Sublcasses should be careful voerriding in order to
+     * @implSpec Sublcasses should be careful overriding in order to
      *           not mess up new calls for methods of this class.
      */
     protected Integer nextPlayer(final Integer activePlayer, final Integer playersCount) {

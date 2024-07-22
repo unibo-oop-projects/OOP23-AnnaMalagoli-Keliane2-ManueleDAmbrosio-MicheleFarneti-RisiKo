@@ -57,7 +57,7 @@ public class AttackPanel extends JPanel {
     private final int width;
 
     @SuppressFBWarnings(value = "EI2", justification = "observer is intentionally mutable")
-    private transient final GameViewObserver observer;
+    private final transient GameViewObserver observer;
     private List<Integer> attDice;
     private List<Integer> defDice;
     private final String attacking;
