@@ -28,11 +28,11 @@ public abstract class PlaceArmiesActionHandler extends ActionHandlerImpl {
      * @param territories       The territories of the game.
      * @return True if it wass possible to execute the action
      */
-    public boolean checkActionAndExceute(final Integer activePlayerIndex, final List<Player> players,
+    public boolean checkPlaceableAndExecute(final Integer activePlayerIndex, final List<Player> players,
             final String territory,
             final Territories territories) {
         if (players.get(activePlayerIndex).getArmiesToPlace() > 0) {
-            return doAction(activePlayerIndex, players, territory, territories);
+            return updateStatus(activePlayerIndex, players, territory, territories);
         }
         return false;
     }
@@ -48,7 +48,7 @@ public abstract class PlaceArmiesActionHandler extends ActionHandlerImpl {
      * @param territories       The territories of the game.
      * @return True if it wass possible to execute the action
      */
-    abstract boolean doAction(Integer activePlayerIndex, List<Player> players, String territory,
+    protected abstract boolean updateStatus(Integer activePlayerIndex, List<Player> players, String territory,
             Territories territories);
 
     /**

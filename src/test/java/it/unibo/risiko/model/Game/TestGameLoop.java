@@ -89,19 +89,19 @@ class TestGameLoop {
         players.get(0).setArmiesToPlace(3);
         players.get(1).setArmiesToPlace(3);
         for (Integer i = 0; i < 3; i++) {
-            occupationActionHandler.checkActionAndExceute(0, players, territoryPlayer1, territories);
+            occupationActionHandler.checkPlaceableAndExecute(0, players, territoryPlayer1, territories);
         }
         assertEquals(1, occupationActionHandler.getActivePlayerIndex());
         assertEquals(GameStatus.TERRITORY_OCCUPATION, occupationActionHandler.getGameStatus());
 
         for (Integer i = 0; i < 3; i++) {
-            occupationActionHandler.checkActionAndExceute(1, players, territoryPlayer1, territories);
+            occupationActionHandler.checkPlaceableAndExecute(1, players, territoryPlayer1, territories);
         }
 
         assertEquals(0, occupationActionHandler.getActivePlayerIndex());
         assertEquals(GameStatus.ARMIES_PLACEMENT, occupationActionHandler.getGameStatus());
 
-        armiesPlacementHandler.checkActionAndExceute(0, players, territoryPlayer1, territories);
+        armiesPlacementHandler.checkPlaceableAndExecute(0, players, territoryPlayer1, territories);
         assertEquals(0, occupationActionHandler.getActivePlayerIndex());
         assertEquals(GameStatus.ARMIES_PLACEMENT, occupationActionHandler.getGameStatus());
     }

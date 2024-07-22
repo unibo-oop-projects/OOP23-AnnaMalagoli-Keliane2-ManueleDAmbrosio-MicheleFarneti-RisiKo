@@ -19,7 +19,7 @@ public final class OccupationPhaseActionHandler extends PlaceArmiesActionHandler
     private int armiesPlaced;
 
     @Override
-    boolean doAction(final Integer actionPlayerIndex, final List<Player> players, final String territory,
+    protected boolean updateStatus(final Integer actionPlayerIndex, final List<Player> players, final String territory,
             final Territories territories) {
         if (armiesPlaced < PLACEABLE_ARMIES_PER_OCCUPATION_TURN) {
             armiesPlaced++;
@@ -66,5 +66,4 @@ public final class OccupationPhaseActionHandler extends PlaceArmiesActionHandler
             return nextPlayerWithArmies(nextPlayer(playerIndex, players.size()), players);
         }
     }
-
 }

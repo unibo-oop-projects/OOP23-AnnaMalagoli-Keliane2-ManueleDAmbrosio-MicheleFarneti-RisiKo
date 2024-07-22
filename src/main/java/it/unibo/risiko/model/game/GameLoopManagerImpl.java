@@ -41,14 +41,14 @@ public final class GameLoopManagerImpl extends ActionHandlerImpl implements Game
         GameStatus newStatus = GameStatus.ARMIES_PLACEMENT;
         switch (this.getGameStatus()) {
             case TERRITORY_OCCUPATION:
-                if (occupationPhaseActionHandler.checkActionAndExceute(this.getActivePlayerIndex(), players, territory,
+                if (occupationPhaseActionHandler.checkPlaceableAndExecute(this.getActivePlayerIndex(), players, territory,
                         territories)) {
                     newStatus = occupationPhaseActionHandler.getGameStatus();
                     this.setActivePlayerIndex(occupationPhaseActionHandler.getActivePlayerIndex());
                 }
                 break;
             case ARMIES_PLACEMENT:
-                if (placementPhaseActionHandler.checkActionAndExceute(this.getActivePlayerIndex(), players, territory,
+                if (placementPhaseActionHandler.checkPlaceableAndExecute(this.getActivePlayerIndex(), players, territory,
                         territories)) {
                     newStatus = placementPhaseActionHandler.getGameStatus();
                     this.setActivePlayerIndex(placementPhaseActionHandler.getActivePlayerIndex());
