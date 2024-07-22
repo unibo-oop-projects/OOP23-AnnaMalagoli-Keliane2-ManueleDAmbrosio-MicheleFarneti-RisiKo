@@ -1,7 +1,6 @@
 package it.unibo.risiko.view.gameview;
 
 import java.util.List;
-import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.map.Territory;
@@ -18,12 +17,12 @@ import it.unibo.risiko.model.map.Territory;
  */
 public class TableModelTerritories extends AbstractTableModel {
 
-    public static final long serialVersionUID = 23L;
-    private final transient List<Territory> listTerritories;
-    private final transient List<Player> listPlayers;
+    private final List<Territory> listTerritories;
+    private final List<Player> listPlayers;
     private static final int NUM_COLUMN = 4;
     /*the following list is used to contain the name of every column in the table*/
     private final String[] columnsName = {"Territory", "Continent", "NumArmies", "Player"};
+    public static final long serialVersionUID = 28L;
 
     /**
      * Method to set datas in the table model.

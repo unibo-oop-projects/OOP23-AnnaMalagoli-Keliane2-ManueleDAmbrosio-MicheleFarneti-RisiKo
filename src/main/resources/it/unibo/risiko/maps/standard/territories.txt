@@ -3,7 +3,7 @@ Great-Britain West-Europe North-Europe Scandinavia Iceland
 Europe:
 Iceland Great-Britain Scandinavia Greenland
 Europe:
-Scandinavia Ukraine North-Europe Great-Britain
+Scandinavia Ukraine North-Europe Great-Britain Iceland
 Europe:
 North-Europe West-Europe South-Europe Ukraine Scandinavia Great-Britain
 Europe:
