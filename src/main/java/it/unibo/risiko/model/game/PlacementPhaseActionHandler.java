@@ -15,7 +15,7 @@ import it.unibo.risiko.model.player.Player;
 public final class PlacementPhaseActionHandler extends PlaceArmiesActionHandler {
 
     @Override
-    boolean doAction(final Integer actionPlayerIndex, final List<Player> players, final String territory,
+    protected boolean doAction(final Integer actionPlayerIndex, final List<Player> players, final String territory,
             final Territories territories) {
         this.addArmies(players.get(actionPlayerIndex), territory, territories);
         if (players.get(actionPlayerIndex).getArmiesToPlace() == 0) {

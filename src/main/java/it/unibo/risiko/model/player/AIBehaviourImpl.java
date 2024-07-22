@@ -29,6 +29,10 @@ public final class AIBehaviourImpl implements AIBehaviour {
     private Optional<Territory> nextAttackingTerritory;
     private Optional<Territory> nextAttackedTerritory;
 
+    /**
+     * @param playerOwnedTerritories - list of territories owned by the player.
+     * @param playerOwnedCards - list of cards owned by the player.
+     */
     public AIBehaviourImpl(final List<Territory> playerOwnedTerritories, final List<Card> playerOwnedCards) {
         this.playerTerritoryList = new ArrayList<>(playerOwnedTerritories);
         this.playerCardList = new ArrayList<>(playerOwnedCards);

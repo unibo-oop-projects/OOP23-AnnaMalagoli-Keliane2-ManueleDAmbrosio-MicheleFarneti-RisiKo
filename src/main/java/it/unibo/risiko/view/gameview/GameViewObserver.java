@@ -2,7 +2,7 @@ package it.unibo.risiko.view.gameview;
 
 /**
  * Observer used by the view to interact with the controller by calling it's
- * void methods
+ * void methods.
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
@@ -19,17 +19,17 @@ public interface GameViewObserver {
     /**
      * Method used to start a new game.
      * 
-     * @param mapName                 - name of the map.
+     * @param mapName - name of the map.
      * @param players - number of players controlled by humans.
-     * @param bots       - number of players controlled by the
-     *                                computer.
+     * @param bots    - number of players controlled by the
+     *                computer.
      * @author Manuele D'Ambrosio.
      */
     void startNewGame(String mapName, int players, int bots);
 
     /**
      * Method that compute the attack after setting the number of
-     * attacking armies and updates the view
+     * attacking armies and updates the view.
      * 
      * @param armies - Number of armies that are attacking.
      * @author Manuele D'Ambrosio.
@@ -54,7 +54,7 @@ public interface GameViewObserver {
     void setMovingArmies(int armies);
 
     /**
-     * Tells the controller that the user clicked on a territory
+     * Tells the controller that the user clicked on a territory.
      * 
      * @author Michele Farneti
      * @param territory The selected territory'sname
@@ -72,10 +72,10 @@ public interface GameViewObserver {
      * Method used to move a certain amount of armies between two
      * adjacent territories.
      * 
-     * @param src is the source territory
-     * @param dst is the destination territory
+     * @param src    is the source territory
+     * @param dst    is the destination territory
      * @param armies is the number of armies that the player
-     * wants to move
+     *               wants to move
      * 
      * @author Anna Malagoli
      */
@@ -93,21 +93,21 @@ public interface GameViewObserver {
     void playCards(String card1, String card2, String card3);
 
     /**
-     * Alerts the controller that the move armies button has been clicked
+     * Alerts the controller that the move armies button has been clicked.
      * 
      * @author Michele Farneti
      */
     void moveClicked();
 
     /**
-     * Alerts the controller that the armies movement phase has concluded
+     * Alerts the controller that the armies movement phase has concluded.
      * 
      * @author Michele Farneti
      */
     void closeMovementPhase();
 
     /**
-     * Alert the controller that the card managing phase has concluded
+     * Alert the controller that the card managing phase has concluded.
      * 
      * @author Michele Farneti
      */

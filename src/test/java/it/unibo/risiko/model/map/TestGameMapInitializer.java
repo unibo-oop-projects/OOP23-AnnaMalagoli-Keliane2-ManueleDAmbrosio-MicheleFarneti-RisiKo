@@ -28,8 +28,7 @@ class TestGameMapInitializer {
         static void setResoucesString() {
                 testResourcePath = "src" + FILE_SEPARATOR + "test" + FILE_SEPARATOR + "java" + FILE_SEPARATOR + "it"
                                 + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko" + FILE_SEPARATOR + "model"
-                                + FILE_SEPARATOR + "map" + FILE_SEPARATOR +
-                                "testresources";
+                                + FILE_SEPARATOR + "testresources";
                 playerFactory = new SimplePlayerFactory();
         }
 
@@ -51,7 +50,8 @@ class TestGameMapInitializer {
                 assertEquals(SMALL_MAP_NAME, testMap.getMapName());
                 assertEquals(testMap.getMaxPlayers(), 2);
                 final Territories territories = new TerritoriesImpl(testMap.getTerritoriesPath());
-                assertEquals(6, territories.getListTerritories().size());
+                final int territoriesPresent = 6;
+                assertEquals(territoriesPresent, territories.getListTerritories().size());
                 final List<String> territoriesNames = territories.getListTerritories().stream()
                                 .map(t -> t.getTerritoryName())
                                 .collect(Collectors.toList());
@@ -61,15 +61,17 @@ class TestGameMapInitializer {
                 final List<Continent> continentNames = territories.getListContinents();
                 assertEquals("Europa", continentNames.get(0).getName());
 
-                assertEquals(5, testMap.getStartingArmies(3));
-                assertEquals(10, testMap.getStartingArmies(2));
+                final int startArmiesFor3 = 5;
+                final int startArmiesFor2 = 10;
+                assertEquals(startArmiesFor3, testMap.getStartingArmies(3));
+                assertEquals(startArmiesFor2, testMap.getStartingArmies(2));
 
                 final var deck = new DeckImpl(testMap.getDeckPath());
-                assertEquals(deck.getListCards().size(), 1);
+                assertEquals(1, deck.getListCards().size());
 
                 final Player player1 = playerFactory.createStandardPlayer();
                 final Player player2 = playerFactory.createAIPlayer();
-                //final var target = testMap.generateTarget(0, List.of(player1, player2), territories);
-                //assertEquals(target.getPlayer(), player1);
+                final var target = testMap.generateTarget(0, List.of(player1, player2), territories);
+                assertEquals(player1.getColorID(), target.getPlayer().getColorID());
         }
 }

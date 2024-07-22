@@ -43,7 +43,7 @@ import it.unibo.risiko.view.initview.InitialViewObserver;
  * @author Anna Malagoli
  * @author Keliane Nana
  */
-public class GameController implements GameViewObserver, InitialViewObserver {
+public final class GameController implements GameViewObserver, InitialViewObserver {
     private static final String FILE_SEPARATOR = File.separator;
     private static final String RESOURCES_PACKAGE_STRING = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR
             + "resources" + FILE_SEPARATOR + "it" + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko";
@@ -63,11 +63,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     private Territories territories;
     private List<Player> players;
     private Deck deck;
-    Boolean cardsPanelOpened = false;
+    private Boolean cardsPanelOpened = false;
 
     /**
      * Initialization of the Game controller with a GameManager as model field and a
-     * Java Swing view
+     * Java Swing view.
      * 
      * @author Michele Farneti
      */
@@ -83,7 +83,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     @Override
     public void initializeNewGame() {
-        view.showInitializationWindow(GameMapInitializerImpl.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
+        view.showInitializationWindow(
+                GameMapInitializerImpl.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
     }
 
     @Override
@@ -97,7 +98,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * Updates the view in such a way to show the players icons
+     * Updates the view in such a way to show the players icons.
      * 
      * @author Michele Farneti
      */
@@ -121,7 +122,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * AIBehaviour handler
+     * AIBehaviour handler, enables to simulate the ai player actions by using the
+     * methods called by the standard players themself updating the game enviroment.
      * 
      * @author Michele Farneti
      * @autho Manuele D'Ambrosio
@@ -166,7 +168,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
     /**
      * Check if the current player has cards to be played and eventually shows him
-     * the menu
+     * the menu.
      * 
      * @Author Michele Farneti
      */
@@ -177,7 +179,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * Resets the current territories set as attacker and defender
+     * Resets the current territories set as attacker and defender.
      * 
      * @author Michele Farneti
      */
@@ -200,12 +202,11 @@ public class GameController implements GameViewObserver, InitialViewObserver {
                 if (currentPlayer().isOwnedTerritory(territory) && getArmiesInTerritory(territory) > 1) {
                     setFighter(territory, true);
                 } else if (defenderTerritory.isEmpty() && attackerTerritory.isPresent()
-                        && !currentPlayer().isOwnedTerritory(territory)) {
-                    if (territories.territoriesAreNear(attackerTerritory.get(),
-                            territory)) {
-                        setFighter(territory, false);
-                        startAttack();
-                    }
+                        && !currentPlayer().isOwnedTerritory(territory)
+                        && territories.territoriesAreNear(attackerTerritory.get(),
+                                territory)) {
+                    setFighter(territory, false);
+                    startAttack();
                 }
                 break;
 
@@ -230,7 +231,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
      * 
      * Checks if the current player won the game, eventually displaying
      * a gameover window, also remove player without territories from the players
-     * lists
+     * lists.
      * 
      * @author Michele Farneti
      */
@@ -257,7 +258,7 @@ public class GameController implements GameViewObserver, InitialViewObserver {
             attackPhase = new AttackPhaseImpl(
                     getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() > MAX_ATTACKING_ARMIES
                             ? MAX_ATTACKING_ARMIES
-                            : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies(),
+                            : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES,
                     getArmiesInTerritory(defenderTerritory.get()));
 
             // Creation of attack event.
@@ -271,14 +272,23 @@ public class GameController implements GameViewObserver, InitialViewObserver {
 
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
+                final Player attacked = getOwner(getTerritoryFromString(defenderTerritory.get()));
                 final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies()
                         - MIN_ARMIES;
 
                 // Conquer Event
                 createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
                         getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
-                        Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
+                        Optional.of(attacked),
                         Optional.empty());
+
+                // Steal cards
+                if (attacked.isDefeated()) {
+                    for (final Card card : attacked.getOwnedCards()) {
+                        currentPlayer().addCard(card);
+                        attacked.removeCard(card);
+                    }
+                }
 
                 conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
@@ -325,11 +335,20 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
+            final Player attacked = getOwner(getTerritoryFromString(defenderTerritory.get()));
 
             createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
                     getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
                     Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
                     Optional.empty());
+
+            // Steal cards
+            if (attacked.isDefeated()) {
+                for (final Card card : attacked.getOwnedCards()) {
+                    currentPlayer().addCard(card);
+                    attacked.removeCard(card);
+                }
+            }
 
             view.updateLog();
             view.drawConquerPanel();
@@ -375,12 +394,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * @param reg
      * @param type
      * @param attacker
      * @param defender
      * @param eventLeader
      * @param eventLeaderAdversary
+     * @param numArmies
      * @author Keliane Nana
      */
     private void createEvent(final EventType type, final Territory attacker, final Territory defender,
@@ -401,10 +420,12 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * The territory passed as argument is set as AttackerTerritory and is Higligted
-     * by the GUI
+     * The territory passed as argument is set as attacker or defender and is
+     * highlighted by the GUI.
      * 
      * @param territory
+     * @param isAttacker True if the territory has to be higligthed as attacker,
+     *                   false if it is a defender.
      * @author Michele Farneti
      */
     private void setFighter(final String territory, final boolean isAttacker) {
@@ -495,8 +516,8 @@ public class GameController implements GameViewObserver, InitialViewObserver {
     }
 
     /**
-     * @param minimuArmiesPerTerritory The minimum number of armies every territory
-     *                                 has to have when it's owned by someone
+     * @param minimumArmiesPerTerritory The minimum number of armies every territory
+     *                                  has to have when it's owned by someone.
      * @author Michele Farneti
      */
     private void assignTerritories(final Integer minimumArmiesPerTerritory) {

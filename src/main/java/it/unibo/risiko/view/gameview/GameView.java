@@ -10,22 +10,25 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.Player;
 
 /**
- * The view interface for the game phase of the application
+ * The view interface for the game phase of the application.
  * 
  * @author Michele Farneti
  * @author Manuele D'Ambrosio
  * @author Keliane Nana
+ * @author Anna Malagoli
  */
 public interface GameView {
 
     /**
-     * Starts the view by setting up all of the main components
+     * Starts the view by setting up all of the main components.
      * 
      * @author Michele Farneti
      */
     void start();
 
     /**
+     * Displays a window used for initializating the game by selecting the map and
+     * the number of standard or ai players.
      * 
      * @author Michele Farneti
      * @param mapNames A map with the name of the GameMap names and associated
@@ -34,7 +37,7 @@ public interface GameView {
     void showInitializationWindow(Map<String, Integer> mapNames);
 
     /**
-     * Shows the game window used for displaying the events happening in the
+     * Shows the game window used for displaying the events happening in the game.
      * 
      * @param mapName       The name of the map Used for the game
      * @param playersNumber The number of players playing the game
@@ -44,7 +47,7 @@ public interface GameView {
 
     /**
      * Activates the placing and the viewing of the tanks buttons over their
-     * respective territories
+     * respective territories.
      * 
      * @param territories Territories list of the game map
      * @author Michele Farneti
@@ -52,10 +55,10 @@ public interface GameView {
     void showTanks(List<Territory> territories);
 
     /**
-     * Setups one turn icon bar with the players' info
+     * Setups one turn icon bar with the players' info.
      * 
      * @param player       the player
-     * @param playersIndex The player's index in the games turns
+     * @param playerIndex The player's index in the games turns
      * @author Michele Farneti
      */
     void showTurnIcon(Player player, int playerIndex);
@@ -70,7 +73,7 @@ public interface GameView {
 
     /**
      * Highlights a territory in a different way either if it is attacking ord
-     * defending
+     * defending.
      * 
      * @param territory  The territory wich is going to be higlighted as attacker
      * @param isAttacker
@@ -90,14 +93,12 @@ public interface GameView {
      * occupation and updating the armies count label.
      * 
      * @param territory
-     * @param playerColor
-     * @param numberOfArmies The count of the armies placed over the territory.
      * @author Michele Farneti
      */
     void redrawTank(Territory territory);
 
     /**
-     * Updates the gameView making it show who is the winner of the game
+     * Updates the gameView making it show who is the winner of the game.
      * 
      * @param winnerColor
      * @author Michele Farneti
@@ -139,7 +140,7 @@ public interface GameView {
     void closeAttackPanel();
 
     /**
-     * Handles MoveArmiesPanel closure if it's closed without completing a move
+     * Handles MoveArmiesPanel closure if it's closed without completing a move.
      *
      * @author Michele Farneti
      */
@@ -207,7 +208,7 @@ public interface GameView {
 
     /**
      * 
-     * Enables or deactivates Clicks over the maps tanks
+     * Enables or deactivates Clicks over the maps tanks.
      * 
      * @author Michele Farneti
      * @param enabled True if the buttons have to be enabled
@@ -216,7 +217,7 @@ public interface GameView {
 
     /**
      * 
-     * Enables or deactivates the button used for skipping
+     * Enables or deactivates the button used for skipping.
      * 
      * @author Michele Farneti
      * @param enabled True if the button has to be enabled
@@ -233,7 +234,7 @@ public interface GameView {
     void enableAttack(boolean enabled);
 
     /**
-     * Creates the logPanel used to display the events of the register
+     * Creates the logPanel used to display the events of the register.
      * 
      * @param reg the register
      * @param l   the list of the players
@@ -242,7 +243,7 @@ public interface GameView {
     void createLog(Register reg, List<Player> l);
 
     /**
-     * Updates the log with the events that should be visualized
+     * Updates the log with the events that should be visualized.
      * 
      * @author Keliane Nana
      */
@@ -262,7 +263,7 @@ public interface GameView {
     void updateTablePanel();
 
     /**
-     * Handles Cards panel closure
+     * Handles Cards panel closure.
      * 
      * @author Michele Farneti
      */
