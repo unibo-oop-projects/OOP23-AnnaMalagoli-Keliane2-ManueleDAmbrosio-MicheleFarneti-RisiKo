@@ -1,26 +1,27 @@
-package it.unibo.risiko.model.game;
+package it.unibo.risiko.model.player;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
-import it.unibo.risiko.model.player.Player;
-import it.unibo.risiko.model.player.PlayerFactory;
-import it.unibo.risiko.model.player.SimplePlayerFactory;
+
+/**
+ * @author Manuele D'Ambrosio
+ */
 
 public final class GameSave {
+    private static final int OWNER = 2;
     private static final String SEP = File.separator;
     private static final String NEW_LINE = System.lineSeparator();
     private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
@@ -37,37 +38,33 @@ public final class GameSave {
     }
 
     public GameSave() {
-        try (InputStreamReader streamReader = new InputStreamReader(new FileInputStream(PATH));
+        try (InputStreamReader streamReader = new InputStreamReader(new FileInputStream(PATH), StandardCharsets.UTF_8);
                 BufferedReader reader = new BufferedReader(streamReader);) {
-            final PlayerFactory pFactory = new SimplePlayerFactory();
             String map;
             int numberOfPlayers;
             List<String> line;
-            List<Player> pList = new ArrayList<>();
-            List<Territory> tList = new ArrayList<>();
+            final List<Player> pList = new ArrayList<>();
+            final List<Territory> tList = new ArrayList<>();
             Territory newTerritory;
-            String row;
+            Optional<String> row;
 
             map = reader.readLine();
             numberOfPlayers = Integer.parseInt(reader.readLine());
             for (int i = 0; i < numberOfPlayers; i++) {
-                row = reader.readLine();
-                line = Arrays.asList(row.substring(0, row.length() - 1).split(" "));
-                if ("true".equals(line.get(1))) {
-                    pList.add(pFactory.createAIPlayer());
-                } else {
-                    pList.add(pFactory.createStandardPlayer());
-                }
+                row = Optional.ofNullable(reader.readLine());
+                line = Arrays.asList(row.get().substring(0, row.get().length() - 1).split(" "));
+                pList.add(new StdPlayer(line.get(0), Boolean.parseBoolean(line.get(1))));
             }
-            row = reader.readLine();
-            while (row.length() > 1) {
-                line = Arrays.asList(row.substring(0, row.length() - 1).split(" "));
+            row = Optional.ofNullable(reader.readLine());
+            while (row.isPresent()) {
+                line = Arrays.asList(row.get().substring(0, row.get().length() - 1).split(" "));
                 newTerritory = new TerritoryImpl(line.get(0), map, List.of());
                 newTerritory.addArmies(Integer.parseInt(line.get(1)));
+                newTerritory.setPlayer(line.get(OWNER));
                 tList.add(newTerritory);
-                row = reader.readLine();
+                row = Optional.ofNullable(reader.readLine());
             }
-            //Initializing game save.
+            // Initializing game save.
             this.mapName = map;
             this.playerList = pList;
             this.territoryList = tList;
@@ -92,18 +89,19 @@ public final class GameSave {
     }
 
     private boolean saveWriter(final String savePath) {
-        try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath))) {
+        try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath), StandardCharsets.UTF_8)) {
             // In the fisrt line there is the map name.
             saveFile.write(this.mapName + NEW_LINE);
             // In the second line there is the number of players.
             saveFile.write(playerList.size() + NEW_LINE);
             // Players names.
             for (final Player player : playerList) {
-                saveFile.write(player.getColorID() + player.isAI() + NEW_LINE);
+                saveFile.write(player.getColorID() + " " + player.isAI() + " " + NEW_LINE);
             }
             // Territories with armies and owners.
             for (final Territory t : territoryList) {
-                saveFile.write(t.getTerritoryName() + t.getNumberOfArmies() + t.getPlayer() + NEW_LINE);
+                saveFile.write(
+                        t.getTerritoryName() + " " + t.getNumberOfArmies() + " " + t.getPlayer() + " " + NEW_LINE);
             }
         } catch (IOException e) {
             return false;
