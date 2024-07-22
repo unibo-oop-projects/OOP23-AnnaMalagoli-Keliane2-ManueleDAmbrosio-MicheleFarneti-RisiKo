@@ -3,16 +3,20 @@ package it.unibo.risiko;
 import it.unibo.risiko.controller.GameController;
 
 /**
- * The main class of the game.
+ * Class containing main.
+ * 
+ * @author Michele Farneti
+ * @author Anna Malagoli
+ * @author Keliane Nana
+ * @author Manuele D'Ambrosio
  */
 public final class Program {
-
     private Program() {
         // This constructor is intentionally private.
     }
 
     /**
-     * The main for starting the game.
+     * Main.
      * 
      * @param args
      */

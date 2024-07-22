@@ -237,9 +237,9 @@ public final class GameController implements GameViewObserver, InitialViewObserv
      */
     private void checkWinner() {
         players.removeIf(p -> p.getOwnedTerritories().size() == 0);
-        // if (gameLoopManager.isGameOver(players, territories)) {
-        // this.view.gameOver(currentPlayer().getColorID());
-        // }
+        if (gameLoopManager.isGameOver(players, territories)) {
+            this.view.gameOver(currentPlayer().getColorID());
+        }
     }
 
     /**

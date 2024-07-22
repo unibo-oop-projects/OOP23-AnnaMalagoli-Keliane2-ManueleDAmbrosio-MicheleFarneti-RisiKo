@@ -12,7 +12,6 @@ import it.unibo.risiko.model.objective.Target;
  * cards.
  * 
  * @author Manuele D'Ambrosio
- * @author Keliane Nana
  */
 
 public interface Player {
