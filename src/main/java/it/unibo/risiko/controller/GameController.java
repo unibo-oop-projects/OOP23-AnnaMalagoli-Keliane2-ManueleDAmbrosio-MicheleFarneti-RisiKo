@@ -238,7 +238,7 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     private void checkWinner() {
         players.removeIf(p -> p.getOwnedTerritories().size() == 0);
         // if (gameLoopManager.isGameOver(players, territories)) {
-        //     this.view.gameOver(currentPlayer().getColorID());
+        // this.view.gameOver(currentPlayer().getColorID());
         // }
     }
 
@@ -272,14 +272,23 @@ public final class GameController implements GameViewObserver, InitialViewObserv
 
             // Conquer of the territory.
             if (attackPhase.isTerritoryConquered()) {
+                final Player attacked = getOwner(getTerritoryFromString(defenderTerritory.get()));
                 final int armiesToMove = getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies()
                         - MIN_ARMIES;
 
                 // Conquer Event
                 createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
                         getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
-                        Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
+                        Optional.of(attacked),
                         Optional.empty());
+
+                // Steal cards
+                if (attacked.isDefeated()) {
+                    for (final Card card : attacked.getOwnedCards()) {
+                        currentPlayer().addCard(card);
+                        attacked.removeCard(card);
+                    }
+                }
 
                 conquerAndDraw(attackerTerritory.get(), defenderTerritory.get(), armiesToMove);
 
@@ -326,11 +335,20 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     @Override
     public void conquerIfPossible() {
         if (attackPhase.isTerritoryConquered()) {
+            final Player attacked = getOwner(getTerritoryFromString(defenderTerritory.get()));
 
             createEvent(EventType.TERRITORY_CONQUEST, getTerritoryFromString(attackerTerritory.get()),
                     getTerritoryFromString(defenderTerritory.get()), currentPlayer(),
                     Optional.of(getOwner(getTerritoryFromString(defenderTerritory.get()))),
                     Optional.empty());
+
+            // Steal cards
+            if (attacked.isDefeated()) {
+                for (final Card card : attacked.getOwnedCards()) {
+                    currentPlayer().addCard(card);
+                    attacked.removeCard(card);
+                }
+            }
 
             view.updateLog();
             view.drawConquerPanel();
