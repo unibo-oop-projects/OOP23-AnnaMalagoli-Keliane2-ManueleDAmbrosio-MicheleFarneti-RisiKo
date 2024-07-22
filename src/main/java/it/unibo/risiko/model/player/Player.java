@@ -194,7 +194,7 @@ public interface Player {
     boolean drawNewCardIfPossible(Card card);
 
     /**
-     * This method is used to clone a player.
+     * This method is used to get the player instance.
      * 
      * @return a player's clone
      * @author Keliane Nana
