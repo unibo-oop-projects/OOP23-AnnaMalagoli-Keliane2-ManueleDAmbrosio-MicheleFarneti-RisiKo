@@ -9,16 +9,17 @@ import it.unibo.risiko.model.player.Player;
 
 /**
  * The Register's implementation
+ * 
  * @author Keliane Nana
  */
-public class RegisterImpl implements Register{
+public class RegisterImpl implements Register {
     private List<Event> register;
 
     public RegisterImpl() {
         this.register = new ArrayList<>();
     }
 
-    public RegisterImpl(Register reg){
+    public RegisterImpl(final Register reg) {
         this.register = reg.getAllEvents();
     }
 
@@ -37,12 +38,12 @@ public class RegisterImpl implements Register{
         if (this.register.isEmpty()) {
             return null;
         }
-        return this.register.get(this.register.size()-1);
+        return this.register.get(this.register.size() - 1);
     }
 
     @Override
     public List<Event> getAllEventsPlayer(final Player player) {
-        List<Event> l=new ArrayList<>();
+        List<Event> l = new ArrayList<>();
         for (Event e : this.register) {
             if (e.getEventLeaderId().equals(player.getColorID())) {
                 l.add(e);
@@ -50,5 +51,5 @@ public class RegisterImpl implements Register{
         }
         return l;
     }
-    
+
 }

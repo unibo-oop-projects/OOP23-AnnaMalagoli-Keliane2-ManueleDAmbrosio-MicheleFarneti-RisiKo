@@ -20,21 +20,24 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
 
+/**
+ * @author Keliane Nana
+ */
 public class TestTarget {
-    private Territory nigeria=new TerritoryImpl("Nigeria", "Africa", List.of("Cameroon","Tchad","Niger"));
-    private Territory cameroon =new TerritoryImpl("Cameroon", "Africa", List.of("Nigeria","Tchad","Niger"));
-    private Territory tchad=new TerritoryImpl("Tchad", "Africa", List.of("Cameroon","Nigeria","Niger"));
-    private Territory italy=new TerritoryImpl("Italy", "Europe", List.of("Belgia","Francia"));
+    private Territory nigeria = new TerritoryImpl("Nigeria", "Africa", List.of("Cameroon", "Tchad", "Niger"));
+    private Territory cameroon = new TerritoryImpl("Cameroon", "Africa", List.of("Nigeria", "Tchad", "Niger"));
+    private Territory tchad = new TerritoryImpl("Tchad", "Africa", List.of("Cameroon", "Nigeria", "Niger"));
+    private Territory italy = new TerritoryImpl("Italy", "Europe", List.of("Belgia", "Francia"));
 
     @Test
-    void testPlayerDestroyTarget(){
-        //testing remainingActions and isAchieved of DestroyPlayerTarget
-        PlayerFactory pf=new SimplePlayerFactory();
-        Player p1=pf.createStandardPlayer();
+    void testPlayerDestroyTarget() {
+        // testing remainingActions and isAchieved of DestroyPlayerTarget
+        PlayerFactory pf = new SimplePlayerFactory();
+        Player p1 = pf.createStandardPlayer();
         p1.addTerritory(cameroon.getTerritoryName());
         p1.addTerritory(italy.getTerritoryName());
-        Player p3=pf.createStandardPlayer();
-        Target playerDestroyTarget=new DestroyPlayerTarget(p3, p1);
+        Player p3 = pf.createStandardPlayer();
+        Target playerDestroyTarget = new DestroyPlayerTarget(p3, p1);
         p3.setTarget(playerDestroyTarget);
         assertEquals(2, playerDestroyTarget.remainingActions());
         assertFalse(playerDestroyTarget.isAchieved());
@@ -51,15 +54,15 @@ public class TestTarget {
     }
 
     @Test
-    void testRemainingActions_ContinentTarget(){
-        //testing remainingActions and isAchieved of ConquerContinentTarget
-        PlayerFactory pf=new SimplePlayerFactory();
-        Player p2=pf.createStandardPlayer();
-        Continent africa=new ContinentImpl("Africa",2);
+    void testRemainingActions_ContinentTarget() {
+        // testing remainingActions and isAchieved of ConquerContinentTarget
+        PlayerFactory pf = new SimplePlayerFactory();
+        Player p2 = pf.createStandardPlayer();
+        Continent africa = new ContinentImpl("Africa", 2);
         africa.addTerritory(nigeria);
         africa.addTerritory(cameroon);
         africa.addTerritory(tchad);
-        Target continentTarget=new ConquerContinentTarget(p2, africa);
+        Target continentTarget = new ConquerContinentTarget(p2, africa);
         p2.setTarget(continentTarget);
         assertEquals(3, continentTarget.remainingActions());
         assertFalse(continentTarget.isAchieved());
@@ -72,13 +75,13 @@ public class TestTarget {
         assertEquals(0, continentTarget.remainingActions());
         assertTrue(continentTarget.isAchieved());
     }
-    
+
     @Test
-    void testRemainingActions_TerritoryTarget(){
-        //testing remainingActions and isAchieved of ConquerTerritoryTarget
-        PlayerFactory pf=new SimplePlayerFactory();
-        Player p3=pf.createStandardPlayer();
-        Target territoryTarget=new ConquerTerritoriesTarget(p3, 3);
+    void testRemainingActions_TerritoryTarget() {
+        // testing remainingActions and isAchieved of ConquerTerritoryTarget
+        PlayerFactory pf = new SimplePlayerFactory();
+        Player p3 = pf.createStandardPlayer();
+        Target territoryTarget = new ConquerTerritoriesTarget(p3, 3);
         p3.setTarget(territoryTarget);
         assertEquals(3, territoryTarget.remainingActions());
         assertFalse(territoryTarget.isAchieved());

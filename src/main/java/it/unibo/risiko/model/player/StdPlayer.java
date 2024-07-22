@@ -16,6 +16,7 @@ import it.unibo.risiko.model.objective.Target;
  * Implementation of Player interface.
  * 
  * @author Manuele D'Ambrosio
+ * @author Keliane Nana
  */
 public final class StdPlayer implements Player {
     private static final int REINFORCEMENT_FACTOR = 3;

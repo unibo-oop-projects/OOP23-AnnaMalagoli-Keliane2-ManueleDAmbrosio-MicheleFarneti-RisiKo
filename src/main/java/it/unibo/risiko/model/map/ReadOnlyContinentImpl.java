@@ -4,15 +4,16 @@ import java.util.List;
 
 /**
  * ReadOnlyContinent implementation
+ * 
  * @author Keliane Nana
  */
-public class ContinentProxy implements ReadOnlyContinent {
+public class ReadOnlyContinentImpl implements ReadOnlyContinent {
     private final String name;
     private final List<Territory> listTerritories;
 
-    public ContinentProxy(final Continent continent) {
+    public ReadOnlyContinentImpl(final Continent continent) {
         this.name = continent.getName();
-        this.listTerritories = List.copyOf(continent.getListTerritories()); 
+        this.listTerritories = List.copyOf(continent.getListTerritories());
     }
 
     @Override
