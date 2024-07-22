@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -19,11 +20,13 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
 import java.io.File;
 
 /**
+ * Test class used to test the deck.
  * @author Anna Malagoli
  */
-public class TestDeck {
+class TestDeck {
 
-    private String separator = File.separator;
+    private final String separator = File.separator;
+    private static final String CAVALRY = "Cavalry";
 
     /**
      * Test used to verify the correction of the class DeckImpl.
@@ -36,9 +39,9 @@ public class TestDeck {
         final Card firstCardRemoved;
         final Card card = new CardImpl("Italy", "Infantry");
         /* definition of three cards that will be added to the deck */
-        final Card cardAdded1 = new CardImpl("Spain", "Cavalry");
-        final Card cardAdded2 = new CardImpl("Great-Britain", "Infantry");
-        final Card cardAdded3 = new CardImpl("France", "Cavalry");
+        final Card cardAdded1 = new CardImpl("Spain", CAVALRY);
+        final Card cardAdded2 = new CardImpl("Great-Britain", CAVALRY);
+        final Card cardAdded3 = new CardImpl("France", CAVALRY);
         /* extraction of the list of cards in the deck */
         final List<Card> deckList = deck.getListCards();
 
@@ -68,24 +71,27 @@ public class TestDeck {
         deck.addCard(cardAdded3);
     }
 
+    /**
+     * Test created to verify the play of three cards by a player.
+     */
     @Test
     void testPlaysOfCards() {
         final String path = "src/test/java/it/unibo/risiko/deck/DeckCards.txt";
         final Deck deck = new DeckImpl(path);
         /* cards that will be added to the deck */
-        final Card card1 = new CardImpl("Italy", "Cavalry");
-        final Card card2 = new CardImpl("Spain", "Cavalry");
+        final Card card1 = new CardImpl("Italy", CAVALRY);
+        final Card card2 = new CardImpl("Spain", CAVALRY);
         final Card card3 = new CardImpl("Great-Britain", "Infantry");
-        final Card card4 = new CardImpl("France", "Cavalry");
+        final Card card4 = new CardImpl("France", CAVALRY);
         deck.addCard(card1);
         deck.addCard(card2);
         deck.addCard(card3);
         deck.addCard(card4);
 
         /* creation of the set of territories owned by the player */
-        Set<String> playerTerritories = new HashSet<String>();
+        final Set<String> playerTerritories = new HashSet<>();
         playerTerritories.add("Spain");
-        Player player = new SimplePlayerFactory().createStandardPlayer();
+        final Player player = new SimplePlayerFactory().createStandardPlayer();
         player.setOwnedTerritories(playerTerritories);
         /* added cards to the list of cards of the player */
         player.addCard(card1);
@@ -103,32 +109,5 @@ public class TestDeck {
         assertEquals(10, player.getArmiesToPlace());
         assertEquals(0, player.getOwnedCards().size());
     }
-
-    /** DA RIMUOVERE PERCHè metodo privato
-     * Test per verificare funzionamento del metodo getCardFromNameTerritory 
-    @Test
-    void testGetCardFromNameTerritory() {
-    *creation of a player*
-    Player player = new SimplePlayerFactory().createStandardPlayer();
-    final String path = "src/test/java/it/unibo/risiko/deck/DeckCards.txt";
-    final Deck deck = new DeckImpl(path);
-    *definition of four cards*
-    final Card card1 = new CardImpl("Italy", "Cavalry");
-    final Card card2 = new CardImpl("Spain", "Cavalry");
-    final Card card3 = new CardImpl("Great-Britain", "Infantry");
-    final Card card4 = new CardImpl("France", "Cavalry");
-    * added the four cards to the player *
-    player.addCard(card1);
-    player.addCard(card2);
-    player.addCard(card3);
-    player.addCard(card4);
-    *verification that the card extracted from the list of cards of the player is
-    corrected *
-    assertEquals(card3, deck.getCardByTerritoryName("Great-Britain",
-    player).get());
-    assertEquals(card3.getTerritoryName(),
-    deck.getCardByTerritoryName(card3.getTerritoryName(),
-    player).get().getTerritoryName());
-    }*/
 
 }

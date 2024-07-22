@@ -20,11 +20,11 @@ import it.unibo.risiko.model.map.TerritoryImpl;
  * 
  * @author Anna Malagoli
  */
-class MainTest {
+class TestTerritories {
 
     private static final String ITALIA = "Italia";
     private static final String FRANCIA = "Francia";
-    private String separator = File.separator;
+    private final String separator = File.separator;
 
     /**
      * Test of the method of the class TerritoryImpl.
@@ -73,60 +73,25 @@ class MainTest {
         assertEquals(continent.getListTerritories().get(1).getTerritoryName(), FRANCIA);
         // Added three armies in Italia
         territories.addArmiesInTerritory(ITALIA, 3);
-        for (var elem : territoriesList) {
-            if (elem.getTerritoryName().equals(ITALIA)) {
+        for (final var elem : territoriesList) {
+            if (ITALIA.equals(elem.getTerritoryName())) {
                 assertEquals(elem.getNumberOfArmies(), 3);
             }
         }
     }
 
+    /**
+     * Test the method used to verify if two territories are adjacent.
+     */
     @Test
     void testTwoTerritoriesAreNear() {
         final String path = "src" + separator + "test" + separator + "java" + separator + "it" + separator + "unibo"
                 + separator + "risiko" + separator + "model" + separator + "territories" + separator
                 + "Territories.txt";
         final Territories territories = new TerritoriesImpl(path);
-        System.out.println(territories.getListTerritories().size());
-        for (var elem : territories.getListTerritories()) {
-            System.out.println(elem.getTerritoryName());
-        }
+
         assertTrue(territories.territoriesAreNear("Francia", "Italia"));
         assertFalse(territories.territoriesAreNear("Italia", "Spagna"));
     }
-
-    /*
-     * @Test
-     * public void testMovementOfArmiesBetweenTwoTerritory() {
-     * final String path = "src/test/java/it/unibo/risiko/Territories.txt";
-     * final Territories territories = new Territories(path);
-     * Verify if the movement of 3 armies between ITALY and SPAIN is permetted
-     * and does as expected.
-     * 
-     * territories.addArmiesInTerritory(ITALIA, 4);
-     * Territory France = territories.getListTerritories().get(1);
-     * Territory Italy = territories.getListTerritories().get(0);
-     * int movedArmies = Italy.getNumberOfArmies() - 1;
-     * territories.moveArmiesFromPlaceToPlace(ITALIA, FRANCIA, movedArmies);
-     * assertEquals(1, Italy.getNumberOfArmies());
-     * assertEquals(movedArmies, France.getNumberOfArmies());
-     * }
-     */
-
-    /*
-     * @Test
-     * public void testMovementOfArmiesBetweenTwoTerritory() {
-     * extracion of two territories that are in the territories example file
-     * GameController controller = new GameController();
-     * final String path = "src/test/java/it/unibo/risiko/Territories.txt";
-     * final Territories territories = new Territories(path);
-     * territories.addArmiesInTerritory(ITALIA, 4);
-     * Territory France = territories.getListTerritories().get(1);
-     * Territory Italy = territories.getListTerritories().get(0);
-     * int movedArmies = Italy.getNumberOfArmies() - 1;
-     * controller.moveArmies(ITALIA, FRANCIA, movedArmies);
-     * assertEquals(1, Italy.getNumberOfArmies());
-     * assertEquals(movedArmies, France.getNumberOfArmies());
-     * }
-     */
 
 }
