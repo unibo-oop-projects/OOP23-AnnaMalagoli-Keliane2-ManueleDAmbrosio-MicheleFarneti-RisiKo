@@ -237,9 +237,9 @@ public final class GameController implements GameViewObserver, InitialViewObserv
      */
     private void checkWinner() {
         players.removeIf(p -> p.getOwnedTerritories().size() == 0);
-        if (gameLoopManager.isGameOver(players, territories)) {
-            this.view.gameOver(currentPlayer().getColorID());
-        }
+        // if (gameLoopManager.isGameOver(players, territories)) {
+        //     this.view.gameOver(currentPlayer().getColorID());
+        // }
     }
 
     /**
@@ -258,7 +258,7 @@ public final class GameController implements GameViewObserver, InitialViewObserv
             attackPhase = new AttackPhaseImpl(
                     getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() > MAX_ATTACKING_ARMIES
                             ? MAX_ATTACKING_ARMIES
-                            : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies(),
+                            : getTerritoryFromString(attackerTerritory.get()).getNumberOfArmies() - MIN_ARMIES,
                     getArmiesInTerritory(defenderTerritory.get()));
 
             // Creation of attack event.
