@@ -11,6 +11,10 @@ public abstract class ActionHandlerImpl implements ActionHandler {
     private GameStatus gameStatus = GameStatus.TERRITORY_OCCUPATION;
     private Integer activePlayerIndex = 0;
 
+    /**
+     * @implSpec Sublcasses should be careful overriding in order to
+     *           not mess up new calls for methods of this class.
+     */
     @Override
     public void setGameStatus(final GameStatus gameStatus) {
         this.gameStatus = gameStatus;
