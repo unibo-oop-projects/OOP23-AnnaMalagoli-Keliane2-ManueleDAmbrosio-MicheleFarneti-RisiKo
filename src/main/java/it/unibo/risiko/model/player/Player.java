@@ -11,7 +11,6 @@ import it.unibo.risiko.model.objective.Target;
  * Contains player status and informations as well as owned territories and cards.
  * 
  * @author Manuele D'Ambrosio
- * @author Keliane Nana
  */
 
 public interface Player {
