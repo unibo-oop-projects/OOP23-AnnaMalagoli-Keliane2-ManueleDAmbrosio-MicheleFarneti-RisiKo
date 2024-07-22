@@ -8,7 +8,8 @@ import it.unibo.risiko.model.map.Continent;
 import it.unibo.risiko.model.objective.Target;
 
 /**
- * Contains player status and informations as well as owned territories and cards.
+ * Contains player status and informations as well as owned territories and
+ * cards.
  * 
  * @author Manuele D'Ambrosio
  * @author Keliane Nana
@@ -21,7 +22,7 @@ public interface Player {
      * a player has to place.
      * 
      * @param armiesToPlace - int value representig the number
-     * of armies that the player has to place.
+     *                      of armies that the player has to place.
      */
     void setArmiesToPlace(int armiesToPlace);
 
@@ -29,8 +30,8 @@ public interface Player {
      * This method is used to set the territories owned
      * by the player.
      * 
-     * @param ownedTerritories - Set containing the name of 
-     * the territories owned by the player.
+     * @param ownedTerritories - Set containing the name of
+     *                         the territories owned by the player.
      */
     void setOwnedTerritories(Set<String> ownedTerritories);
 
@@ -58,7 +59,7 @@ public interface Player {
     void addCard(Card newCard);
 
     /**
-     * This method is used to get the target of the 
+     * This method is used to get the target of the
      * player.
      * 
      * @return the target of the player.
@@ -81,7 +82,7 @@ public interface Player {
     int getArmiesToPlace();
 
     /**
-     * This method is used to get a collection containing 
+     * This method is used to get a collection containing
      * the territories owned by the player.
      * 
      * @return the names of the territories owned by the player.
@@ -89,7 +90,7 @@ public interface Player {
     Collection<String> getOwnedTerritories();
 
     /**
-     * This method is used to get a collection containing 
+     * This method is used to get a collection containing
      * the cards owned by the player.
      * 
      * @return the cards owned by the player.
@@ -97,7 +98,7 @@ public interface Player {
     Collection<Card> getOwnedCards();
 
     /**
-     * This method is used to get the number of cards 
+     * This method is used to get the number of cards
      * owned by the player.
      * 
      * @return the number of cards owned by the player.
@@ -126,22 +127,22 @@ public interface Player {
     void decrementArmiesToPlace();
 
     /**
-     * This metod is used to remove a card from the 
+     * This metod is used to remove a card from the
      * set of cards owned by the player.
      * 
      * @param card - card to be removed.
      * @return true if the card was possesed by the player,
-     * false otherwise.
+     *         false otherwise.
      */
     boolean removeCard(Card card);
 
     /**
-     * This metod is used to remove a territory from the 
+     * This metod is used to remove a territory from the
      * set of territories owned by the player.
      * 
      * @param territory - name of the territory to be removed.
      * @return true if the territory was possesed by the
-     * player, false otherwise.
+     *         player, false otherwise.
      */
     boolean removeTerritory(String territory);
 
@@ -151,7 +152,7 @@ public interface Player {
      * player has also been defeated.
      * 
      * @return true if the player has lost all of his
-     * territories, false otherwise.
+     *         territories, false otherwise.
      */
     boolean isDefeated();
 
@@ -161,17 +162,17 @@ public interface Player {
      * 
      * @param card - card to check.
      * @return true if the player owns the card, false
-     * otherwise.
+     *         otherwise.
      */
     boolean isOwnedCard(Card card);
 
     /**
-     * This method is used to know if a player owns a 
+     * This method is used to know if a player owns a
      * certain territory.
      * 
      * @param territory - name of the territory to check.
-     * @return True if the player owns the territory, false 
-     * otherwise.
+     * @return True if the player owns the territory, false
+     *         otherwise.
      */
     boolean isOwnedTerritory(String territory);
 
@@ -180,7 +181,7 @@ public interface Player {
      * a human or AI.
      * 
      * @return true if the player is not controlled by
-     * a human, false otherwise.
+     *         a human, false otherwise.
      */
     boolean isAI();
 
@@ -189,14 +190,14 @@ public interface Player {
      * 
      * @param card - the card to draw.
      * @return true it a new card has been drawn,
-     * false otherwise.
+     *         false otherwise.
      */
     boolean drawNewCardIfPossible(Card card);
 
     /**
      * This method is used to get the player instance.
      * 
-     * @return a player's clone
+     * @return the player
      * @author Keliane Nana
      */
     Player clonePlayer();
