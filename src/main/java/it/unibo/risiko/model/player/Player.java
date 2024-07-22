@@ -13,7 +13,7 @@ import it.unibo.risiko.model.objective.Target;
  * @author Manuele D'Ambrosio
  */
 
-public interface Player extends Cloneable{
+public interface Player {
 
     /**
      * This method is used to set the number of armies
@@ -197,5 +197,5 @@ public interface Player extends Cloneable{
      * @return a player's clone
      * @author Keliane Nana
      */
-    Player clone();
+    Player clonePlayer();
 }

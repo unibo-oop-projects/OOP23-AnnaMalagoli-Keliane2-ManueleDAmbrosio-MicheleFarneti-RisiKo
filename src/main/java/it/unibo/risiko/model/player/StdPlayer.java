@@ -1,6 +1,7 @@
 package it.unibo.risiko.model.player;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -83,12 +84,12 @@ public final class StdPlayer implements Player {
 
     @Override
     public Collection<String> getOwnedTerritories() {
-        return List.copyOf(this.ownedTerritories);
+        return Collections.unmodifiableCollection(this.ownedTerritories);
     }
 
     @Override
     public Collection<Card> getOwnedCards() {
-        return List.copyOf(this.ownedCards);
+        return Collections.unmodifiableCollection(this.ownedCards);
     }
 
     @Override
@@ -191,15 +192,7 @@ public final class StdPlayer implements Player {
         this.hasDrawnNewCard = false;
     }
 
-    @Override
-    public StdPlayer clone() {
-        try {
-            final StdPlayer cloned = (StdPlayer) super.clone();
-            cloned.ownedTerritories = new HashSet<>(this.ownedTerritories);
-            cloned.ownedCards = new HashSet<>(this.ownedCards);
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            return new StdPlayer(this.colorID, isAI());
-        }
+    public Player clonePlayer(){
+        return this;
     }
 }

@@ -11,7 +11,7 @@ public class DestroyPlayerTarget extends BaseTarget {
     
     public DestroyPlayerTarget(final Player player,final Player playerToDestroy) {
         super(player);
-        this.playerToDestroy=playerToDestroy.clone();
+        this.playerToDestroy=playerToDestroy.clonePlayer();
     }
 
     @Override

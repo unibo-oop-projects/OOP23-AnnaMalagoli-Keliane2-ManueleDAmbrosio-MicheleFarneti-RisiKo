@@ -10,12 +10,12 @@ public abstract class BaseTarget implements Target{
     private final Player player;
 
     public BaseTarget(final Player player) {
-        this.player = player.clone();
+        this.player = player.clonePlayer();
     }
     
     @Override
     public Player getPlayer(){
-        return this.player.clone();
+        return this.player.clonePlayer();
     }
 
     @Override
