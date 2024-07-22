@@ -48,7 +48,7 @@ public abstract class PlaceArmiesActionHandler extends ActionHandlerImpl {
      * @param territories       The territories of the game.
      * @return True if it wass possible to execute the action
      */
-    abstract boolean updateStatus(Integer activePlayerIndex, List<Player> players, String territory,
+    protected abstract boolean updateStatus(Integer activePlayerIndex, List<Player> players, String territory,
             Territories territories);
 
     /**
