@@ -643,8 +643,13 @@ public final class GameController implements GameViewObserver, InitialViewObserv
         gameLoopManager.setActivePlayerIndex(save.getTurnIndex());
         gameLoopManager.setGameStatus(GameStatus.READY_TO_ATTACK);
         players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
-
         linkPlayerTerritories();
+
+        this.setupGameView();
+        while (players.get(gameLoopManager.getActivePlayerIndex()).isAI()) {
+            handleAIBehaviour();
+        }
+        redrawView();
     }
 
     @Override

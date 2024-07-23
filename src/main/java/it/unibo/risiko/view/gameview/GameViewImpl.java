@@ -151,6 +151,7 @@ public final class GameViewImpl implements GameView {
     private JButton skipButton;
     private JButton attackButton;
     private JButton moveArmiesButton;
+    private JButton saveButton;
 
     private int mapWidth;
     private int mapHeight;
@@ -679,6 +680,7 @@ public final class GameViewImpl implements GameView {
     @Override
     public void enableAttack(final boolean enabled) {
         attackButton.setEnabled(enabled);
+        saveButton.setEnabled(enabled);
     }
 
     /**
