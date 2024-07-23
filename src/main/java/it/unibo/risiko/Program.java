@@ -12,8 +12,9 @@ import it.unibo.risiko.controller.GameController;
  */
 public final class Program {
     private Program() {
-        //This constructor is intentionally private.
+        // This constructor is intentionally private.
     }
+
     /**
      * Main.
      * 

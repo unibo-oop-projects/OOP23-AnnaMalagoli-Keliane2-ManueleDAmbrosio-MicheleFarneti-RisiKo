@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /**
- * The gameFrame implementation
+ * The gameFrame implementation.
  * 
  * @author Keliane Nana
  */
@@ -16,18 +16,26 @@ public class InitialViewImpl implements InitialView {
     private static final int INITIAL_FRAME_WIDTH = 80;
     private static final int INITIAL_FRAME_HEIGHT = 80;
     private final JFrame frame;
-    private final PrincipalMenu menuPanel;
 
+    /**
+     * 
+     * @param controller the game controller
+     */
     public InitialViewImpl(final InitialViewObserver controller) {
-        this.menuPanel = new PrincipalMenu(this, controller);
+        final PrincipalMenu menuPanel = new PrincipalMenu(this, controller);
         this.frame = new JFrame("***Risiko***");
         this.frame.setLayout(new BorderLayout());
-        this.updatePanel(menuPanel);
+        this.frame.getContentPane().add(menuPanel);
         this.frame.setSize(INITIAL_FRAME_WIDTH, INITIAL_FRAME_HEIGHT);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.show();
     }
 
+    /**
+     * This method updates the view that should be shown by the GameFrame.
+     * 
+     * @param c the component to show
+     */
     @Override
     public void updatePanel(final Component c) {
         this.frame.getContentPane().removeAll();
@@ -36,13 +44,19 @@ public class InitialViewImpl implements InitialView {
         this.frame.getContentPane().add(c);
     }
 
+    /**
+     * This method helps to set the GameFrame resolution.
+     * 
+     * @param width  the width of the GameFrame
+     * @param height the height of the GameFrame
+     */
     @Override
     public void setResolution(final int width, final int height) {
         this.frame.setSize(width, height);
     }
 
     /**
-     * This method is used to make sure the GameFrame will be visible
+     * This method is used to make sure the GameFrame will be visible.
      */
     private void show() {
         this.frame.pack();
@@ -50,11 +64,19 @@ public class InitialViewImpl implements InitialView {
         this.frame.setVisible(true);
     }
 
+    /**
+     * Method used to get the dimensios of the GameFrame.
+     * 
+     * @return GameFrame's risolutions
+     */
     @Override
     public Dimension getFrameRisolution() {
         return this.frame.getSize();
     }
 
+    /**
+     * method used to remove the initial frame.
+     */
     @Override
     public void unshow() {
         this.frame.dispose();

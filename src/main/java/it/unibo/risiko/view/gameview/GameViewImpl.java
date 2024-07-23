@@ -82,7 +82,7 @@ public final class GameViewImpl implements GameView {
     private static final Double GAME_PANEL_WIDTH_PERCENTAGE = 0.8;
     private static final Double MAP_PANEL_HEIGHT_PERCENTAGE = 0.7;
 
-    private static final Integer MAP_GRADIENT_LEVEL = 1;
+    private static final Integer MAP_GRADIENT_LEVEL = 2;
     private static final Integer ATTACK_BAR_GRADIENT_LEVEL = 7;
     private static final Integer TURNS_BAR_GRADIENT_LEVEL = 1;
 
@@ -405,6 +405,7 @@ public final class GameViewImpl implements GameView {
         mapPanel.setBounds(0, 0, mapLayoutPane.getWidth(), mapLayoutPane.getHeight());
         mapLayoutPane.add(mapPanel, MAP_LAYER, 0);
         gamePanel.add(mapLayoutPane);
+        mapPanel.setOpaque(false);
     }
 
     @Override
