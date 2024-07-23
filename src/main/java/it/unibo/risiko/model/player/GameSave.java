@@ -37,7 +37,7 @@ public final class GameSave implements ActualGame {
     private static final String NEW_LINE = System.lineSeparator();
     private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "save" + SEP + "save.txt";
-    private Map<String, String> targetMap = new HashMap<>();
+    private final Map<String, String> targetMap = new HashMap<>();
     private List<Player> playerList;
     private List<Territory> territoryList;
     private String mapName;
@@ -135,6 +135,13 @@ public final class GameSave implements ActualGame {
         return this.turnIndex;
     }
 
+    @Override
+    public Map<String, String> getTargetMap() {
+        final HashMap<String, String> returnMap = new HashMap<>();
+        returnMap.putAll(this.targetMap);
+        return returnMap;
+    }
+
     private boolean saveWriter(final String savePath) {
         try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath),
                 StandardCharsets.UTF_8)) {
@@ -200,10 +207,5 @@ public final class GameSave implements ActualGame {
             return "TERRITORY " + splitTarget.get(TERRITORIES_TO_CONQUER_INDEX);
         }
         return "CONTINENT " + splitTarget.get(CONTINENT_TO_CONQUER_INDEX);
-    }
-
-    @Override
-    public Map<String, String> getTargetMap() {
-        return this.targetMap;
     }
 }
