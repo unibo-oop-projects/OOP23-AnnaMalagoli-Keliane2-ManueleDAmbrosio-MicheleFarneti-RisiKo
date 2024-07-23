@@ -1,6 +1,7 @@
 package it.unibo.risiko.model.player;
 
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
@@ -41,4 +42,8 @@ public interface ActualGame {
      */
     void reassignCards(Deck deck);
 
+    /**
+     * @return a map with player names as keys and a string representing their target as values.
+     */
+    Map<String, String> getTargetMap();
 }

@@ -1,9 +1,11 @@
 package it.unibo.risiko.controller;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Card;
@@ -21,6 +23,9 @@ import it.unibo.risiko.model.map.GameMapInitializerImpl;
 import it.unibo.risiko.model.map.TerritoriesImpl;
 import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
+import it.unibo.risiko.model.objective.ConquerContinentTarget;
+import it.unibo.risiko.model.objective.ConquerTerritoriesTarget;
+import it.unibo.risiko.model.objective.DestroyPlayerTarget;
 import it.unibo.risiko.model.player.AIBehaviour;
 import it.unibo.risiko.model.player.AIBehaviourImpl;
 import it.unibo.risiko.model.player.ActualGame;
@@ -649,11 +654,12 @@ public final class GameController implements GameViewObserver, InitialViewObserv
                     }
                 }
             }
+            assignTargets(save.getTargetMap());
 
             this.gameLoopManager = new GameLoopManagerImpl();
             gameLoopManager.setActivePlayerIndex(save.getTurnIndex());
             gameLoopManager.setGameStatus(GameStatus.READY_TO_ATTACK);
-            players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
+
             linkPlayerTerritories();
 
             this.setupGameView();
@@ -675,6 +681,28 @@ public final class GameController implements GameViewObserver, InitialViewObserv
                 if (t.getPlayer().equals(p.getColorID())) {
                     p.addTerritory(t.getTerritoryName());
                 }
+            }
+        }
+    }
+
+    private void assignTargets(final Map<String, String> targetMap) {
+        String target;
+        for (final Player player : players) {
+            List<String> splitTarget;
+            String targetType;
+            target = targetMap.get(player.getColorID());
+            splitTarget = Arrays.asList(target.substring(0, target.length()).split(" "));
+            targetType = splitTarget.get(0);
+            if ("DESTROY".equals(targetType)) {
+                // System.out.println(target);
+                // System.out.println(targetType + " " + splitTarget.get(1) + " " + target.length());
+                player.setTarget(new DestroyPlayerTarget(player, players.stream().filter(p -> p.getColorID().equals(splitTarget.get(1))).findFirst().get()));
+            } else if ("TERRITORY".equals(targetType)){
+                player.setTarget(new ConquerTerritoriesTarget(player, Integer.parseInt(splitTarget.get(1))));
+            } else if ("CONTINENT".equals(targetType)) {
+                player.setTarget(new ConquerContinentTarget(player, territories.getListContinents().stream().filter(c -> c.getName().equals(splitTarget.get(1))).findFirst().get()));
+            } else {
+                //Intentionally void.
             }
         }
     }
