@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.risiko.model.cards.Card;
+import it.unibo.risiko.model.cards.CardImpl;
+import it.unibo.risiko.model.cards.Deck;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
 
@@ -20,8 +23,9 @@ import it.unibo.risiko.model.map.TerritoryImpl;
  * @author Manuele D'Ambrosio
  */
 
-public final class GameSave {
+public final class GameSave implements ActualGame {
     private static final int OWNER = 2;
+    private static final String DEFAULT_TYPE = "NaT";
     private static final String SEP = File.separator;
     private static final String NEW_LINE = System.lineSeparator();
     private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
@@ -29,14 +33,28 @@ public final class GameSave {
     private List<Player> playerList;
     private List<Territory> territoryList;
     private String mapName;
+    private int turnIndex;
 
-    public GameSave(final List<Player> playerList, final List<Territory> territoryList, final String mapName) {
+    /**
+     * This contructor saves the actual game.
+     * 
+     * @param playerList    - list of players.
+     * @param territoryList - list of territories.
+     * @param mapName       - name of the map.
+     * @param turnIndex     - index of the actual player in the player list.
+     */
+    public GameSave(final List<Player> playerList, final List<Territory> territoryList, final String mapName,
+            final int turnIndex) {
         this.playerList = List.copyOf(playerList);
         this.territoryList = List.copyOf(territoryList);
         this.mapName = mapName;
+        this.turnIndex = turnIndex;
         saveWriter(PATH);
     }
 
+    /**
+     * This contructor build this class from the previous save.
+     */
     public GameSave() {
         try (InputStreamReader streamReader = new InputStreamReader(new FileInputStream(PATH), StandardCharsets.UTF_8);
                 BufferedReader reader = new BufferedReader(streamReader);) {
@@ -49,11 +67,22 @@ public final class GameSave {
             Optional<String> row;
 
             map = reader.readLine();
+
+            // Initialize turn Index
+            this.turnIndex = Integer.parseInt(reader.readLine());
+
             numberOfPlayers = Integer.parseInt(reader.readLine());
             for (int i = 0; i < numberOfPlayers; i++) {
                 row = Optional.ofNullable(reader.readLine());
                 line = Arrays.asList(row.get().substring(0, row.get().length() - 1).split(" "));
                 pList.add(new StdPlayer(line.get(0), Boolean.parseBoolean(line.get(1))));
+                // Initializing player owned cards.
+                row = Optional.ofNullable(reader.readLine());
+                row = Optional.ofNullable(reader.readLine());
+                while (!"$".equals(row.get())) {
+                    pList.get(pList.size() - 1).addCard(new CardImpl(row.get(), DEFAULT_TYPE));
+                    row = Optional.ofNullable(reader.readLine());
+                }
             }
             row = Optional.ofNullable(reader.readLine());
             while (row.isPresent()) {
@@ -76,27 +105,43 @@ public final class GameSave {
         }
     }
 
+    @Override
     public String getMapName() {
         return this.mapName;
     }
 
+    @Override
     public List<Player> getPlayerList() {
         return List.copyOf(this.playerList);
     }
 
+    @Override
     public List<Territory> getTerritoryList() {
         return List.copyOf(this.territoryList);
     }
 
+    @Override
+    public int getTurnIndex() {
+        return this.turnIndex;
+    }
+
     private boolean saveWriter(final String savePath) {
-        try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath), StandardCharsets.UTF_8)) {
+        try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath),
+                StandardCharsets.UTF_8)) {
             // In the fisrt line there is the map name.
             saveFile.write(this.mapName + NEW_LINE);
-            // In the second line there is the number of players.
+            // In the second line there is the turn index;
+            saveFile.write(this.turnIndex + NEW_LINE);
+            // In the third line there is the number of players.
             saveFile.write(playerList.size() + NEW_LINE);
             // Players names.
             for (final Player player : playerList) {
                 saveFile.write(player.getColorID() + " " + player.isAI() + " " + NEW_LINE);
+                saveFile.write("$" + NEW_LINE);
+                for (final Card card : player.getOwnedCards()) {
+                    saveFile.write(card.getTerritoryName() + NEW_LINE);
+                }
+                saveFile.write("$" + NEW_LINE);
             }
             // Territories with armies and owners.
             for (final Territory t : territoryList) {
@@ -108,4 +153,15 @@ public final class GameSave {
         }
         return true;
     }
+
+    @Override
+    public void reassignCards(Deck deck) {
+        playerList.stream().forEach(p -> {
+            List<Card> newList = new ArrayList<>();
+            p.getOwnedCards().stream().forEach(e -> newList.add(deck.getListCards().stream()
+                    .filter(c -> c.getTerritoryName().equals(e.getTerritoryName())).findFirst().get()));
+            p.setOwnedCards(newList);
+        });
+    }
+
 }

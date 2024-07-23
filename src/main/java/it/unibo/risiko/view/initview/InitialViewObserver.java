@@ -17,11 +17,11 @@ public interface InitialViewObserver {
     void initializeNewGame();
 
     /**
-     * Tells the controller to setUp the game phase window in the gameView.
+     * Continues from the last saved game.
      * 
-     * @author Michele Farneti
+     * @author Manuele D'Ambrosio
      */
-    void setupGameView();
+    void continueGame();
 
     /**
      * Start a new window used for the game playing phase and eventually for game

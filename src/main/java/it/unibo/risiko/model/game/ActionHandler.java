@@ -18,6 +18,14 @@ public interface ActionHandler {
     Integer getActivePlayerIndex();
 
     /**
+     * Setter for the active player index, used only when continuing
+     * a saved game.
+     * 
+     * @param index - index of the actual player in the player list.
+     */
+    void setActivePlayerIndex(final Integer activePlayerIndex);
+
+    /**
      * 
      * @return The game status saved in the action handler.
      * @implSpec Sublcasses should be careful voerriding in order to

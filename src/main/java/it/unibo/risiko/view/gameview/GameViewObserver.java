@@ -112,4 +112,11 @@ public interface GameViewObserver {
      * @author Michele Farneti
      */
     void exitCardsManagingPhase();
+
+    /**
+     * Saves the actual game.
+     * 
+     * @author Manuele D'Ambrosio.
+     */
+    void saveGame();
 }

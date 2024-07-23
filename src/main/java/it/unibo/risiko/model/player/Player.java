@@ -34,6 +34,13 @@ public interface Player {
     void setOwnedTerritories(Set<String> ownedTerritories);
 
     /**
+     * Sets the player's owned cards.
+     * 
+     * @param ownedCards - new collection of cards owned by the player.
+     */
+    void setOwnedCards(Collection<Card> ownedCards);
+
+    /**
      * This method is used to set the target of the player.
      * 
      * @param target - target of the player.

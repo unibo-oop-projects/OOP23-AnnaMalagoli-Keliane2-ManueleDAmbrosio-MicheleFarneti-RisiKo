@@ -27,7 +27,8 @@ public abstract class ActionHandlerImpl implements ActionHandler {
      *           not mess up new calls for methods of this class.
      * @param activePlayerIndex
      */
-    protected void setActivePlayerIndex(final Integer activePlayerIndex) {
+    @Override
+    public void setActivePlayerIndex(final Integer activePlayerIndex) {
         this.activePlayerIndex = activePlayerIndex;
     }
 
