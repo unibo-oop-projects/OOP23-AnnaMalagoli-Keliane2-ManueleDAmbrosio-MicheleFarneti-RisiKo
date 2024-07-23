@@ -59,6 +59,13 @@ public final class ColoredImageButton extends JButton {
         this.imageColor = imageColor;
     }
 
+    /**
+     * @return The color the button image is currently set.
+     */
+    public String getColor() {
+        return this.imageColor;
+    }
+
     @Override
     protected void paintComponent(final Graphics g) {
         imageReader.loadColoredImage(resourcesPackagePath + imageName, imageColor)

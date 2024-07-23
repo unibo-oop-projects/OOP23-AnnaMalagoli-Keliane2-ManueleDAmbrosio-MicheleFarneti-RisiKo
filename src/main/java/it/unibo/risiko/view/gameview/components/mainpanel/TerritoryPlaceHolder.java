@@ -29,7 +29,8 @@ public interface TerritoryPlaceHolder {
     /**
      * Updates the appearence of a territory place holder by taking infos from a
      * given territory. Changes its color in relation to its owner and updates it's
-     * armies label.
+     * armies label. Avoids doing the operation in case those datas don't need an
+     * update.
      * 
      * @param territory
      */

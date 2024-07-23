@@ -68,8 +68,12 @@ public final class TankIcon implements TerritoryPlaceHolder {
 
         @Override
         public void redrawTank(final Territory territory) {
-                tankButton.setColor(territory.getPlayer());
-                armiesLabel.setText(String.valueOf(territory.getNumberOfArmies()));
+                if (!tankButton.getColor().equals(territory.getPlayer())) {
+                        tankButton.setColor(territory.getPlayer());
+                }
+                if (!armiesLabel.getText().equals(String.valueOf(territory.getNumberOfArmies()))) {
+                        armiesLabel.setText(String.valueOf(territory.getNumberOfArmies()));
+                }
         }
 
         @Override
