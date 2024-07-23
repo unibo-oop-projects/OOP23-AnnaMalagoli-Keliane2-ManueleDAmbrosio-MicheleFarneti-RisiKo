@@ -230,13 +230,11 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     /**
      * 
      * Checks if the current player won the game, eventually displaying
-     * a gameover window, also remove player without territories from the players
-     * lists.
+     * a gameover window.
      * 
      * @author Michele Farneti
      */
     private void checkWinner() {
-        players.removeIf(p -> p.getOwnedTerritories().size() == 0);
         if (gameLoopManager.isGameOver(players, territories)) {
             this.view.gameOver(currentPlayer().getColorID());
         }
