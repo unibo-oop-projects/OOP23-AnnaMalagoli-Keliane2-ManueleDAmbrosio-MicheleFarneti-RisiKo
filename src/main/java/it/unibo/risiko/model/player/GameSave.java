@@ -10,7 +10,9 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.risiko.model.cards.Card;
@@ -24,12 +26,18 @@ import it.unibo.risiko.model.map.TerritoryImpl;
  */
 
 public final class GameSave implements ActualGame {
+    private static final int TERRITORIES_TO_CONQUER_INDEX = 1;
+    private static final int CONTINENT_TO_CONQUER_INDEX = 3;
+    private static final int PLAYER_TO_DESTROY_INDEX = 3;
     private static final int OWNER = 2;
     private static final String DEFAULT_TYPE = "NaT";
+    private static final int TERRITORY_INDEX = 2;
+    private static final int DESTROY_TARGET_INDEX = 0;
     private static final String SEP = File.separator;
     private static final String NEW_LINE = System.lineSeparator();
     private static final String PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP
             + "risiko" + SEP + "save" + SEP + "save.txt";
+    private final Map<String, String> targetMap = new HashMap<>();
     private List<Player> playerList;
     private List<Territory> territoryList;
     private String mapName;
@@ -74,8 +82,10 @@ public final class GameSave implements ActualGame {
             numberOfPlayers = Integer.parseInt(reader.readLine());
             for (int i = 0; i < numberOfPlayers; i++) {
                 row = Optional.ofNullable(reader.readLine());
-                line = Arrays.asList(row.get().substring(0, row.get().length() - 1).split(" "));
+                line = Arrays.asList(row.get().substring(0, row.get().length()).split(" "));
                 pList.add(new StdPlayer(line.get(0), Boolean.parseBoolean(line.get(1))));
+                this.targetMap.put(line.get(0), line.get(2) + " " + line.get(3));
+                //System.out.println(line.get(2) + " " + line.get(3));
                 // Initializing player owned cards.
                 reader.readLine();
                 row = Optional.ofNullable(reader.readLine());
@@ -125,6 +135,13 @@ public final class GameSave implements ActualGame {
         return this.turnIndex;
     }
 
+    @Override
+    public Map<String, String> getTargetMap() {
+        final HashMap<String, String> returnMap = new HashMap<>();
+        returnMap.putAll(this.targetMap);
+        return returnMap;
+    }
+
     private boolean saveWriter(final String savePath) {
         try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath),
                 StandardCharsets.UTF_8)) {
@@ -136,7 +153,7 @@ public final class GameSave implements ActualGame {
             saveFile.write(playerList.size() + NEW_LINE);
             // Players names.
             for (final Player player : playerList) {
-                saveFile.write(player.getColorID() + " " + player.isAI() + " " + NEW_LINE);
+                saveFile.write(player.getColorID() + " " + player.isAI() + " " + encodeTarget(player) + NEW_LINE);
                 saveFile.write("$" + NEW_LINE);
                 for (final Card card : player.getOwnedCards()) {
                     saveFile.write(card.getTerritoryName() + NEW_LINE);
@@ -181,4 +198,14 @@ public final class GameSave implements ActualGame {
         }
     }
 
+    private String encodeTarget(final Player player) {
+        final String targetString = player.getTarget().showTargetDescription();
+        final List<String> splitTarget = Arrays.asList(targetString.substring(0, targetString.length() - 1).split(" "));
+        if ("Destroy".equals(splitTarget.get(DESTROY_TARGET_INDEX))) {
+            return "DESTROY " + splitTarget.get(PLAYER_TO_DESTROY_INDEX);
+        } else if ("territories".equals(splitTarget.get(TERRITORY_INDEX))) {
+            return "TERRITORY " + splitTarget.get(TERRITORIES_TO_CONQUER_INDEX);
+        }
+        return "CONTINENT " + splitTarget.get(CONTINENT_TO_CONQUER_INDEX);
+    }
 }
