@@ -630,24 +630,38 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     @Override
     public void continueGame() {
         final ActualGame save = new GameSave();
-        gameInitializer = new GameMapInitializerImpl(save.getMapName(), RESOURCES_PACKAGE_STRING);
-        this.deck = new DeckImpl(gameInitializer.getDeckPath());
-        this.territories = new TerritoriesImpl(gameInitializer.getTerritoriesPath());
-        this.register = new RegisterImpl();
-        save.reassignCards(deck);
-        this.players = save.getPlayerList();
+        if ("X".equals(save.getMapName())) {
+            initializeNewGame();
+        } else {
+            this.mapName = save.getMapName();
+            gameInitializer = new GameMapInitializerImpl(save.getMapName(), RESOURCES_PACKAGE_STRING);
+            this.deck = new DeckImpl(gameInitializer.getDeckPath());
+            this.territories = new TerritoriesImpl(gameInitializer.getTerritoriesPath());
+            this.register = new RegisterImpl();
+            save.reassignCards(deck);
+            this.players = save.getPlayerList();
 
-        this.gameLoopManager = new GameLoopManagerImpl();
-        gameLoopManager.setActivePlayerIndex(save.getTurnIndex());
-        gameLoopManager.setGameStatus(GameStatus.READY_TO_ATTACK);
-        players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
-        linkPlayerTerritories();
+            for (final Territory t : territories.getListTerritories()) {
+                for (final Territory t2 : save.getTerritoryList()) {
+                    if (t.getTerritoryName().equals(t2.getTerritoryName())) {
+                        t.setPlayer(t2.getPlayer());
+                        t.addArmies(t2.getNumberOfArmies());
+                    }
+                }
+            }
 
-        this.setupGameView();
-        while (players.get(gameLoopManager.getActivePlayerIndex()).isAI()) {
-            handleAIBehaviour();
+            this.gameLoopManager = new GameLoopManagerImpl();
+            gameLoopManager.setActivePlayerIndex(save.getTurnIndex());
+            gameLoopManager.setGameStatus(GameStatus.READY_TO_ATTACK);
+            players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
+            linkPlayerTerritories();
+
+            this.setupGameView();
+            while (players.get(gameLoopManager.getActivePlayerIndex()).isAI()) {
+                handleAIBehaviour();
+            }
+            redrawView();
         }
-        redrawView();
     }
 
     @Override
@@ -656,8 +670,12 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     }
 
     private void linkPlayerTerritories() {
-        territories.getListTerritories().stream()
-                .forEach(t -> players.stream().filter(p -> p.getColorID().equals(t.getPlayer())).findFirst().get()
-                        .addTerritory(t.getTerritoryName()));
+        for (final Territory t : territories.getListTerritories()) {
+            for (final Player p : players) {
+                if (t.getPlayer().equals(p.getColorID())) {
+                    p.addTerritory(t.getTerritoryName());
+                }
+            }
+        }
     }
 }

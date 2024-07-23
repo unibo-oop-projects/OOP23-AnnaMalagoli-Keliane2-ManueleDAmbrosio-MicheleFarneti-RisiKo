@@ -51,6 +51,7 @@ class TestGameSave {
 
         assertEquals(save.getPlayerList().get(FIRST_INDEX).getColorID(),
                 load.getPlayerList().get(FIRST_INDEX).getColorID());
+        assertEquals(0, load.getTurnIndex());
         assertEquals(MAP, save.getMapName());
         assertEquals(MAP, load.getMapName());
         assertEquals(THREE_ARMIES, save.getTerritoryList().get(SECOND_INDEX).getNumberOfArmies());

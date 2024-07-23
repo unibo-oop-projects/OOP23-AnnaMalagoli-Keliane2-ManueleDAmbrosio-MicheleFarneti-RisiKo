@@ -1,16 +1,54 @@
-map
+standard
 0
 3
 cyan false 
 $
 $
-blue true 
-$
-$
 green true 
 $
 $
-t1 1 cyan 
-t2 3 blue 
-t3 3 green 
-t4 2 null 
+blue true 
+$
+$
+Ukraine 1 cyan 
+Mongolia 1 green 
+West-United-States 1 blue 
+Madagascar 16 cyan 
+East-Africa 4 green 
+Siberia 1 blue 
+Scandinavia 1 cyan 
+Argentina 4 green 
+New-Guinea 1 blue 
+Middle-East 1 cyan 
+India 1 green 
+Great-Britain 1 blue 
+Peru 1 cyan 
+Central-America 1 green 
+Japan 2 blue 
+North-Africa 1 cyan 
+Yakutia 1 green 
+Venezuela 1 blue 
+Egypt 1 cyan 
+Congo 2 green 
+Southern-Africa 2 blue 
+Northwest-Territories 1 cyan 
+North-Europe 1 green 
+South-Europe 4 blue 
+Brazil 1 cyan 
+Alaska 2 green 
+Western-Australia 3 blue 
+Eastern-United-States 1 cyan 
+West-Europe 2 green 
+Alberta 1 blue 
+Quebec 1 cyan 
+Chita 2 green 
+Iceland 2 blue 
+Kamchatka 1 cyan 
+Ontario 1 green 
+Siam 3 blue 
+East-Australia 1 cyan 
+Afghanistan 1 green 
+China 1 blue 
+Urals 1 cyan 
+Greenland 2 green 
+Indonesia 2 blue 
