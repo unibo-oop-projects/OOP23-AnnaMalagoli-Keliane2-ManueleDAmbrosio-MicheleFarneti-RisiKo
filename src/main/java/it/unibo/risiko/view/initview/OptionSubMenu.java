@@ -199,10 +199,10 @@ public class OptionSubMenu extends JPanel {
         final ButtonGroup g = new ButtonGroup();
         final JPanel p1 = createResolutionSubPanels();
         final JPanel p2 = createResolutionSubPanels();
-        createRadioButton(g, p1, "900x900");
-        createRadioButton(g, p1, "1820x1024");
-        createRadioButton(g, p2, "800x950");
-        createRadioButton(g, p2, "1024x1024");
+        createRadioButton(g, p1, "1600x900");
+        createRadioButton(g, p1, "1500x840");
+        createRadioButton(g, p2, "1350x760");
+        createRadioButton(g, p2, "1280x720");
         p.add(p1);
         p.add(p2);
         return g;
