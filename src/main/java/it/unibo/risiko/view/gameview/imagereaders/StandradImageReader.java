@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameview.components.mainpanel;
+package it.unibo.risiko.view.gameview.imagereaders;
 
 import java.awt.Image;
 import java.util.Optional;
@@ -6,6 +6,7 @@ import java.util.Optional;
 /**
  * A simple image reader to carry on tasks about reading images from the game
  * resources automatically handling exceptions.
+ * @author Michele Farneti
  */
 public interface StandradImageReader {
     /**
