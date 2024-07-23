@@ -77,7 +77,7 @@ public final class GameSave implements ActualGame {
                 line = Arrays.asList(row.get().substring(0, row.get().length() - 1).split(" "));
                 pList.add(new StdPlayer(line.get(0), Boolean.parseBoolean(line.get(1))));
                 // Initializing player owned cards.
-                row = Optional.ofNullable(reader.readLine());
+                reader.readLine();
                 row = Optional.ofNullable(reader.readLine());
                 while (!"$".equals(row.get())) {
                     pList.get(pList.size() - 1).addCard(new CardImpl(row.get(), DEFAULT_TYPE));
@@ -155,13 +155,30 @@ public final class GameSave implements ActualGame {
     }
 
     @Override
-    public void reassignCards(Deck deck) {
+    public void reassignCards(final Deck deck) {
         playerList.stream().forEach(p -> {
-            List<Card> newList = new ArrayList<>();
+            final List<Card> newList = new ArrayList<>();
             p.getOwnedCards().stream().forEach(e -> newList.add(deck.getListCards().stream()
                     .filter(c -> c.getTerritoryName().equals(e.getTerritoryName())).findFirst().get()));
             p.setOwnedCards(newList);
         });
+        adjustDeck(deck);
+    }
+
+    private void adjustDeck(final Deck deck) {
+        final List<Card> drawnCards = new ArrayList<>();
+        final List<Card> totalCards = deck.getListCards();
+        for (final Player p : playerList) {
+            drawnCards.addAll(p.getOwnedCards());
+        }
+        while (deck.getListCards().size() > 0) {
+            deck.pullCard();
+        }
+        for (final Card card : totalCards) {
+            if (!drawnCards.contains(card)) {
+                deck.addCard(card);
+            }
+        }
     }
 
 }

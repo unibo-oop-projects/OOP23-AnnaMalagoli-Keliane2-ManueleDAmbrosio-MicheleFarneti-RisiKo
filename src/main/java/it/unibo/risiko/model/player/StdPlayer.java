@@ -58,7 +58,7 @@ public final class StdPlayer implements Player {
     }
 
     @Override
-    public void setOwnedCards(Collection<Card> ownedCards) {
+    public void setOwnedCards(final Collection<Card> ownedCards) {
         this.ownedCards = ownedCards.stream().collect(Collectors.toSet());
     }
 

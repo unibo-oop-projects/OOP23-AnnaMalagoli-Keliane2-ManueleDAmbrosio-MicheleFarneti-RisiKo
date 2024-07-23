@@ -47,7 +47,7 @@ class TestGameSave {
         t3.setPlayer(p3.getColorID());
 
         final ActualGame save = new GameSave(List.of(p1, p2, p3), List.of(t1, t2, t3, t4), MAP, 0);
-        final it.unibo.risiko.model.player.ActualGame load = new GameSave();
+        final ActualGame load = new GameSave();
 
         assertEquals(save.getPlayerList().get(FIRST_INDEX).getColorID(),
                 load.getPlayerList().get(FIRST_INDEX).getColorID());

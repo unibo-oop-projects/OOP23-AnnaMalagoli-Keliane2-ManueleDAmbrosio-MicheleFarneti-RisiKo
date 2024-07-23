@@ -21,9 +21,9 @@ public interface ActionHandler {
      * Setter for the active player index, used only when continuing
      * a saved game.
      * 
-     * @param index - index of the actual player in the player list.
+     * @param activePlayerIndex - index of the actual player in the player list.
      */
-    void setActivePlayerIndex(final Integer activePlayerIndex);
+    void setActivePlayerIndex(Integer activePlayerIndex);
 
     /**
      * 
