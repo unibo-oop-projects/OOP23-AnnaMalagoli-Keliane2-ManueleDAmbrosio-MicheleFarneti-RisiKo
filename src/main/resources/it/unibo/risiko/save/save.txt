@@ -1,54 +1,16 @@
-standard
+map
 0
 3
-blue false CONTINENT Africa
+cyan false DESTROY blue
 $
 $
-cyan false TERRITORY 32
+blue true DESTROY green
 $
 $
-green false CONTINENT South-America
+green true DESTROY cyan
 $
 $
-Central-America 1 blue 
-Egypt 1 cyan 
-Japan 1 green 
-North-Africa 1 blue 
-Yakutia 1 cyan 
-Scandinavia 1 green 
-East-Africa 16 blue 
-Southern-Africa 1 cyan 
-Venezuela 1 green 
-Peru 1 blue 
-Madagascar 12 cyan 
-Urals 1 green 
-North-Europe 1 blue 
-Chita 1 cyan 
-South-Europe 12 green 
-Kamchatka 1 blue 
-China 1 cyan 
-Argentina 1 green 
-Afghanistan 1 blue 
-Iceland 1 cyan 
-New-Guinea 1 green 
-Alaska 1 blue 
-Ukraine 1 cyan 
-Indonesia 1 green 
-India 1 blue 
-Mongolia 1 cyan 
-Brazil 1 green 
-East-Australia 1 blue 
-West-Europe 1 cyan 
-Siberia 1 green 
-Ontario 1 blue 
-Congo 1 cyan 
-Quebec 1 green 
-Siam 1 blue 
-Western-Australia 1 cyan 
-Northwest-Territories 1 green 
-Great-Britain 1 blue 
-Eastern-United-States 1 cyan 
-Alberta 1 green 
-West-United-States 1 blue 
-Middle-East 1 cyan 
-Greenland 1 green 
+t1 1 cyan 
+t2 3 blue 
+t3 3 green 
+t4 2 null 

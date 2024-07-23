@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.map.TerritoryImpl;
+import it.unibo.risiko.model.objective.DestroyPlayerTarget;
 
 /**
  * @author Manuele D'Ambrosio.
@@ -38,6 +39,9 @@ class TestGameSave {
         final Player p1 = factory.createStandardPlayer();
         final Player p2 = factory.createAIPlayer();
         final Player p3 = factory.createAIPlayer();
+        p1.setTarget(new DestroyPlayerTarget(p1, p2));
+        p2.setTarget(new DestroyPlayerTarget(p2, p3));
+        p3.setTarget(new DestroyPlayerTarget(p3, p1));
         p1.addTerritory(t1.getTerritoryName());
         p2.addTerritory(t2.getTerritoryName());
         p3.addTerritory(t3.getTerritoryName());
