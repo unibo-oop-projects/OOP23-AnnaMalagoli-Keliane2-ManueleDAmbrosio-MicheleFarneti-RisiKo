@@ -23,6 +23,8 @@ import it.unibo.risiko.model.map.Territories;
 import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.player.AIBehaviour;
 import it.unibo.risiko.model.player.AIBehaviourImpl;
+import it.unibo.risiko.model.player.ActualGame;
+import it.unibo.risiko.model.player.GameSave;
 import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.model.player.PlayerFactory;
 import it.unibo.risiko.model.player.SimplePlayerFactory;
@@ -60,6 +62,7 @@ public final class GameController implements GameViewObserver, InitialViewObserv
     private AttackPhase attackPhase;
     private Register register;
 
+    private String mapName;
     private Territories territories;
     private List<Player> players;
     private Deck deck;
@@ -87,8 +90,12 @@ public final class GameController implements GameViewObserver, InitialViewObserv
                 GameMapInitializerImpl.getAvailableMaps(RESOURCES_PACKAGE_STRING + FILE_SEPARATOR));
     }
 
-    @Override
-    public void setupGameView() {
+    /**
+     * Tells the controller to setUp the game phase window in the gameView.
+     * 
+     * @author Michele Farneti
+     */
+    private void setupGameView() {
         view.showGameWindow(gameInitializer.getMapName(), players.size());
         view.showTanks(territories.getListTerritories());
         showTurnIcons();
@@ -486,6 +493,7 @@ public final class GameController implements GameViewObserver, InitialViewObserv
 
     @Override
     public void startNewGame(final String mapName, final int numberOfStandardPlayers, final int numberOfAIPlayers) {
+        this.mapName = mapName;
         gameInitializer = new GameMapInitializerImpl(mapName, RESOURCES_PACKAGE_STRING);
         players = new LinkedList<>();
         final PlayerFactory playerFactory = new SimplePlayerFactory();
@@ -616,6 +624,58 @@ public final class GameController implements GameViewObserver, InitialViewObserv
             this.view.exitCardsPanel();
             cardsPanelOpened = false;
             redrawView();
+        }
+    }
+
+    @Override
+    public void continueGame() {
+        final ActualGame save = new GameSave();
+        if ("X".equals(save.getMapName())) {
+            initializeNewGame();
+        } else {
+            this.mapName = save.getMapName();
+            gameInitializer = new GameMapInitializerImpl(save.getMapName(), RESOURCES_PACKAGE_STRING);
+            this.deck = new DeckImpl(gameInitializer.getDeckPath());
+            this.territories = new TerritoriesImpl(gameInitializer.getTerritoriesPath());
+            this.register = new RegisterImpl();
+            save.reassignCards(deck);
+            this.players = save.getPlayerList();
+
+            for (final Territory t : territories.getListTerritories()) {
+                for (final Territory t2 : save.getTerritoryList()) {
+                    if (t.getTerritoryName().equals(t2.getTerritoryName())) {
+                        t.setPlayer(t2.getPlayer());
+                        t.addArmies(t2.getNumberOfArmies());
+                    }
+                }
+            }
+
+            this.gameLoopManager = new GameLoopManagerImpl();
+            gameLoopManager.setActivePlayerIndex(save.getTurnIndex());
+            gameLoopManager.setGameStatus(GameStatus.READY_TO_ATTACK);
+            players.forEach(p -> p.setTarget(gameInitializer.generateTarget(players.indexOf(p), players, territories)));
+            linkPlayerTerritories();
+
+            this.setupGameView();
+            while (players.get(gameLoopManager.getActivePlayerIndex()).isAI()) {
+                handleAIBehaviour();
+            }
+            redrawView();
+        }
+    }
+
+    @Override
+    public void saveGame() {
+        new GameSave(players, territories.getListTerritories(), this.mapName, gameLoopManager.getActivePlayerIndex());
+    }
+
+    private void linkPlayerTerritories() {
+        for (final Territory t : territories.getListTerritories()) {
+            for (final Player p : players) {
+                if (t.getPlayer().equals(p.getColorID())) {
+                    p.addTerritory(t.getTerritoryName());
+                }
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ public final class StdPlayer implements Player {
     private static final int INITIAL_ARMIES = 0;
     private final String colorID;
     private final Set<String> ownedTerritories = new HashSet<>();
-    private final Set<Card> ownedCards = new HashSet<>();
+    private Set<Card> ownedCards = new HashSet<>();
     private int armiesToPlace;
     private Optional<Target> target;
     private boolean isAI;
@@ -55,6 +55,11 @@ public final class StdPlayer implements Player {
     @Override
     public void setOwnedTerritories(final Set<String> newTerritories) {
         this.ownedTerritories.addAll(newTerritories);
+    }
+
+    @Override
+    public void setOwnedCards(final Collection<Card> ownedCards) {
+        this.ownedCards = ownedCards.stream().collect(Collectors.toSet());
     }
 
     @Override

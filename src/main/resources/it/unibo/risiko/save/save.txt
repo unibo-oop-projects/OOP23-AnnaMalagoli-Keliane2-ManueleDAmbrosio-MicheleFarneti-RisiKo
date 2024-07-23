@@ -1,0 +1,16 @@
+map
+0
+3
+cyan false 
+$
+$
+blue true 
+$
+$
+green true 
+$
+$
+t1 1 cyan 
+t2 3 blue 
+t3 3 green 
+t4 2 null 

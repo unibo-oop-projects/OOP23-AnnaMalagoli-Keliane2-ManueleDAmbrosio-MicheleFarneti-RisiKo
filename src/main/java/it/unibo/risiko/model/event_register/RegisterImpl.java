@@ -74,11 +74,8 @@ public class RegisterImpl implements Register {
     @Override
     public List<Event> getAllEventsPlayer(final Player player) {
         final List<Event> l = new ArrayList<>();
-        for (final Event e : this.register) {
-            if (e.getEventLeaderId().equals(player.getColorID())) {
-                l.add(e);
-            }
-        }
+        this.register.stream().filter(e -> e.getEventLeaderId().equals(player.getColorID()))
+                .forEach(i -> l.add(i));
         return l;
     }
 

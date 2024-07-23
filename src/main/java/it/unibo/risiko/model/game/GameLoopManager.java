@@ -69,7 +69,7 @@ public interface GameLoopManager extends ActionHandler {
     void setLoopPhase(GameStatus status);
 
     /**
-     * Chechk if in the players list there is someone who reached his target. In the
+     * Check if in the players list there is someone who reached his target. In the
      * particular case where a player has to destroy someone whose last nation is
      * conquired by somebody else, a new target gets generated for him.
      * 

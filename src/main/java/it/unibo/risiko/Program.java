@@ -10,7 +10,7 @@ import it.unibo.risiko.controller.GameController;
  * @author Keliane Nana
  * @author Manuele D'Ambrosio
  */
-public final class Program {
+final class Program {
     private Program() {
         // This constructor is intentionally private.
     }

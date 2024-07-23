@@ -104,7 +104,7 @@ public class PrincipalMenu extends JPanel {
         final var dim = gameFrame.getFrameRisolution();
         gameFrame.unshow();
         controller.startGameWindow(dim.width, dim.height);
-        controller.setupGameView();
+        controller.continueGame();
     }
 
     /**

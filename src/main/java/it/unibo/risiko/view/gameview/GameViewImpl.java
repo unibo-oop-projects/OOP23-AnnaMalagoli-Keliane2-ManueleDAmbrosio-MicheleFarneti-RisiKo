@@ -5,6 +5,7 @@ import it.unibo.risiko.model.map.Territory;
 import it.unibo.risiko.model.event_register.Register;
 import it.unibo.risiko.model.game.GameStatus;
 import it.unibo.risiko.model.player.Player;
+import it.unibo.risiko.view.gameview.components.DefaultButton;
 import it.unibo.risiko.view.gameview.components.LoggerView;
 import it.unibo.risiko.view.gameview.components.Position;
 import it.unibo.risiko.view.gameview.components.StandardTextField;
@@ -151,6 +152,7 @@ public final class GameViewImpl implements GameView {
     private JButton skipButton;
     private JButton attackButton;
     private JButton moveArmiesButton;
+    private JButton saveButton;
 
     private int mapWidth;
     private int mapHeight;
@@ -301,6 +303,13 @@ public final class GameViewImpl implements GameView {
         attackBarLayoutPane.add(skipButton, BUTTONS_LAYER, 0);
         skipButton.addActionListener(e -> gameViewObserver.skipTurn());
         skipButton.setEnabled(false);
+
+        saveButton = new DefaultButton("SAVE");
+        saveButton.setBounds(TURNBAR_START_X, TURNBAR_START_Y * 2 + COUNTRYBAR_START_Y + countryBarPanel.getHeight(),
+                ATTACKBAR_BUTTONS_WIDTH / ATTACK_PANEL_POSITIONING,
+                ATTACKBAR_BUTTONS_HEIGHT / ATTACK_PANEL_POSITIONING);
+        saveButton.addActionListener(e -> gameViewObserver.saveGame());
+        attackBarLayoutPane.add(saveButton, BUTTONS_LAYER, 0);
 
         moveArmiesButton = new CustomButton("MOVE");
         moveArmiesButton.setBounds(gamePanel.getWidth() / 2 + ATTACKBAR_BUTTONS_DISTANCE, 100, ATTACKBAR_BUTTONS_WIDTH,
@@ -680,6 +689,7 @@ public final class GameViewImpl implements GameView {
     @Override
     public void enableAttack(final boolean enabled) {
         attackButton.setEnabled(enabled);
+        saveButton.setEnabled(enabled);
     }
 
     /**
