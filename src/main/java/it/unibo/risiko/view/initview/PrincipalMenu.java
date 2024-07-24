@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
  */
 public class PrincipalMenu extends JPanel {
     private static final long serialVersionUID = 1L;
+    private static final String SEP = File.separator;
     private static final int PREFERRED_WIDTH = 1600;
     private static final int PREFERRED_HEIGHT = 900;
     private static final int DEFAULT_EMPTY_BORDER = 0;
@@ -29,7 +31,8 @@ public class PrincipalMenu extends JPanel {
     private static final int DEFAULT_WIDTH_SPACE = 0;
     private static final int DEFAULT_HEIGHT_SPACE = 5;
     private final ImageIcon backgroundImage = new ImageIcon(
-            "src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
+            "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP + "risiko" + SEP + "images"
+                    + SEP + "background.jpg");
 
     /**
      * Inizializing the principal menu.
