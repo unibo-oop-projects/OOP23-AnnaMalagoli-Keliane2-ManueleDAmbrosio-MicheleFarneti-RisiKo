@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
+import it.unibo.risiko.view.gameview.imagereaders.ColoredImageReader;
+import it.unibo.risiko.view.gameview.imagereaders.ColoredImageReaderImpl;
+
 /**
  * ColoredImageButton enables to create a button with a given image as
  * background,it also allows to change the image color by generating the right
@@ -17,7 +20,7 @@ public final class ColoredImageButton extends JButton {
     private final String resourcesPackagePath;
     private static final int BORDER_THICKNESS = 2;
     private static final long serialVersionUID = 1;
-    private final transient ColoredImageReader imageReader = new SimpleImageReader();
+    private final transient ColoredImageReader imageReader = new ColoredImageReaderImpl();
 
     private final String imageName;
     private String imageColor = "white";

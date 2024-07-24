@@ -27,7 +27,7 @@ class TestTerritoryPlaceHolders {
                 + FILE_SEPARATOR + "unibo" + FILE_SEPARATOR + "risiko" + FILE_SEPARATOR + "view"
                 + FILE_SEPARATOR + "gameview" + FILE_SEPARATOR + "components" + FILE_SEPARATOR + "mainpanel"
                 + FILE_SEPARATOR + "coordinates.txt";
-        final TerritoryPlaceHolderFactory factory = new TerritoryPlaceHolderFactory(coordinatesPath);
+        final TerritoryPlaceHolderFactory factory = new TerritoryPlaceHolderFactoryImpl(coordinatesPath);
         final Territory territory = new TerritoryImpl("China", "Asia", List.of());
         final Function<Position, Position> coordinatesFunction = new Function<>() {
 

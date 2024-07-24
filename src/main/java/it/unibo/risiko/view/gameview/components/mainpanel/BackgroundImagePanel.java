@@ -3,6 +3,9 @@ package it.unibo.risiko.view.gameview.components.mainpanel;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
+import it.unibo.risiko.view.gameview.imagereaders.SimpleImageReader;
+import it.unibo.risiko.view.gameview.imagereaders.StandradImageReader;
+
 /**
  * Realizes a JPanel with an image as background.
  * 

@@ -24,11 +24,11 @@ import it.unibo.risiko.model.player.SimplePlayerFactory;
  * @author Keliane Nana
  */
 class TestTarget {
-    final private static String AFRICA = "Afica";
-    final private Territory nigeria = new TerritoryImpl("Nigeria", AFRICA, List.of("Cameroon", "Tchad", "Niger"));
-    final private Territory cameroon = new TerritoryImpl("Cameroon", AFRICA, List.of("Nigeria", "Tchad", "Niger"));
-    final private Territory tchad = new TerritoryImpl("Tchad", AFRICA, List.of("Cameroon", "Nigeria", "Niger"));
-    final private Territory italy = new TerritoryImpl("Italy", "Europe", List.of("Belgia", "Francia"));
+    private final static String AFRICA = "Afica";
+    private final Territory nigeria = new TerritoryImpl("Nigeria", AFRICA, List.of("Cameroon", "Tchad", "Niger"));
+    private final Territory cameroon = new TerritoryImpl("Cameroon", AFRICA, List.of("Nigeria", "Tchad", "Niger"));
+    private final Territory tchad = new TerritoryImpl("Tchad", AFRICA, List.of("Cameroon", "Nigeria", "Niger"));
+    private final Territory italy = new TerritoryImpl("Italy", "Europe", List.of("Belgia", "Francia"));
 
     @Test
     void testPlayerDestroyTarget() {

@@ -1,4 +1,4 @@
-package it.unibo.risiko.view.gameview.components.mainpanel;
+package it.unibo.risiko.view.gameview.imagereaders;
 
 import java.awt.Image;
 import java.util.Optional;
@@ -7,6 +7,8 @@ import java.util.Optional;
  * Class used to carry on tasks about reading images from the file system by
  * follwing a predeterminated image name structure also indicating it's color.
  * The immage name should appear like /namecolor.png.
+ * 
+ * @author Michele Farneti
  */
 public interface ColoredImageReader {
     /**

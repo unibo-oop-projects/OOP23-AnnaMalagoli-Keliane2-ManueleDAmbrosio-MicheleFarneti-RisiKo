@@ -15,6 +15,7 @@ import it.unibo.risiko.view.gameview.components.mainpanel.CustomButton;
 import it.unibo.risiko.view.gameview.components.mainpanel.GradientPanel;
 import it.unibo.risiko.view.gameview.components.mainpanel.TerritoryPlaceHolder;
 import it.unibo.risiko.view.gameview.components.mainpanel.TerritoryPlaceHolderFactory;
+import it.unibo.risiko.view.gameview.components.mainpanel.TerritoryPlaceHolderFactoryImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -439,7 +440,7 @@ public final class GameViewImpl implements GameView {
 
     @Override
     public void showTanks(final List<Territory> territories) {
-        final TerritoryPlaceHolderFactory tanksFactory = new TerritoryPlaceHolderFactory(
+        final TerritoryPlaceHolderFactory tanksFactory = new TerritoryPlaceHolderFactoryImpl(
                 createPath(resourcesLocator, List.of("maps", mapName, "coordinates.txt")));
         territories.stream().map(territory -> tanksFactory.generateTank(territory,
                 position -> new Position(Math.round(position.x() * (mapWidth / MAP_WIDTH_SCALE)),
