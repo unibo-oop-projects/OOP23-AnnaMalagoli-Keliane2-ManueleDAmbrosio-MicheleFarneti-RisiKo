@@ -34,7 +34,7 @@ public interface TripleDice {
      * @param defenderThrows - defender'S throws.
      * @return the number of armies lost by the attacker.
      */
-    static int attackerLostArmies(final TripleDiceImpl attackerThrows, final TripleDiceImpl defenderThrows) {
+    static int attackerLostArmies(final TripleDice attackerThrows, final TripleDice defenderThrows) {
         int attackerArmies = INITIAL_VALUE;
         int defenderArmies = INITIAL_VALUE;
         int lostArmies = INITIAL_VALUE;
