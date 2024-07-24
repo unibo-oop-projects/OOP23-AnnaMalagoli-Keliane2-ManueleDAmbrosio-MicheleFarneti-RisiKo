@@ -44,7 +44,7 @@ public final class TerritoryPlaceHolderFactoryImpl implements TerritoryPlaceHold
     }
 
     @Override
-    public Optional<TankIcon> generateTank(final Territory territory,
+    public Optional<TerritoryPlaceHolder> generateTank(final Territory territory,
             final Function<Position, Position> coordinatesGenerator, final String resourcesPackageString,
             final ActionListener al) {
         if (tanksCoordinates.containsKey(territory.getTerritoryName())) {

@@ -29,10 +29,10 @@ public interface TerritoryPlaceHolderFactory {
      * @param resourcesPackageString
      * @param al                     ActionListener for when te tankIcon gets
      *                               clicked.
-     * @return An optional of a tank Icon if it was possible to find the coordinates
+     * @return An optional of a territory place holder if it was possible to find the coordinates
      *         of the territory, an empty optional otherwiswe.
      */
-    Optional<TankIcon> generateTank(Territory territory,
+    Optional<TerritoryPlaceHolder> generateTank(Territory territory,
             Function<Position, Position> coordinatesGenerator, String resourcesPackageString,
             ActionListener al);
 }
