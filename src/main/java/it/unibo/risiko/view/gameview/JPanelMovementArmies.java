@@ -44,7 +44,7 @@ public class JPanelMovementArmies extends JPanel {
      * Through the constructor the JPanelMovementArmies is set.
      * 
      * @param territories is the list of territories of a player
-     * @param observer is the game observer
+     * @param observer    is the game observer
      */
     public JPanelMovementArmies(final List<Territory> territories, final GameViewObserver observer) {
         this.setLayout(new BorderLayout());
@@ -73,7 +73,7 @@ public class JPanelMovementArmies extends JPanel {
         final JComboBox<String> srcTerrChoice = new JComboBox<>();
         final JComboBox<String> dstTerrChoice = new JComboBox<>();
         final JComboBox<Integer> choiceNumArmies = new JComboBox<>();
-        /*setting the size and font of the three Choice */
+        /* setting the size and font of the three Choice */
         srcTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         dstTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         choiceNumArmies.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
@@ -105,9 +105,11 @@ public class JPanelMovementArmies extends JPanel {
         final JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.closeMovementPhase());
         final JPanel executePanel = new ContinuePanel("Move armies", BOTTON_DIMENSION,
                 e -> {
-                    if (checkSelectedItem(String.valueOf(srcTerrChoice.getSelectedItem()), String.valueOf(dstTerrChoice.getSelectedItem()),
-                            Integer.valueOf(String.valueOf(choiceNumArmies.getSelectedItem())))) {
-                        observer.moveArmies(String.valueOf(srcTerrChoice.getSelectedItem()), String.valueOf(dstTerrChoice.getSelectedItem()),
+                    if (checkSelectedItem(String.valueOf(srcTerrChoice.getSelectedItem()),
+                            String.valueOf(dstTerrChoice.getSelectedItem()),
+                            Integer.parseInt(String.valueOf(choiceNumArmies.getSelectedItem())))) {
+                        observer.moveArmies(String.valueOf(srcTerrChoice.getSelectedItem()),
+                                String.valueOf(dstTerrChoice.getSelectedItem()),
                                 Integer.parseInt(String.valueOf(choiceNumArmies.getSelectedItem())));
                         this.setVisible(false);
                     } else {
@@ -155,8 +157,8 @@ public class JPanelMovementArmies extends JPanel {
      * Method used to verify if it is possible to move a certain amount of armies
      * between two territories of the player.
      * 
-     * @param src is the name of the source territory
-     * @param dst is the name of the destination territory
+     * @param src       is the name of the source territory
+     * @param dst       is the name of the destination territory
      * @param numArmies is the number of armies that the player wants to move
      * @return true if the operation is permitted, false otherwise
      */
@@ -204,12 +206,12 @@ public class JPanelMovementArmies extends JPanel {
      * to permit the movement of a certain amount of its armies to an adjacent
      * territory.
      * 
-     * @param terr is the name of the territory which the player wants
-     * to remove a certain amount of armies to place them in an
-     * adjacent territory
+     * @param terr      is the name of the territory which the player wants
+     *                  to remove a certain amount of armies to place them in an
+     *                  adjacent territory
      * @param numArmies is the number of armies that the player wants to move
      * @return true if the number of armies that the player wants to move is less
-     * than the number of armies placed in the territory, false otherwise
+     *         than the number of armies placed in the territory, false otherwise
      */
     private boolean checkNumberArmies(final Territory terr, final int numArmies) {
 
