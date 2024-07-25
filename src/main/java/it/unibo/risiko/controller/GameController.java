@@ -694,9 +694,6 @@ public final class GameController implements GameViewObserver, InitialViewObserv
             splitTarget = Arrays.asList(target.substring(0, target.length()).split(" "));
             targetType = splitTarget.get(0);
             if ("DESTROY".equals(targetType)) {
-                // System.out.println(target);
-                // System.out.println(targetType + " " + splitTarget.get(1) + " " +
-                // target.length());
                 player.setTarget(new DestroyPlayerTarget(player,
                         players.stream().filter(p -> p.getColorID().equals(splitTarget.get(1))).findFirst().get()));
             } else if ("TERRITORY".equals(targetType)) {

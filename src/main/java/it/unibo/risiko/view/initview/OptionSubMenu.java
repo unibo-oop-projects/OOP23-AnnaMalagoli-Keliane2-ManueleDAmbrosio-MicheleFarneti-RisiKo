@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
@@ -32,6 +33,7 @@ import javax.swing.JTextArea;
  */
 public class OptionSubMenu extends JPanel {
     private static final long serialVersionUID = 1L;
+    private static final String SEP = File.separator;
     private static final int PREFERRED_WIDTH = 700;
     private static final int PREFERRED_HEIGHT = 700;
     private static final int DEFAULT_WIDTH_SPACE = 0;
@@ -44,7 +46,8 @@ public class OptionSubMenu extends JPanel {
     private static final int BUTTON_TRANVERSAL_EMPTY_BORDER = 69;
     private final ButtonGroup grp;
     private final ImageIcon backgroundImage = new ImageIcon(
-            "src\\main\\resources\\it\\unibo\\risiko\\images\\background.jpg");
+            "src" + SEP + "main" + SEP + "resources" + SEP + "it" + SEP + "unibo" + SEP + "risiko" + SEP + "images"
+                    + SEP + "background.jpg");
 
     /**
      * Option's Sub menu innizialisation.

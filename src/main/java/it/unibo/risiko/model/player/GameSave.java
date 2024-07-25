@@ -85,7 +85,6 @@ public final class GameSave implements ActualGame {
                 line = Arrays.asList(row.get().substring(0, row.get().length()).split(" "));
                 pList.add(new StdPlayer(line.get(0), Boolean.parseBoolean(line.get(1))));
                 this.targetMap.put(line.get(0), line.get(2) + " " + line.get(3));
-                //System.out.println(line.get(2) + " " + line.get(3));
                 // Initializing player owned cards.
                 reader.readLine();
                 row = Optional.ofNullable(reader.readLine());
@@ -145,7 +144,7 @@ public final class GameSave implements ActualGame {
     private boolean saveWriter(final String savePath) {
         try (OutputStreamWriter saveFile = new OutputStreamWriter(new FileOutputStream(savePath),
                 StandardCharsets.UTF_8)) {
-            // In the fisrt line there is the map name.
+            // In the firstt line there is the map name.
             saveFile.write(this.mapName + NEW_LINE);
             // In the second line there is the turn index;
             saveFile.write(this.turnIndex + NEW_LINE);
