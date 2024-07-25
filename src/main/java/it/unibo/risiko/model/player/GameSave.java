@@ -107,6 +107,8 @@ public final class GameSave implements ActualGame {
             this.playerList = pList;
             this.territoryList = tList;
 
+            
+
         } catch (IOException e) {
             this.playerList = List.of();
             this.territoryList = List.of();

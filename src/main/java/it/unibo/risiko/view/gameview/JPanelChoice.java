@@ -2,7 +2,6 @@ package it.unibo.risiko.view.gameview;
 
 import java.util.List;
 import java.awt.BorderLayout;
-import java.awt.Choice;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.util.Optional;
@@ -65,9 +65,9 @@ public class JPanelChoice extends JPanel {
         final JPanel choicePanel = new JPanel();
         choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 3));
-        final Choice firstChoiceTerritories = new Choice();
-        final Choice secondChoiceTerritories = new Choice();
-        final Choice thirdChoiceTerritories = new Choice();
+        final JComboBox<String> firstChoiceTerritories = new JComboBox<>();
+        final JComboBox<String> secondChoiceTerritories = new JComboBox<>();
+        final JComboBox<String> thirdChoiceTerritories = new JComboBox<>();
         /*setting the size and font of the three Choice */
         firstChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         secondChoiceTerritories.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
@@ -90,9 +90,9 @@ public class JPanelChoice extends JPanel {
                     }
                 }
             }
-            firstChoiceTerritories.add(card.getTerritoryName() + " " + type);
-            secondChoiceTerritories.add(card.getTerritoryName() + " " + type);
-            thirdChoiceTerritories.add(card.getTerritoryName() + " " + type);
+            firstChoiceTerritories.addItem(card.getTerritoryName() + " " + type);
+            secondChoiceTerritories.addItem(card.getTerritoryName() + " " + type);
+            thirdChoiceTerritories.addItem(card.getTerritoryName() + " " + type);
         }
         choicePanel.add(firstChoiceTerritories);
         choicePanel.add(secondChoiceTerritories);
@@ -109,9 +109,9 @@ public class JPanelChoice extends JPanel {
         final JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.exitCardsManagingPhase());
         final JPanel executePanel = new ContinuePanel("Play selected cards", BOTTON_DIMENSION,
                 e -> {
-                    final String[] firstTerritoryName = firstChoiceTerritories.getSelectedItem().split(" ");
-                    final String[] secondTerritoryName = secondChoiceTerritories.getSelectedItem().split(" ");
-                    final String[] thirdTerritoryName = thirdChoiceTerritories.getSelectedItem().split(" ");
+                    final String[] firstTerritoryName = String.valueOf(firstChoiceTerritories.getSelectedItem()).split(" ");
+                    final String[] secondTerritoryName = String.valueOf(secondChoiceTerritories.getSelectedItem()).split(" ");
+                    final String[] thirdTerritoryName = String.valueOf(thirdChoiceTerritories.getSelectedItem()).split(" ");
                     firstChoice = firstTerritoryName[0];
                     secondChoice = secondTerritoryName[0];
                     thirdChoice = thirdTerritoryName[0];

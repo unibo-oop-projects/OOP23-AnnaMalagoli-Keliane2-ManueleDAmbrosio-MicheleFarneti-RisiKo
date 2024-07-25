@@ -18,8 +18,8 @@ import it.unibo.risiko.model.map.Territory;
 public final class TankIcon implements TerritoryPlaceHolder {
         private static final int ARMIES_LABEL_HEIGHT = 17;
         private static final int ARMIES_LABEL_WIDTH = 17;
-        private static final int ARMIES_LABEL_FONT_SIZE = 14;
-        private static final String FONT_NAME = "Arial";
+        private static final int ARMIES_LABEL_FONT_SIZE = 12;
+        private static final String FONT_NAME = "Dialog";
         private static final Integer TANKS_WIDTH = 45;
         private static final Integer TANKS_HEIGTH = 45;
         private static final String SEP = File.separator;

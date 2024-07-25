@@ -190,7 +190,7 @@ public class AttackPanel extends JPanel {
         topPanel.setBackground(BLACK_COLOR);
         topPanel.setPreferredSize(new Dimension(width, height / QUARTER_SIZE_FACTOR));
         topPanel.add(titlePanel(), BorderLayout.NORTH);
-        topPanel.add(selectorPanel("CHOSE THE NUMBER OF ATTACKING ARMIES: "), BorderLayout.SOUTH);
+        topPanel.add(selectorPanel("ATTACKING ARMIES: "), BorderLayout.SOUTH);
 
         return topPanel;
     }

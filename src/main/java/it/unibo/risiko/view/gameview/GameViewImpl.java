@@ -8,7 +8,6 @@ import it.unibo.risiko.model.player.Player;
 import it.unibo.risiko.view.gameview.components.DefaultButton;
 import it.unibo.risiko.view.gameview.components.LoggerView;
 import it.unibo.risiko.view.gameview.components.Position;
-import it.unibo.risiko.view.gameview.components.StandardTextField;
 import it.unibo.risiko.view.gameview.components.mainpanel.BackgroundImagePanel;
 import it.unibo.risiko.view.gameview.components.mainpanel.ColoredImageButton;
 import it.unibo.risiko.view.gameview.components.mainpanel.CustomButton;
@@ -73,7 +72,7 @@ public final class GameViewImpl implements GameView {
     private static final int TURN_ICON_DIMENSION_DIVIDER = 20;
     private static final int MAX_COLOR_VALUE = 255;
 
-    private static final String FONT_NAME = "Arial";
+    private static final String FONT_NAME = "Dialog";
 
     private static final int ARMIES_COUNT_THICKNESS = 3;
 
@@ -115,7 +114,7 @@ public final class GameViewImpl implements GameView {
 
     private static final int PLAYER_ARMIES_LABEL_HEIGHT = 23;
     private static final int PLAYER_ARMIES_LABEL_WIDTH = 23;
-    private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 20;
+    private static final int PLAYER_ARMIES_LABEL_FONT_SIZE = 16;
 
     private static final int ATTACK_PANEL_POSITIONING = 2;
     private static final int ATTACK_PANEL_LOCATION = 6;
@@ -139,7 +138,7 @@ public final class GameViewImpl implements GameView {
     private AttackPanel attackPanel;
     private JPanel moveArmiesPanel;
     private TablePanel tablePanel;
-    private final JTextField targetTextField = new StandardTextField("Target");
+    private final JTextArea targetTextField = new JTextArea("Target");
     private final JPanel logPanel = new JPanel();
     private final JPanel territoriesTablePanel = new JPanel();
     private JPanel choiceCardsPanel;
@@ -343,6 +342,7 @@ public final class GameViewImpl implements GameView {
                 (int) (attackBarLayoutPane.getHeight() * TARGET_Y_PERCENTAGE),
                 (int) (gamePanel.getWidth() * TARGET_WIDTH_PERCENTAGE), TARGET_HEIGHT);
         targetTextField.setFont(new Font(FONT_NAME, Font.ITALIC, TARGET_FONT_SIZE));
+        targetTextField.setLineWrap(true);
         attackBarLayoutPane.add(targetTextField, TURN_ICON_LAYER, 0);
 
         // Game Status Bar

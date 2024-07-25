@@ -3,12 +3,12 @@ package it.unibo.risiko.view.gameview;
 import java.util.Optional;
 import java.util.List;
 import java.awt.BorderLayout;
-import java.awt.Choice;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -70,9 +70,9 @@ public class JPanelMovementArmies extends JPanel {
         final JPanel choicePanel = new JPanel();
         choicePanel.setBackground(BACKGROUND_COLOR);
         choicePanel.setLayout(new GridLayout(1, 2));
-        final Choice srcTerrChoice = new Choice();
-        final Choice dstTerrChoice = new Choice();
-        final Choice choiceNumArmies = new Choice();
+        final JComboBox<String> srcTerrChoice = new JComboBox<>();
+        final JComboBox<String> dstTerrChoice = new JComboBox<>();
+        final JComboBox<Integer> choiceNumArmies = new JComboBox<>();
         /*setting the size and font of the three Choice */
         srcTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
         dstTerrChoice.setFont(new Font("Verdana", Font.PLAIN, CHOICE_SIZE));
@@ -83,11 +83,11 @@ public class JPanelMovementArmies extends JPanel {
          * there are numbers between 1 and 100
          */
         for (final var terr : territories) {
-            srcTerrChoice.add(terr.getTerritoryName());
-            dstTerrChoice.add(terr.getTerritoryName());
+            srcTerrChoice.addItem(terr.getTerritoryName());
+            dstTerrChoice.addItem(terr.getTerritoryName());
         }
         for (int i = 1; i <= MAX_NUM_ARMIES; i++) {
-            choiceNumArmies.add(String.valueOf(i));
+            choiceNumArmies.addItem(i);
         }
         choicePanel.add(srcTerrChoice);
         choicePanel.add(dstTerrChoice);
@@ -105,10 +105,10 @@ public class JPanelMovementArmies extends JPanel {
         final JPanel exitPanel = new ContinuePanel("Exit", BOTTON_DIMENSION, e -> observer.closeMovementPhase());
         final JPanel executePanel = new ContinuePanel("Move armies", BOTTON_DIMENSION,
                 e -> {
-                    if (checkSelectedItem(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(),
-                            Integer.parseInt(choiceNumArmies.getSelectedItem()))) {
-                        observer.moveArmies(srcTerrChoice.getSelectedItem(), dstTerrChoice.getSelectedItem(),
-                                Integer.parseInt(choiceNumArmies.getSelectedItem()));
+                    if (checkSelectedItem(String.valueOf(srcTerrChoice.getSelectedItem()), String.valueOf(dstTerrChoice.getSelectedItem()),
+                            Integer.valueOf(String.valueOf(choiceNumArmies.getSelectedItem())))) {
+                        observer.moveArmies(String.valueOf(srcTerrChoice.getSelectedItem()), String.valueOf(dstTerrChoice.getSelectedItem()),
+                                Integer.parseInt(String.valueOf(choiceNumArmies.getSelectedItem())));
                         this.setVisible(false);
                     } else {
                         final String message = "Error of the item selected.\n Retry!";
